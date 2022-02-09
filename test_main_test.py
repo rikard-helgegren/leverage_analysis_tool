@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-import sys
-from code.test_code import say_hi
+from code.test_code.test_callfile_in_different_folder import say_hi
 
 
 def main():
@@ -12,4 +11,5 @@ def main():
 
 
 
+############################
 main()
