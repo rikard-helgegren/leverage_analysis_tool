@@ -1,21 +1,114 @@
-def check_if_data_files_are_clean():
+import os
+from os import listdir
+from os.path import isfile, join
+import datetime 
 
 
+def check_if_data_files_are_clean(data_file_path):
 
-    
-    #Get all files in list
+
+    #Get all data files in list LOCAL VERSION
+    #data_file_path = '../../data/raw_data/old' #Path to data files
+
+    try:
+        all_data_files = [f for f in listdir(data_file_path) if isfile(join(data_file_path, f))]
+    except :
+        print("ERROR: Path to data files is wrong.")
 
 
     #Check each file
-    for file in all_files:
+    for file_itter in all_data_files:
+
+        file = open(data_file_path+"/"+file_itter, 'r')
+        lines_of_file = file.readlines()
+        
+        #Check data is more than 600 days
+        if len(lines_of_file) > 600:
+            print("SUCCESS: File passed size: ", file_itter)
+        else:
+            print("FAIL:    File failed size: ", file_itter)
+            #remove file
+            continue
 
         #Check format on first row
+        if check_first_line(lines_of_file[0]):
+            print("SUCCESS: File passed first row format: ", file_itter)
+        else:
+            print("FAIL:    File failed first row format: ", file_itter)
+            #remove file
+            continue
+        
 
-        #Check format on all uppcomming rows
+        #Check format on first uppcomming rows
+        if check_value_rows(lines_of_file[1:10]):
+            print("SUCCESS: File passed value format: ", file_itter)
+        else:
+            print("FAIL:    File failed value format: ", file_itter)
+            #remove file
+            continue
 
         #Check time decreases for each row
+        if check_time_decreases_for_each_row(lines_of_file[1:100]):
+            print("SUCCESS: File passed time decreasing with row number: ", file_itter)
+        else:
+            print("FAIL:    File failed time decreasing with row number: ", file_itter)
+            #remove file
+            continue
 
-        #Check data is more than 300 days
+    return all_data_files
+
+def check_first_line(line):
+    words_in_line = line.split(',')
+
+    if words_in_line[0] != "Datum": #Date
+        return False
+
+    if words_in_line[1] != "Senaste":  #Open
+        return False
+
+    return True
+
+def check_value_rows(lines):
+    return_value = True
+
+    current_time = datetime.datetime.now()
+    today = current_time.year*10000+current_time.month*100+current_time.day
 
 
+    for line in lines:
+        words_in_line = line.split(',')
     
+        try:
+            date_value = int(words_in_line[0])
+            if date_value < 18000000 or date_value > today:
+                return_value = False
+        except :
+            print("ERROR:  Date format in data file is in wrong format.")
+            return_value = False
+
+        
+
+        try:
+            opening_value = float(words_in_line[1].replace('"','')) #TODO remove the replace and fix files
+        except :
+            return_value = False
+            print("ERROR:  Market opening value in data file is in wrong format.")
+    
+    return return_value
+
+def check_time_decreases_for_each_row(lines):
+    return_value = True
+
+    previous_date = 100000000
+
+    for line in lines:
+        words_in_line = line.split(',')
+    
+        date_value = int(words_in_line[0])
+        if date_value > previous_date:
+            return_value = False
+        previous_date = date_value
+    return return_value
+
+#LOCAL RUN
+#check_if_data_files_are_clean()  
