@@ -20,12 +20,12 @@ def read_and_manage_raw_data(data_file_path, index_file_names_list):
             first_row = next(csvfile)
             reader = csv.reader(csvfile,)
             for row in reader: # each row is a list
-                time.append(row[0])
-                index_value.append(row[1])
+                time.append(float(row[0]))
+                index_value.append(float(row[1].replace(",",".")))
 
         #save data in dict
-        country_data_and_sattistics.append( contry_index:
-        {'time': np.array(time),'index_value': np.array(index_value)})
+        country_data_and_sattistics[contry_index] = {'time': np.array(time)}
+        country_data_and_sattistics[contry_index]['index_value'] = np.array(index_value)
 
 
     return country_data_and_sattistics

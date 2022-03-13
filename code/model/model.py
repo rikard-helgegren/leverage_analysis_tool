@@ -8,7 +8,7 @@ from code.data_manager.read_and_manage_raw_data import read_and_manage_raw_data
 from code.calculator.calcultate_daily_change import calcultate_daily_change
 
 ###### MODEL ######
-import code.model.constants as constant
+import code.model.constants as constants
 
 
 
@@ -26,14 +26,13 @@ data_index_dict = {}
 
 def model_initiate():
 
-    clean_file_names =check_if_data_files_are_clean(data_files_path)
+    clean_file_names = check_if_data_files_are_clean(data_files_path)
     print("Clean files are:", clean_file_names)
-
     data_index_dict = read_and_manage_raw_data(data_files_path, clean_file_names)
-
     data_index_dict = calcultate_daily_change(data_index_dict)
 
 
+    print("dict:", data_index_dict['omx Stockholm 30.csv'].keys())
     
 
 def update_model():

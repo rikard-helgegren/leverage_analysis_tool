@@ -38,17 +38,24 @@ def check_if_data_files_are_clean(data_file_path):
         
 
         # Check format on first uppcomming rows
-        if check_value_rows(lines_of_file[1:10]):
+        if check_value_rows(lines_of_file[1:]):
             print("SUCCESS: ", file_itter, "\t File passed value format")
         else:
             print("FAIL:    ", file_itter, "\t File failed value format")
             continue
 
         # Check time decreases for each row
-        if check_time_decreases_for_each_row(lines_of_file[1:100]):
+        if check_time_decreases_for_each_row(lines_of_file[1:]):
             print("SUCCESS: ", file_itter, "\t File passed time decreasing with row number")
         else:
             print("FAIL:    ", file_itter, "\t File failed time decreasing with row number")
+            continue
+
+        # Check daily change for each row
+        if check_daily_change(lines_of_file[1:]):
+            print("SUCCESS: ", file_itter, "\t File passed daily change")
+        else:
+            print("FAIL:    ", file_itter, "\t File failed daily change")
             continue
 
         # After passing all tests
@@ -109,3 +116,23 @@ def check_time_decreases_for_each_row(lines):
             return_value = False
         previous_date = date_value
     return return_value
+
+def check_daily_change(lines):
+
+    index_values = []
+
+    for line in lines:
+        words_in_line = line.split(',')
+        index_values.append(float(words_in_line[1].replace('"',''))) #TODO remove the replace and fix files
+
+    for index, val in enumerate(index_values[1:]):
+        change = (int(val)-index_values[index])/index_values[index]
+        
+        if change<= 1 and change >= -0.6:
+            #all is well, do nothing
+            continue
+        else:
+            print("ERROR: Unprobable daily change:" ,\
+                round(change*100,0), "%. Check line ", index-1 )
+            return False
+    return True
