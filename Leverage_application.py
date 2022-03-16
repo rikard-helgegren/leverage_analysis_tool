@@ -8,7 +8,7 @@ from code.model.Model import Model
 from code.view.View import View
 from code.controller.Controller import Controller
 
-class App(Tk):
+class Leverage_application(Tk):
     def __init__(self):
         super().__init__()
 
@@ -29,14 +29,10 @@ class App(Tk):
         view.set_controller(controller)
     
 
-        # Initiate model
-        print("All is well, ready to rebase and merge")
-        
-
-
-
+    
 
 ############################
+
 if __name__ == '__main__':
-    app = App()
+    app = Leverage_application()
     app.mainloop()

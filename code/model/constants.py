@@ -15,33 +15,20 @@ data_files_path = "data/raw_data/old"
 
 ############### GUI VALUES #################
 
-DEFULT_LOAN = 0
-
-YEARS_INVESTIGATING = 5
-
-HARVEST_POINT = 1.5
-
-REFILL_POINT = 0.5
-
-UPDATE_HARVEST_REFILL = 0
-
-AMOUNT_CASH = 0
-
-AMOUNT_FUNDS = 1
-
-AMOUNT_BULL = 1 - AMOUNT_FUNDS
-
-INCLUDE_FEES = True
-
-REBALANCE = False
-
-REBALANCE_BETWEEN_INSTRUMENTS = False
-
-CORRECTION_OF_INFLATION =  True
-
-CORRECTION_OF_CURRENCY = True
-
-DELAY_OF_CORRECTION = 0
+DEFULT_LOAN                                 = 0
+DEFULT_YEARS_INVESTIGATING                  = 5
+DEFULT_HARVEST_POINT                        = 1.5
+DEFULT_REFILL_POINT                         = 0.5
+DEFULT_UPDATE_HARVEST_REFILL                = 0
+DEFULT_AMOUNT_CASH                          = 0
+DEFULT_AMOUNT_FUNDS                         = 1
+DEFULT_AMOUNT_LEVERAGE                      = 1 - DEFULT_AMOUNT_FUNDS
+DEFULT_INCLUDE_FEES_STATUS                  = True
+DEFULT_REBALANCE_STATUS                     = False
+DEFULT_REBALANCE_BETWEEN_INSTRUMENTS_STATUS = False
+DEFULT_CORRECTION_OF_INFLATION_STATUS       = True
+DEFULT_CORRECTION_OF_CURRENCY_STATUS        = True
+DEFULT_DELAY_OF_CORRECTION                  = 0
 
 
 
