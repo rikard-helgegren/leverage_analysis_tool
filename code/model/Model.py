@@ -13,6 +13,7 @@ import code.model.constants as constants
 
 class Model:
     def __init__(self):
+        print("TRACE: Model: __init__")
         self.view = None 
 
         ################ Data Files ################
@@ -46,6 +47,7 @@ class Model:
 
 
     def model_initiate(self):
+        print("TRACE: Model: model_initiate")
 
         clean_file_names = check_if_data_files_are_clean(self.data_files_path)
         print("Clean files are:", clean_file_names)
@@ -55,11 +57,12 @@ class Model:
         
 
     def update_model():
-        print("model: update_model")
+        print("TRACE: Model: update_model")
         #TODO
 
 
     def set_include_fee_status(self, include_fee_status):
+        print("TRACE: Model: set_include_fee_status")
         print("Model, fee_status:", include_fee_status)
         self.include_fees_status = include_fee_status
 
