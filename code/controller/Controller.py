@@ -18,6 +18,7 @@ class Controller:
     def update_model(self):
         print("TRACE: controller: update_model")
         #TODO
+        self.model.update_model()
 
     def update_view(self):
         print("TRACE: controller: update_view")

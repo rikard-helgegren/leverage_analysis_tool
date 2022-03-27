@@ -18,7 +18,7 @@ class Model:
 
         ################ Data Files ################
 
-        self.data_files_path = "data/raw_data/old"
+        self.data_files_path  = "data/raw_data/old"
         self.clean_file_names = []
 
 
@@ -41,7 +41,7 @@ class Model:
 
         ################ Data Processed ################
 
-        self.data_index_dict = {}
+        self.data_index_dict      = {}
         self.instruments_selected = [] # Tuples (index, leverage) 
 
 
@@ -56,13 +56,126 @@ class Model:
         print("dict:", self.data_index_dict['omx Stockholm 30.csv'].keys())
         
 
-    def update_model():
+    def update_model(self):
         print("TRACE: Model: update_model")
         #TODO
 
+        #self.calculate_graph()
+        #self.calculate_hist()
 
+
+
+    ##########################
+    #  Getters and Setters
+    ##########################
+    def get_loan(self):
+        print("TRACE: Model: get_loan")
+        return self.loan
+    def set_loan(self, loan):
+        print("TRACE: Model: set_loan")
+        self.loan = loan
+    
+    def get_years_investigating(self):
+        print("TRACE: Model: get_years_investigating")
+        return self.years_investigating
+    def set_years_investigating(self, years):
+        print("TRACE: Model: set_years_investigating")
+        self.years_investigating = years
+
+    def get_harvest_point(self):
+        print("TRACE: Model: get_harvest_point")
+        return self.harvest_point
+    def set_harvest_point(self, harvest_point):
+        print("TRACE: Model: set_harvest_point")
+        self.harvest_point = harvest_point
+
+    def get_refill_point(self):
+        print("TRACE: Model: get_refill_point")
+        return self.refill_point
+    def set_refill_point(self, refill_point):
+        print("TRACE: Model: set_refill_point")
+        self.refill_point = refill_point
+
+    def get_update_harvest_refill(self):
+        print("TRACE: Model: get_update_harvest_refill")
+        return self.update_harvest_refill
+    def set_update_harvest_refill(self, update_harvest_refill):
+        self.update_harvest_refill = update_harvest_refill
+
+    def get_amount_cash(self):
+        print("TRACE: Model: get_amount_cash")
+        return self.amount_cash
+    def set_amount_cash(self, amount_cash):
+        print("TRACE: Model: set_amount_cash")
+        self.amount_cash = amount_cash
+
+    def get_amount_funds(self):
+        print("TRACE: Model: get_amount_funds")
+        return self.amount_funds
+    def set_amount_funds(self, amount_funds):
+        print("TRACE: Model: set_amount_funds")
+        self.amount_funds = amount_funds
+
+    def get_amount_leverage(self):
+        return self.amount_leverage
+        print("TRACE: Model: get_amount_leverage")
+    def set_amount_leverage(self, amount_leverage):
+        print("TRACE: Model: set_amount_leverage")
+        self.amount_leverage = amount_leverage
+
+    def get_include_fees_status(self):
+        print("TRACE: Model: get_include_fees_status")
+        return self.include_fee_status
     def set_include_fee_status(self, include_fee_status):
         print("TRACE: Model: set_include_fee_status")
-        print("Model, fee_status:", include_fee_status)
         self.include_fees_status = include_fee_status
+        print("Model, fee_status:", include_fee_status)
 
+    def get_rebalance_status(self):
+        print("TRACE: Model: get_rebalance_status")
+        return self.rebalance_status
+    def set_rebalance_status(self, rebalance_status):
+        print("TRACE: Model: set_rebalance_status")
+        self.set_rebalance_status = rebalance_status
+
+    def get_rebalance_between_instruments_status(self):
+        print("TRACE: Model: get_rebalance_between_instruments_status")
+        return self.rebalance_between_instruments_status
+    def set_rebalance_between_instruments_status(self, rebalance_between_instruments_status):
+        print("TRACE: Model: set_rebalance_between_instruments_status")
+        self.rebalance_between_instruments_status = rebalance_between_instruments_status
+
+    def get_correctino_of_inflation_status(self):
+        print("TRACE: Model: get_correctino_of_inflation_status")
+        return self.correctino_of_inflation_status
+    def set_correctino_of_inflation_status(self, correctino_of_inflation_status):
+        print("TRACE: Model: set_rebalance_between_instruments_status")
+        self.correctino_of_inflation_status = correctino_of_inflation_status
+
+    def get_correctino_of_currency_status(self):
+        print("TRACE: Model: get_correctino_of_currency_status")
+        return self.correctino_of_currency_status
+    def set_correctino_of_currency_status(self, correctino_of_currency_status):
+        print("TRACE: Model: set_correctino_of_currency_status")
+        self.correctino_of_currency_status = correctino_of_currency_status
+
+    def get_delay_of_correction(self):
+        print("TRACE: Model: get_delay_of_correction")
+        return self.delay_of_correction
+    def set_delay_of_correction(self, delay_of_correction):
+        print("TRACE: Model: set_delay_of_correction")
+        self.delay_of_correction = delay_of_correction
+
+    def get_data_index_dict(self):
+        print("TRACE: Model: get_data_index_dict")
+        return self.data_index_dict
+    def set_data_index_dict(self, data_index_dict):
+        print("TRACE: Model: set_data_index_dict")
+        self.data_index_dict = data_index_dict
+
+    def get_instruments_selected(self):
+        print("TRACE: Model: get_instruments_selected")
+        return self.instruments_selected
+    def set_instruments_selected(self, instruments_selected):
+        print("TRACE: Model: set_instruments_selected")
+        self.instruments_selected = instruments_selected

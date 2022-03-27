@@ -10,7 +10,7 @@ class View(Frame):
         super().__init__(parent)
         print("TRACE: View: __init__")
 
-        # set the controller
+        # create controller
         self.controller = None
 
         # create widgets
