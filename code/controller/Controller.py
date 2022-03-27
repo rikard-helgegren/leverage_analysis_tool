@@ -30,6 +30,10 @@ class Controller:
         self.draw_histogram(data)
         self.draw_line_graph(data)
 
+        self.set_market_table()
+
+
+
     def draw_histogram(self, data):
         print("TRACE: controller: draw_histogram")
         self.view.draw_histogram(data)
@@ -37,3 +41,10 @@ class Controller:
     def draw_line_graph(self, data):
         print("TRACE: controller: draw_line_graph")
         self.view.draw_line_graph(data)
+
+    def set_market_table(self):
+        print("TRACE: controller: set_market_table")
+
+        markets = self.model.get_data_index_dict().keys()
+        print("markets: ",markets)
+        self.view.set_market_table(markets)

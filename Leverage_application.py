@@ -13,6 +13,7 @@ class Leverage_application(Tk):
         super().__init__()
 
         self.title('Leverage Experiment Tool')
+        #self.geometry('700x700')
 
         # create a model
         model = Model()
@@ -20,7 +21,8 @@ class Leverage_application(Tk):
 
         # create a view and place it on the root window
         view = View(self)
-        view.grid(row=0, column=0, padx=10, pady=10)
+        #view.grid(row=0, column=0, padx=10, pady=10)
+        view.pack()
 
         # create a controller
         controller = Controller(model, view)
