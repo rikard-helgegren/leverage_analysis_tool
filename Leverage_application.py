@@ -13,7 +13,6 @@ class Leverage_application(Tk):
         super().__init__()
 
         self.title('Leverage Experiment Tool')
-        #self.geometry('700x700')
 
         # create a model
         model = Model()

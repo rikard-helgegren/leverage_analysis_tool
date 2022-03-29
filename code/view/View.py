@@ -6,6 +6,10 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
 NavigationToolbar2Tk)
 from tkinter import messagebox
 
+import code.view.histogram
+import code.view.line_graph_full_time
+import code.view.table_of_instruments
+
 class View(Frame):
     def __init__(self, parent):
         super().__init__(parent)
@@ -36,61 +40,14 @@ class View(Frame):
         self.scale = Scale(self.frame1, from_=0, to=100, orient='horizontal', command=self.update_amount)
         self.scale.pack()
 
+        # Histogram
+        code.view.histogram.__init__(self)
 
-        ##### Histogram #####
-
-        self.frame2 = Frame(self, padx=5, pady=5)
-        self.frame2.pack(side=LEFT)
-        # specify the window as master
-        self.histogram_fig = plt.figure(figsize=(4, 5))
-        self.histogram_canvas = FigureCanvasTkAgg(self.histogram_fig, master=self.frame2)
-        self.histogram_canvas.draw()
-        self.histogram_canvas.get_tk_widget().pack()
-
-        # navigation toolbar
-        self.histogram_toolbarFrame = Frame(master=self.frame2)
-        self.histogram_toolbarFrame.pack()
-        self.histogram_toolbar = NavigationToolbar2Tk(self.histogram_canvas, self.histogram_toolbarFrame)
-        self.histogram_toolbar.pack(side=BOTTOM)
-
-        ##### Line Graph #####
-
-        self.frame3 = Frame(self, padx=5, pady=5)
-        self.frame3.pack(side=LEFT)
-        # specify the window as master
-        self.line_graph_fig = plt.figure(figsize=(4, 5))
-        self.line_graph_canvas = FigureCanvasTkAgg(self.line_graph_fig, master=self.frame3)
-        self.line_graph_canvas.draw()
-        self.line_graph_canvas.get_tk_widget().pack()
-
-        # navigation toolbar
-        self.line_graph_toolbarFrame = Frame(master=self.frame3)
-        self.line_graph_toolbarFrame.pack()
-        self.line_graph_toolbar = NavigationToolbar2Tk(self.line_graph_canvas, self.line_graph_toolbarFrame)
-        self.line_graph_toolbar.pack(side=BOTTOM)
-
+        # Line Graph
+        code.view.line_graph_full_time.__init__(self)
        
         #Table of Stock Markets
-
-        self.frame4 = Frame(self, padx=5, pady=5)
-        self.frame4.pack(side=LEFT)
-        #scrollbar
-        game_scroll = Scrollbar(self.frame4)
-        game_scroll.pack(side=RIGHT, fill=Y)
-
-        game_scroll = Scrollbar(self.frame4,orient='horizontal')
-        game_scroll.pack(side=BOTTOM,fill=X)
-
-        columns = ('index', 'country', 'leverage')
-
-        self.market_table = ttk.Treeview(self.frame4,yscrollcommand=game_scroll.set, xscrollcommand =game_scroll.set, columns=columns, show='headings')
-        self.market_table.heading('index', text='Index')
-        self.market_table.heading('country', text='Country')
-        self.market_table.heading('leverage', text='Leverage')
-        self.market_table.pack()
-        self.market_table.bind('<<TreeviewSelect>>',self.table_item_selected)
-
-
+        code.view.table_of_instruments.__init__(self)
 
     ###############
     # Commands
@@ -116,31 +73,18 @@ class View(Frame):
         messagebox.showinfo('Error', 'Not fully implemented')
         #TODO
 
-
     def draw_histogram(self, data):
         print("TRACE: View: draw_histogram")
-        plt.figure(self.histogram_fig.number)
-
-        if data != []:
-            plt.hist(data)
-
-        self.histogram_canvas.draw()
+        code.view.histogram.draw_histogram(self,data)
 
     def draw_line_graph(self, data):
         print("TRACE: View: draw_line_graph")
-        plt.figure(self.line_graph_fig.number)
-
-        if data != []:
-            plt.plot(data)
-
-        self.line_graph_canvas.draw()
+        code.view.line_graph_full_time.draw_line_graph(self,data)
 
     def set_market_table(self, markets):
         print("TRACE: View: set_market_table")
-
-        for market in markets:
-            self.market_table.insert(parent='', index=END, values=(market, ))
-
+        code.view.table_of_instruments.set_market_table(self, markets)
+        
     def table_item_selected(self, _ ):
-        curItem = self.market_table.focus()
-        print ("selected item in table",self.market_table.item(curItem))
+        code.view.table_of_instruments.table_item_selected(self)
+        
