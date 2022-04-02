@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 class Controller:
     def __init__(self, model, view):
         self.model = model
@@ -25,10 +27,10 @@ class Controller:
         #TODO
 
         ### Update histogram ###
-        #data = model.get_all_outcomes()
-        data = [1,2,2,3]
-        self.draw_histogram(data)
-        self.draw_line_graph(data)
+        combined_outcomes_time_intervals = self.model.get_combined_outcomes_time_intervall()
+        self.draw_histogram([1,2,2,3])#combined_outcomes_time_intervals)
+        combined_outcomes_full_time = self.model.get_combined_outcomes_full_time()
+        self.draw_line_graph(combined_outcomes_full_time)
 
         self.set_market_table()
 
@@ -44,11 +46,14 @@ class Controller:
 
     def set_market_table(self):
         print("TRACE: controller: set_market_table")
-
         markets = self.model.get_data_index_dict().keys()
-        print("markets: ",markets)
         self.view.set_market_table(markets)
 
     def update_instrument_selected(self, table_focus_item ):
         print("TRACE: controller: update_table_item_focused")
+        #Update model
         self.model.update_instrument_selected(table_focus_item)
+        self.update_model()
+
+        #Update View
+        self.update_view()

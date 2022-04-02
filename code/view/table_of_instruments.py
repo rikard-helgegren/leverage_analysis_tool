@@ -20,10 +20,26 @@ def __init__(self):
 def set_market_table(self, markets):
     print("TRACE: table_of_instruments: set_market_table")
 
+    all_item_values = get_all_item_values(self)
+
     for market in markets:
-        self.market_table.insert(parent='', index=END, values=(market, ))
+        #only add if not all ready there
+        if market not in all_item_values:
+            self.market_table.insert(parent='', index=END, values=(market, 'not known',1))
 
 def get_table_item_focused(self):
     print("TRACE: table_of_instruments: get_table_item_focused")
     curItem = self.market_table.focus()
     return self.market_table.item(curItem)['values']
+
+def get_all_item_values(self):
+    print("TRACE: table_of_instruments: get_all_item_values")
+
+    all_item_values = []
+
+    for item in self.market_table.get_children():
+        item_value = self.market_table.item(item)['values']
+        all_item_values.append(item_value[0]) # TODO update when adding bull > 1
+
+    return all_item_values
+

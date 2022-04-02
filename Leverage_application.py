@@ -28,6 +28,9 @@ class Leverage_application(Tk):
 
         # set the controller to view
         view.set_controller(controller)
+
+        # make the view updated
+        controller.update_view()
     
 
     

@@ -1,11 +1,13 @@
+#!/usr/bin/env python3
+
 ###### IMPORT DATA MANAGER ######
-from code.test_code.test_callfile_in_different_folder import say_hi
 from code.data_manager.check_if_data_files_are_clean import check_if_data_files_are_clean
 from code.data_manager.read_and_manage_raw_data import read_and_manage_raw_data
 
 ##### IMPORT CALCULATOR #######
 
-from code.calculator.calcultate_daily_change import calcultate_daily_change
+from code.model.calcultate_daily_change import calcultate_daily_change
+from code.model.calculate_outcomes import calculate_outcomes
 
 ###### IMPORT MODEL ######
 import code.model.constants as constants
@@ -42,7 +44,9 @@ class Model:
         ################ Data Processed ################
 
         self.data_index_dict      = {}
-        self.instruments_selected = [] # Tuples (index, leverage) 
+        self.instruments_selected = [] # Tuples (index, leverage)
+        self.combined_outcomes_time_intervall = []
+        self.combined_outcomes_full_time = []
 
 
 
@@ -53,15 +57,19 @@ class Model:
         print("Clean files are:", clean_file_names)
         self.data_index_dict = read_and_manage_raw_data(self.data_files_path, clean_file_names)
         self.data_index_dict = calcultate_daily_change(self.data_index_dict)
-        print("dict omx:", self.data_index_dict['omx Stockholm 30.csv'].keys())
+        print("TMP: dict omx:", self.data_index_dict['omx Stockholm 30.csv'].keys())
         
 
     def update_model(self):
         print("TRACE: Model: update_model")
+
+        calculate_outcomes(self)
+
         #TODO
 
         #self.calculate_graph()
         #self.calculate_hist()
+
 
 
 
@@ -176,17 +184,38 @@ class Model:
     def get_instruments_selected(self):
         print("TRACE: Model: get_instruments_selected")
         return self.instruments_selected
-
     def set_instruments_selected(self, instruments_selected):
         print("TRACE: Model: set_instruments_selected")
         self.instruments_selected = instruments_selected
 
+    def get_combined_outcomes_time_intervall(self):
+        print("TRACE: Model: get_combined_outcomes_time_intervall")
+        return self.combined_outcomes_time_intervall
+    def set_combined_outcomes_time_intervall(self, combined_outcomes_time_intervall):
+        print("TRACE: Model: set_combined_outcomes_time_intervall")
+        self.combined_outcomes_time_intervall = combined_outcomes_time_intervall
+
+    def get_combined_outcomes_full_time(self):
+        print("TRACE: Model: get_combined_outcomes_full_time")
+        return self.combined_outcomes_full_time
+    def set_combined_outcomes_full_time(self, combined_outcomes_full_time):
+        print("TRACE: Model: set_combined_outcomes_full_time")
+        self.combined_outcomes_full_time = combined_outcomes_full_time
+
+
+
+
+    ######################
+    #
+    ######################
+
+
+
+
+
     def update_instrument_selected(self, table_focus_item ):
         print("TRACE: Model: update_instrument_selected")
-
-        #Instrument clicked and should be removed
         if table_focus_item in self.instruments_selected:
             self.instruments_selected.remove(table_focus_item)
-        #Instrument clicked and should be added 
         else:
             self.instruments_selected.append(table_focus_item)

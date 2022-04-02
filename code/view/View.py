@@ -1,9 +1,10 @@
+#!/usr/bin/env python3
+
 from tkinter import *
 from  tkinter import ttk
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
-NavigationToolbar2Tk)
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from tkinter import messagebox
 
 import code.view.histogram
