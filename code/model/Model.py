@@ -53,7 +53,7 @@ class Model:
         print("Clean files are:", clean_file_names)
         self.data_index_dict = read_and_manage_raw_data(self.data_files_path, clean_file_names)
         self.data_index_dict = calcultate_daily_change(self.data_index_dict)
-        print("dict:", self.data_index_dict['omx Stockholm 30.csv'].keys())
+        print("dict omx:", self.data_index_dict['omx Stockholm 30.csv'].keys())
         
 
     def update_model(self):
@@ -176,6 +176,17 @@ class Model:
     def get_instruments_selected(self):
         print("TRACE: Model: get_instruments_selected")
         return self.instruments_selected
+
     def set_instruments_selected(self, instruments_selected):
         print("TRACE: Model: set_instruments_selected")
         self.instruments_selected = instruments_selected
+
+    def update_instrument_selected(self, table_focus_item ):
+        print("TRACE: Model: update_instrument_selected")
+
+        #Instrument clicked and should be removed
+        if table_focus_item in self.instruments_selected:
+            self.instruments_selected.remove(table_focus_item)
+        #Instrument clicked and should be added 
+        else:
+            self.instruments_selected.append(table_focus_item)

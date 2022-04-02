@@ -49,6 +49,7 @@ class View(Frame):
         #Table of Stock Markets
         code.view.table_of_instruments.__init__(self)
 
+
     ###############
     # Commands
     ###############
@@ -85,6 +86,7 @@ class View(Frame):
         print("TRACE: View: set_market_table")
         code.view.table_of_instruments.set_market_table(self, markets)
         
-    def table_item_selected(self, _ ):
-        code.view.table_of_instruments.table_item_selected(self)
-        
+    def update_table_item_focused(self, _ ):
+        print("TRACE: View: table_item_focused")
+        table_focus_item = code.view.table_of_instruments.get_table_item_focused(self)
+        self.controller.update_instrument_selected(table_focus_item)

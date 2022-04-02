@@ -15,7 +15,7 @@ def __init__(self):
     self.market_table.heading('country', text='Country')
     self.market_table.heading('leverage', text='Leverage')
     self.market_table.pack()
-    self.market_table.bind('<<TreeviewSelect>>',self.table_item_selected)
+    self.market_table.bind('<<TreeviewSelect>>',self.update_table_item_focused)
 
 def set_market_table(self, markets):
     print("TRACE: table_of_instruments: set_market_table")
@@ -23,6 +23,7 @@ def set_market_table(self, markets):
     for market in markets:
         self.market_table.insert(parent='', index=END, values=(market, ))
 
-def table_item_selected(self):
+def get_table_item_focused(self):
+    print("TRACE: table_of_instruments: get_table_item_focused")
     curItem = self.market_table.focus()
-    print ("selected item in table",self.market_table.item(curItem))
+    return self.market_table.item(curItem)['values']
