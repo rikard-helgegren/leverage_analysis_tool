@@ -62,15 +62,17 @@ def check_if_data_files_are_clean(data_file_path):
         print("SUCCESS: ", file_itter, "\t Passed all tests")
         clean_files.append(file_itter)
 
+        file.close()
+
     return clean_files
 
 def check_first_line(line):
     words_in_line = line.split(',')
 
-    if words_in_line[0] != "Datum": #Date TODO
+    if words_in_line[0] != "Date":
         return False
 
-    if words_in_line[1] != "Senaste":  #Open TODO
+    if words_in_line[2] != "Open":
         return False
 
     return True
@@ -96,7 +98,7 @@ def check_value_rows(lines):
         
 
         try:
-            opening_value = float(words_in_line[1].replace('"','')) #TODO remove the replace and fix files
+            opening_value = float(words_in_line[2])
         except :
             return_value = False
             print("ERROR:  Market opening value in data file is in wrong format.")
@@ -113,6 +115,7 @@ def check_time_decreases_for_each_row(lines):
     
         date_value = int(words_in_line[0])
         if date_value > previous_date:
+            print("Time FAILED date_value > previous_date", date_value ,">", previous_date)
             return_value = False
         previous_date = date_value
     return return_value
@@ -123,7 +126,7 @@ def check_daily_change(lines):
 
     for line in lines:
         words_in_line = line.split(',')
-        index_values.append(float(words_in_line[1].replace('"',''))) #TODO remove the replace and fix files
+        index_values.append(float(words_in_line[2])) #TODO remove the replace and fix files
 
     for index, val in enumerate(index_values[1:]):
         change = (int(val)-index_values[index])/index_values[index]

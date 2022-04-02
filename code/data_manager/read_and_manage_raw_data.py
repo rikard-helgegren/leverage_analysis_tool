@@ -21,7 +21,7 @@ def read_and_manage_raw_data(data_file_path, index_file_names_list):
             reader = csv.reader(csvfile,)
             for row in reader: # each row is a list
                 time.append(float(row[0]))
-                index_value.append(float(row[1].replace(",",".")))
+                index_value.append(float(row[2]))
 
         #save data in dict
         country_data_and_sattistics[contry_index] = {'time': np.array(time)}

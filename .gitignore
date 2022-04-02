@@ -1,4 +1,5 @@
 __init__.py
 __pycache__
-data/
+data/raw_data
+data/pre_calculated
 images/
