@@ -89,5 +89,6 @@ class View(Frame):
         
     def update_table_item_focused(self, _ ):
         print("TRACE: View: table_item_focused")
+        code.view.table_of_instruments.update_item_color(self)
         table_focus_item = code.view.table_of_instruments.get_table_item_focused(self)
         self.controller.update_instrument_selected(table_focus_item)

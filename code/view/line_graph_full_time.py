@@ -26,6 +26,9 @@ def draw_line_graph(self, data):
     print("TRACE: Line_graph_full_time: draw_line_graph")
     plt.figure(self.line_graph_fig.number)
 
+    #if clear_before_drawing: #TODO implement with this input
+    self.line_graph_fig.clear(True)
+
     if data != []:
         plt.plot(data)
 
