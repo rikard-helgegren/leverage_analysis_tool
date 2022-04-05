@@ -20,7 +20,7 @@ def read_and_manage_raw_data(data_file_path, index_file_names_list):
             first_row = next(csvfile)
             reader = csv.reader(csvfile,)
             for row in reader: # each row is a list
-                time.append(float(row[0]))
+                time.append(int(row[0]))
                 index_value.append(float(row[2]))
 
         #Reverse, since data is backwrds

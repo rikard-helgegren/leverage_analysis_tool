@@ -32,9 +32,9 @@ class Model:
         self.harvest_point                        = constants.DEFULT_HARVEST_POINT
         self.refill_point                         = constants.DEFULT_REFILL_POINT
         self.update_harvest_refill                = constants.DEFULT_UPDATE_HARVEST_REFILL
-        self.amount_cash                          = constants.DEFULT_AMOUNT_CASH
-        self.amount_funds                         = constants.DEFULT_AMOUNT_FUNDS 
-        self.amount_leverage                      = constants.DEFULT_AMOUNT_LEVERAGE
+        self.proportion_cash                      = constants.DEFULT_PROPORTION_CASH
+        self.proportion_funds                     = constants.DEFULT_PROPORTION_FUNDS 
+        self.proportion_leverage                  = constants.DEFULT_PROPORTION_LEVERAGE
         self.include_fees_status                  = constants.DEFULT_INCLUDE_FEES_STATUS
         self.rebalance_status                     = constants.DEFULT_REBALANCE_STATUS
         self.rebalance_between_instruments_status = constants.DEFULT_REBALANCE_BETWEEN_INSTRUMENTS_STATUS
@@ -112,26 +112,26 @@ class Model:
     def set_update_harvest_refill(self, update_harvest_refill):
         self.update_harvest_refill = update_harvest_refill
 
-    def get_amount_cash(self):
-        print("TRACE: Model: get_amount_cash")
-        return self.amount_cash
-    def set_amount_cash(self, amount_cash):
-        print("TRACE: Model: set_amount_cash")
-        self.amount_cash = amount_cash
+    def get_proportion_cash(self):
+        print("TRACE: Model: get_proportion_cash")
+        return self.proportion_cash
+    def set_proportion_cash(self, proportion_cash):
+        print("TRACE: Model: set_proportion_cash")
+        self.proportion_cash = proportion_cash
 
-    def get_amount_funds(self):
-        print("TRACE: Model: get_amount_funds")
-        return self.amount_funds
-    def set_amount_funds(self, amount_funds):
-        print("TRACE: Model: set_amount_funds")
-        self.amount_funds = amount_funds
+    def get_proportion_funds(self):
+        print("TRACE: Model: get_proportion_funds")
+        return self.proportion_funds
+    def set_proportion_funds(self, proportion_funds):
+        print("TRACE: Model: set_proportion_funds")
+        self.proportion_funds = proportion_funds
 
-    def get_amount_leverage(self):
-        return self.amount_leverage
-        print("TRACE: Model: get_amount_leverage")
-    def set_amount_leverage(self, amount_leverage):
-        print("TRACE: Model: set_amount_leverage")
-        self.amount_leverage = amount_leverage
+    def get_proportion_leverage(self):
+        return self.proportion_leverage
+        print("TRACE: Model: get_proportion_leverage")
+    def set_proportion_leverage(self, proportion_leverage):
+        print("TRACE: Model: set_proportion_leverage")
+        self.proportion_leverage = proportion_leverage
 
     def get_include_fees_status(self):
         print("TRACE: Model: get_include_fees_status")

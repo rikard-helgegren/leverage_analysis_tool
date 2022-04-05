@@ -36,7 +36,6 @@ def check_if_data_files_are_clean(data_file_path):
             print("FAIL:    ", file_itter, "\t File failed first row format")
             continue
         
-
         # Check format on first uppcomming rows
         if check_value_rows(lines_of_file[1:]):
             print("SUCCESS: ", file_itter, "\t File passed value format")
@@ -126,7 +125,7 @@ def check_daily_change(lines):
 
     for line in lines:
         words_in_line = line.split(',')
-        index_values.append(float(words_in_line[2])) #TODO remove the replace and fix files
+        index_values.append(float(words_in_line[2]))
 
     for index, val in enumerate(index_values[1:]):
         change = (int(val)-index_values[index])/index_values[index]

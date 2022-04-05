@@ -3,8 +3,11 @@ import numpy as np
 
 
 def calculate_outcomes(self):
+    print("TRACE: Model: calculate_outcomes")
     data_index_dict      = self.get_data_index_dict()
     instruments_selected = self.get_instruments_selected()
+    proportion_funds     = self.get_proportion_funds()
+    proportion_leverage  = self.get_proportion_leverage()
 
     #Check if empty
     if instruments_selected == []:
@@ -19,16 +22,15 @@ def calculate_outcomes(self):
     [start_time, end_time] = determine_longest_common_timespan(instruments_selected, data_index_dict)
 
     #Calculate the outcome
-    combined_outcomes_full_time = calculate_combined_outcomes_full_time(start_time, end_time, instruments_selected, data_index_dict)
-
-
-    selected_key = instruments_selected[-1][0]#TODO remove, temporary
-    print("TMP selected_key: ", selected_key)
-
+    combined_outcomes_full_time = calculate_combined_outcomes_full_time(start_time,
+                                                                        end_time,
+                                                                        instruments_selected,
+                                                                        data_index_dict,
+                                                                        proportion_funds,
+                                                                        proportion_leverage)
 
     combined_outcomes_time_intervall = []#TODO remove, temporary
-    combined_outcomes_full_time = data_index_dict[selected_key]["index_value"]#TODO remove, temporary
-
+    
     self.set_combined_outcomes_time_intervall(combined_outcomes_time_intervall)
     self.set_combined_outcomes_full_time(combined_outcomes_full_time)
 
@@ -45,8 +47,13 @@ def determine_longest_common_timespan(instruments_selected, data_index_dict):
 
     return [start_time, end_time]
 
-def calculate_combined_outcomes_full_time(start_time, end_time, instruments_selected, data_index_dict):
-    print("TMP: work in progress")
+
+def calculate_combined_outcomes_full_time(start_time,
+                                          end_time,
+                                          instruments_selected,
+                                          data_index_dict,
+                                          proportion_funds,
+                                          proportion_leverage):
 
     combined_outcome = []
     outcomes_of_normal_investments = []
@@ -56,9 +63,8 @@ def calculate_combined_outcomes_full_time(start_time, end_time, instruments_sele
     number_of_non_leveraged_selected = 0
 
 
-    print("TMP: Size dates NEEEW RUN")
+
     for instrument in instruments_selected:
-        print("TMP: index", instrument)
 
         leverage = instrument[2]
 
@@ -66,11 +72,8 @@ def calculate_combined_outcomes_full_time(start_time, end_time, instruments_sele
         inedx_data = data_index_dict[instrument[0]]
 
         #Get index of start time for this instrument
-        print("TMP, max time",max(inedx_data['time']))
         start_pos = inedx_data['time'].index(start_time)
         end_pos   = inedx_data['time'].index(end_time)
-
-        print("TMP: Size dates", start_pos, end_pos,  end_pos-start_pos)
 
 
         relevant_daily_change = inedx_data['daily_change'][start_pos:end_pos]
@@ -87,10 +90,38 @@ def calculate_combined_outcomes_full_time(start_time, end_time, instruments_sele
         else:
             print("ERROR: Non valid leverage used")
 
-    print("TMP: normal, bull:", number_of_non_leveraged_selected, "|", number_of_leveraged_selected)
+    #Unifed list of normal instruments
+    unified_normal = []
+    if number_of_non_leveraged_selected == 1:
+        unified_normal = outcomes_of_normal_investments[0]
 
+    elif  number_of_non_leveraged_selected > 1:
+        unified_normal = outcomes_of_normal_investments[0]
 
+        for i in range(1, number_of_non_leveraged_selected):
+            unified_normal = [a + b for a, b in zip(unified_normal, outcomes_of_normal_investments[i])]
+        unified_normal = np.divide(unified_normal, number_of_non_leveraged_selected)
 
+    #Unifed list of leveraged instruments
+    unified_leveraged = []
+    if number_of_leveraged_selected == 1:
+        unified_leveraged = outcomes_of_leveraged_investments[0]
+
+    elif  number_of_leveraged_selected > 1:
+        unified_leveraged = outcomes_of_leveraged_investments[0]
+
+        for i in range(1, number_of_leveraged_selected):
+            unified_leveraged = [a + b for a, b in zip(unified_leveraged, outcomes_of_leveraged_investments[i])]
+        unified_leveraged = np.divide(unified_leveraged, number_of_leveraged_selected)
+
+    #add both lists, take cere if empty TODO
+    if number_of_leveraged_selected == 0:
+        return unified_normal
+    elif number_of_non_leveraged_selected == 0:
+        return unified_leveraged
+    else:
+        unified_combined = [a + b for a, b in zip(np.multiply(proportion_funds,unified_normal), np.multiply(proportion_leverage, unified_leveraged))] 
+        return unified_combined
 
 
 def simulate_normal_performance(relevant_daily_change):
@@ -106,10 +137,10 @@ def simulate_normal_performance(relevant_daily_change):
 
 
 def simulate_leverage_strategy(relevant_daily_change, leverage):
-    #TODO NOT DONE YET
     print("TMP: NOT YET FULLY IMPLEMENTED")
 
-    stock_value = []
+    START_STOCK_VALUE_START = 1000
+    stock_value = [START_STOCK_VALUE_START]
 
     for change in relevant_daily_change:
         new_value = stock_value[-1]*(1+change*leverage)

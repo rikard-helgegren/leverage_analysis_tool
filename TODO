@@ -1,3 +1,6 @@
 Remove bug: graph changes size when displaying position
 
 Table of selected items can only handel bull = 1 
+
+
+Time should be a linked list.
