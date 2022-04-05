@@ -24,7 +24,6 @@ def calculate_outcomes(self):
     print("TMP selected_key: ", selected_key)
 
 
-
     combined_outcomes_time_intervall = []
     combined_outcomes_full_time = data_index_dict[selected_key]["index_value"]
 
@@ -59,8 +58,9 @@ def calculate_combined_outcomes_full_time(start_time, end_time, instruments_sele
         inedx_data = data_index_dict[instrument[0]]
 
         #Get index of start time for this instrument
-        start_pos = np.where(inedx_data['time'] == start_time)
-        end_pos   = np.where(inedx_data['time'] == end_time)
+        start_pos = np.where(inedx_data['time'] == start_time)[0][0]
+        end_pos   = np.where(inedx_data['time'] == end_time)[0][0]
+
 
         relevant_daily_change = inedx_data['daily_change'][start_pos:end_pos]
 
@@ -78,6 +78,7 @@ def calculate_combined_outcomes_full_time(start_time, end_time, instruments_sele
 
 
 def simulate_normal_performance(relevant_daily_change):
-    
+    print("hi")
 
 def simulate_leverage_strategy(relevant_daily_change):
+    print("hii")
