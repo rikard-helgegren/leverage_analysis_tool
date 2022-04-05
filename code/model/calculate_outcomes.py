@@ -66,9 +66,9 @@ def calculate_combined_outcomes_full_time(start_time, end_time, instruments_sele
         inedx_data = data_index_dict[instrument[0]]
 
         #Get index of start time for this instrument
-        print("TMP: what type ", np.where(inedx_data['time'] == start_time)[0], instrument[0])
-        start_pos = np.where(inedx_data['time'] == start_time)[0][0] #TODO improve
-        end_pos   = np.where(inedx_data['time'] == end_time)[0][0]   #TODO improve
+        print("TMP, max time",max(inedx_data['time']))
+        start_pos = inedx_data['time'].index(start_time)
+        end_pos   = inedx_data['time'].index(end_time)
 
         print("TMP: Size dates", start_pos, end_pos,  end_pos-start_pos)
 

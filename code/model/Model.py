@@ -8,6 +8,7 @@ from code.data_manager.read_and_manage_raw_data import read_and_manage_raw_data
 
 from code.model.calcultate_daily_change import calcultate_daily_change
 from code.model.calculate_outcomes import calculate_outcomes
+from code.model.fill_in_missing_dates import fill_in_missing_dates
 
 ###### IMPORT MODEL ######
 import code.model.constants as constants
@@ -56,6 +57,7 @@ class Model:
         clean_file_names = check_if_data_files_are_clean(self.data_files_path)
         print("Clean files are:", clean_file_names)
         self.data_index_dict = read_and_manage_raw_data(self.data_files_path, clean_file_names)
+        self.data_index_dict = fill_in_missing_dates(self.data_index_dict)
         self.data_index_dict = calcultate_daily_change(self.data_index_dict)
         print("TMP: dict omx:", self.data_index_dict['omx Stockholm 30.csv'].keys())
         

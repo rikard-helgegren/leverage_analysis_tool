@@ -28,8 +28,8 @@ def read_and_manage_raw_data(data_file_path, index_file_names_list):
         index_value = index_value[::-1]
 
         #save data in dict
-        country_data_and_sattistics[contry_index] = {'time': np.array(time)}
-        country_data_and_sattistics[contry_index]['index_value'] = np.array(index_value)
+        country_data_and_sattistics[contry_index] = {'time': time}
+        country_data_and_sattistics[contry_index]['index_value'] = index_value
 
 
     return country_data_and_sattistics
