@@ -6,6 +6,7 @@ def calculate_outcomes(self):
     data_index_dict      = self.get_data_index_dict()
     instruments_selected = self.get_instruments_selected()
 
+    #Check if empty
     if instruments_selected == []:
         print("NOTIFY: Model: calculate_outcomes: instruments_selected is empty")
         return
@@ -17,15 +18,16 @@ def calculate_outcomes(self):
     #Get common start and end time
     [start_time, end_time] = determine_longest_common_timespan(instruments_selected, data_index_dict)
 
+    #Calculate the outcome
     combined_outcomes_full_time = calculate_combined_outcomes_full_time(start_time, end_time, instruments_selected, data_index_dict)
 
 
-    selected_key = instruments_selected[0][0]
+    selected_key = instruments_selected[-1][0]#TODO remove, temporary
     print("TMP selected_key: ", selected_key)
 
 
-    combined_outcomes_time_intervall = []
-    combined_outcomes_full_time = data_index_dict[selected_key]["index_value"]
+    combined_outcomes_time_intervall = []#TODO remove, temporary
+    combined_outcomes_full_time = data_index_dict[selected_key]["index_value"]#TODO remove, temporary
 
     self.set_combined_outcomes_time_intervall(combined_outcomes_time_intervall)
     self.set_combined_outcomes_full_time(combined_outcomes_full_time)
@@ -47,38 +49,70 @@ def calculate_combined_outcomes_full_time(start_time, end_time, instruments_sele
     print("TMP: work in progress")
 
     combined_outcome = []
+    outcomes_of_normal_investments = []
+    outcomes_of_leverage_investments = []
 
     number_of_leveraged_selected = 0
     number_of_non_leveraged_selected = 0
 
+
+    print("TMP: Size dates NEEEW RUN")
     for instrument in instruments_selected:
         print("TMP: index", instrument)
+
+        leverage = instrument[2]
 
         #Get data with instrument name
         inedx_data = data_index_dict[instrument[0]]
 
         #Get index of start time for this instrument
-        start_pos = np.where(inedx_data['time'] == start_time)[0][0]
-        end_pos   = np.where(inedx_data['time'] == end_time)[0][0]
+        print("TMP: what type ", np.where(inedx_data['time'] == start_time)[0], instrument[0])
+        start_pos = np.where(inedx_data['time'] == start_time)[0][0] #TODO improve
+        end_pos   = np.where(inedx_data['time'] == end_time)[0][0]   #TODO improve
+
+        print("TMP: Size dates", start_pos, end_pos,  end_pos-start_pos)
 
 
         relevant_daily_change = inedx_data['daily_change'][start_pos:end_pos]
 
 
-        # Look at instrument leverage
-        if instrument[2] == 1:
+        if leverage == 1:
             number_of_non_leveraged_selected += 1
             performance = simulate_normal_performance(relevant_daily_change)
-        elif instrument[2] > 1:
+            outcomes_of_normal_investments.append(performance)
+        elif leverage > 1:
             number_of_leveraged_selected += 1
-            performance = simulate_leverage_strategy(relevant_daily_change)
+            performance = simulate_leverage_strategy(relevant_daily_change, leverage)
+            outcomes_of_leverage_investments.append(performance)
         else:
-            print("ERROR: elegal leverage used")
+            print("ERROR: Non valid leverage used")
+
+    print("TMP: normal, bull:", number_of_non_leveraged_selected, "|", number_of_leveraged_selected)
+
+
 
 
 
 def simulate_normal_performance(relevant_daily_change):
-    print("hi")
 
-def simulate_leverage_strategy(relevant_daily_change):
-    print("hii")
+    START_STOCK_VALUE_START = 1000
+    stock_value = [START_STOCK_VALUE_START]
+
+    for change in relevant_daily_change:
+        new_value = stock_value[-1]*(1+change)
+        stock_value.append(new_value)
+
+    return stock_value
+
+
+def simulate_leverage_strategy(relevant_daily_change, leverage):
+    #TODO NOT DONE YET
+    print("TMP: NOT YET FULLY IMPLEMENTED")
+
+    stock_value = []
+
+    for change in relevant_daily_change:
+        new_value = stock_value[-1]*(1+change*leverage)
+        stock_value.append(new_value)
+
+    return stock_value
