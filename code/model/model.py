@@ -1,4 +1,4 @@
-
+from copy import deepcopy
 
 ###### IMPORT DATA MANAGER ######
 from code.data_manager.check_if_data_files_are_clean import check_if_data_files_are_clean
@@ -11,6 +11,7 @@ from code.data_manager.manage_preproccessed_data     import save_preproccessed_f
 from code.model.calcultate_daily_change          import calcultate_daily_change
 from code.model.calculate_outcomes               import calculate_outcomes
 from code.model.fill_in_missing_dates            import fill_in_missing_dates
+from code.model.fill_in_missing_dates_improved   import fill_gaps_data
 from code.model.calculate_common_time_interval   import calculate_common_time_interval
 
 from code.model.convert_between_market_and_dict import dict_of_market_dicts_to_dict_of_market_classes, dict_of_market_classes_to_dict_of_market_dicts
@@ -49,6 +50,7 @@ class Model:
         ################ Data Processed ################
 
         self.markets                          = {}
+        self.markets_selected                 = {}
         self.instruments_selected             = [] # Tuples (market_name, leverage)
         self.combined_outcomes_time_intervall = []
         self.combined_outcomes_full_time      = []
@@ -62,26 +64,17 @@ class Model:
         clean_file_names = check_if_data_files_are_clean(self.data_files_path)
         print("Clean files are:", clean_file_names)
 
-        #Check if data files have been proccesed before
-        if  are_files_preproccessed(clean_file_names):
-
-            self.markets = load_preproccessed_files(clean_file_names)
-
-        else:
-            self.markets = read_and_manage_raw_data(self.data_files_path, clean_file_names)
-            self.markets = fill_in_missing_dates(self.markets)
-            self.markets = calcultate_daily_change(self.markets)
-
-            save_preproccessed_files(clean_file_names, self.markets)
+        self.markets = read_and_manage_raw_data(self.data_files_path, clean_file_names)
 
 
     def update_model(self):
         print("TRACE: Model: update_model")
 
-        calculate_outcomes(self)
-        self.common_time_intervall = calculate_common_time_interval(self)
+        self.markets_selected = fill_gaps_data(self.markets_selected)
+        self.markets_selected = calcultate_daily_change(self.markets_selected)
 
-        #TODO
+        calculate_outcomes(self)
+        self.common_time_intervall = calculate_common_time_interval(self) # TODO: doing double work
 
         #self.calculate_graph()
         #self.calculate_hist()
@@ -225,12 +218,16 @@ class Model:
         print("TRACE: Model: set_common_time_intervall")
         self.common_time_intervall = common_time_intervall
 
+
+
+    def set_markets_selected(self, markets_selected):
+        self.markets_selected = markets_selected
+    def get_markets_selected(self):
+        return self.markets_selected
+
     ######################
-    #
+    # Other methods
     ######################
-
-
-
 
 
     def update_instrument_selected(self, table_focus_item ):
@@ -239,3 +236,13 @@ class Model:
             self.instruments_selected.remove(table_focus_item)
         else:
             self.instruments_selected.append(table_focus_item)
+
+        self.update_market_selected()
+
+
+    def update_market_selected(self):
+        self.markets_selected = {}
+        for instrument in self.instruments_selected:
+            name = instrument[0]
+            self.markets_selected[name] = deepcopy(self.markets[name])
+

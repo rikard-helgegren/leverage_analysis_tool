@@ -6,7 +6,7 @@ from code.model.determine_longest_common_timespan import determine_longest_commo
 
 def calculate_common_time_interval(self):
 
-    markets              = self.get_markets()
+    markets_selected              = self.get_markets_selected()
 
     instruments_selected = self.get_instruments_selected()
 
@@ -15,15 +15,15 @@ def calculate_common_time_interval(self):
         print("NOTIFY: Model: calculate_outcomes: instruments_selected is empty")
         return []
 
-    if markets  == []:
+    if markets_selected  == []:
         print("NOTIFY: Model: calculate_outcomes: no loaded data files")
         return []
 
     #Get common start and end time
-    [start_time, end_time] = determine_longest_common_timespan(instruments_selected, markets)
+    [start_time, end_time] = determine_longest_common_timespan(instruments_selected, markets_selected)
 
     #Get select data of a random instrument
-    market = markets[instruments_selected[0][0]]
+    market = markets_selected[instruments_selected[0][0]]
 
     #Extract intervall
     time_span = market.get_time_span()

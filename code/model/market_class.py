@@ -24,7 +24,7 @@ class Market:
 
     def get_values(self):
         return self.values
-    def set_values(self, value):
+    def set_values(self, values):
         self.values = values
 
     def get_time_span(self):
@@ -41,10 +41,10 @@ class Market:
     ################## Other methods ##############
 
     def get_first_day(self):
-        return min(self.time_span)
+        return self.time_span[0]
 
     def get_last_day(self):
-        return max(self.time_span)
+        return self.time_span[-1]
 
 
 

@@ -5,7 +5,7 @@ from code.model.determine_longest_common_timespan   import determine_longest_com
 
 def calculate_outcomes(self):
     print("TRACE: Model: calculate_outcomes")
-    markets              = self.get_markets()
+    markets_selected     = self.get_markets_selected()
     instruments_selected = self.get_instruments_selected()
     proportion_funds     = self.get_proportion_funds()
     proportion_leverage  = self.get_proportion_leverage()
@@ -16,13 +16,13 @@ def calculate_outcomes(self):
         self.set_combined_outcomes_full_time([])
         return
 
-    if markets  == []:
+    if markets_selected  == []:
         print("NOTIFY: Model: calculate_outcomes: no loaded data files")
         self.set_combined_outcomes_full_time([])
         return
 
     #Get common start and end time
-    [start_time, end_time] = determine_longest_common_timespan(instruments_selected, markets)
+    [start_time, end_time] = determine_longest_common_timespan(instruments_selected, markets_selected)
 
 
     #Calculate the outcome
@@ -31,7 +31,7 @@ def calculate_outcomes(self):
                                                                         instruments_selected,
                                                                         proportion_funds,
                                                                         proportion_leverage,
-                                                                        markets)
+                                                                        markets_selected)
 
     combined_outcomes_time_intervall = []#TODO remove, temporary
     
@@ -68,6 +68,7 @@ def calculate_combined_outcomes_full_time(start_time,
 
 
         relevant_daily_change = market.get_daily_change()[start_pos:end_pos]
+
 
 
         if leverage == 1:
