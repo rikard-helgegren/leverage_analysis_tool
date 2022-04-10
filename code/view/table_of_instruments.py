@@ -1,5 +1,11 @@
 
-from tkinter import *
+from tkinter import ttk
+from tkinter import Frame
+from tkinter import LEFT
+from tkinter import RIGHT
+from tkinter import Scrollbar
+from tkinter import END
+from tkinter import Y
 
 def __init__(self):
     frame = Frame(self, padx=5, pady=5)

@@ -69,14 +69,14 @@ def calculate_combined_outcomes_full_time(start_time,
         leverage = instrument[2]
 
         #Get data with instrument name
-        inedx_data = data_index_dict[instrument[0]]
+        index_data = data_index_dict[instrument[0]]
 
         #Get index of start time for this instrument
-        start_pos = inedx_data['time'].index(start_time)
-        end_pos   = inedx_data['time'].index(end_time)
+        start_pos = index_data['time'].index(start_time)
+        end_pos   = index_data['time'].index(end_time)
 
 
-        relevant_daily_change = inedx_data['daily_change'][start_pos:end_pos]
+        relevant_daily_change = index_data['daily_change'][start_pos:end_pos]
 
 
         if leverage == 1:
