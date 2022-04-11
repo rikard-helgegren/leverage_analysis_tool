@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-import numpy as np
+
 import csv
 
 
@@ -27,9 +26,12 @@ def read_and_manage_raw_data(data_file_path, index_file_names_list):
         time        = time[::-1]
         index_value = index_value[::-1]
 
+
         #save data in dict
         country_data_and_sattistics[contry_index] = {'time': time}
         country_data_and_sattistics[contry_index]['index_value'] = index_value
+
+        #TODO: create the index class instance here
 
 
     return country_data_and_sattistics

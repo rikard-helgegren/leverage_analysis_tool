@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 
 from tkinter import *
 from  tkinter import ttk
@@ -12,11 +12,11 @@ import code.view.line_graph_full_time
 import code.view.table_of_instruments
 
 class View(Frame):
-    def __init__(self, parent):
+    def __init__(self, parent:Frame):
         super().__init__(parent)
         print("TRACE: View: __init__")
 
-        # create controller
+        # placeholder for controller
         self.controller = None
 
 
@@ -79,9 +79,9 @@ class View(Frame):
         print("TRACE: View: draw_histogram")
         code.view.histogram.draw_histogram(self,data)
 
-    def draw_line_graph(self, data):
+    def draw_line_graph(self, data, time_intervall):
         print("TRACE: View: draw_line_graph")
-        code.view.line_graph_full_time.draw_line_graph(self,data)
+        code.view.line_graph_full_time.draw_line_graph(self, data, time_intervall)
 
     def set_market_table(self, markets):
         print("TRACE: View: set_market_table")

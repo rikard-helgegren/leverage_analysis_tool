@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 
 ###### IMPORT DATA MANAGER ######
 from code.data_manager.check_if_data_files_are_clean import check_if_data_files_are_clean
@@ -8,9 +8,10 @@ from code.data_manager.manage_preproccessed_data     import load_preproccessed_f
 from code.data_manager.manage_preproccessed_data     import save_preproccessed_files
 
 ###### IMPORT MODEL ######
-from code.model.calcultate_daily_change import calcultate_daily_change
-from code.model.calculate_outcomes      import calculate_outcomes
-from code.model.fill_in_missing_dates   import fill_in_missing_dates
+from code.model.calcultate_daily_change          import calcultate_daily_change
+from code.model.calculate_outcomes               import calculate_outcomes
+from code.model.fill_in_missing_dates            import fill_in_missing_dates
+from code.model.calculate_common_time_interval   import calculate_common_time_interval
 
 
 import code.model.constants as constants
@@ -49,6 +50,7 @@ class Model:
         self.instruments_selected = [] # Tuples (index, leverage)
         self.combined_outcomes_time_intervall = []
         self.combined_outcomes_full_time = []
+        self.common_time_intervall = []
 
 
 
@@ -73,6 +75,7 @@ class Model:
         print("TRACE: Model: update_model")
 
         calculate_outcomes(self)
+        self.common_time_intervall = calculate_common_time_interval(self)
 
         #TODO
 
@@ -211,8 +214,12 @@ class Model:
         print("TRACE: Model: set_combined_outcomes_full_time")
         self.combined_outcomes_full_time = combined_outcomes_full_time
 
-
-
+    def get_common_time_intervall(self):
+        print("TRACE: Model: get_common_time_intervall")
+        return self.common_time_intervall
+    def set_common_time_intervall(self, common_time_intervall):
+        print("TRACE: Model: set_common_time_intervall")
+        self.common_time_intervall = common_time_intervall
 
     ######################
     #

@@ -15,6 +15,7 @@ def fill_in_missing_dates(data_index_dict):
 
         index_dict[index] = {'first_day':first_day, 'last_day':last_day, 'last_checked_day':first_day} 
 
+        #TODO make a good comment
         if first_day < very_first_day:
             very_first_day = first_day
         if last_day > very_last_day:

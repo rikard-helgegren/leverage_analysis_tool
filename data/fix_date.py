@@ -31,7 +31,7 @@ def change_date_format():
 
         # Read file and lines
         try:
-            file = open(data_file_path+"/"+file_itter, 'r')
+            file = open(data_file_path+"/"+file_itter, 'r') #TODO do it with with
         except:
             print("ERROR: Could not open file: ", data_file_path+"/"+file_itter)
 
@@ -60,15 +60,6 @@ def change_date_format():
         fout = open("raw_data/old_test/"+file_itter, "w")
         fout.write(replacement)
         fout.close()
-
-
-
-
-def replaceAll(file,searchExp,replaceExp):
-    
-        if searchExp in line:
-            line = line.replace(searchExp,replaceExp)
-        sys.stdout.write(line)
 
 
 def convert_text_month_to_number(match_one):

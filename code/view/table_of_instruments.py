@@ -1,6 +1,7 @@
 
-from tkinter import *
+from tkinter import * # HIHI!
 
+#Make this a class
 def __init__(self):
     frame = Frame(self, padx=5, pady=5)
     frame.pack(side=LEFT)

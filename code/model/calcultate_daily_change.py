@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 
 def calcultate_daily_change(index_dictionary):
 

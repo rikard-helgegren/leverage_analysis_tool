@@ -4,11 +4,11 @@
 #import code.model.model as model
 
 from tkinter import *
-from code.model.Model import Model
-from code.view.View import View
-from code.controller.Controller import Controller
+from code.model.model import Model
+from code.view.view import View
+from code.controller.controller import Controller
 
-class Leverage_application(Tk):
+class Leverage_Application(Tk):
     def __init__(self):
         super().__init__()
 
@@ -38,5 +38,5 @@ class Leverage_application(Tk):
 ############################
 
 if __name__ == '__main__':
-    app = Leverage_application()
+    app = Leverage_Application()
     app.mainloop()

@@ -1,6 +1,14 @@
+
 Remove bug: graph changes size when displaying position
 
 Table of selected items can only handel bull = 1 
 
 
 Time should be a linked list.
+
+
+borde göera om inde_dict till dict av klasser, där ett indeg blir sin egen glass med funktioner och getters och setters
+
+
+def __init__(self, parent:Frame): vill vi ha typer i funtions och metod anrop
+

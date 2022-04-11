@@ -1,6 +1,7 @@
-#!/usr/bin/env python3
+
 import numpy as np
 
+from code.model.determine_longest_common_timespan   import determine_longest_common_timespan
 
 def calculate_outcomes(self):
     print("TRACE: Model: calculate_outcomes")
@@ -12,14 +13,17 @@ def calculate_outcomes(self):
     #Check if empty
     if instruments_selected == []:
         print("NOTIFY: Model: calculate_outcomes: instruments_selected is empty")
+        self.set_combined_outcomes_full_time([])
         return
 
     if data_index_dict  == []:
-        print("NOTIFY: Model: calculate_outcomes: instruments_selected is empty")
+        print("NOTIFY: Model: calculate_outcomes: no loaded data files")
+        self.set_combined_outcomes_full_time([])
         return
 
     #Get common start and end time
     [start_time, end_time] = determine_longest_common_timespan(instruments_selected, data_index_dict)
+
 
     #Calculate the outcome
     combined_outcomes_full_time = calculate_combined_outcomes_full_time(start_time,
@@ -33,19 +37,6 @@ def calculate_outcomes(self):
     
     self.set_combined_outcomes_time_intervall(combined_outcomes_time_intervall)
     self.set_combined_outcomes_full_time(combined_outcomes_full_time)
-
-
-def determine_longest_common_timespan(instruments_selected, data_index_dict):    
-    min_time = []
-    max_time = []
-    for index in instruments_selected:
-        min_time.append(min(data_index_dict[index[0]]['time'])) #Get all first days (select highest)
-        max_time.append(max(data_index_dict[index[0]]['time'])) #Get all last days (select lowest)
-
-    start_time = max(min_time)
-    end_time   = min(max_time)
-
-    return [start_time, end_time]
 
 
 def calculate_combined_outcomes_full_time(start_time,
@@ -120,6 +111,7 @@ def calculate_combined_outcomes_full_time(start_time,
     elif number_of_non_leveraged_selected == 0:
         return unified_leveraged
     else:
+        #TODO make prittier
         unified_combined = [a + b for a, b in zip(np.multiply(proportion_funds,unified_normal), np.multiply(proportion_leverage, unified_leveraged))] 
         return unified_combined
 
