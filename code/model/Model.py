@@ -2,17 +2,18 @@
 
 ###### IMPORT DATA MANAGER ######
 from code.data_manager.check_if_data_files_are_clean import check_if_data_files_are_clean
-from code.data_manager.read_and_manage_raw_data import read_and_manage_raw_data
-
-##### IMPORT CALCULATOR #######
-
-from code.model.calcultate_daily_change import calcultate_daily_change
-from code.model.calculate_outcomes import calculate_outcomes
-from code.model.fill_in_missing_dates import fill_in_missing_dates
+from code.data_manager.read_and_manage_raw_data      import read_and_manage_raw_data
+from code.data_manager.manage_preproccessed_data     import are_files_preproccessed
+from code.data_manager.manage_preproccessed_data     import load_preproccessed_files
+from code.data_manager.manage_preproccessed_data     import save_preproccessed_files
 
 ###### IMPORT MODEL ######
-import code.model.constants as constants
+from code.model.calcultate_daily_change import calcultate_daily_change
+from code.model.calculate_outcomes      import calculate_outcomes
+from code.model.fill_in_missing_dates   import fill_in_missing_dates
 
+
+import code.model.constants as constants
 
 class Model:
     def __init__(self):
@@ -56,10 +57,16 @@ class Model:
 
         clean_file_names = check_if_data_files_are_clean(self.data_files_path)
         print("Clean files are:", clean_file_names)
-        self.data_index_dict = read_and_manage_raw_data(self.data_files_path, clean_file_names)
-        self.data_index_dict = fill_in_missing_dates(self.data_index_dict)
-        self.data_index_dict = calcultate_daily_change(self.data_index_dict)
-        print("TMP: dict omx:", self.data_index_dict['omx Stockholm 30.csv'].keys())
+
+        #Check if data files have been proccesed before
+        if  are_files_preproccessed(clean_file_names):
+                self.data_index_dict = load_preproccessed_files(clean_file_names)
+        else:
+            self.data_index_dict = read_and_manage_raw_data(self.data_files_path, clean_file_names)
+            self.data_index_dict = fill_in_missing_dates(self.data_index_dict)
+            self.data_index_dict = calcultate_daily_change(self.data_index_dict)
+            
+            save_preproccessed_files(clean_file_names, self.data_index_dict)
         
 
     def update_model(self):
