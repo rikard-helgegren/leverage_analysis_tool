@@ -47,7 +47,7 @@ class Controller:
 
     def set_market_table(self):
         print("TRACE: controller: set_market_table")
-        markets = self.model.get_data_index_dict().keys() # TODO: maybe make a method for this
+        markets = self.model.get_markets().keys() # TODO: maybe make a method for this
         self.view.set_market_table(markets)
 
     def update_instrument_selected(self, table_focus_item ):

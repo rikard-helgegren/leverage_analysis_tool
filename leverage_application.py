@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 
 ###### MODEL ######
-#import code.model.model as model
 
-from tkinter import *
+import tkinter as tk
 from code.model.model import Model
 from code.view.view import View
 from code.controller.controller import Controller
 
-class Leverage_Application(Tk):
+class Leverage_Application(tk.Tk):
     def __init__(self):
         super().__init__()
 

@@ -13,6 +13,8 @@ from code.model.calculate_outcomes               import calculate_outcomes
 from code.model.fill_in_missing_dates            import fill_in_missing_dates
 from code.model.calculate_common_time_interval   import calculate_common_time_interval
 
+from code.model.convert_between_market_and_dict import dict_of_market_dicts_to_dict_of_market_classes, dict_of_market_classes_to_dict_of_market_dicts
+
 
 import code.model.constants as constants
 
@@ -46,11 +48,11 @@ class Model:
 
         ################ Data Processed ################
 
-        self.data_index_dict      = {}
-        self.instruments_selected = [] # Tuples (index, leverage)
+        self.markets                          = {}
+        self.instruments_selected             = [] # Tuples (market_name, leverage)
         self.combined_outcomes_time_intervall = []
-        self.combined_outcomes_full_time = []
-        self.common_time_intervall = []
+        self.combined_outcomes_full_time      = []
+        self.common_time_intervall            = []
 
 
 
@@ -62,14 +64,16 @@ class Model:
 
         #Check if data files have been proccesed before
         if  are_files_preproccessed(clean_file_names):
-                self.data_index_dict = load_preproccessed_files(clean_file_names)
+
+            self.markets = load_preproccessed_files(clean_file_names)
+
         else:
-            self.data_index_dict = read_and_manage_raw_data(self.data_files_path, clean_file_names)
-            self.data_index_dict = fill_in_missing_dates(self.data_index_dict)
-            self.data_index_dict = calcultate_daily_change(self.data_index_dict)
-            
-            save_preproccessed_files(clean_file_names, self.data_index_dict)
-        
+            self.markets = read_and_manage_raw_data(self.data_files_path, clean_file_names)
+            self.markets = fill_in_missing_dates(self.markets)
+            self.markets = calcultate_daily_change(self.markets)
+
+            save_preproccessed_files(clean_file_names, self.markets)
+
 
     def update_model(self):
         print("TRACE: Model: update_model")
@@ -186,12 +190,12 @@ class Model:
         print("TRACE: Model: set_delay_of_correction")
         self.delay_of_correction = delay_of_correction
 
-    def get_data_index_dict(self):
-        print("TRACE: Model: get_data_index_dict")
-        return self.data_index_dict
-    def set_data_index_dict(self, data_index_dict):
-        print("TRACE: Model: set_data_index_dict")
-        self.data_index_dict = data_index_dict
+    def get_markets(self):
+        print("TRACE: Model: get_markets")
+        return self.markets
+    def set_markets(self, markets):
+        print("TRACE: Model: set_markets")
+        self.markets = markets
 
     def get_instruments_selected(self):
         print("TRACE: Model: get_instruments_selected")

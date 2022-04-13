@@ -1,18 +1,17 @@
 
-def calcultate_daily_change(index_dictionary):
+def calcultate_daily_change(markets_dict):
 
-    for index_key in index_dictionary:
+    for market in markets_dict.values():
 
-        #Extract index values 
-        index_values = index_dictionary[index_key]["index_value"]
+        market_values = market.get_values()
 
         daily_change = []
 
         #Calculate change in index value since last input
-        for index, val in enumerate(index_values[1:]):
-            change = (val-index_values[index])/index_values[index]            
+        for i, value in enumerate(market_values[1:]):
+            change = (value-market_values[i])/market_values[i]
             daily_change.append(change)
         
-        index_dictionary[index_key]["daily_change"] = daily_change
+        market.set_daily_change(daily_change)
 
-    return index_dictionary
+    return markets_dict

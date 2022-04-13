@@ -1,17 +1,17 @@
 
-from tkinter import * # HIHI!
+import tkinter as tk
 
 #Make this a class
 def __init__(self):
-    frame = Frame(self, padx=5, pady=5)
-    frame.pack(side=LEFT)
+    frame = tk.Frame(self, padx=5, pady=5)
+    frame.pack(side=tk.LEFT)
     #scrollbar
-    game_scroll = Scrollbar(frame)
-    game_scroll.pack(side=RIGHT, fill=Y)
+    game_scroll = tk.Scrollbar(frame)
+    game_scroll.pack(side=tk.RIGHT, fill=tk.Y)
 
     columns = ('index', 'country', 'leverage')
 
-    self.market_table = ttk.Treeview(frame,yscrollcommand=game_scroll.set, xscrollcommand =game_scroll.set, columns=columns, show='headings')
+    self.market_table = tk.ttk.Treeview(frame,yscrollcommand=game_scroll.set, xscrollcommand =game_scroll.set, columns=columns, show='headings')
     self.market_table.heading('index', text='Index')
     self.market_table.heading('country', text='Country')
     self.market_table.heading('leverage', text='Leverage')
@@ -31,7 +31,7 @@ def set_market_table(self, markets):
     for market in markets:
         #only add if not all ready there
         if market not in all_item_values:
-            self.market_table.insert(parent='', index=END, values=(market, 'not known',1))
+            self.market_table.insert(parent='', index=tk.END, values=(market, 'not known',1))
 
 def get_table_item_focused(self):
     print("TRACE: table_of_instruments: get_table_item_focused")

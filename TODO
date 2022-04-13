@@ -12,3 +12,4 @@ borde göera om inde_dict till dict av klasser, där ett indeg blir sin egen gla
 
 def __init__(self, parent:Frame): vill vi ha typer i funtions och metod anrop
 
+remove all dict_of_market_classes_to_dict_of_market_dicts where possible

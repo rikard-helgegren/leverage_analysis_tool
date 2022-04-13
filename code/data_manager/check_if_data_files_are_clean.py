@@ -107,7 +107,7 @@ def check_value_rows(lines):
 def check_time_decreases_for_each_row(lines):
     return_value = True
 
-    previous_date = 100000000
+    previous_date = 100000000 #date value larger most resent data point
 
     for line in lines:
         words_in_line = line.split(',')
@@ -121,20 +121,20 @@ def check_time_decreases_for_each_row(lines):
 
 def check_daily_change(lines):
 
-    index_values = []
+    market_values = []
 
     for line in lines:
         words_in_line = line.split(',')
-        index_values.append(float(words_in_line[2]))
+        market_values.append(float(words_in_line[2]))
 
-    for index, val in enumerate(index_values[1:]):
-        change = (int(val)-index_values[index])/index_values[index]
+    for i, value in enumerate(market_values[1:]):
+        change = (int(value)-market_values[i])/market_values[i]
         
         if change<= 1 and change >= -0.6:
             #all is well, do nothing
             continue
         else:
             print("ERROR: Unprobable daily change:" ,\
-                round(change*100,0), "%. Check line ", index-1 )
+                round(change*100,0), "%. Check line ", i-1 )
             return False
     return True

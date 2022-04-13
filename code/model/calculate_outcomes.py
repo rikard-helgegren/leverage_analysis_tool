@@ -5,7 +5,7 @@ from code.model.determine_longest_common_timespan   import determine_longest_com
 
 def calculate_outcomes(self):
     print("TRACE: Model: calculate_outcomes")
-    data_index_dict      = self.get_data_index_dict()
+    markets              = self.get_markets()
     instruments_selected = self.get_instruments_selected()
     proportion_funds     = self.get_proportion_funds()
     proportion_leverage  = self.get_proportion_leverage()
@@ -16,22 +16,22 @@ def calculate_outcomes(self):
         self.set_combined_outcomes_full_time([])
         return
 
-    if data_index_dict  == []:
+    if markets  == []:
         print("NOTIFY: Model: calculate_outcomes: no loaded data files")
         self.set_combined_outcomes_full_time([])
         return
 
     #Get common start and end time
-    [start_time, end_time] = determine_longest_common_timespan(instruments_selected, data_index_dict)
+    [start_time, end_time] = determine_longest_common_timespan(instruments_selected, markets)
 
 
     #Calculate the outcome
     combined_outcomes_full_time = calculate_combined_outcomes_full_time(start_time,
                                                                         end_time,
                                                                         instruments_selected,
-                                                                        data_index_dict,
                                                                         proportion_funds,
-                                                                        proportion_leverage)
+                                                                        proportion_leverage,
+                                                                        markets)
 
     combined_outcomes_time_intervall = []#TODO remove, temporary
     
@@ -42,13 +42,13 @@ def calculate_outcomes(self):
 def calculate_combined_outcomes_full_time(start_time,
                                           end_time,
                                           instruments_selected,
-                                          data_index_dict,
                                           proportion_funds,
-                                          proportion_leverage):
+                                          proportion_leverage,
+                                          markets):
 
     combined_outcome = []
     outcomes_of_normal_investments = []
-    outcomes_of_leverage_investments = []
+    outcomes_of_leveraged_investments = []
 
     number_of_leveraged_selected = 0
     number_of_non_leveraged_selected = 0
@@ -60,14 +60,14 @@ def calculate_combined_outcomes_full_time(start_time,
         leverage = instrument[2]
 
         #Get data with instrument name
-        inedx_data = data_index_dict[instrument[0]]
+        market = markets[instrument[0]]
 
         #Get index of start time for this instrument
-        start_pos = inedx_data['time'].index(start_time)
-        end_pos   = inedx_data['time'].index(end_time)
+        start_pos = market.get_time_span().index(start_time)
+        end_pos   = market.get_time_span().index(end_time)
 
 
-        relevant_daily_change = inedx_data['daily_change'][start_pos:end_pos]
+        relevant_daily_change = market.get_daily_change()[start_pos:end_pos]
 
 
         if leverage == 1:
@@ -77,10 +77,28 @@ def calculate_combined_outcomes_full_time(start_time,
         elif leverage > 1:
             number_of_leveraged_selected += 1
             performance = simulate_leverage_strategy(relevant_daily_change, leverage)
-            outcomes_of_leverage_investments.append(performance)
+            outcomes_of_leveraged_investments.append(performance)
         else:
             print("ERROR: Non valid leverage used")
 
+
+
+    combined_normal = combine_normal_instruments(number_of_non_leveraged_selected, outcomes_of_normal_investments)
+
+    combined_leveraged = combine_leveraged_instruments(number_of_leveraged_selected, outcomes_of_leveraged_investments)#Unifed list of leveraged instruments
+
+    # Combine normal and leveraged
+    if number_of_leveraged_selected == 0:
+        return combined_normal
+    elif number_of_non_leveraged_selected == 0:
+        return combined_leveraged
+    else:
+        combined_normal_proprtionally = np.multiply(proportion_funds, combined_normal) # take in to account how much of total is invested in normal funds
+        combined_leveraged_proprtionally = np.multiply(proportion_leverage, combined_leveraged) # take in to account how much of total is invested in leveraged markets
+        normal_and_leverage_combined = [normal + leverage for normal, leverage in zip(combined_normal_proprtionally, combined_leveraged_proprtionally)]
+        return normal_and_leverage_combined
+
+def combine_normal_instruments(number_of_non_leveraged_selected, outcomes_of_normal_investments):
     #Unifed list of normal instruments
     unified_normal = []
     if number_of_non_leveraged_selected == 1:
@@ -93,6 +111,9 @@ def calculate_combined_outcomes_full_time(start_time,
             unified_normal = [a + b for a, b in zip(unified_normal, outcomes_of_normal_investments[i])]
         unified_normal = np.divide(unified_normal, number_of_non_leveraged_selected)
 
+    return unified_normal
+
+def combine_leveraged_instruments(number_of_leveraged_selected, outcomes_of_leveraged_investments):
     #Unifed list of leveraged instruments
     unified_leveraged = []
     if number_of_leveraged_selected == 1:
@@ -104,17 +125,7 @@ def calculate_combined_outcomes_full_time(start_time,
         for i in range(1, number_of_leveraged_selected):
             unified_leveraged = [a + b for a, b in zip(unified_leveraged, outcomes_of_leveraged_investments[i])]
         unified_leveraged = np.divide(unified_leveraged, number_of_leveraged_selected)
-
-    #add both lists, take cere if empty TODO
-    if number_of_leveraged_selected == 0:
-        return unified_normal
-    elif number_of_non_leveraged_selected == 0:
-        return unified_leveraged
-    else:
-        #TODO make prittier
-        unified_combined = [a + b for a, b in zip(np.multiply(proportion_funds,unified_normal), np.multiply(proportion_leverage, unified_leveraged))] 
-        return unified_combined
-
+    return unified_leveraged
 
 def simulate_normal_performance(relevant_daily_change):
 
