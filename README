@@ -1,0 +1,11 @@
+
+This is a analyzing tool for gaining understanding if and how leveraged instruments can be used to buld a investment portfolio that matches ones prefrences.
+
+
+####### RUN ######
+
+Run leverage_application.py to start application
+
+####### DATA ######
+
+The data is stord as csv files and need to have a specific format that is checked in the beginning of the program

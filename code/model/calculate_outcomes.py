@@ -57,7 +57,7 @@ def calculate_combined_outcomes_full_time(start_time,
 
     for instrument in instruments_selected:
 
-        leverage = instrument[2]
+        leverage = instrument[1]
 
         #Get data with instrument name
         market = markets[instrument[0]]

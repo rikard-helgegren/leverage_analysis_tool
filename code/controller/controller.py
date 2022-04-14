@@ -50,10 +50,10 @@ class Controller:
         markets = self.model.get_markets().keys() # TODO: maybe make a method for this
         self.view.set_market_table(markets)
 
-    def update_instrument_selected(self, table_focus_item ):
+    def update_instrument_selected(self, table_focus_item_data ):
         print("TRACE: controller: update_table_item_focused")
         #Update model
-        self.model.update_instrument_selected(table_focus_item)
+        self.model.update_instrument_selected(table_focus_item_data)
         self.update_model()
 
         #Update View

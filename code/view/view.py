@@ -89,6 +89,13 @@ class View(tk.Frame):
         
     def update_table_item_focused(self, _ ):
         print("TRACE: View: table_item_focused")
-        code.view.table_of_instruments.update_item_color(self)
-        table_focus_item = code.view.table_of_instruments.get_table_item_focused(self)
-        self.controller.update_instrument_selected(table_focus_item)
+        did_unfolding = code.view.table_of_instruments.only_did_unfolding(self)
+
+        if did_unfolding:
+            #An item was only unfolded do nothing
+            return
+        else:
+            #An item was selected update view
+            code.view.table_of_instruments.update_item_color(self)
+            table_focus_item = code.view.table_of_instruments.get_table_item_focused(self)
+            self.controller.update_instrument_selected(table_focus_item)

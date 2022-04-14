@@ -219,6 +219,15 @@ class Model:
         self.common_time_intervall = common_time_intervall
 
 
+    def get_markets_selected(self):
+        return self.markets_selected
+    def set_markets_selected(self, markets_selected):
+        slef.markets_selected = markets_selected
+
+    ######################
+    #
+    ######################
+
 
     def set_markets_selected(self, markets_selected):
         self.markets_selected = markets_selected
@@ -230,12 +239,12 @@ class Model:
     ######################
 
 
-    def update_instrument_selected(self, table_focus_item ):
+    def update_instrument_selected(self, table_focus_item_data ):
         print("TRACE: Model: update_instrument_selected")
-        if table_focus_item in self.instruments_selected:
-            self.instruments_selected.remove(table_focus_item)
+        if table_focus_item_data in self.instruments_selected:
+            self.instruments_selected.remove(table_focus_item_data)
         else:
-            self.instruments_selected.append(table_focus_item)
+            self.instruments_selected.append(table_focus_item_data)
 
         self.update_market_selected()
 
