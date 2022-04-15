@@ -173,14 +173,6 @@ def naive_fix_gaps(lists_of_indexes):
                 master_list.insert(find_first_index_less_than(master_list, index)+1, index)
     return master_list
 
-def my_zip(A, B):
-    i = 0
-    C = []
-    while i < len(A) and i < len(B):
-        C.append((A[i], B[i]))
-        i += 1
-    return C
-
 def fill_gaps_data(lists_to_fill, lists_of_values):
     latest_first = find_latest_first(lists_to_fill)
     earliest_last = find_Earliest_last(lists_to_fill)
@@ -224,6 +216,102 @@ def fill_gaps_data(lists_to_fill, lists_of_values):
     
     master_list = linked_list_to_list(master_linked_list)
     return ([master_list]*len(lists_to_fill), master_lists_of_values)
+
+def fix_gaps_cmp(lists_of_indexes, cmp):
+    return fix_gaps2(lists_of_indexes, find_latest_first(lists_of_indexes), find_Earliest_last(lists_of_indexes))
+
+def fix_gaps2_cmp(lists_of_indexes, latest_first, earliest_last, cmp):
+    master_node = Node() # Dummy node
+    previous_node = master_node
+    current_node = None
+
+    # Create master_index_list
+    for list_of_indexes in lists_of_indexes:
+        i = 0
+        while i < len(list_of_indexes):
+            index = list_of_indexes[i]
+
+            if cmp(index, latest_first) < 0 or cmp(index, earliest_last) > 0:
+                i += 1
+
+            # first node, or out of data
+            elif current_node == None:
+                current_node = Node(index)
+                previous_node.next = current_node
+                previous_node = current_node
+                current_node = previous_node.next
+                i += 1
+
+            # insert index
+            elif cmp(current_node.data, index) > 0:
+                previous_node.next = Node(index)
+                previous_node = previous_node.next
+                previous_node.next = current_node
+                i += 1
+
+            # index is later than current_node
+            elif cmp(current_node.data, index) < 0:
+                previous_node = current_node
+                current_node = previous_node.next
+
+            # index already exist in the linked_list
+            else:
+                previous_node = current_node
+                current_node = previous_node.next
+                i += 1
+
+        previous_node = master_node
+        current_node = master_node.next
+
+    master_index_list = LinkedList()
+    master_index_list.head = master_node.next
+    return master_index_list
+
+def fill_gaps_data_cmp(lists_to_fill, lists_of_values, cmp):
+    latest_first = find_latest_first(lists_to_fill)
+    earliest_last = find_Earliest_last(lists_to_fill)
+    master_linked_list = fix_gaps2(lists_to_fill, latest_first, earliest_last)
+    node = master_linked_list.head
+    master_lists_of_values = []
+
+    for (list_to_fill, list_of_values) in zip(lists_to_fill, lists_of_values):
+        i = 0
+        value_list = []
+        while node != None:
+
+#            print("Test>>>>>>>>>>>>>>>>>>>>>>>")
+#            print(i)
+#            print(node.data)
+#            print(list_to_fill[i])
+#            print(value_list)
+
+            if i == len(list_to_fill):
+                value_list.append(list_of_values[i-1])
+                node = node.next
+
+            # if list_to_fill[i] > earliest_last then node != None by the construction of master_linked_list
+            elif cmp(list_to_fill[i], latest_first) < 0:
+                i += 1
+
+            elif list_to_fill[i] == node.data:
+                value_list.append(list_of_values[i])
+                node = node.next
+                i += 1
+
+            # Here we know node.data < list_to_fill[i] and we don't want to increase i
+            # Here i != 0 since then latest_first < node.data < list_to_fill[0], which is impossible
+            else:
+                value_list.append(list_of_values[i-1])
+                node = node.next
+        master_lists_of_values.append(value_list)
+        node = master_linked_list.head
+
+#    print("END<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    
+    master_list = linked_list_to_list(master_linked_list)
+    return ([master_list]*len(lists_to_fill), master_lists_of_values)
+
+
 
 #######################################################
 ###                     Tests                       ###
@@ -314,6 +402,8 @@ def fix_gaps_test():
         assert(linked_list_to_list(fix_gaps(lists_to_fill)) == 
                naive_fix_gaps([[i for i in list_to_fill
                     if find_latest_first(lists_to_fill) <= i <= find_Earliest_last(lists_to_fill)] for list_to_fill in lists_to_fill]))
+        assert(linked_list_to_list(fix_gaps(lists_to_fill)) == 
+               linked_list_to_list(fix_gaps_cmp(lists_to_fill, lambda x, y: x - y)))
 
     list_of_lists_to_fill2 = [[[1, 2, 3, 6], [1, 2, 4, 8]],
                               [[1, 3, 5, 6, 8], [1, 3, 6, 8, 9], [1, 7, 9]],
@@ -331,6 +421,9 @@ def fix_gaps_test():
     for i in range(len(list_of_expected_output)):
         assert(fill_gaps_data(list_of_lists_to_fill2[i], list_of_lists_of_data[i]) == 
                list_of_expected_output[i])
+        assert(fill_gaps_data(list_of_lists_to_fill2[i], list_of_lists_of_data[i]) == 
+               fill_gaps_data_cmp(list_of_lists_to_fill2[i], list_of_lists_of_data[i], lambda x, y: x - y))
+
 
 import random
 
@@ -413,7 +506,7 @@ def tests():
     fix_gaps_test()
 
     #preformence_tests()
-    fix_gaps_preformence_test()
+    #fix_gaps_preformence_test()
 
 if __name__ == '__main__':
     tests()
