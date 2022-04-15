@@ -218,7 +218,7 @@ def fill_gaps_data(lists_to_fill, lists_of_values):
     return ([master_list]*len(lists_to_fill), master_lists_of_values)
 
 def fix_gaps_cmp(lists_of_indexes, cmp):
-    return fix_gaps2(lists_of_indexes, find_latest_first(lists_of_indexes), find_Earliest_last(lists_of_indexes))
+    return fix_gaps2_cmp(lists_of_indexes, find_latest_first(lists_of_indexes), find_Earliest_last(lists_of_indexes), cmp)
 
 def fix_gaps2_cmp(lists_of_indexes, latest_first, earliest_last, cmp):
     master_node = Node() # Dummy node
@@ -270,7 +270,7 @@ def fix_gaps2_cmp(lists_of_indexes, latest_first, earliest_last, cmp):
 def fill_gaps_data_cmp(lists_to_fill, lists_of_values, cmp):
     latest_first = find_latest_first(lists_to_fill)
     earliest_last = find_Earliest_last(lists_to_fill)
-    master_linked_list = fix_gaps2(lists_to_fill, latest_first, earliest_last)
+    master_linked_list = fix_gaps2_cmp(lists_to_fill, latest_first, earliest_last, cmp)
     node = master_linked_list.head
     master_lists_of_values = []
 
@@ -293,7 +293,7 @@ def fill_gaps_data_cmp(lists_to_fill, lists_of_values, cmp):
             elif cmp(list_to_fill[i], latest_first) < 0:
                 i += 1
 
-            elif list_to_fill[i] == node.data:
+            elif cmp(list_to_fill[i], node.data) == 0:
                 value_list.append(list_of_values[i])
                 node = node.next
                 i += 1
