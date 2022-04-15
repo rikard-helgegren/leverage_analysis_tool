@@ -5,7 +5,7 @@ This is a analyzing tool for gaining understanding if and how leveraged instrume
 
 ### How to run
 
-Run the application by executnig leverage_analysis_tool.py
+Run the application by executing leverage_analysis_tool.py
 
 ```
 python3 leverage_analysis_tool.py
@@ -13,14 +13,14 @@ python3 leverage_analysis_tool.py
 
 ### Data
 
-Data files are not included due to copywrite uncertenties but can be downloaded at
+Data files are not included due to copy write uncertainties but can be downloaded at
 
 * https://www.investing.com/
 * https://www.kaggle.com/
 
-The should be stored as csv files and need to have a specific format, this is checked in the beginning of the program.
+The data should be stored as csv files and need to have a specific format, this is checked in the beginning of the program.
 
-Filname: *Index* *Country*.csv \
+Filename: *Index* *Country*.csv \
 First row: Date, Close, Open \
 Following rows: *Date value*, *Close value*, *Open value*
 

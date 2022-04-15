@@ -1,25 +1,20 @@
 
 
 import tkinter as tk
-from tkinter import ttk
-from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
-
-import code.view.histogram
-import code.view.line_graph_full_time
-import code.view.table_of_instruments
 
 from code.view.histogram import Histogram
 from code.view.line_graph_full_time import Line_Graph_Full_Time
 from code.view.table_of_instruments import Table_Of_Instuments
+from code.view.widgets_in_vertical_1 import setup_vertical_frame_1
+from code.view.table_of_statistics import Table_Of_Statistics
+
 
 class View(tk.Frame):
-    """This is the view of the application. It is the interface beetween
+    """This is the view of the application. It is the interface between
        the user and the model.
 
-       The View contains widgets and plots, and comunicates any interactions
+       The View contains widgets and plots, and communicates any interactions
        with the view to the controller
     """
     def __init__(self, parent):
@@ -30,42 +25,50 @@ class View(tk.Frame):
         # placeholder for controller
         self.controller = None
 
+        #############
+        # Vertical 1
+        #############
 
-        ######################
-        # create widgets
-        ######################
+        self.vertical_frame_1 = tk.Frame(self, padx=5, pady=5)
+        self.vertical_frame_1.pack(side=tk.LEFT)
 
-        self.frame1 = tk.Frame(self, padx=5, pady=5)
-        self.frame1.pack(side=tk.LEFT)
-        self.checkbutton_fee_state = tk.IntVar()
-        self.checkbutton = tk.Checkbutton(self.frame1, text="Include Fees", variable=self.checkbutton_fee_state, command=self.update_fee_status)
-        self.checkbutton.pack()
+        setup_vertical_frame_1(self, self.vertical_frame_1)
 
-        self.label = tk.Label(self.frame1, text='Years')
-        self.label.pack()
+        #############
+        # Vertical 2
+        #############
 
-        #Spinbox
-        self.spin = tk.Spinbox(self.frame1, from_=0, to=100, width=5,command=self.update_limit)
-        self.spin.pack()
+        self.vertical_frame_2 = tk.Frame(self, padx=5, pady=5)
+        self.vertical_frame_2.pack(side=tk.LEFT)
 
-        #Slide
-        self.scale = tk.Scale(self.frame1, from_=0, to=100, orient='horizontal', command=self.update_amount)
-        self.scale.pack()
-
-        self.histogram = Histogram(self)
-        """ The histogram displaies a distribution of outcomes from all continious
+        self.histogram = Histogram(self.vertical_frame_2)
+        """ The histogram displays a distribution of outcomes from all continuous
             time intervals of the selected length.
         """
 
-        self.line_graph_full_time = Line_Graph_Full_Time(self)
-        """ This line garaph displaies the performance of the created portfolio
+        self.line_graph_full_time = Line_Graph_Full_Time(self.vertical_frame_2)
+        """ This line graph displays the performance of the created portfolio
             for the full time span available
         """
 
-        self.table_of_instruments = Table_Of_Instuments(self)
+        #############
+        # Vertical 3
+        #############
+
+        self.vertical_frame_3 = tk.Frame(self, padx=5, pady=5)
+        self.vertical_frame_3.pack(side=tk.LEFT)
+
+        self.table_of_instruments = Table_Of_Instuments(self.vertical_frame_3, self)
         """ The table of instruments is a table from which the user can select
             instruments with or without leverage to use in their portfolio
         """
+
+        self.table_of_statistics = Table_Of_Statistics(self.vertical_frame_3)
+
+
+        #############
+        # Vertical 4
+        #############
 
 
     ###############
@@ -82,15 +85,25 @@ class View(tk.Frame):
         self.controller.update_fee_status(self.checkbutton_fee_state.get())
         tk.messagebox.showinfo('Error', 'Not fully implemented')
     
-    def update_limit(self):
-        print("TRACE: View: update_limit")
+    def update_years_investigating(self):
+        print("TRACE: View: updatupdate_years_investigatinge_limit")
+        value = int(self.spin_years.get())
+        self.controller.update_years_investigating(value)
+
+    def update_loan(self, value):
+        print("TRACE: View: update_loan")
         tk.messagebox.showinfo('Error', 'Not fully implemented')
+
+    def update_amount_leverage(self, value):
+        print("TRACE: View: update_amount_leverage")
+        self.controller.set_update_amount_leverage(value)
         #TODO
 
-    def update_amount(self, value):
-        print("TRACE: View: update_amount")
+    def update_rebalance_status(self):
+        print("TRACE: View: update_rebalance_status", self.checkbutton_rebalance_state.get())
         tk.messagebox.showinfo('Error', 'Not fully implemented')
-        #TODO
+        self.checkbutton_rebalance_state.get()
+        # TODO
 
     def draw_histogram(self, data):
         print("TRACE: View: draw_histogram")
@@ -104,17 +117,6 @@ class View(tk.Frame):
         print("TRACE: View: set_market_table")
         self.table_of_instruments.set_table(names, countries)
         
-    def update_table_item_focused(self, _ ):
-        #TODO move parts of code to the table class and rename method
+    def update_instrument_selected(self, table_focus_item):
         print("TRACE: View: table_item_focused")
-
-        did_unfolding = self.table_of_instruments.only_did_unfolding()
-
-        if did_unfolding:
-            #An item was only unfolded do nothing
-            return
-        else:
-            #An item was selected update view
-            self.table_of_instruments.update_item_color()
-            table_focus_item = self.table_of_instruments.get_table_item_focused()
-            self.controller.update_instrument_selected(table_focus_item)
+        self.controller.update_instrument_selected(table_focus_item)

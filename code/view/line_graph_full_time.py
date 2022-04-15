@@ -4,13 +4,13 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
 class Line_Graph_Full_Time:
-    def __init__(self, gui_frame):
+    def __init__(self, super_frame):
         print("TRACE: View: Line_Graph_Full_Time: __init__")
 
-        self.frame = tk.Frame(gui_frame, padx=5, pady=5)
-        self.frame.pack(side=tk.LEFT)
+        self.frame = tk.Frame(super_frame, padx=5, pady=5)
+        self.frame.pack()
         # specify the window as master
-        self.fig = plt.figure(figsize=(4, 5))
+        self.fig = plt.figure(figsize=(5, 3))
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame)
         self.canvas.draw()
         self.canvas.get_tk_widget().pack()

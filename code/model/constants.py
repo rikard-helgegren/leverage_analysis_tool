@@ -16,7 +16,7 @@ data_files_path = "data/raw_data/old"
 ############### GUI VALUES #################
 
 DEFULT_LOAN                                 = 0
-DEFULT_YEARS_INVESTIGATING                  = 5
+DEFULT_YEARS_INVESTIGATING                  = 1
 DEFULT_HARVEST_POINT                        = 1.5
 DEFULT_REFILL_POINT                         = 0.5
 DEFULT_UPDATE_HARVEST_REFILL                = 0

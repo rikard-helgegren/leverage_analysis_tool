@@ -13,6 +13,7 @@ from code.model.calculate_graph_outcomes         import calculate_graph_outcomes
 from code.model.fill_in_missing_dates            import fill_in_missing_dates
 from code.model.fill_in_missing_dates_improved   import fill_gaps_data
 from code.model.calculate_common_time_interval   import calculate_common_time_interval
+from code.model.calculate_histogram              import calculate_histogram
 
 from code.model.convert_between_market_and_dict import dict_of_market_dicts_to_dict_of_market_classes, dict_of_market_classes_to_dict_of_market_dicts
 
@@ -49,36 +50,43 @@ class Model:
         self.include_fees_status                  = constants.DEFULT_INCLUDE_FEES_STATUS
         self.rebalance_status                     = constants.DEFULT_REBALANCE_STATUS
         self.rebalance_between_instruments_status = constants.DEFULT_REBALANCE_BETWEEN_INSTRUMENTS_STATUS
-        self.correctino_of_inflation_status       = constants.DEFULT_CORRECTION_OF_INFLATION_STATUS
-        self.correctino_of_currency_status        = constants.DEFULT_CORRECTION_OF_CURRENCY_STATUS
+        self.correction_of_inflation_status       = constants.DEFULT_CORRECTION_OF_INFLATION_STATUS
+        self.correction_of_currency_status        = constants.DEFULT_CORRECTION_OF_CURRENCY_STATUS
         self.delay_of_correction                  = constants.DEFULT_DELAY_OF_CORRECTION
 
         ################ Data Processed ################
 
-        self.markets                          = {}
+        self.markets = {}
         """ Dictionary of Market objects representing the data files
-            Dictionary keys are same as the market abbriviation
+            Dictionary keys are same as the market abbreviation
         """
 
-        self.markets_selected                 = {}
+        self.markets_selected = {}
         """ Dictionary of Market objects selected from the GUI Instrument table
-            Coppies of the self.markets, and theese will be modified as needed to be compatible
+            Copies of the self.markets, and these will be modified as needed to be compatible
         """
 
-        self.instruments_selected             = []
+        self.instruments_selected = []
         """ List of the instruments selected from the GUI Instrument table
             each item is a list with instrument name and leverage
             e.g. [[SP500, 1], [SP500, 5], [OMXS30, 1], ...]
         """
 
-        self.portfolio_results_full_time      = []
+        self.portfolio_results_full_time = []
         """ List of the portfolios value for each day with an update.
             The portfolio is made up of all selected instruments
         """
 
-        self.common_time_intervall            = []
+        self.common_time_interval = []
         """ List of all days in the time span that the selected instruments
             have data for. Missing days within the common time span are added
+        """
+
+        self.results_for_intervals = []
+        """ List of results for all the continuous time intervalls of length 
+            'self.years_investigating' in the time investigated.
+            
+            The purpose of this variable is to be ploted in histogram
         """
 
     ######################
@@ -102,9 +110,8 @@ class Model:
         self.markets_selected = calcultate_daily_change(self.markets_selected)
 
         calculate_graph_outcomes(self)
-        self.common_time_intervall = calculate_common_time_interval(self) # TODO: doing double work
-
-        #TODO self.calculate_hist()
+        calculate_histogram(self)
+        self.common_time_interval = calculate_common_time_interval(self) # TODO: doing double work some times
 
 
     ######################
@@ -128,12 +135,12 @@ class Model:
 
 
     def update_market_selected(self):
-        """ Coppy the markets of the instruments selected in the instrument
+        """ Copy the markets of the instruments selected in the instrument
             table, into the variable self.markets_selected.
         """
         print("TRACE: Model: update_market_selected")
 
-        #TODO: can try to add same instrument multiple times, takes some extra time
+        # TODO: can try to add same market multiple times, takes some extra time
         self.markets_selected = {}
         for instrument in self.instruments_selected:
             name = instrument[0]
@@ -191,14 +198,14 @@ class Model:
         print("TRACE: Model: get_proportion_funds")
         return self.proportion_funds
     def set_proportion_funds(self, proportion_funds):
-        print("TRACE: Model: set_proportion_funds")
+        print("TRACE: Model: set_proportion_funds", proportion_funds)
         self.proportion_funds = proportion_funds
 
     def get_proportion_leverage(self):
         return self.proportion_leverage
         print("TRACE: Model: get_proportion_leverage")
     def set_proportion_leverage(self, proportion_leverage):
-        print("TRACE: Model: set_proportion_leverage")
+        print("TRACE: Model: set_proportion_leverage", proportion_leverage)
         self.proportion_leverage = proportion_leverage
 
     def get_include_fees_status(self):
@@ -225,17 +232,17 @@ class Model:
 
     def get_correctino_of_inflation_status(self):
         print("TRACE: Model: get_correctino_of_inflation_status")
-        return self.correctino_of_inflation_status
+        return self.correction_of_inflation_status
     def set_correctino_of_inflation_status(self, correctino_of_inflation_status):
         print("TRACE: Model: set_rebalance_between_instruments_status")
-        self.correctino_of_inflation_status = correctino_of_inflation_status
+        self.correction_of_inflation_status = correctino_of_inflation_status
 
     def get_correctino_of_currency_status(self):
         print("TRACE: Model: get_correctino_of_currency_status")
-        return self.correctino_of_currency_status
+        return self.correction_of_currency_status
     def set_correctino_of_currency_status(self, correctino_of_currency_status):
         print("TRACE: Model: set_correctino_of_currency_status")
-        self.correctino_of_currency_status = correctino_of_currency_status
+        self.correction_of_currency_status = correctino_of_currency_status
 
     def get_delay_of_correction(self):
         print("TRACE: Model: get_delay_of_correction")
@@ -267,10 +274,10 @@ class Model:
 
     def get_common_time_intervall(self):
         print("TRACE: Model: get_common_time_intervall")
-        return self.common_time_intervall
+        return self.common_time_interval
     def set_common_time_intervall(self, common_time_intervall):
         print("TRACE: Model: set_common_time_intervall")
-        self.common_time_intervall = common_time_intervall
+        self.common_time_interval = common_time_intervall
 
     def get_markets_selected(self):
         print("TRACE: Model: get_markets_selected")
@@ -278,4 +285,11 @@ class Model:
     def set_markets_selected(self, markets_selected):
         print("TRACE: Model: set_markets_selected")
         self.markets_selected = markets_selected
+
+    def get_results_for_intervalls(self):
+        print("TRACE: Model: get_results_for_intervalls")
+        return self.results_for_intervals
+    def set_results_for_intervalls(self, results_for_intervalls):
+        print("TRACE: Model: set_results_for_intervalls")
+        self.results_for_intervals = results_for_intervalls
 

@@ -33,12 +33,13 @@ class Controller:
         #TODO not complete (update_view)
 
         ### Update histogram ###
-        self.draw_histogram([1,2,2,3])#TODO fix histogram
+
+        self.draw_histogram(self.model.get_results_for_intervalls())#TODO fix histogram
 
         ### Update line graph ###
-        time_intervall = self.model.get_common_time_intervall()
+        time_interval = self.model.get_common_time_intervall()
         portfolio_results_full_time = self.model.get_portfolio_results_full_time()
-        self.draw_line_graph(portfolio_results_full_time, time_intervall)
+        self.draw_line_graph(portfolio_results_full_time, time_interval)
 
 
     def draw_histogram(self, data):
@@ -62,9 +63,25 @@ class Controller:
         self.view.set_table_of_instruments(names, countries)
 
     def update_instrument_selected(self, table_focus_item_data ):
-        print("TRACE: Controller: update_table_item_focused")
+        print("TRACE: Controller: update_instrument_selected")
         #Update model
         self.model.update_instrument_selected(table_focus_item_data)
+
+        self.update_model()
+        self.update_view()
+
+    def set_update_amount_leverage(self, value_percent):
+        print("TRACE: Controller: set_update_amount_leverage")
+        value = int(value_percent)/100
+        self.model.set_proportion_leverage(value)
+        self.model.set_proportion_funds(1-value)
+
+        self.update_model()
+        self.update_view()
+
+    def update_years_investigating(self, years):
+        print("TRACE: Controller: update_years_investigating")
+        self.model.set_years_investigating(years)
 
         self.update_model()
         self.update_view()

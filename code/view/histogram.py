@@ -5,12 +5,12 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
 NavigationToolbar2Tk)
 
 class Histogram:
-    def __init__(self, gui_frame):
+    def __init__(self, super_frame):
         print("TRACE: View: Histogram: __init__")
-        frame = tk.Frame(gui_frame, padx=5, pady=5)
-        frame.pack(side=tk.LEFT)
+        frame = tk.Frame(super_frame, padx=5, pady=5)
+        frame.pack()
         # specify the window as master
-        self.fig = plt.figure(figsize=(4, 5))
+        self.fig = plt.figure(figsize=(5, 3))
         self.canvas = FigureCanvasTkAgg(self.fig, master=frame)
         self.canvas.draw()
         self.canvas.get_tk_widget().pack()
@@ -29,6 +29,7 @@ class Histogram:
         self.fig.clear(True)
 
         if data != []:
-            plt.hist(data)
+            plt.style.use('seaborn')
+            plt.hist(data, bins =80, alpha=0.5,color='blue')
 
         self.canvas.draw()

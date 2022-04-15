@@ -1,25 +1,30 @@
 
 import tkinter as tk
+from tkinter import ttk
 
 class Table_Of_Instuments:
-    def __init__(self, gui_frame):
-        frame = tk.Frame(gui_frame, padx=5, pady=5)
-        frame.pack(side=tk.LEFT)
+    def __init__(self, super_frame, view_object):
+
+        self.view_object = view_object
+
+        frame = tk.Frame(super_frame, padx=5, pady=5)
+        frame.pack()
+
         #scrollbar
-        game_scroll = tk.Scrollbar(frame)
-        game_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        scroll = tk.Scrollbar(frame)
+        scroll.pack(side=tk.RIGHT, fill=tk.Y)
 
         columns = ('country', 'leverage')
 
         self.table = tk.ttk.Treeview(frame,
-                                            yscrollcommand=game_scroll.set,
-                                            columns=columns,
-                                            selectmode="extended")
-        self.table.heading('#0', text='Text')
+                                     yscrollcommand=scroll.set,
+                                     columns=columns,
+                                     selectmode="extended")
+        self.table.heading('#0', text='Market')
         self.table.heading('country', text='Country')
         self.table.heading('leverage', text='Leverage')
         self.table.pack()
-        self.table.bind('<<TreeviewSelect>>',gui_frame.update_table_item_focused)
+        self.table.bind('<<TreeviewSelect>>', self.update_table_item_focused)
 
 
         # Define the row colors with a tag
@@ -122,4 +127,21 @@ class Table_Of_Instuments:
             # Folding sattus changed, action was an unfolding
             self.rows_unfolded = rows_folding_status
             return True
+
+
+
+    def update_table_item_focused(self, _ ):
+        #TODO move parts of code to the table class and rename method
+        print("TRACE: View: table_item_focused")
+
+        did_unfolding = self.only_did_unfolding()
+
+        if did_unfolding:
+            #An item was only unfolded do nothing
+            return
+        else:
+            #An item was selected update view
+            self.update_item_color()
+            table_focus_item = self.get_table_item_focused()
+            self.view_object.update_instrument_selected(table_focus_item)
 

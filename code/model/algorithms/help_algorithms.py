@@ -470,7 +470,7 @@ l = [random.sample(range(1, n*10), n) for i in range(s)]
 
     print('Naive fix_gaps:')
     print(min(timeit.repeat(setup = SETUP_CODE,
-                        stmt = TEST_CODE3,
+                        stmt = TEST_CODE4,
                         repeat = 100,
                         number = 1)))
 
