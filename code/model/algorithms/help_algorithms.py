@@ -1,6 +1,6 @@
 import timeit
 
-class Node:
+class List_node:
     def __init__(self, data=None):
         self.data = data
         self.next = None
@@ -30,7 +30,7 @@ class LinkedList:
         self.head.set_next(temp_node)
 
     def add_first_data(self, data):
-        self.add_first(Node(data))
+        self.add_first(List_node(data))
 
     def drop_first(self):
         self.head = self.head.next
@@ -50,11 +50,11 @@ def print_linked_list(linked_list):
 
 def gen_linked_list_of_ints(n):
     linked_list = LinkedList()
-    start_node = Node(0)
+    start_node = List_node(0)
     node = start_node
     index = 0
     while n > index + 1:
-        node.next = Node(index+1)
+        node.next = List_node(index+1)
         node = node.next
         index += 1
     linked_list.head = start_node
@@ -63,10 +63,10 @@ def gen_linked_list_of_ints(n):
 def list_to_linked_list(list_to_convert):
     if len(list_to_convert) == 0:
         return LinkedList()
-    start_node = Node(list_to_convert[0])
+    start_node = List_node(list_to_convert[0])
     node = start_node
     for i in range(1, len(list_to_convert)):
-        node.next = Node(list_to_convert[i])
+        node.next = List_node(list_to_convert[i])
         node = node.next
     linked_list = LinkedList()
     linked_list.head = start_node
@@ -113,7 +113,7 @@ def fix_gaps(lists_of_indexes):
     return fix_gaps2(lists_of_indexes, find_latest_first(lists_of_indexes), find_Earliest_last(lists_of_indexes))
 
 def fix_gaps2(lists_of_indexes, latest_first, earliest_last):
-    master_node = Node() # Dummy node
+    master_node = List_node() # Dummy node
     previous_node = master_node
     current_node = None
 
@@ -128,7 +128,7 @@ def fix_gaps2(lists_of_indexes, latest_first, earliest_last):
 
             # first node, or out of data
             elif current_node == None:
-                current_node = Node(index)
+                current_node = List_node(index)
                 previous_node.next = current_node
                 previous_node = current_node
                 current_node = previous_node.next
@@ -136,7 +136,7 @@ def fix_gaps2(lists_of_indexes, latest_first, earliest_last):
 
             # insert index
             elif current_node.data > index:
-                previous_node.next = Node(index)
+                previous_node.next = List_node(index)
                 previous_node = previous_node.next
                 previous_node.next = current_node
                 i += 1
@@ -185,12 +185,6 @@ def fill_gaps_data(lists_to_fill, lists_of_values):
         value_list = []
         while node != None:
 
-#            print("Test>>>>>>>>>>>>>>>>>>>>>>>")
-#            print(i)
-#            print(node.data)
-#            print(list_to_fill[i])
-#            print(value_list)
-
             if i == len(list_to_fill):
                 value_list.append(list_of_values[i-1])
                 node = node.next
@@ -211,8 +205,6 @@ def fill_gaps_data(lists_to_fill, lists_of_values):
                 node = node.next
         master_lists_of_values.append(value_list)
         node = master_linked_list.head
-
-#    print("END<<<<<<<<<<<<<<<<<<<<<<<<<<")
     
     master_list = linked_list_to_list(master_linked_list)
     return ([master_list]*len(lists_to_fill), master_lists_of_values)
@@ -221,7 +213,7 @@ def fix_gaps_cmp(lists_of_indexes, cmp):
     return fix_gaps2_cmp(lists_of_indexes, find_latest_first(lists_of_indexes), find_Earliest_last(lists_of_indexes), cmp)
 
 def fix_gaps2_cmp(lists_of_indexes, latest_first, earliest_last, cmp):
-    master_node = Node() # Dummy node
+    master_node = List_node() # Dummy node
     previous_node = master_node
     current_node = None
 
@@ -236,7 +228,7 @@ def fix_gaps2_cmp(lists_of_indexes, latest_first, earliest_last, cmp):
 
             # first node, or out of data
             elif current_node == None:
-                current_node = Node(index)
+                current_node = List_node(index)
                 previous_node.next = current_node
                 previous_node = current_node
                 current_node = previous_node.next
@@ -244,7 +236,7 @@ def fix_gaps2_cmp(lists_of_indexes, latest_first, earliest_last, cmp):
 
             # insert index
             elif cmp(current_node.data, index) > 0:
-                previous_node.next = Node(index)
+                previous_node.next = List_node(index)
                 previous_node = previous_node.next
                 previous_node.next = current_node
                 i += 1
@@ -279,12 +271,6 @@ def fill_gaps_data_cmp(lists_to_fill, lists_of_values, cmp):
         value_list = []
         while node != None:
 
-#            print("Test>>>>>>>>>>>>>>>>>>>>>>>")
-#            print(i)
-#            print(node.data)
-#            print(list_to_fill[i])
-#            print(value_list)
-
             if i == len(list_to_fill):
                 value_list.append(list_of_values[i-1])
                 node = node.next
@@ -305,8 +291,6 @@ def fill_gaps_data_cmp(lists_to_fill, lists_of_values, cmp):
                 node = node.next
         master_lists_of_values.append(value_list)
         node = master_linked_list.head
-
-#    print("END<<<<<<<<<<<<<<<<<<<<<<<<<<")
     
     master_list = linked_list_to_list(master_linked_list)
     return ([master_list]*len(lists_to_fill), master_lists_of_values)
@@ -320,11 +304,11 @@ def fill_gaps_data_cmp(lists_to_fill, lists_of_values, cmp):
 
 def node_test():
     # Test constructor and get_data
-    node = Node()
+    node = List_node()
     assert(node.data == None)
     assert(node.get_data() == None)
 
-    node = Node('Test')
+    node = List_node('Test')
     assert(node.data == 'Test')
     assert(node.get_data() == 'Test')
 
@@ -333,7 +317,7 @@ def node_test():
     assert(node.get_data() == 'Other Test')
 
     # Test next and set_next
-    node2 = Node(1)
+    node2 = List_node(1)
     node.set_next(node2)
     assert(node.get_data() == 'Other Test')
     assert(node.get_next().get_data() == 1)
@@ -348,7 +332,7 @@ def list_test():
     assert(list1.get_head().data == 'Test')
     assert(list1.get_head().next == None)
 
-    list1.add_first(Node('Other Text'))
+    list1.add_first(List_node('Other Text'))
     assert(list1.get_head().data == 'Other Text')
     assert(list1.get_head().next.data == 'Test')
     assert(list1.get_head().next.next == None)
@@ -483,11 +467,13 @@ l = [random.sample(range(1, n*10), n) for i in range(s)]
                         stmt = TEST_CODE2,
                         repeat = 100,
                         number = 1)))
-#    print('Naive fix_gaps:')
-#    print(min(timeit.repeat(setup = SETUP_CODE,
-#                        stmt = TEST_CODE3,
-#                        repeat = 100,
-#                        number = 1)))
+
+    print('Naive fix_gaps:')
+    print(min(timeit.repeat(setup = SETUP_CODE,
+                        stmt = TEST_CODE3,
+                        repeat = 100,
+                        number = 1)))
+
     print('Full fill_gaps:')
     print(min(timeit.repeat(setup = SETUP_CODE,
                         stmt = TEST_CODE4,
