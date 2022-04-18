@@ -26,8 +26,11 @@ def read_and_manage_raw_data(data_file_path, markets_file_name_list):
         value = value[::-1]
 
         #save data in dict of market objects
-        market = Market(market_file_name, value, time)
-        country_data_and_sattistics[market_file_name] = market
+        [name, country] = market_file_name.split()
+
+        market = Market(name, value, time)
+        market.set_country(country[:-4]) # add country but remove ".csv"
+        country_data_and_sattistics[name] = market
 
 
     return country_data_and_sattistics

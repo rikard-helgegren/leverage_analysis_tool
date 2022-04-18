@@ -141,7 +141,8 @@ def simulate_normal_performance(relevant_daily_change):
 
 
 def simulate_leverage_strategy(relevant_daily_change, leverage):
-    print("TMP: NOT YET FULLY IMPLEMENTED")
+    #TODO: No strategies implemented
+    #TODO: No fees implemented
 
     START_STOCK_VALUE_START = 1000
     stock_value = [START_STOCK_VALUE_START]

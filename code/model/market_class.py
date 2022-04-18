@@ -7,7 +7,7 @@ class Market:
         self.values = values
         self.time_span = time_span
 
-        self.short_name = ""
+        self.country = ""
         self.daily_change = []
 
     ################## Getters for variables ##############
@@ -17,10 +17,10 @@ class Market:
     def set_name(self, name):
         self.name = name
 
-    def get_short_name(self):
-        return self.short_name
-    def set_short_name(self, short_name):
-        self.short_name = short_name
+    def get_country(self):
+        return self.contry
+    def set_country(self, contry):
+        self.contry = contry
 
     def get_values(self):
         return self.values

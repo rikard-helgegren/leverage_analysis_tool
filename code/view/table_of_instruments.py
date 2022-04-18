@@ -29,7 +29,7 @@ def __init__(self):
     self.rows_unfolded = []
 
 
-def set_market_table(self, markets):
+def set_market_table(self, names, countries):
     print("TRACE: table_of_instruments: set_market_table")
 
     all_item_values = get_all_item_values(self)
@@ -37,15 +37,15 @@ def set_market_table(self, markets):
 
     added_new_item = False
 
-    for market in markets:
+    for market_name, country in zip(names, countries):
         #only add if market not in table
-        if market not in all_item_texts:
+        if market_name not in all_item_texts:
 
             added_new_item = True
 
-            self.market_table.insert(parent='', index=tk.END, iid=market, text=market, values=('not known',1))
+            self.market_table.insert(parent='', index=tk.END, iid=market_name, text=market_name, values=(country,1))
             for i in range(2,4): #leverage span
-                self.market_table.insert(parent=market, index=tk.END, text=market, values=('not known',i))
+                self.market_table.insert(parent=market_name, index=tk.END, text=market_name, values=(country,i))
 
     if added_new_item:
         update_unfolding_status(self)

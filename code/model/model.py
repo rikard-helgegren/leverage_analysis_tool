@@ -51,7 +51,7 @@ class Model:
 
         self.markets                          = {}
         self.markets_selected                 = {}
-        self.instruments_selected             = [] # Tuples (market_name, leverage)
+        self.instruments_selected             = []
         self.combined_outcomes_time_intervall = []
         self.combined_outcomes_full_time      = []
         self.common_time_intervall            = []
@@ -76,7 +76,7 @@ class Model:
         calculate_outcomes(self)
         self.common_time_intervall = calculate_common_time_interval(self) # TODO: doing double work
 
-        #self.calculate_graph()
+
         #self.calculate_hist()
 
 

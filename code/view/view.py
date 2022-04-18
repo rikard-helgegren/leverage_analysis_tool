@@ -83,12 +83,13 @@ class View(tk.Frame):
         print("TRACE: View: draw_line_graph")
         code.view.line_graph_full_time.draw_line_graph(self, values, time_span)
 
-    def set_market_table(self, markets):
+    def set_market_table(self, names, countries):
         print("TRACE: View: set_market_table")
-        code.view.table_of_instruments.set_market_table(self, markets)
+        code.view.table_of_instruments.set_market_table(self, names, countries)
         
     def update_table_item_focused(self, _ ):
         print("TRACE: View: table_item_focused")
+
         did_unfolding = code.view.table_of_instruments.only_did_unfolding(self)
 
         if did_unfolding:
