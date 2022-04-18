@@ -149,7 +149,6 @@ def naive_cutoff(list_of_values, cutoff, values_to_check):
     gains = []
     have_appended = False
     for i in range(0, len(list_of_values) - values_to_check):
-        gain = 0
         start_value = list_of_values[i]
         have_appended = False
 
