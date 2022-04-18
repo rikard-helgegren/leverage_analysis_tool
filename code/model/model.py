@@ -9,7 +9,7 @@ from code.data_manager.manage_preproccessed_data     import save_preproccessed_f
 
 ###### IMPORT MODEL ######
 from code.model.calcultate_daily_change          import calcultate_daily_change
-from code.model.calculate_outcomes               import calculate_outcomes
+from code.model.calculate_graph_outcomes         import calculate_graph_outcomes
 from code.model.fill_in_missing_dates            import fill_in_missing_dates
 from code.model.fill_in_missing_dates_improved   import fill_gaps_data
 from code.model.calculate_common_time_interval   import calculate_common_time_interval
@@ -20,9 +20,15 @@ from code.model.convert_between_market_and_dict import dict_of_market_dicts_to_d
 import code.model.constants as constants
 
 class Model:
+    """ This is the model of the application. It models stock market index
+        instruments and calculates portfolio performance as well as other
+        measures of intrest.
+
+        In order to model the instruments and suport a range of portfolios
+        the model have plenty of variables.
+    """
     def __init__(self):
         print("TRACE: Model: __init__")
-        self.view = None 
 
         ################ Data Files ################
 
@@ -50,34 +56,88 @@ class Model:
         ################ Data Processed ################
 
         self.markets                          = {}
+        """ Dictionary of Market objects representing the data files
+            Dictionary keys are same as the market abbriviation
+        """
+
         self.markets_selected                 = {}
+        """ Dictionary of Market objects selected from the GUI Instrument table
+            Coppies of the self.markets, and theese will be modified as needed to be compatible
+        """
+
         self.instruments_selected             = []
-        self.combined_outcomes_time_intervall = []
-        self.combined_outcomes_full_time      = []
+        """ List of the instruments selected from the GUI Instrument table
+            each item is a list with instrument name and leverage
+            e.g. [[SP500, 1], [SP500, 5], [OMXS30, 1], ...]
+        """
+
+        self.portfolio_results_full_time      = []
+        """ List of the portfolios value for each day with an update.
+            The portfolio is made up of all selected instruments
+        """
+
         self.common_time_intervall            = []
+        """ List of all days in the time span that the selected instruments
+            have data for. Missing days within the common time span are added
+        """
 
+    ######################
+    # Central methods
+    ######################
 
-
-    def model_initiate(self):
-        print("TRACE: Model: model_initiate")
-
+    def model_import_data(self):
+        """ Check if data fiels are clean and store the market data in
+            Market class objects
+        """
+        print("TRACE: Model: model_import_data")
         clean_file_names = check_if_data_files_are_clean(self.data_files_path)
-        print("Clean files are:", clean_file_names)
-
         self.markets = read_and_manage_raw_data(self.data_files_path, clean_file_names)
 
 
     def update_model(self):
+        """ Make the markets selected compatible, and calculate the new results"""
         print("TRACE: Model: update_model")
 
         self.markets_selected = fill_gaps_data(self.markets_selected)
         self.markets_selected = calcultate_daily_change(self.markets_selected)
 
-        calculate_outcomes(self)
+        calculate_graph_outcomes(self)
         self.common_time_intervall = calculate_common_time_interval(self) # TODO: doing double work
 
+        #TODO self.calculate_hist()
 
-        #self.calculate_hist()
+
+    ######################
+    # Other methods
+    ######################
+
+
+    def update_instrument_selected(self, table_focus_item_data ):
+        """ Update the instruments selected based on what item was
+            selected in the table of instruments.
+
+            Param: table_focus_item_data: [Name: String, leverage: Int]
+        """
+        print("TRACE: Model: update_instrument_selected")
+        if table_focus_item_data in self.instruments_selected:
+            self.instruments_selected.remove(table_focus_item_data)
+        else:
+            self.instruments_selected.append(table_focus_item_data)
+
+        self.update_market_selected()
+
+
+    def update_market_selected(self):
+        """ Coppy the markets of the instruments selected in the instrument
+            table, into the variable self.markets_selected.
+        """
+        print("TRACE: Model: update_market_selected")
+
+        #TODO: can try to add same instrument multiple times, takes some extra time
+        self.markets_selected = {}
+        for instrument in self.instruments_selected:
+            name = instrument[0]
+            self.markets_selected[name] = deepcopy(self.markets[name])
 
 
 
@@ -197,19 +257,12 @@ class Model:
         print("TRACE: Model: set_instruments_selected")
         self.instruments_selected = instruments_selected
 
-    def get_combined_outcomes_time_intervall(self):
-        print("TRACE: Model: get_combined_outcomes_time_intervall")
-        return self.combined_outcomes_time_intervall
-    def set_combined_outcomes_time_intervall(self, combined_outcomes_time_intervall):
-        print("TRACE: Model: set_combined_outcomes_time_intervall")
-        self.combined_outcomes_time_intervall = combined_outcomes_time_intervall
-
-    def get_combined_outcomes_full_time(self):
-        print("TRACE: Model: get_combined_outcomes_full_time")
-        return self.combined_outcomes_full_time
-    def set_combined_outcomes_full_time(self, combined_outcomes_full_time):
-        print("TRACE: Model: set_combined_outcomes_full_time")
-        self.combined_outcomes_full_time = combined_outcomes_full_time
+    def get_portfolio_results_full_time(self):
+        print("TRACE: Model: get_portfolio_results_full_time")
+        return self.portfolio_results_full_time
+    def set_portfolio_results_full_time(self, portfolio_results_full_time):
+        print("TRACE: Model: set_portfolio_results_full_time")
+        self.portfolio_results_full_time = portfolio_results_full_time
 
     def get_common_time_intervall(self):
         print("TRACE: Model: get_common_time_intervall")
@@ -218,40 +271,10 @@ class Model:
         print("TRACE: Model: set_common_time_intervall")
         self.common_time_intervall = common_time_intervall
 
-
     def get_markets_selected(self):
+        print("TRACE: Model: get_markets_selected")
         return self.markets_selected
     def set_markets_selected(self, markets_selected):
+        print("TRACE: Model: set_markets_selected")
         slef.markets_selected = markets_selected
-
-    ######################
-    #
-    ######################
-
-
-    def set_markets_selected(self, markets_selected):
-        self.markets_selected = markets_selected
-    def get_markets_selected(self):
-        return self.markets_selected
-
-    ######################
-    # Other methods
-    ######################
-
-
-    def update_instrument_selected(self, table_focus_item_data ):
-        print("TRACE: Model: update_instrument_selected")
-        if table_focus_item_data in self.instruments_selected:
-            self.instruments_selected.remove(table_focus_item_data)
-        else:
-            self.instruments_selected.append(table_focus_item_data)
-
-        self.update_market_selected()
-
-
-    def update_market_selected(self):
-        self.markets_selected = {}
-        for instrument in self.instruments_selected:
-            name = instrument[0]
-            self.markets_selected[name] = deepcopy(self.markets[name])
 

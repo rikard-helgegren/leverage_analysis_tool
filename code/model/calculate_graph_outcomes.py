@@ -3,8 +3,8 @@ import numpy as np
 
 from code.model.determine_longest_common_timespan   import determine_longest_common_timespan
 
-def calculate_outcomes(self):
-    print("TRACE: Model: calculate_outcomes")
+def calculate_graph_outcomes(self):
+    print("TRACE: Model: calculate_graph_outcomes")
     markets_selected     = self.get_markets_selected()
     instruments_selected = self.get_instruments_selected()
     proportion_funds     = self.get_proportion_funds()
@@ -12,13 +12,13 @@ def calculate_outcomes(self):
 
     #Check if empty
     if instruments_selected == []:
-        print("NOTIFY: Model: calculate_outcomes: instruments_selected is empty")
-        self.set_combined_outcomes_full_time([])
+        print("NOTIFY: Model: calculate_graph_outcomes: instruments_selected is empty")
+        self.set_portfolio_results_full_time([])
         return
 
     if markets_selected  == []:
-        print("NOTIFY: Model: calculate_outcomes: no loaded data files")
-        self.set_combined_outcomes_full_time([])
+        print("NOTIFY: Model: calculate_graph_outcomes: no loaded data files")
+        self.set_portfolio_results_full_time([])
         return
 
     #Get common start and end time
@@ -26,20 +26,17 @@ def calculate_outcomes(self):
 
 
     #Calculate the outcome
-    combined_outcomes_full_time = calculate_combined_outcomes_full_time(start_time,
+    portfolio_results_full_time = calculate_portfolio_results_full_time(start_time,
                                                                         end_time,
                                                                         instruments_selected,
                                                                         proportion_funds,
                                                                         proportion_leverage,
                                                                         markets_selected)
 
-    combined_outcomes_time_intervall = []#TODO remove, temporary
-    
-    self.set_combined_outcomes_time_intervall(combined_outcomes_time_intervall)
-    self.set_combined_outcomes_full_time(combined_outcomes_full_time)
+    self.set_portfolio_results_full_time(portfolio_results_full_time)
 
 
-def calculate_combined_outcomes_full_time(start_time,
+def calculate_portfolio_results_full_time(start_time,
                                           end_time,
                                           instruments_selected,
                                           proportion_funds,

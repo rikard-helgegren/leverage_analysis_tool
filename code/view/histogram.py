@@ -1,33 +1,34 @@
-##### histogram #####
+
 import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg,
 NavigationToolbar2Tk)
 
-def __init__(self):
-    print("TRACE: View: draw_histogram")
-    frame = tk.Frame(self, padx=5, pady=5)
-    frame.pack(side=tk.LEFT)
-    # specify the window as master
-    self.histogram_fig = plt.figure(figsize=(4, 5))
-    self.histogram_canvas = FigureCanvasTkAgg(self.histogram_fig, master=frame)
-    self.histogram_canvas.draw()
-    self.histogram_canvas.get_tk_widget().pack()
+class Histogram:
+    def __init__(self, gui_frame):
+        print("TRACE: View: Histogram: __init__")
+        frame = tk.Frame(gui_frame, padx=5, pady=5)
+        frame.pack(side=tk.LEFT)
+        # specify the window as master
+        self.fig = plt.figure(figsize=(4, 5))
+        self.canvas = FigureCanvasTkAgg(self.fig, master=frame)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack()
 
-    # navigation toolbar
-    histogram_toolbarFrame = tk.Frame(master=frame)
-    histogram_toolbarFrame.pack()
-    histogram_toolbar = NavigationToolbar2Tk(self.histogram_canvas, histogram_toolbarFrame)
-    histogram_toolbar.pack(side=tk.BOTTOM)
+        # navigation toolbar
+        toolbarFrame = tk.Frame(master=frame)
+        toolbarFrame.pack()
+        toolbar = NavigationToolbar2Tk(self.canvas, toolbarFrame)
+        toolbar.pack(side=tk.BOTTOM)
 
-def draw_histogram(self, data):
-    print("TRACE: Histogram: draw_histogram")
-    plt.figure(self.histogram_fig.number)
+    def draw(self, data):
+        print("TRACE: View: Histogram: draw")
+        plt.figure(self.fig.number)
 
-    #if clear_before_drawing: #TODO implement with this input
-    self.histogram_fig.clear(True)
+        #if clear_before_drawing: #TODO implement with this input button
+        self.fig.clear(True)
 
-    if data != []:
-        plt.hist(data)
+        if data != []:
+            plt.hist(data)
 
-    self.histogram_canvas.draw()
+        self.canvas.draw()

@@ -1,125 +1,125 @@
 
 import tkinter as tk
 
-#Make this a class
-def __init__(self):
-    frame = tk.Frame(self, padx=5, pady=5)
-    frame.pack(side=tk.LEFT)
-    #scrollbar
-    game_scroll = tk.Scrollbar(frame)
-    game_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+class Table_Of_Instuments:
+    def __init__(self, gui_frame):
+        frame = tk.Frame(gui_frame, padx=5, pady=5)
+        frame.pack(side=tk.LEFT)
+        #scrollbar
+        game_scroll = tk.Scrollbar(frame)
+        game_scroll.pack(side=tk.RIGHT, fill=tk.Y)
 
-    columns = ('country', 'leverage')
+        columns = ('country', 'leverage')
 
-    self.market_table = tk.ttk.Treeview(frame,
-                                        yscrollcommand=game_scroll.set,
-                                        columns=columns,
-                                        selectmode="extended")
-    self.market_table.heading('#0', text='Text')
-    self.market_table.heading('country', text='Country')
-    self.market_table.heading('leverage', text='Leverage')
-    self.market_table.pack()
-    self.market_table.bind('<<TreeviewSelect>>',self.update_table_item_focused)
-
-
-    # Define the row colors with a tag
-    self.market_table.tag_configure("selected_row", background="green")
-    self.market_table.tag_configure("not_selected_row", background="white")
-
-    self.rows_unfolded = []
+        self.table = tk.ttk.Treeview(frame,
+                                            yscrollcommand=game_scroll.set,
+                                            columns=columns,
+                                            selectmode="extended")
+        self.table.heading('#0', text='Text')
+        self.table.heading('country', text='Country')
+        self.table.heading('leverage', text='Leverage')
+        self.table.pack()
+        self.table.bind('<<TreeviewSelect>>',gui_frame.update_table_item_focused)
 
 
-def set_market_table(self, names, countries):
-    print("TRACE: table_of_instruments: set_market_table")
+        # Define the row colors with a tag
+        self.table.tag_configure("selected_row", background="green")
+        self.table.tag_configure("not_selected_row", background="white")
 
-    all_item_values = get_all_item_values(self)
-    all_item_texts = get_all_item_texts(self)
-
-    added_new_item = False
-
-    for market_name, country in zip(names, countries):
-        #only add if market not in table
-        if market_name not in all_item_texts:
-
-            added_new_item = True
-
-            self.market_table.insert(parent='', index=tk.END, iid=market_name, text=market_name, values=(country,1))
-            for i in range(2,4): #leverage span
-                self.market_table.insert(parent=market_name, index=tk.END, text=market_name, values=(country,i))
-
-    if added_new_item:
-        update_unfolding_status(self)
+        self.rows_unfolded = []
 
 
-def get_table_item_focused(self):
-    print("TRACE: table_of_instruments: get_table_item_focused")
-    curItem = self.market_table.focus()
-    item = self.market_table.item(curItem)
+    def set_table(self, names, countries):
+        print("TRACE: table_of_instruments: set_table")
 
-    return [item['text'], item['values'][1]] #market index and leverage
+        all_item_values = self.get_all_item_values()
+        all_item_texts = self.get_all_item_texts()
 
+        added_new_item = False
 
-def update_item_color(self):
-    print("TRACE: table_of_instruments: update_item_color")
+        for market_name, country in zip(names, countries):
+            #only add if market not in table
+            if market_name not in all_item_texts:
 
-    curItem = self.market_table.focus()
-    current_item_tag = self.market_table.item(curItem)["tags"]
+                added_new_item = True
 
-    if current_item_tag != ['selected_row']:
-        self.market_table.item(curItem, tag="selected_row")
-    else:
-        self.market_table.item(curItem, tag="not_selected_row")
+                self.table.insert(parent='', index=tk.END, iid=market_name, text=market_name, values=(country,1))
+                for i in range(2,4): #leverage span
+                    self.table.insert(parent=market_name, index=tk.END, text=market_name, values=(country,i))
 
-
-def get_all_item_texts(self):
-    print("TRACE: table_of_instruments: get_all_item_texts")
-
-    all_item_texts = []
-
-    for item in self.market_table.get_children():
-        item_text = self.market_table.item(item)['text']
-        all_item_texts.append(item_text)
-
-    return all_item_texts
+        if added_new_item:
+            self.update_unfolding_status()
 
 
-def get_all_item_values(self):
-    print("TRACE: table_of_instruments: get_all_item_values")
+    def get_table_item_focused(self):
+        print("TRACE: table_of_instruments: get_table_item_focused")
+        curItem = self.table.focus()
+        item = self.table.item(curItem)
 
-    all_item_values = []
-
-    for item in self.market_table.get_children():
-        item_value = self.market_table.item(item)['values']
-        all_item_values.append(item_value[0]) # TODO update when adding bull > 1
-
-    return all_item_values
+        return [item['text'], item['values'][1]] #market index and leverage
 
 
-def update_unfolding_status(self):
-    print("TRACE: View: update_unfolding_status")
+    def update_item_color(self):
+        print("TRACE: table_of_instruments: update_item_color")
 
-    rows_folding_status = []
-    for item in self.market_table.get_children():
-        item =  self.market_table.item(item)['open']
+        curItem = self.table.focus()
+        current_item_tag = self.table.item(curItem)["tags"]
 
-        rows_folding_status.append(item)
-    self.rows_unfolded = rows_folding_status
-
-
-def only_did_unfolding(self):
-    rows_folding_status = []
-    for item in self.market_table.get_children():
-        item =  self.market_table.item(item)['open']
-
-        rows_folding_status.append(item)
+        if current_item_tag != ['selected_row']:
+            self.table.item(curItem, tag="selected_row")
+        else:
+            self.table.item(curItem, tag="not_selected_row")
 
 
-    if rows_folding_status == self.rows_unfolded:
-        # Folding sattus unchanged, action was no unfolding
+    def get_all_item_texts(self):
+        print("TRACE: table_of_instruments: get_all_item_texts")
+
+        all_item_texts = []
+
+        for item in self.table.get_children():
+            item_text = self.table.item(item)['text']
+            all_item_texts.append(item_text)
+
+        return all_item_texts
+
+
+    def get_all_item_values(self):
+        print("TRACE: table_of_instruments: get_all_item_values")
+
+        all_item_values = []
+
+        for item in self.table.get_children():
+            item_value = self.table.item(item)['values']
+            all_item_values.append(item_value[0]) # TODO update when adding bull > 1
+
+        return all_item_values
+
+
+    def update_unfolding_status(self):
+        print("TRACE: View: update_unfolding_status")
+
+        rows_folding_status = []
+        for item in self.table.get_children():
+            item =  self.table.item(item)['open']
+
+            rows_folding_status.append(item)
         self.rows_unfolded = rows_folding_status
-        return False
-    else:
-        # Folding sattus changed, action was an unfolding
-        self.rows_unfolded = rows_folding_status
-        return True
+
+
+    def only_did_unfolding(self):
+        rows_folding_status = []
+        for item in self.table.get_children():
+            item =  self.table.item(item)['open']
+
+            rows_folding_status.append(item)
+
+
+        if rows_folding_status == self.rows_unfolded:
+            # Folding sattus unchanged, action was no unfolding
+            self.rows_unfolded = rows_folding_status
+            return False
+        else:
+            # Folding sattus changed, action was an unfolding
+            self.rows_unfolded = rows_folding_status
+            return True
 

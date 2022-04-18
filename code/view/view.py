@@ -11,10 +11,21 @@ import code.view.histogram
 import code.view.line_graph_full_time
 import code.view.table_of_instruments
 
+from code.view.histogram import Histogram
+from code.view.line_graph_full_time import Line_Graph_Full_Time
+from code.view.table_of_instruments import Table_Of_Instuments
+
 class View(tk.Frame):
+    """This is the view of the application. It is the interface beetween
+       the user and the model.
+
+       The View contains widgets and plots, and comunicates any interactions
+       with the view to the controller
+    """
     def __init__(self, parent):
-        super().__init__(parent)
         print("TRACE: View: __init__")
+
+        super().__init__(parent)
 
         # placeholder for controller
         self.controller = None
@@ -41,14 +52,20 @@ class View(tk.Frame):
         self.scale = tk.Scale(self.frame1, from_=0, to=100, orient='horizontal', command=self.update_amount)
         self.scale.pack()
 
-        # Histogram
-        code.view.histogram.__init__(self)
+        self.histogram = Histogram(self)
+        """ The histogram displaies a distribution of outcomes from all continious
+            time intervals of the selected length.
+        """
 
-        # Line Graph
-        code.view.line_graph_full_time.__init__(self)
-       
-        #Table of Stock Markets
-        code.view.table_of_instruments.__init__(self)
+        self.line_graph_full_time = Line_Graph_Full_Time(self)
+        """ This line garaph displaies the performance of the created portfolio
+            for the full time span available
+        """
+
+        self.table_of_instruments = Table_Of_Instuments(self)
+        """ The table of instruments is a table from which the user can select
+            instruments with or without leverage to use in their portfolio
+        """
 
 
     ###############
@@ -77,26 +94,27 @@ class View(tk.Frame):
 
     def draw_histogram(self, data):
         print("TRACE: View: draw_histogram")
-        code.view.histogram.draw_histogram(self,data)
+        self.histogram.draw(data)
 
     def draw_line_graph(self, values, time_span):
         print("TRACE: View: draw_line_graph")
-        code.view.line_graph_full_time.draw_line_graph(self, values, time_span)
+        self.line_graph_full_time.draw(values, time_span)
 
-    def set_market_table(self, names, countries):
+    def set_table_of_instruments(self, names, countries):
         print("TRACE: View: set_market_table")
-        code.view.table_of_instruments.set_market_table(self, names, countries)
+        self.table_of_instruments.set_table(names, countries)
         
     def update_table_item_focused(self, _ ):
+        #TODO move parts of code to the table class and rename method
         print("TRACE: View: table_item_focused")
 
-        did_unfolding = code.view.table_of_instruments.only_did_unfolding(self)
+        did_unfolding = self.table_of_instruments.only_did_unfolding()
 
         if did_unfolding:
             #An item was only unfolded do nothing
             return
         else:
             #An item was selected update view
-            code.view.table_of_instruments.update_item_color(self)
-            table_focus_item = code.view.table_of_instruments.get_table_item_focused(self)
+            self.table_of_instruments.update_item_color()
+            table_focus_item = self.table_of_instruments.get_table_item_focused()
             self.controller.update_instrument_selected(table_focus_item)

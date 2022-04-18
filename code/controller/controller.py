@@ -1,9 +1,15 @@
 
 
 class Controller:
+    """ This is the controller of the application. Which has access to
+        both the view and the model in order to keep the model updated
+        and sending the right information to the view.
+    """
     def __init__(self, model, view):
         self.model = model
         self.view = view
+
+        self.set_table_of_instruments()
 
 
     def update_fee_status(self, checkbutton_fee_state):
@@ -19,38 +25,33 @@ class Controller:
 
     def update_model(self):
         print("TRACE: Controller: update_model")
-        #TODO
+        #TODO not complete (update_model)?
         self.model.update_model()
 
     def update_view(self):
         print("TRACE: Controller: update_view")
-        #TODO
+        #TODO not complete (update_view)
 
         ### Update histogram ###
-        combined_outcomes_time_intervals = self.model.get_combined_outcomes_time_intervall()
-        self.draw_histogram([1,2,2,3])#combined_outcomes_time_intervals)
+        self.draw_histogram([1,2,2,3])#TODO fix histogram
 
         ### Update line graph ###
         time_intervall = self.model.get_common_time_intervall()
-        combined_outcomes_full_time = self.model.get_combined_outcomes_full_time()
-        self.draw_line_graph(combined_outcomes_full_time, time_intervall)
-
-
-        self.set_market_table()
-
+        portfolio_results_full_time = self.model.get_portfolio_results_full_time()
+        self.draw_line_graph(portfolio_results_full_time, time_intervall)
 
 
     def draw_histogram(self, data):
-        print("TRACE: controller: draw_histogram")
+        print("TRACE: Controller: draw_histogram")
         self.view.draw_histogram(data)
 
     def draw_line_graph(self, data, time_intervall):
-        print("TRACE: controller: draw_line_graph")
+        print("TRACE: Controller: draw_line_graph")
         self.view.draw_line_graph(data, time_intervall)
 
-    def set_market_table(self):
-        print("TRACE: controller: set_market_table")
-        #markets = self.model.get_markets().keys() # TODO: maybe make a method for this
+    def set_table_of_instruments(self):
+        """ Set the table with information of instruments available"""
+        print("TRACE: Controller: set_table_of_instruments")
         names = []
         countries = []
 
@@ -58,11 +59,10 @@ class Controller:
             names.append(market.get_name())
             countries.append(market.get_country())
 
-
-        self.view.set_market_table(names, countries)
+        self.view.set_table_of_instruments(names, countries)
 
     def update_instrument_selected(self, table_focus_item_data ):
-        print("TRACE: controller: update_table_item_focused")
+        print("TRACE: Controller: update_table_item_focused")
         #Update model
         self.model.update_instrument_selected(table_focus_item_data)
 
