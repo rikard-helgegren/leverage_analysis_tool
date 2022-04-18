@@ -1,7 +1,7 @@
 import os
 from os import listdir
 from os.path import isfile, join
-import datetime 
+import datetime
 
 import fileinput
 import sys
@@ -40,24 +40,31 @@ def change_first_row_open_format():
 
 
         # Check that "Open" is in the correct wrong place
-        if line_one_splited[1] != "Open":
+        if line_one_splited[5] != "open" and line_one_splited[5] != "Open":
             print("This file does not have this problem")
             continue
 
+        #REMOVE: date,close,raw_close,high,low,open,volume
+
         #Check that data has Date, High, and Low
-        if line_one_splited[0] == "Date":
-            if line_one_splited[2:4] == ['High', 'Low']:
+        if line_one_splited[0] == "Date" or line_one_splited[0] == "date":
+            if line_one_splited[1:5] == ['close','raw_close','high','low']:
                 print("Setting a first line for this file")
-                replacement = "Date,-,Open,High,Low,Vol,Procentage" + "\n"
-        
-        #Add a extra column to shift "Open" to column 2
+                replacement = "Date,Close,Open,High,Low,Vol,Procentage" + "\n"
+
+        #Shift "Open" (column 6) to column 2
         for line in lines_of_file[1:]:
             try:
-                p = re.compile("([0-9]+)(.*)")
+                p = re.compile("(\d*\.*\d*),(\d*\.*\d*),(\d*\.*\d*),(\d*\.*\d*),(\d*\.*\d*),(\d*\.*\d*)")
                 match_one = p.match(line).group(1)
                 match_two = p.match(line).group(2)
-                
-                replacement = replacement + match_one + ', -' + match_two + "\n"
+                match_three = p.match(line).group(3)
+                match_four = p.match(line).group(4)
+                match_five = p.match(line).group(5)
+                match_six = p.match(line).group(6)
+
+                replacement = replacement + match_one +","+ match_two +","+ match_six +","+ match_three+","+ match_four+","+ match_five+ "\n"
+                print("TMP, match_five",match_five)
             except:
                 counter_of_missmatch += 1
                 if counter_of_missmatch < 4:
@@ -70,7 +77,7 @@ def change_first_row_open_format():
         fout = open(data_file_path+"/"+file_itter, "w")
         fout.write(replacement)
         fout.close()
-        
+
 
 #Run code
 change_first_row_open_format()

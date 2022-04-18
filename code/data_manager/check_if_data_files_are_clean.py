@@ -85,27 +85,31 @@ def check_value_rows(lines):
 
     for line in lines:
         words_in_line = line.split(',')
-    
+
         try:
+
             date_value = int(words_in_line[0])
             if date_value < 18000000 or date_value > today:
                 return_value = False
         except :
             print("ERROR:  Date format in data file is in wrong format.")
-            return_value = False
+            print("TMP words_in_line[0]", words_in_line[0])
+            return False
 
         
 
         try:
             opening_value = float(words_in_line[2])
         except :
-            return_value = False
             print("ERROR:  Market opening value in data file is in wrong format.")
-    
-    return return_value
+            print("TMP words_in_line[2]", words_in_line[2])
+            print("TMP words_in_line",words_in_line)
+            return False
+
+
+    return True
 
 def check_time_decreases_for_each_row(lines):
-    return_value = True
 
     previous_date = 100000000 #date value larger most resent data point
 
@@ -115,9 +119,9 @@ def check_time_decreases_for_each_row(lines):
         date_value = int(words_in_line[0])
         if date_value > previous_date:
             print("Time FAILED date_value > previous_date", date_value ,">", previous_date)
-            return_value = False
+            return False
         previous_date = date_value
-    return return_value
+    return True
 
 def check_daily_change(lines):
 

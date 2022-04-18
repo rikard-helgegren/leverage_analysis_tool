@@ -1,0 +1,7 @@
+code/data_manager/check_if_data_files_are_clean.py:            date_value = int(words_in_line[0])
+code/data_manager/check_if_data_files_are_clean.py:            if date_value < 18000000 or date_value > today:
+code/data_manager/check_if_data_files_are_clean.py:        date_value = int(words_in_line[0])
+code/data_manager/check_if_data_files_are_clean.py:        if date_value > previous_date:
+code/data_manager/check_if_data_files_are_clean.py:            print("Time FAILED date_value > previous_date", date_value ,">", previous_date)
+code/data_manager/check_if_data_files_are_clean.py:        previous_date = date_value
+Binary file code/data_manager/__pycache__/check_if_data_files_are_clean.cpython-38.pyc matches

@@ -12,7 +12,7 @@ import re
 def change_first_row_open_format():
 
     clean_files = []
-    data_file_path = "raw_data/old_test"
+    data_file_path = "raw_data/new_test"
 
     #Open all data files in folder
     try:
@@ -49,14 +49,14 @@ def change_first_row_open_format():
 
         # Reverse all rows except first
         for line in lines_of_file[1:]:
-            replacement = line + replacement + "\n"
+            replacement = line + replacement
 
         #Add first row
-        replacement = lines_of_file[0] + replacement + "\n"
+        replacement = lines_of_file[0] + replacement
         file.close()
 
         #Write to new file
-        fout = open("raw_data/old_test/"+file_itter, "w")
+        fout = open(data_file_path+"/"+file_itter, "w")
         fout.write(replacement)
         fout.close()
         

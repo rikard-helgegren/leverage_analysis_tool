@@ -9,8 +9,7 @@ from code.controller.controller import Controller
 
 class Leverage_Application(tk.Tk):
     """ GUI for analyzing investments with leveraged cirtificates.
-        The code follows the MVC (Model View Controller) achitecture
-
+        The code follows the MVC (Model View Controller) architecture
     """
     def __init__(self):
         super().__init__()

@@ -32,7 +32,7 @@ class Model:
 
         ################ Data Files ################
 
-        self.data_files_path  = "data/raw_data/old_fixed"
+        self.data_files_path  = "data/raw_data/all"
         self.clean_file_names = []
 
 
