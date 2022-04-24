@@ -1,5 +1,4 @@
 
-
-
-Naive implementation of fill in missing dates:
-    10s --> 0.07s
+Implementation of fill in missing dates:
+    Change: Switched from list to linked list:
+    Speed up: 10s --> 0.07s

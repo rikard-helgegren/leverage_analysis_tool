@@ -112,7 +112,7 @@ class Model:
     ######################
 
 
-    def update_instrument_selected(self, table_focus_item_data ):
+    def update_instrument_selected(self, table_focus_item_data):
         """ Update the instruments selected based on what item was
             selected in the table of instruments.
 
@@ -145,6 +145,7 @@ class Model:
     ##########################
     #  Getters and Setters
     ##########################
+
     def get_loan(self):
         print("TRACE: Model: get_loan")
         return self.loan
@@ -276,5 +277,5 @@ class Model:
         return self.markets_selected
     def set_markets_selected(self, markets_selected):
         print("TRACE: Model: set_markets_selected")
-        slef.markets_selected = markets_selected
+        self.markets_selected = markets_selected
 
