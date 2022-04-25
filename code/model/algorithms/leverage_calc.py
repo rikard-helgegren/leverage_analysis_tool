@@ -41,9 +41,72 @@ def improved_calc(list_of_values, leverage, cutoff, values_to_check):
     # calc once:
     value_thus_far = 1
     lowest_value = 1
+    lowest_value_index = 0
     has_appended = False
 
-    for change in changes[0:values_to_check]:
+    for i, change in enumerate(changes[0:values_to_check]):
+        value_thus_far *= 1 + change*leverage
+        
+        if value_thus_far < lowest_value:
+            lowest_value = value_thus_far
+            lowest_value_index = i
+
+        if value_thus_far < cutoff:
+            gains.append(cutoff)
+            has_appended = True
+            break
+        
+    if not has_appended:
+        gains.append(value_thus_far)
+
+    for prev_i in range(0, len(list_of_values) - values_to_check - 1):
+        has_appended = False
+
+        # move interval to check
+        lowest_value /= (1 + changes[prev_i]*leverage)
+        value_thus_far /= (1 + changes[prev_i]*leverage)
+        value_thus_far *= (1 + changes[prev_i+values_to_check]*leverage)
+
+        if value_thus_far < lowest_value:
+            lowest_value = value_thus_far
+            lowest_value_index = prev_i + values_to_check
+
+        if lowest_value < cutoff:
+            if lowest_value_index <= prev_i:
+                # The lowest recorded value is in the past! Need to recalculate a new lowest value.
+                lowest_value = value_thus_far
+                lowest_value_index = i
+                value_thus_far = 1
+
+                for j, change in enumerate(changes[i:i+values_to_check]):
+                    value_thus_far *= 1 + change*leverage
+                    
+                    if value_thus_far < lowest_value:
+                        lowest_value = value_thus_far
+                        lowest_value_index = i + j
+            
+            if lowest_value < cutoff:
+                gains.append(cutoff)
+                has_appended = True
+
+        if not has_appended:
+            gains.append(value_thus_far)
+        
+    return gains
+
+# Tests suggest improved_calc and naive_improved_calc have approximately the same preformance.
+# But improved_calc should be theoreticaly faster for the same data set in most cases.
+def naive_improved_calc(list_of_values, leverage, cutoff, values_to_check):
+    changes = percentage_change(list_of_values)
+    gains = []
+    has_appended = False
+
+    # calc once:
+    value_thus_far = 1
+    lowest_value = 1
+    has_appended = False
+
+    for i, change in enumerate(changes[0:values_to_check]):
         value_thus_far *= 1 + change*leverage
         
         if value_thus_far < lowest_value:
@@ -57,28 +120,35 @@ def improved_calc(list_of_values, leverage, cutoff, values_to_check):
     if not has_appended:
         gains.append(value_thus_far)
 
-    for i in range(0, len(list_of_values) - values_to_check - 1):
+    for prev_i in range(0, len(list_of_values) - values_to_check - 1):
         has_appended = False
-        
-        # Hypothesis: No need to ever recalculate!
 
-        lowest_value /= (1 + changes[i]*leverage)
-        value_thus_far /= (1 + changes[i]*leverage)
-        value_thus_far *= (1 + changes[i+values_to_check]*leverage)
+        # move interval to check
+        lowest_value /= (1 + changes[prev_i]*leverage)
+        value_thus_far /= (1 + changes[prev_i]*leverage)
+        value_thus_far *= (1 + changes[prev_i+values_to_check]*leverage)
 
         if value_thus_far < lowest_value:
             lowest_value = value_thus_far
-        
-        if value_thus_far < cutoff:
+
+        if lowest_value == 1:
+            lowest_value = value_thus_far
+            value_thus_far = 1
+
+            for change in changes[i:i+values_to_check]:
+                value_thus_far *= 1 + change*leverage
+                
+                if value_thus_far < lowest_value:
+                    lowest_value = value_thus_far
+            
+        if lowest_value < cutoff:
             gains.append(cutoff)
             has_appended = True
 
         if not has_appended:
             gains.append(value_thus_far)
         
-    
     return gains
-
 
 def naive_calc_money(list_of_values, leverage, cutoff, values_to_check, money_to_invest):
     changes = percentage_change(list_of_values)
@@ -191,9 +261,9 @@ def leverage_calc_test():
             naive_calc(test_values[i], leverages[i], cutoffs[i], values_to_check[i]),
             improved_calc(test_values[i], leverages[i], cutoffs[i], values_to_check[i]), eps))
 
-    m = 10 # Days in each "index"
+    m = 10000 # Days in each "index"
     for i in range(10):
-        l = list(map(lambda a: 1+a/(100*m),
+        l = list(map(lambda a: 1+a/(10*m),
                      random.sample(range(1, m*10), m+1)))
         assert(naive_calc(l, 2, 0, m) == improved_calc(l, 2, 0, m))
 
@@ -205,6 +275,7 @@ def calc_preformence_tests():
 import random
 from __main__ import naive_calc
 from __main__ import improved_calc
+from __main__ import naive_improved_calc
 n = 10000 # Days in each "index"
 days = 3650 # Days to check
 l = list(map(lambda a: 1+a/(1000*n),
@@ -213,6 +284,7 @@ l = list(map(lambda a: 1+a/(1000*n),
 
     TEST_CODE1 = 'naive_calc(l, 2, 0, days)'
     TEST_CODE2 = 'improved_calc(l, 2, 0, days)'
+    TEST_CODE3 = 'naive_improved_calc(l, 2, 0, days)'
 
     print('Naive cutoff:')
     naive_time = min(timeit.repeat(setup = SETUP_CODE,
@@ -230,8 +302,16 @@ l = list(map(lambda a: 1+a/(1000*n),
 
     print(improved_time)
 
-    print("Fraction")
+    print('Naive Improved cutoff:')
+    naive_improved_time = min(timeit.repeat(setup = SETUP_CODE,
+                        stmt = TEST_CODE3,
+                        repeat = 100,
+                        number = 1))
+
+    print("Fractions")
     print(naive_time/improved_time)
+    print(naive_time/naive_improved_time)
+    print(naive_improved_time/improved_time)
 
 def tests():
     leverage_calc_test()
