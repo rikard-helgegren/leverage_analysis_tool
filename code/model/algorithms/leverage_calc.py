@@ -267,7 +267,6 @@ def leverage_calc_test():
                      random.sample(range(1, m*10), m+1)))
         assert(naive_calc(l, 2, 0, m) == improved_calc(l, 2, 0, m))
 
-
 def calc_preformence_tests():
     print('cutoffs preformance test:')
 
