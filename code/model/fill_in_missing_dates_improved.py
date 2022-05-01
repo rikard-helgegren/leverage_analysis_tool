@@ -45,14 +45,27 @@ def linked_list_to_list(linked_list):
 ###                  Algorithms                     ###
 #######################################################
 
-def find_latest_first(lists_of_indexes):
-    return max([x[0] for x in lists_of_indexes])
+def find_first_common_market_day(lists_of_indexes, chosen_time_interval_start_date):
+    """ Returns the earliest day that all selected indexes have in common
+        or
+        The manually set day to use as first, if it is valid for all indexes.
+    """
+    first_common = max([x[0] for x in lists_of_indexes])
+    if chosen_time_interval_start_date == 0:
+        return first_common
 
-def find_Earliest_last(lists_of_indexes):
-    return min([x[-1] for x in lists_of_indexes])
+    return max(first_common, chosen_time_interval_start_date)
 
-def fix_gaps(lists_of_indexes):
-    return fix_gaps2(lists_of_indexes, find_latest_first(lists_of_indexes), find_Earliest_last(lists_of_indexes))
+def find_last_common_market_day(lists_of_indexes, chosen_time_interval_end_date):
+    """ Returns the last day that all selected indexes have in common
+        or
+        The manually set day to use as last, if it is valid for all indexes.
+    """
+    last_common = min([x[-1] for x in lists_of_indexes])
+    if chosen_time_interval_end_date == 0:
+        return last_common
+
+    return min(last_common, chosen_time_interval_end_date)
 
 def fix_gaps2(lists_of_indexes, latest_first, earliest_last):
     master_node = List_node() # Dummy node
@@ -101,7 +114,7 @@ def fix_gaps2(lists_of_indexes, latest_first, earliest_last):
     master_index_list.head = master_node.next
     return master_index_list
 
-def fill_gaps_data(markets_selected):
+def fill_gaps_data(markets_selected, chosen_time_interval_start_date, chosen_time_interval_end_date):
     print("TRACE: Model: fill_gaps_data")
 
     if markets_selected == {}:
@@ -115,8 +128,8 @@ def fill_gaps_data(markets_selected):
        lists_of_values.append(market.get_values())
     #end prefix adapter
 
-    latest_first = find_latest_first(lists_to_fill)
-    earliest_last = find_Earliest_last(lists_to_fill)
+    latest_first = find_first_common_market_day(lists_to_fill, chosen_time_interval_start_date)
+    earliest_last = find_last_common_market_day(lists_to_fill, chosen_time_interval_end_date)
     master_linked_list = fix_gaps2(lists_to_fill, latest_first, earliest_last)
     node = master_linked_list.head
     master_lists_of_values = []
@@ -124,7 +137,7 @@ def fill_gaps_data(markets_selected):
     for (list_to_fill, list_of_values) in zip(lists_to_fill, lists_of_values):
         i = 0
         value_list = []
-        while node != None:
+        while node is not None:
 
             if i == len(list_to_fill):
                 value_list.append(list_of_values[i-1])
@@ -151,8 +164,8 @@ def fill_gaps_data(markets_selected):
 
     #sufix adapter
     for i, market in enumerate(markets_selected.values()):
-       market.set_time_span(master_list)
-       market.set_values(master_lists_of_values[i])
+        market.set_time_span(master_list)
+        market.set_values(master_lists_of_values[i])
     #end sufix adapter
 
     return markets_selected

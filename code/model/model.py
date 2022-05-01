@@ -53,6 +53,9 @@ class Model:
         self.correction_of_inflation_status       = constants.DEFULT_CORRECTION_OF_INFLATION_STATUS
         self.correction_of_currency_status        = constants.DEFULT_CORRECTION_OF_CURRENCY_STATUS
         self.delay_of_correction                  = constants.DEFULT_DELAY_OF_CORRECTION
+        self.chosen_time_interval_start_date      = 0
+        self.chosen_time_interval_end_date        = 0
+        self.chosen_time_interval_status          = False
 
         ################ Data Processed ################
 
@@ -106,7 +109,9 @@ class Model:
         """ Make the markets selected compatible, and calculate the new results"""
         print("TRACE: Model: update_model")
 
-        self.markets_selected = fill_gaps_data(self.markets_selected)
+        self.markets_selected = fill_gaps_data(self.markets_selected,
+                                               self.chosen_time_interval_start_date,
+                                               self.chosen_time_interval_end_date)
         self.markets_selected = calcultate_daily_change(self.markets_selected)
 
         calculate_graph_outcomes(self)
@@ -140,7 +145,7 @@ class Model:
         """
         print("TRACE: Model: update_market_selected")
 
-        # TODO: can try to add same market multiple times, takes some extra time
+        # TODO: this part maybe tries to add same market multiple times, takes some extra time
         self.markets_selected = {}
         for instrument in self.instruments_selected:
             name = instrument[0]
@@ -230,19 +235,19 @@ class Model:
         print("TRACE: Model: set_rebalance_between_instruments_status")
         self.rebalance_between_instruments_status = rebalance_between_instruments_status
 
-    def get_correctino_of_inflation_status(self):
-        print("TRACE: Model: get_correctino_of_inflation_status")
+    def get_correction_of_inflation_status(self):
+        print("TRACE: Model: get_correction_of_inflation_status")
         return self.correction_of_inflation_status
-    def set_correctino_of_inflation_status(self, correctino_of_inflation_status):
+    def set_correction_of_inflation_status(self, correction_of_inflation_status):
         print("TRACE: Model: set_rebalance_between_instruments_status")
-        self.correction_of_inflation_status = correctino_of_inflation_status
+        self.correction_of_inflation_status = correction_of_inflation_status
 
-    def get_correctino_of_currency_status(self):
-        print("TRACE: Model: get_correctino_of_currency_status")
+    def get_correction_of_currency_status(self):
+        print("TRACE: Model: get_correction_of_currency_status")
         return self.correction_of_currency_status
-    def set_correctino_of_currency_status(self, correctino_of_currency_status):
-        print("TRACE: Model: set_correctino_of_currency_status")
-        self.correction_of_currency_status = correctino_of_currency_status
+    def set_correction_of_currency_status(self, correction_of_currency_status):
+        print("TRACE: Model: set_correction_of_currency_status")
+        self.correction_of_currency_status = correction_of_currency_status
 
     def get_delay_of_correction(self):
         print("TRACE: Model: get_delay_of_correction")
@@ -272,12 +277,12 @@ class Model:
         print("TRACE: Model: set_portfolio_results_full_time")
         self.portfolio_results_full_time = portfolio_results_full_time
 
-    def get_common_time_intervall(self):
-        print("TRACE: Model: get_common_time_intervall")
+    def get_common_time_interval(self):
+        print("TRACE: Model: get_common_time_interval")
         return self.common_time_interval
-    def set_common_time_intervall(self, common_time_intervall):
-        print("TRACE: Model: set_common_time_intervall")
-        self.common_time_interval = common_time_intervall
+    def set_common_time_interval(self, common_time_interval):
+        print("TRACE: Model: set_common_time_interval")
+        self.common_time_interval = common_time_interval
 
     def get_markets_selected(self):
         print("TRACE: Model: get_markets_selected")
@@ -286,10 +291,33 @@ class Model:
         print("TRACE: Model: set_markets_selected")
         self.markets_selected = markets_selected
 
-    def get_results_for_intervalls(self):
-        print("TRACE: Model: get_results_for_intervalls")
+    def get_results_for_intervals(self):
+        print("TRACE: Model: get_results_for_intervals")
         return self.results_for_intervals
-    def set_results_for_intervalls(self, results_for_intervalls):
-        print("TRACE: Model: set_results_for_intervalls")
-        self.results_for_intervals = results_for_intervalls
+    def set_results_for_intervals(self, results_for_intervals):
+        print("TRACE: Model: set_results_for_intervals")
+        self.results_for_intervals = results_for_intervals
+
+    def set_chosen_start_date_time_limit(self, start_date):
+        print("TRACE: Model: set_chosen_start_date_time_limit")
+        # TODO lots of bugs along the path of changing limits
+        self.chosen_time_interval_start_date = start_date
+    def get_chosen_start_date_time_limit(self):
+        print("TRACE: Model: get_chosen_start_date_time_limit")
+        return self.chosen_time_interval_start_date
+
+    def set_chosen_end_date_time_limit(self, end_date):
+        print("TRACE: Model: set_chosen_end_date_time_limit")
+        # TODO lots of bugs along the path of changing limits
+        self.chosen_time_interval_end_date = end_date
+    def get_chosen_end_date_time_limit(self):
+        print("TRACE: Model: get_chosen_end_date_time_limit")
+        return self.chosen_time_interval_end_date
+
+    def set_chosen_time_interval_status(self, status_time_limit):
+        print("TRACE: Model: set_chosen_time_interval_status")
+        self.chosen_time_interval_status = status_time_limit
+    def get_chosen_time_interval_status(self):
+        print("TRACE: Model: get_chosen_time_interval_status")
+        return self.chosen_time_interval_status
 

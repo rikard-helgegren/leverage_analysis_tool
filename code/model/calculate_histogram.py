@@ -10,12 +10,12 @@ def calculate_histogram(self):
     # Check if empty
     if instruments_selected == []:
         print("NOTIFY: Model: calculate_histogram: instruments_selected is empty")
-        self.set_results_for_intervalls([])
+        self.set_results_for_intervals([])
         return
 
     if markets_selected == []:
         print("NOTIFY: Model: calculate_histogram: no loaded data files")
-        self.set_results_for_intervalls([])
+        self.set_results_for_intervals([])
         return
 
     # Duplicate code of  calc graph
@@ -53,9 +53,9 @@ def calculate_histogram(self):
 
     # Combine normal and leveraged
     if number_of_leveraged_selected == 0:
-        return self.set_results_for_intervalls(combined_normal)
+        return self.set_results_for_intervals(combined_normal)
     elif number_of_non_leveraged_selected == 0:
-        return self.set_results_for_intervalls(combined_leveraged)
+        return self.set_results_for_intervals(combined_leveraged)
     else:
         combined_normal_proprtionally = np.multiply(proportion_funds,
                                                     combined_normal)  # take in to account how much of total is invested in normal funds
@@ -63,7 +63,7 @@ def calculate_histogram(self):
                                                        combined_leveraged)  # take in to account how much of total is invested in leveraged markets
         normal_and_leverage_combined = [normal + leverage for normal, leverage in
                                         zip(combined_normal_proprtionally, combined_leveraged_proprtionally)]
-        return self.set_results_for_intervalls(normal_and_leverage_combined)
+        return self.set_results_for_intervals(normal_and_leverage_combined)
 
 def combine_normal_instruments(number_of_non_leveraged_selected, outcomes_of_normal_investments):
     # Unified list of normal instruments

@@ -22,7 +22,7 @@ from code.view.view import View
 from code.controller.controller import Controller
 
 class Leverage_Application(tk.Tk):
-    """ GUI for analyzing investments with leveraged cirtificates.
+    """ GUI for analyzing investments with leveraged certificates.
         The code follows the MVC (Model View Controller) architecture
     """
     def __init__(self):
@@ -50,7 +50,7 @@ class Leverage_Application(tk.Tk):
 
 ############################
 
-# Create an inctance and run the application
+# Create an instance and run the application
 if __name__ == '__main__':
     app = Leverage_Application()
     app.mainloop()

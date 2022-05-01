@@ -8,6 +8,7 @@ from code.view.line_graph_full_time import Line_Graph_Full_Time
 from code.view.table_of_instruments import Table_Of_Instuments
 from code.view.widgets_in_vertical_1 import setup_vertical_frame_1
 from code.view.table_of_statistics import Table_Of_Statistics
+from code.view.setup_time_limiters import setup_time_limiters
 
 
 class View(tk.Frame):
@@ -50,6 +51,8 @@ class View(tk.Frame):
         """ This line graph displays the performance of the created portfolio
             for the full time span available
         """
+
+        setup_time_limiters(self, self.vertical_frame_2)
 
         #############
         # Vertical 3
@@ -120,3 +123,11 @@ class View(tk.Frame):
     def update_instrument_selected(self, table_focus_item):
         print("TRACE: View: table_item_focused")
         self.controller.update_instrument_selected(table_focus_item)
+
+    def update_time_limits(self, from_time, to_time):
+        print("TRACE: View: update_time_limits, needs implementing")
+        print("from_time, to_time", from_time, to_time)
+
+        self.controller.set_time_limits(from_time, to_time)
+
+        # TODO implement

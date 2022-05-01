@@ -1,6 +1,8 @@
 # LAT - Leverage Analysis Tool
 
-This is a analyzing tool for gaining understanding if and how leveraged instruments can be used to build an investment portfolio that matches ones preferences.
+This is an analyzing tool for gaining understanding if and how leveraged instruments
+can be used to build an investment portfolio that matches ones preferences. The tool is
+still under construction.
 
 
 ### How to run
@@ -10,6 +12,16 @@ Run the application by executing leverage_analysis_tool.py
 ```
 python3 leverage_analysis_tool.py
 ```
+
+*NOTE*: Does not work at windows currently. 
+
+### Required libraries
+
+Beyond Python3 standard libraries this program also requires:
+
+* numpy
+* matplotlib
+* tkinter
 
 ### Data
 
@@ -37,4 +49,5 @@ Date, Close, Open
 
 ### Disclaimer
 
-Historical returns are no guarantee of future returns. An investment in securities or funds can both increase and decrease in value, and you may not get the invested capital back.
+Historical returns are no guarantee of future returns. An investment in securities or funds can both increase and decrease in value,
+and you may not get the invested capital back.

@@ -16,3 +16,11 @@ remove all dict_of_market_classes_to_dict_of_market_dicts where possible
 
 
 add fields for selecting years
+
+Implement strategies:
+    might need a class account with all the instruments selected which can return
+    current value for all instruments
+    lowest value so far for all instruments
+    lowest value after reset for all instruments
+    step on day forward
+    getters and seters

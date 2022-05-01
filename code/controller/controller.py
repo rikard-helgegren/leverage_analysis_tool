@@ -34,12 +34,14 @@ class Controller:
 
         ### Update histogram ###
 
-        self.draw_histogram(self.model.get_results_for_intervalls())#TODO fix histogram
+        self.draw_histogram(self.model.get_results_for_intervals())#TODO fix histogram
 
         ### Update line graph ###
-        time_interval = self.model.get_common_time_intervall()
+        time_interval = self.model.get_common_time_interval()
         portfolio_results_full_time = self.model.get_portfolio_results_full_time()
         self.draw_line_graph(portfolio_results_full_time, time_interval)
+
+        self.update_chosen_time_intervals()
 
 
     def draw_histogram(self, data):
@@ -85,3 +87,45 @@ class Controller:
 
         self.update_model()
         self.update_view()
+
+    def set_time_limits(self, from_time, to_time):
+        print("TRACE: Controller: set_time_limits")
+
+        self.model.set_chosen_start_date_time_limit(from_time)
+        self.model.set_chosen_end_date_time_limit(to_time)
+
+        # If time limit is not set, do not use it
+        if from_time == 0 and to_time == 0:
+            self.model.set_chosen_time_interval_status(False)
+        else:
+            self.model.set_chosen_time_interval_status(True)
+
+        self.update_model() #TODO can fine tune this
+        self.update_view() #TODO can fine tune this
+
+    def update_chosen_time_intervals(self):
+        start = self.model.get_chosen_start_date_time_limit()
+        end = self.model.get_chosen_end_date_time_limit()
+
+        # If start day is 0 then no date is set
+        if start != 0:
+            start = str(start)
+
+            start = list(start)
+            start.insert(6, '-')
+            start.insert(4, '-')
+            start = ''.join(start)
+
+            self.view.text_box_left.set_text(start)
+
+        # If start day is 0 then no date is set
+        if end != 0:
+            end = str(end)
+
+            end = list(end)
+            end.insert(6, '-')
+            end.insert(4, '-')
+            end = ''.join(end)
+
+            self.view.text_box_right.set_text(end)
+
