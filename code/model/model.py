@@ -14,6 +14,7 @@ from code.model.fill_in_missing_dates            import fill_in_missing_dates
 from code.model.fill_in_missing_dates_improved   import fill_gaps_data
 from code.model.calculate_common_time_interval   import calculate_common_time_interval
 from code.model.calculate_histogram              import calculate_histogram
+from code.model.performance_key_values_class     import Performance_Key_values
 
 from code.model.convert_between_market_and_dict import dict_of_market_dicts_to_dict_of_market_classes, dict_of_market_classes_to_dict_of_market_dicts
 
@@ -23,9 +24,9 @@ import code.model.constants as constants
 class Model:
     """ This is the model of the application. It models stock market index
         instruments and calculates portfolio performance as well as other
-        measures of intrest.
+        measures of interest.
 
-        In order to model the instruments and suport a range of portfolios
+        In order to model the instruments and support a range of portfolios
         the model have plenty of variables.
     """
     def __init__(self):
@@ -33,7 +34,7 @@ class Model:
 
         ################ Data Files ################
 
-        self.data_files_path  = "data/raw_data/all"
+        self.data_files_path  = constants.data_files_path
         self.clean_file_names = []
 
 
@@ -86,18 +87,21 @@ class Model:
         """
 
         self.results_for_intervals = []
-        """ List of results for all the continuous time intervalls of length 
+        """ List of results for all the continuous time intervals of length 
             'self.years_investigating' in the time investigated.
             
             The purpose of this variable is to be ploted in histogram
         """
+
+        self.key_values = Performance_Key_values(self)
+
 
     ######################
     # Central methods
     ######################
 
     def model_import_data(self):
-        """ Check if data fiels are clean and store the market data in
+        """ Check if data files are clean and store the market data in
             Market class objects
         """
         print("TRACE: Model: model_import_data")
@@ -112,11 +116,15 @@ class Model:
         self.markets_selected = fill_gaps_data(self.markets_selected,
                                                self.chosen_time_interval_start_date,
                                                self.chosen_time_interval_end_date)
+
         self.markets_selected = calcultate_daily_change(self.markets_selected)
 
         calculate_graph_outcomes(self)
         calculate_histogram(self)
-        self.common_time_interval = calculate_common_time_interval(self) # TODO: doing double work some times
+
+        self.common_time_interval = calculate_common_time_interval(self)  # TODO: doing double work some times
+
+        self.key_values.update_values(self.results_for_intervals, self.portfolio_results_full_time)
 
 
     ######################
@@ -207,15 +215,15 @@ class Model:
         self.proportion_funds = proportion_funds
 
     def get_proportion_leverage(self):
-        return self.proportion_leverage
         print("TRACE: Model: get_proportion_leverage")
+        return self.proportion_leverage
     def set_proportion_leverage(self, proportion_leverage):
         print("TRACE: Model: set_proportion_leverage", proportion_leverage)
         self.proportion_leverage = proportion_leverage
 
     def get_include_fees_status(self):
         print("TRACE: Model: get_include_fees_status")
-        return self.include_fee_status
+        return self.include_fees_status
     def set_include_fee_status(self, include_fee_status):
         print("TRACE: Model: set_include_fee_status")
         self.include_fees_status = include_fee_status
@@ -226,7 +234,7 @@ class Model:
         return self.rebalance_status
     def set_rebalance_status(self, rebalance_status):
         print("TRACE: Model: set_rebalance_status")
-        self.set_rebalance_status = rebalance_status
+        self.rebalance_status = rebalance_status
 
     def get_rebalance_between_instruments_status(self):
         print("TRACE: Model: get_rebalance_between_instruments_status")
@@ -300,7 +308,6 @@ class Model:
 
     def set_chosen_start_date_time_limit(self, start_date):
         print("TRACE: Model: set_chosen_start_date_time_limit")
-        # TODO lots of bugs along the path of changing limits
         self.chosen_time_interval_start_date = start_date
     def get_chosen_start_date_time_limit(self):
         print("TRACE: Model: get_chosen_start_date_time_limit")
@@ -308,7 +315,6 @@ class Model:
 
     def set_chosen_end_date_time_limit(self, end_date):
         print("TRACE: Model: set_chosen_end_date_time_limit")
-        # TODO lots of bugs along the path of changing limits
         self.chosen_time_interval_end_date = end_date
     def get_chosen_end_date_time_limit(self):
         print("TRACE: Model: get_chosen_end_date_time_limit")
@@ -317,6 +323,9 @@ class Model:
     def set_chosen_time_interval_status(self, status_time_limit):
         print("TRACE: Model: set_chosen_time_interval_status")
         self.chosen_time_interval_status = status_time_limit
+
+        # Need to refresh markets in order to not keep old times
+        self.update_market_selected()
     def get_chosen_time_interval_status(self):
         print("TRACE: Model: get_chosen_time_interval_status")
         return self.chosen_time_interval_status

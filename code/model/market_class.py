@@ -1,6 +1,10 @@
 
 class Market:
+    """ Represents a stock market
 
+        params Values
+
+    """
     def __init__(self, name, values=[], time_span=[]):
 
         self.name = name

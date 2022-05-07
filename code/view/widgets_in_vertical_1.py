@@ -40,7 +40,7 @@ def setup_vertical_frame_1(self, super_frame):
     # Spinbox Years
     self.frame_years = tk.Frame(self.frame_group1, padx=5, pady=5)
     self.frame_years.pack(side=tk.LEFT)
-    self.label_years = tk.Label(self.frame_years, text='Years')
+    self.label_years = tk.Label(self.frame_years, text='Years\nInvesting')
     self.label_years.pack()
     self.spin_years = tk.Spinbox(self.frame_years, from_=0, to=100, width=5, command=self.update_years_investigating)
     self.spin_years.delete(0)
@@ -50,7 +50,7 @@ def setup_vertical_frame_1(self, super_frame):
     # Spinbox Loan
     self.frame_loan = tk.Frame(self.frame_group1, padx=5, pady=5)
     self.frame_loan.pack(side=tk.LEFT)
-    self.label_loan = tk.Label(self.frame_loan, text='Loan')
+    self.label_loan = tk.Label(self.frame_loan, text='\nLoan')
     self.label_loan.pack()
 
     self.spin_loan = tk.Spinbox(self.frame_loan, from_=0, to=100, width=5, command=self.update_loan)

@@ -28,7 +28,7 @@ class Leverage_Application(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        self.title('Leverage Experiment Tool')
+        self.title('Leverage Analysis Tool')
 
         # create a model
         model = Model()

@@ -1,5 +1,4 @@
 
-
 import tkinter as tk
 
 
@@ -89,24 +88,24 @@ class View(tk.Frame):
         tk.messagebox.showinfo('Error', 'Not fully implemented')
     
     def update_years_investigating(self):
-        print("TRACE: View: updatupdate_years_investigatinge_limit")
+        print("TRACE: View: update_years_investigating_limit")
         value = int(self.spin_years.get())
         self.controller.update_years_investigating(value)
 
     def update_loan(self, value):
         print("TRACE: View: update_loan")
         tk.messagebox.showinfo('Error', 'Not fully implemented')
+        # TODO not fully implemented
 
     def update_amount_leverage(self, value):
         print("TRACE: View: update_amount_leverage")
         self.controller.set_update_amount_leverage(value)
-        #TODO
 
     def update_rebalance_status(self):
         print("TRACE: View: update_rebalance_status", self.checkbutton_rebalance_state.get())
         tk.messagebox.showinfo('Error', 'Not fully implemented')
         self.checkbutton_rebalance_state.get()
-        # TODO
+        # TODO not fully implemented
 
     def draw_histogram(self, data):
         print("TRACE: View: draw_histogram")
@@ -131,3 +130,6 @@ class View(tk.Frame):
         self.controller.set_time_limits(from_time, to_time)
 
         # TODO implement
+
+    def update_table_of_statistics(self, key_values):
+        self.table_of_statistics.set_table(key_values)

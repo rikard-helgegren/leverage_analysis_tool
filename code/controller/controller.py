@@ -34,7 +34,7 @@ class Controller:
 
         ### Update histogram ###
 
-        self.draw_histogram(self.model.get_results_for_intervals())#TODO fix histogram
+        self.draw_histogram(self.model.get_results_for_intervals())  # TODO fix histogram visuals
 
         ### Update line graph ###
         time_interval = self.model.get_common_time_interval()
@@ -43,14 +43,16 @@ class Controller:
 
         self.update_chosen_time_intervals()
 
+        self.update_table_of_statistics(self.model.key_values.get_all_values())
+
 
     def draw_histogram(self, data):
         print("TRACE: Controller: draw_histogram")
         self.view.draw_histogram(data)
 
-    def draw_line_graph(self, data, time_intervall):
+    def draw_line_graph(self, data, time_interval):
         print("TRACE: Controller: draw_line_graph")
-        self.view.draw_line_graph(data, time_intervall)
+        self.view.draw_line_graph(data, time_interval)
 
     def set_table_of_instruments(self):
         """ Set the table with information of instruments available"""
@@ -66,7 +68,7 @@ class Controller:
 
     def update_instrument_selected(self, table_focus_item_data ):
         print("TRACE: Controller: update_instrument_selected")
-        #Update model
+
         self.model.update_instrument_selected(table_focus_item_data)
 
         self.update_model()
@@ -104,6 +106,7 @@ class Controller:
         self.update_view() #TODO can fine tune this
 
     def update_chosen_time_intervals(self):
+        """ Update the manually selected time intervals in the view"""
         start = self.model.get_chosen_start_date_time_limit()
         end = self.model.get_chosen_end_date_time_limit()
 
@@ -129,3 +132,5 @@ class Controller:
 
             self.view.text_box_right.set_text(end)
 
+    def update_table_of_statistics(self, key_values):
+        self.view.update_table_of_statistics(key_values)

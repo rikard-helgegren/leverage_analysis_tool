@@ -4,6 +4,7 @@ This is an analyzing tool for gaining understanding if and how leveraged instrum
 can be used to build an investment portfolio that matches ones preferences. The tool is
 still under construction.
 
+![Screenshot of application](/Sample.png)
 
 ### How to run
 
@@ -46,6 +47,8 @@ Date, Close, Open
 20220102, 2, 1
 20220101, 1, 0
 ```
+
+The file path is set in *code/model/constants*
 
 ### Disclaimer
 
