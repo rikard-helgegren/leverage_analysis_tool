@@ -1,5 +1,5 @@
 __pycache__
-data/raw_data
-data/pre_calculated
-images/web_images/
+data/
+images/historic_graphs/
 .idea/
+Notes

@@ -5,6 +5,7 @@ class Performance_Key_values:
 
         e.g. Mean, median, volatility, beta
     """
+    print("TRACE: model, Performance_Key_values: __init__")
 
     def __init__(self, model):
 
@@ -39,6 +40,7 @@ class Performance_Key_values:
         self.exposure_leverage_mean = 0
         self.exposure_funds_median = 0
         self.exposure_leverage_median = 0
+        self.sharpe_ratio = 0
 
     def update_values(self, performance_intervals, performance_full_time):
         """Update key values du to changes in the model"""
@@ -75,10 +77,14 @@ class Performance_Key_values:
             self.exposure_leverage_mean = 0
             self.exposure_funds_median = 0
             self.exposure_leverage_median = 0
+            self.sharpe_ratio = 0
+
         #calculate key values
         else:
             self.variance = round(self.calc_variance(performance_full_time), 2)
             self.volatility = round(np.sqrt(self.calc_variance(performance_full_time)), 2)
+            self.worst_fall_10_days = round(self.calc_worst_fall_X_days(performance_full_time, 10), 2)
+            self.worst_fall_30_days = round(self.calc_worst_fall_X_days(performance_full_time, 30), 2)
 
             if performance_intervals == []:
                 self.mean = 0
@@ -102,10 +108,8 @@ class Performance_Key_values:
         self.beta = 0
         self.alpha = 0
         self.severity = 0
-        self.fees_payed = 0
+        self.fees_payed = 0  # needs to be set in calculations
         self.risk = 0
-        self.worst_fall_10_days = 0
-        self.worst_fall_30_days = 0
         self.rpi = 0
         self.apr = 0
         self.boiling_band = 0
@@ -119,12 +123,27 @@ class Performance_Key_values:
         self.exposure_leverage_mean = 0
         self.exposure_funds_mean = 0
         self.exposure_leverage_mean = 0
+        self.sharpe_ratio = 0
+
+    def calc_worst_fall_X_days(self, performance_full_time, x_days):
+        """ Calculate the largest loss during a time span of x_days measured in percent.
+            A positive loss value is a negative change.
+        """
+        print("TRACE: model, performance_key_values: calc_worst_fall_X_days")
+        worst_fall = 0
+
+        for i in range(len(performance_full_time) - x_days):
+            this_fall = (performance_full_time[i + x_days] - performance_full_time[i])/performance_full_time[i]
+            worst_fall = max(worst_fall, this_fall)
+
+        return worst_fall*100
 
     def calc_variance(self, performance_full_time):
-        """Calculate the variance* of the full time period"""
+        """ Calculate the variance* of the full time period"""
+        print("TRACE: model, performance_key_values: calc_variance")
 
         # Look att mean values over <mean_size> values # TODO check that this is the right approach
-        mean_size = 10
+        mean_size = 30
         mean = np.sum(performance_full_time[:mean_size])/mean_size
         sum_total_dif = 0
         elements_to_sum = (len(performance_full_time) - mean_size - 1)
@@ -157,10 +176,10 @@ class Performance_Key_values:
                 "50th Percentile": self.percentile_50,
                 "75th Percentile": self.percentile_75,
                 "95th Percentile": self.percentile_95,
-                "Fees Payed" : self.fees_payed,
-                "Risk" : self.risk,
-                "Worst fall in 10 days": self.worst_fall_10_days,
-                "Worst fall in 30 days": self.worst_fall_30_days,
+                "Fees Payed": self.fees_payed,
+                "Risk": self.risk,
+                "Worst fall in 10 days": str(self.worst_fall_10_days)+"%",
+                "Worst fall in 30 days": str(self.worst_fall_30_days)+"%",
                 "RPI": self.rpi,
                 "APR": self.apr,
                 "Boiling band": self.boiling_band,
@@ -173,7 +192,8 @@ class Performance_Key_values:
                 "Exposure funds mean": self.exposure_funds_mean,
                 "Exposure leverage mean": self.exposure_leverage_mean,
                 "Exposure funds median": self.exposure_funds_median,
-                "Exposure leverage median": self.exposure_leverage_median}
+                "Exposure leverage median": self.exposure_leverage_median,
+                "Sharpe_ratio":self.sharpe_ratio}
 
     def set_mean(self, mean):
         self.mean = mean
@@ -320,3 +340,8 @@ class Performance_Key_values:
         self.exposure_leverage_median = exposure_leverage_median
     def get_exposure_leverage_median(self):
         return self.exposure_leverage_median
+    
+    def set_sharpe_ratio(self, sharpe_ratio):
+        self.sharpe_ratio = sharpe_ratio
+    def get_sharpe_ratio(self):
+        return self.sharpe_ratio

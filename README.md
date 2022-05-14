@@ -57,11 +57,17 @@ and you may not get the invested capital back.
 
 ### Goal
 
-In the end the graphical user interface will be buildt by usnig Kivy (https://kivy.org/) to achive something in the this style:
+In the end the graphical user interface will be built by using Kivy (https://kivy.org/) to achieve something in this style:
 
 ![Design goal](/images/Goal.jpeg)
 
 
 But during development of the model tkinter will be used to swiftly test and experiment with the model.
 
-The aim is to make a tool for both beginner and experts where there are two display options. One simplistic with only the most importent features and values viewable. And one with all controlls and all statistical peformance meters.
+The aim is to make a tool for both beginner and experts where there are two display options. One simplistic with only the most important features and values viewable. And one with all controls and all statistical performance meters.
+
+### Help out
+
+If you would like to contribute, tasks for further development can be found in the project boards linked to this repository.
+
+(https://github.com/rikard-helgegren/leverage_analysis_tool/projects)

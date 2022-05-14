@@ -1,4 +1,8 @@
 
-Implementation of fill in missing dates:
+Improvements of fill_in_missing_dates:
     Change: Switched from list to linked list:
     Speed up: 10s --> 0.07s
+
+Improvements of calculate_histogram:
+    Change: Reused calculations of ovellapping data sequences:
+    Speed up: 1.46s --> 0.004s

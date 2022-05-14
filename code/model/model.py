@@ -81,6 +81,12 @@ class Model:
             The portfolio is made up of all selected instruments
         """
 
+        self.portfolio_results_full_time_without_leverage = []
+        """ List of the portfolios value for each day with an update.
+            The portfolio is made up of only non leverage items. This is
+            needed for some statistical performance meters.
+        """
+
         self.common_time_interval = []
         """ List of all days in the time span that the selected instruments
             have data for. Missing days within the common time span are added
