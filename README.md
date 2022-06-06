@@ -6,6 +6,14 @@ still under construction.
 
 ![Screenshot of application](/images/Sample.png)
 
+### Background
+
+Development of this application was started after a series increasingly more realistic models. The previous model and experiment with it lead up to a whitepaper, conclunding that leveraged instruments could increase the expected returns of a portfolio. This application will enable non-programmes to experiment with leveraged certificates, and allow different strategies for buying and selling the cirtificates in order to mimimize risk or to increase returns.
+
+<kbd>
+<img src="/images/Leveraged_Certificates.png" alt="Whitepaper first page" width="50%"/>
+</kbd>
+
 ### How to run
 
 Run the application by executing leverage_analysis_tool.py
