@@ -88,24 +88,30 @@ class View(tk.Frame):
         tk.messagebox.showinfo('Error', 'Not fully implemented')
     
     def update_years_investigating(self):
-        print("TRACE: View: update_years_investigating_limit")
+        print("TRACE: View: update_years_investigating")
         value = int(self.spin_years.get())
         self.controller.update_years_investigating(value)
 
-    def update_loan(self, value):
+    def update_harvest_point(self):
+        print("TRACE: View: update_harvest_point")
+        value = int(self.spin_harvest_point.get())
+        self.controller.update_harvest_point(value)
+
+    def update_refill_point(self):
+        print("TRACE: View: update_refill_point")
+        value = int(self.spin_refill_point.get())
+        self.controller.update_refill_point(value)
+
+
+    def update_loan(self):
         print("TRACE: View: update_loan")
-        tk.messagebox.showinfo('Error', 'Not fully implemented')
+        value = int(self.spin_loan.get())
+        self.controller.update_loan(value/100)
         # TODO not fully implemented
 
     def update_amount_leverage(self, value):
         print("TRACE: View: update_amount_leverage")
         self.controller.set_update_amount_leverage(value)
-
-    def update_rebalance_status(self):
-        print("TRACE: View: update_rebalance_status", self.checkbutton_rebalance_state.get())
-        tk.messagebox.showinfo('Error', 'Not fully implemented')
-        self.checkbutton_rebalance_state.get()
-        # TODO not fully implemented
 
     def draw_histogram(self, data):
         print("TRACE: View: draw_histogram")
@@ -122,6 +128,9 @@ class View(tk.Frame):
     def update_instrument_selected(self, table_focus_item):
         print("TRACE: View: table_item_focused")
         self.controller.update_instrument_selected(table_focus_item)
+
+    def update_strategy_selected(self, menu_focus_item):
+        self.controller.update_strategy_selected(menu_focus_item)
 
     def update_time_limits(self, from_time, to_time):
         print("TRACE: View: update_time_limits, needs implementing")

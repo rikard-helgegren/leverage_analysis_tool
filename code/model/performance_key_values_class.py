@@ -86,7 +86,7 @@ class Performance_Key_values:
             self.worst_fall_10_days = round(self.calc_worst_fall_X_days(performance_full_time, 10), 2)
             self.worst_fall_30_days = round(self.calc_worst_fall_X_days(performance_full_time, 30), 2)
 
-            if performance_intervals == []:
+            if performance_intervals == [] :
                 self.mean = 0
                 self.median = 0
                 self.percentile_5 = 0
@@ -133,7 +133,7 @@ class Performance_Key_values:
         worst_fall = 0
 
         for i in range(len(performance_full_time) - x_days):
-            this_fall = (performance_full_time[i + x_days] - performance_full_time[i])/performance_full_time[i]
+            this_fall = (performance_full_time[i + x_days] - performance_full_time[i])/(performance_full_time[i]+10**(-10))
             worst_fall = max(worst_fall, this_fall)
 
         return worst_fall*100
@@ -153,8 +153,10 @@ class Performance_Key_values:
             # Update mean of last of the new group
             mean -= performance_full_time[i]  # Remove first value
             mean += performance_full_time[i + mean_size]  # Add first value
-
-        variance = sum_total_dif/elements_to_sum
+        if elements_to_sum > 0:
+            variance = sum_total_dif/elements_to_sum
+        else:
+            variance = 1000  # set random large value
         return variance
 
 

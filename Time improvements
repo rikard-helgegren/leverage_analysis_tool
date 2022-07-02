@@ -6,3 +6,11 @@ Improvements of fill_in_missing_dates:
 Improvements of calculate_histogram:
     Change: Reused calculations of ovellapping data sequences:
     Speed up: 1.46s --> 0.004s
+
+Changed harvest/refill algorithm:
+    Change: from Python to C++ with ctypes
+    speed up: 14s --> 0.2 (depends on input)
+
+Improvments of harvest/refill algorithm:
+    Change: use async in loop
+    speed up: 1s -> 0.5s (Only have 2 cores on this laptop)

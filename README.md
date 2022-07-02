@@ -8,7 +8,7 @@ still under construction.
 
 ### Background
 
-Development of this application was started after a series increasingly more realistic models. The previous model and experiment with it lead up to a whitepaper, conclunding that leveraged instruments could increase the expected returns of a portfolio. This application will enable non-programmes to experiment with leveraged certificates, and allow different strategies for buying and selling the cirtificates in order to mimimize risk or to increase returns.
+Development of this application was started after a series increasingly more realistic models. Experiment with the previous model resulted in a whitepaper, concluding that leveraged instruments could increase the expected returns of a portfolio. This application will enable non-programmes to experiment with leveraged certificates, and allow different strategies for buying and selling the certificates in order to minimize risk or to increase returns.
 
 <kbd>
 <img src="/images/Leveraged_Certificates.png" alt="Whitepaper first page" width="50%"/>

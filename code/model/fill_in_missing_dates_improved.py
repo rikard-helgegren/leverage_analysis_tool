@@ -10,6 +10,7 @@ class LinkedList:
     def __init__(self):
         self.head = None
 
+
 def linked_list_to_string(linked_list):
     node = linked_list.head
     string = ''
@@ -19,6 +20,7 @@ def linked_list_to_string(linked_list):
         node = node.next
     string += 'None'
     return string
+
 
 def list_to_linked_list(list_to_convert):
     if len(list_to_convert) == 0:
@@ -32,6 +34,7 @@ def list_to_linked_list(list_to_convert):
     linked_list.head = start_node
     return linked_list
 
+
 # This one is faster
 def linked_list_to_list(linked_list):
     temp_list = []
@@ -41,10 +44,10 @@ def linked_list_to_list(linked_list):
         node = node.next
     return temp_list
 
+
 #######################################################
 ###                  Algorithms                     ###
 #######################################################
-
 def find_first_common_market_day(lists_of_indexes, chosen_time_interval_start_date):
     """ Returns the earliest day that all selected indexes have in common
         or
@@ -56,6 +59,7 @@ def find_first_common_market_day(lists_of_indexes, chosen_time_interval_start_da
 
     return max(first_common, chosen_time_interval_start_date)
 
+
 def find_last_common_market_day(lists_of_indexes, chosen_time_interval_end_date):
     """ Returns the last day that all selected indexes have in common
         or
@@ -66,6 +70,7 @@ def find_last_common_market_day(lists_of_indexes, chosen_time_interval_end_date)
         return last_common
 
     return min(last_common, chosen_time_interval_end_date)
+
 
 def fix_gaps2(lists_of_indexes, latest_first, earliest_last):
     master_node = List_node() # Dummy node
@@ -113,6 +118,7 @@ def fix_gaps2(lists_of_indexes, latest_first, earliest_last):
     master_index_list = LinkedList()
     master_index_list.head = master_node.next
     return master_index_list
+
 
 def fill_gaps_data(markets_selected, chosen_time_interval_start_date, chosen_time_interval_end_date):
     print("TRACE: Model: fill_gaps_data")

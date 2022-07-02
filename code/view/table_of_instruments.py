@@ -58,8 +58,8 @@ class Table_Of_Instuments:
 
     def get_table_item_focused(self):
         print("TRACE: table_of_instruments: get_table_item_focused")
-        curItem = self.table.focus()
-        item = self.table.item(curItem)
+        cur_item = self.table.focus()
+        item = self.table.item(cur_item)
 
         return [item['text'], item['values'][1]] #market index and leverage
 
@@ -67,13 +67,13 @@ class Table_Of_Instuments:
     def update_item_color(self):
         print("TRACE: table_of_instruments: update_item_color")
 
-        curItem = self.table.focus()
-        current_item_tag = self.table.item(curItem)["tags"]
+        cur_item = self.table.focus()
+        current_item_tag = self.table.item(cur_item)["tags"]
 
         if current_item_tag != ['selected_row']:
-            self.table.item(curItem, tag="selected_row")
+            self.table.item(cur_item, tag="selected_row")
         else:
-            self.table.item(curItem, tag="not_selected_row")
+            self.table.item(cur_item, tag="not_selected_row")
 
 
     def get_all_item_texts(self):

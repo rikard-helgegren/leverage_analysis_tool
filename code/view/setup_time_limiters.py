@@ -36,9 +36,10 @@ def setup_time_limiters(view, super_frame):
         if time_string == "":
             return 0
 
-        # If only year is set
-        if len(time_string) < 5:
+        if len(time_string) < 5:  # If only year is set
             time_string = time_string + "0101"
+        elif len(time_string) < 7:  # If year and month is set
+            time_string = time_string + "01"
 
         try:
             time_string = int(time_string)
@@ -71,6 +72,5 @@ class Text_Box:
         return self.text_box.get(1.0, 'end')
 
     def set_text(self, text):
-        print("todo, implement")
         self.text_box.delete(1.0, 'end')
         self.text_box.insert(1.0, text)

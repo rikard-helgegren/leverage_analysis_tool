@@ -74,6 +74,13 @@ class Controller:
         self.update_model()
         self.update_view()
 
+    def update_strategy_selected(self, new_strategy):
+        print("TRACE: Controller: update_strategy_selected")
+        self.model.set_portfolio_strategy(new_strategy)
+
+        self.update_model()
+        self.update_view()
+
     def set_update_amount_leverage(self, value_percent):
         print("TRACE: Controller: set_update_amount_leverage")
         value = int(value_percent)/100
@@ -86,6 +93,28 @@ class Controller:
     def update_years_investigating(self, years):
         print("TRACE: Controller: update_years_investigating")
         self.model.set_years_investigating(years)
+
+        self.update_model()
+        self.update_view()
+
+    def update_harvest_point(self, harvest_point):
+        print("TRACE: Controller: update_harvest_point")
+        self.model.set_harvest_point(harvest_point)
+
+        self.update_model()
+        self.update_view()
+
+    def update_refill_point(self, refill_point):
+        print("TRACE: Controller: update_refill_point")
+        self.model.set_refill_point(refill_point)
+
+        self.update_model()
+        self.update_view()
+
+
+    def update_loan(self, loan):
+        print("TRACE: Controller: update_loan")
+        self.model.set_loan(loan)
 
         self.update_model()
         self.update_view()

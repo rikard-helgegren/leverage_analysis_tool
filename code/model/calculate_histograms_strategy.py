@@ -1,7 +1,41 @@
+import code.model.constants as constants
 import numpy as np
+from code.model.harvest_refill_hist_cpp_adapter import harvest_refill_hist_ctypes
+
+
 def calculate_histogram(self):
     print("TRACE: Model: calculate_histogram")
 
+    markets_selected     = self.get_markets_selected()
+    instruments_selected = self.get_instruments_selected()
+
+    # Check if empty
+    if instruments_selected == []:
+        print("NOTIFY: Model: calculate_histogram: instruments_selected is empty")
+        self.set_results_for_intervals([])
+        return
+
+    if markets_selected == []:
+        print("NOTIFY: Model: calculate_histogram: no loaded data files")
+        self.set_results_for_intervals([])
+        return
+
+    #Return after construction
+    strategy = self.get_portfolio_strategy()
+    if strategy == constants.PORTFOLIO_STRATEGIES[0]:  # Do nothing
+        return_data = do_nothing_hist(self)
+    elif strategy == constants.PORTFOLIO_STRATEGIES[1]:  # Harvest/Refill
+        return_data = harvest_refill_hist_ctypes(self)
+    else:
+        return_data = [1, 2, 2, 3]
+
+    return self.set_results_for_intervals(return_data)
+
+
+##################### The actual do nothing ###################
+def do_nothing_hist(self):
+
+    print("TRACE: Model: calculate_histogram")
     markets_selected     = self.get_markets_selected()
     instruments_selected = self.get_instruments_selected()
     proportion_funds     = self.get_proportion_funds()
@@ -18,7 +52,7 @@ def calculate_histogram(self):
         self.set_results_for_intervals([])
         return
 
-    # Duplicate code of  calc graph
+    # Duplicate code of calc graph
     outcomes_of_normal_investments = []
     outcomes_of_leveraged_investments = []
 
@@ -31,17 +65,17 @@ def calculate_histogram(self):
 
         # Get data with instrument name
         market = markets_selected[instrument[0]]
-        list_of_values = market.get_values()
+        daily_change = market.get_daily_change()
         cutoff = 0
-        values_to_check = self.years_investigating*300
+        values_to_check = self.years_investigating*constants.MARKET_DAYS_IN_YEAR
 
         if leverage == 1:
             number_of_non_leveraged_selected += 1
-            performance = improved_calc(list_of_values, leverage, cutoff, values_to_check)
+            performance = improved_calc(daily_change, leverage, cutoff, values_to_check)
             outcomes_of_normal_investments.append(performance)
         elif leverage > 1:
             number_of_leveraged_selected += 1
-            performance = improved_calc(list_of_values, leverage, cutoff, values_to_check)
+            performance = improved_calc(daily_change, leverage, cutoff, values_to_check)
             outcomes_of_leveraged_investments.append(performance)
         else:
             print("ERROR: Non valid leverage used")
@@ -53,17 +87,17 @@ def calculate_histogram(self):
 
     # Combine normal and leveraged
     if number_of_leveraged_selected == 0:
-        return self.set_results_for_intervals(combined_normal)
+        return combined_normal
     elif number_of_non_leveraged_selected == 0:
-        return self.set_results_for_intervals(combined_leveraged)
+        return combined_leveraged
     else:
-        combined_normal_proprtionally = np.multiply(proportion_funds,
+        combined_normal_proportionally = np.multiply(proportion_funds,
                                                     combined_normal)  # take in to account how much of total is invested in normal funds
-        combined_leveraged_proprtionally = np.multiply(proportion_leverage,
+        combined_leveraged_proportionally = np.multiply(proportion_leverage,
                                                        combined_leveraged)  # take in to account how much of total is invested in leveraged markets
         normal_and_leverage_combined = [normal + leverage for normal, leverage in
-                                        zip(combined_normal_proprtionally, combined_leveraged_proprtionally)]
-        return self.set_results_for_intervals(normal_and_leverage_combined)
+                                        zip(combined_normal_proportionally, combined_leveraged_proportionally)]
+        return normal_and_leverage_combined
 
 def combine_normal_instruments(number_of_non_leveraged_selected, outcomes_of_normal_investments):
     # Unified list of normal instruments
@@ -106,35 +140,14 @@ def percentage_change(values):
         changes.append((values[i + 1] - values[i]) / values[i])
     return changes
 
-def naive_calc(list_of_values, leverage, cutoff, values_to_check):
-    changes = percentage_change(list_of_values)
-    gains = []
-    has_appended = False
-    for i in range(0, len(list_of_values) - values_to_check):
-        value_thus_far = 1
-        has_appended = False
-
-        for change in changes[i:i + values_to_check]:
-            value_thus_far *= 1 + change * leverage
-
-            if value_thus_far < cutoff:
-                gains.append(cutoff)
-                has_appended = True
-                break
-
-        if not has_appended:
-            gains.append(value_thus_far)
-
-    return gains
-
-def improved_calc(list_of_values, leverage, cutoff, values_to_check):
-    """ Uses the fact that lots of calculations in the naive version are repeated.
+def improved_calc(daily_change, leverage, cutoff, values_to_check):
+    """Uses the fact that lots of calculations in the naive version are repeated.
         This can be avoided if we know that nothing interesting will happen in the
         interval inspected.
     """
-    changes = percentage_change(list_of_values)
+
+    changes = daily_change
     gains = []
-    has_appended = False
 
     # calc once:
     value_thus_far = 1
@@ -142,9 +155,13 @@ def improved_calc(list_of_values, leverage, cutoff, values_to_check):
     lowest_value_index = 0
     has_appended = False
 
+
+    # Setup, a first run through
     for i, change in enumerate(changes[0:values_to_check]):
         value_thus_far *= 1 + change * leverage
 
+
+        # Check if new extreme
         if value_thus_far < lowest_value:
             lowest_value = value_thus_far
             lowest_value_index = i
@@ -157,10 +174,11 @@ def improved_calc(list_of_values, leverage, cutoff, values_to_check):
     if not has_appended:
         gains.append(value_thus_far)
 
-    for prev_i in range(0, len(list_of_values) - values_to_check - 1):
+    # Loop all possible start days
+    for prev_i in range(0, len(daily_change) - values_to_check):
         has_appended = False
 
-        # move interval to check
+        # move interval and check effects on lowest value and end value
         lowest_value /= (1 + changes[prev_i] * leverage)
         value_thus_far /= (1 + changes[prev_i] * leverage)
         value_thus_far *= (1 + changes[prev_i + values_to_check] * leverage)

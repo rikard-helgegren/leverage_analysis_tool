@@ -1,4 +1,6 @@
 from copy import deepcopy
+import os
+import subprocess
 
 ###### IMPORT DATA MANAGER ######
 from code.data_manager.check_if_data_files_are_clean import check_if_data_files_are_clean
@@ -8,16 +10,13 @@ from code.data_manager.manage_preproccessed_data     import load_preproccessed_f
 from code.data_manager.manage_preproccessed_data     import save_preproccessed_files
 
 ###### IMPORT MODEL ######
-from code.model.calcultate_daily_change          import calcultate_daily_change
-from code.model.calculate_graph_outcomes         import calculate_graph_outcomes
-from code.model.fill_in_missing_dates            import fill_in_missing_dates
-from code.model.fill_in_missing_dates_improved   import fill_gaps_data
-from code.model.calculate_common_time_interval   import calculate_common_time_interval
-from code.model.calculate_histogram              import calculate_histogram
-from code.model.performance_key_values_class     import Performance_Key_values
-
-from code.model.convert_between_market_and_dict import dict_of_market_dicts_to_dict_of_market_classes, dict_of_market_classes_to_dict_of_market_dicts
-
+from code.model.calcultate_daily_change            import calcultate_daily_change
+from code.model.calculate_graph_outcomes_strategy  import calculate_graph_outcomes
+from code.model.fill_in_missing_dates              import fill_in_missing_dates
+from code.model.fill_in_missing_dates_improved     import fill_gaps_data
+from code.model.calculate_common_time_interval     import calculate_common_time_interval
+from code.model.calculate_histograms_strategy      import calculate_histogram
+from code.model.performance_key_values_class       import Performance_Key_values
 
 import code.model.constants as constants
 
@@ -57,6 +56,7 @@ class Model:
         self.chosen_time_interval_start_date      = 0
         self.chosen_time_interval_end_date        = 0
         self.chosen_time_interval_status          = False
+        self.portfolio_strategy                   = constants.PORTFOLIO_STRATEGIES[0]
 
         ################ Data Processed ################
 
@@ -101,6 +101,12 @@ class Model:
 
         self.key_values = Performance_Key_values(self)
 
+        # Compile c++ algorithms
+        pwd = os.environ['PWD']
+        command = 'g++ -o2 -pthread -fPIC -shared -o ' + pwd + '/code/model/hist_harvest_refill_algo.so ' + pwd + '/code/model/hist_harvest_refill_algo.cpp'
+        subprocess.run(command.split())
+
+
 
     ######################
     # Central methods
@@ -136,8 +142,6 @@ class Model:
     ######################
     # Other methods
     ######################
-
-
     def update_instrument_selected(self, table_focus_item_data):
         """ Update the instruments selected based on what item was
             selected in the table of instruments.
@@ -166,14 +170,13 @@ class Model:
             self.markets_selected[name] = deepcopy(self.markets[name])
 
 
-
-
     ##########################
     #  Getters and Setters
     ##########################
 
     def get_loan(self):
         print("TRACE: Model: get_loan")
+        return self.loan
         return self.loan
     def set_loan(self, loan):
         print("TRACE: Model: set_loan")
@@ -329,10 +332,24 @@ class Model:
     def set_chosen_time_interval_status(self, status_time_limit):
         print("TRACE: Model: set_chosen_time_interval_status")
         self.chosen_time_interval_status = status_time_limit
-
         # Need to refresh markets in order to not keep old times
         self.update_market_selected()
+
     def get_chosen_time_interval_status(self):
         print("TRACE: Model: get_chosen_time_interval_status")
         return self.chosen_time_interval_status
 
+    def get_all_portfolio_strategies(self):
+        print("TRACE: Model: get_all_portfolio_strategies")
+        return constants.PORTFOLIO_STRATEGIES
+
+    def set_portfolio_strategy(self, portfolio_strategy):
+        print("TRACE: Model: set_portfolio_strategy")
+        if portfolio_strategy in constants.PORTFOLIO_STRATEGIES:
+            self.portfolio_strategy = portfolio_strategy
+        else:
+            print("ERROR: portfolio_strategy from view is valid in Model")
+
+    def get_portfolio_strategy(self):
+        print("TRACE: Model: get_portfolio_strategy")
+        return self.portfolio_strategy

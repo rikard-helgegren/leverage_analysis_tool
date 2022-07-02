@@ -3,3 +3,4 @@ data/
 images/historic_graphs/
 .idea/
 Notes
+*.so
