@@ -1,6 +1,7 @@
 from copy import deepcopy
 import os
 import subprocess
+import sys
 
 ###### IMPORT DATA MANAGER ######
 from code.data_manager.check_if_data_files_are_clean import check_if_data_files_are_clean
@@ -40,7 +41,7 @@ class Model:
         ############## Simple values ###################
 
         self.loan                                 = constants.DEFULT_LOAN
-        self.years_investigating                  = constants.DEFULT_YEARS_INVESTIGATING
+        self.years_histogram_interval             = constants.DEFULT_YEARS_HISTOGRAM_INTERVAL
         self.harvest_point                        = constants.DEFULT_HARVEST_POINT
         self.refill_point                         = constants.DEFULT_REFILL_POINT
         self.update_harvest_refill                = constants.DEFULT_UPDATE_HARVEST_REFILL
@@ -94,18 +95,12 @@ class Model:
 
         self.results_for_intervals = []
         """ List of results for all the continuous time intervals of length 
-            'self.years_investigating' in the time investigated.
+            'self.years_histogram_interval' in the time investigated.
             
             The purpose of this variable is to be ploted in histogram
         """
 
         self.key_values = Performance_Key_values(self)
-
-        # Compile c++ algorithms
-        pwd = os.environ['PWD']
-        command = 'g++ -o2 -pthread -fPIC -shared -o ' + pwd + '/code/model/hist_harvest_refill_algo.so ' + pwd + '/code/model/hist_harvest_refill_algo.cpp'
-        subprocess.run(command.split())
-
 
 
     ######################
@@ -182,12 +177,12 @@ class Model:
         print("TRACE: Model: set_loan")
         self.loan = loan
     
-    def get_years_investigating(self):
-        print("TRACE: Model: get_years_investigating")
-        return self.years_investigating
-    def set_years_investigating(self, years):
-        print("TRACE: Model: set_years_investigating")
-        self.years_investigating = years
+    def get_years_histogram_interval(self):
+        print("TRACE: Model: get_years_histogram_interval")
+        return self.years_histogram_interval
+    def set_years_histogram_interval(self, years):
+        print("TRACE: Model: set_years_histogram_interval")
+        self.years_histogram_interval = years
 
     def get_harvest_point(self):
         print("TRACE: Model: get_harvest_point")

@@ -6,26 +6,28 @@ from code.model.determine_longest_common_timespan   import determine_longest_com
 import code.model.constants as constants
 
 
-def harvest_refill_hist_ctypes(self):
+def harvest_refill_hist_ctypes(model):
 
     ## C++ interactions ##
-    pwd = os.environ['PWD']
-    cpp_so_file = pwd + '/code/model/hist_harvest_refill_algo.so'
+    cpp_so_file = constants.program_folder + constants.hist_harvest_refill_algo_file
     lib_object_cpp = ctypes.CDLL(cpp_so_file)
 
     ## get variables and pass to function ##
-    cpp_algorithm = lib_object_cpp.cpp_harvest_refill_algo  # Set upp function call
+    cpp_algorithm = lib_object_cpp.cppHarvestRefillAlgo  # Set upp function call
 
     # input types and values
-    [all_argtypes_list, all_values_list] = get_indata(self)
+    [all_argtypes_list, all_values_list] = get_indata(model)
     cpp_algorithm.argtypes = all_argtypes_list
 
     # make actual call
     cpp_algorithm(*all_values_list)
+    
+    list_index_outdata = -1
+    list_index_data_size = 6
+    
+    [return_data, size_days_in] = [all_values_list[list_index_outdata], all_values_list[list_index_data_size]]
 
-    [return_data, size_days_in] = [all_values_list[-1], all_values_list[6]]
-
-    size_return_data = size_days_in - self.years_investigating * constants.MARKET_DAYS_IN_YEAR
+    size_return_data = size_days_in - model.years_histogram_interval * constants.MARKET_DAYS_IN_YEAR
 
     return_data_python_format = [return_data[i] for i in range(size_return_data)]
 
@@ -33,17 +35,17 @@ def harvest_refill_hist_ctypes(self):
 
 
 # Set up which types are to be sent to cpp
-def get_indata(self):
+def get_indata(model):
     all_argtypes = []
     all_values = []
 
     ### loan ###
     all_argtypes.append(ctypes.c_float)
-    all_values.append(self.get_loan())
+    all_values.append(model.get_loan())
 
 
     ### instrument selected ###
-    instruments_selected = self.get_instruments_selected()
+    instruments_selected = model.get_instruments_selected()
     names_instruments_selected, leverage_instruments_selected = zip(*instruments_selected)
 
     # leverage list
@@ -54,23 +56,23 @@ def get_indata(self):
     all_argtypes.append(ctypes.c_int)
     all_values.append(len(leverage_instruments_selected))
 
-    # names
-    all_argtypes.append(ctypes.c_char_p)  # instrument names type
-    all_values.append((','.join(names_instruments_selected) + '.').encode())
+    # instrument names
+    all_argtypes.append(ctypes.c_char_p)
+    all_values.append((','.join(names_instruments_selected)).encode())
 
 
     ### proportion_funds ###
     all_argtypes.append(ctypes.c_float)
-    all_values.append(self.get_proportion_funds())
+    all_values.append(model.get_proportion_funds())
 
 
     ### proportion_leverage ###
     all_argtypes.append(ctypes.c_float)
-    all_values.append(self.get_proportion_leverage())
+    all_values.append(model.get_proportion_leverage())
 
 
     ### markets_selected ###
-    markets_selected = self.get_markets_selected()
+    markets_selected = model.get_markets_selected()
     a_instrument = instruments_selected[0]
     market = markets_selected[a_instrument[0]]
     nr_days_in_data = len(market.get_time_span())
@@ -84,16 +86,12 @@ def get_indata(self):
     all_values.append(len(markets_selected.keys()))
 
     # prep variables
-    countries = []  # countries
-    daily_change = []  # daily change
+    countries = []
+    daily_change = []
     for key in markets_selected.keys():
         countries.append(markets_selected[key].get_country())
         current_daily_change = markets_selected[key].get_daily_change()
         daily_change.append((ctypes.c_float * len(current_daily_change))(*current_daily_change))
-
-    # country names
-    all_argtypes.append(ctypes.c_char_p)
-    all_values.append((','.join(countries)+'.').encode())   # make list to string and encode
 
     # daily change
     all_argtypes.append(ctypes.POINTER(ctypes.c_float) * len(markets_selected.keys()))
@@ -102,17 +100,17 @@ def get_indata(self):
     # index names
     all_argtypes.append(ctypes.c_char_p)
     index_names = markets_selected.keys()
-    all_values.append((','.join(index_names)+'.').encode())  # make list to string and encode
+    all_values.append((','.join(index_names)).encode())  # make list to string and encode
 
     # time horizon days investing
-    all_argtypes.append(ctypes.c_int)  # days investing
-    all_values.append(self.years_investigating*constants.MARKET_DAYS_IN_YEAR)
+    all_argtypes.append(ctypes.c_int)
+    all_values.append(model.years_histogram_interval*constants.MARKET_DAYS_IN_YEAR)
 
     ### Harvest refill limits ###
     all_argtypes.append(ctypes.c_float)
-    all_values.append(self.get_harvest_point()/100)  # harvest point not in percent
+    all_values.append(model.get_harvest_point()/constants.CONVERT_PERCENT)
     all_argtypes.append(ctypes.c_float)
-    all_values.append(self.get_refill_point()/100)  # refill point not in percent
+    all_values.append(model.get_refill_point()/constants.CONVERT_PERCENT)
 
     ### Out data ###
     all_argtypes.append(ctypes.c_float * nr_days_in_data)  # out data

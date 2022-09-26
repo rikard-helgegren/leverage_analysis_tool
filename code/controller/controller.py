@@ -90,9 +90,9 @@ class Controller:
         self.update_model()
         self.update_view()
 
-    def update_years_investigating(self, years):
-        print("TRACE: Controller: update_years_investigating")
-        self.model.set_years_investigating(years)
+    def update_years_histogram_interval(self, years):
+        print("TRACE: Controller: update_years_histogram_interval")
+        self.model.set_years_histogram_interval(years)
 
         self.update_model()
         self.update_view()

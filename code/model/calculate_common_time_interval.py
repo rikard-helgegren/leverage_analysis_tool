@@ -4,11 +4,11 @@ import numpy as np
 from code.model.determine_longest_common_timespan import determine_longest_common_timespan
 
 
-def calculate_common_time_interval(self):
+def calculate_common_time_interval(model):
 
-    markets_selected              = self.get_markets_selected()
+    markets_selected              = model.get_markets_selected()
 
-    instruments_selected = self.get_instruments_selected()
+    instruments_selected = model.get_instruments_selected()
 
     # Check if empty
     if instruments_selected == []:
@@ -29,7 +29,7 @@ def calculate_common_time_interval(self):
     [start_time, end_time] = determine_longest_common_timespan(instruments_selected, markets_selected)
 
     # Compare calculated start and end time with manually set start and end time
-    [start_time, end_time] = compare_calculated_times_to_input(self, start_time, end_time, time_span)
+    [start_time, end_time] = compare_calculated_times_to_input(model, start_time, end_time, time_span)
 
     start_pos = time_span.index(start_time)
     end_pos   = time_span.index(end_time)
@@ -38,18 +38,18 @@ def calculate_common_time_interval(self):
 
     return time_interval
 
-def compare_calculated_times_to_input(self, calculated_start_time, calculated_end_time, time_span):
+def compare_calculated_times_to_input(model, calculated_start_time, calculated_end_time, time_span):
     """ Check if the manually set time limits are valid, otherwise use calculated start and end time"""
 
     # Set default
     start_date = calculated_start_time
     end_date = calculated_end_time
 
-    if not self.get_chosen_time_interval_status():
+    if not model.get_chosen_time_interval_status():
         return [start_date, end_date]
 
-    manual_start_date = self.get_chosen_start_date_time_limit()
-    manual_end_date = self.get_chosen_end_date_time_limit()
+    manual_start_date = model.get_chosen_start_date_time_limit()
+    manual_end_date = model.get_chosen_end_date_time_limit()
 
     # If start day is manually set
     if manual_start_date != 0:

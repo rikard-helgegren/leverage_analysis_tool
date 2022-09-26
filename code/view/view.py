@@ -87,10 +87,10 @@ class View(tk.Frame):
         self.controller.update_fee_status(self.checkbutton_fee_state.get())
         tk.messagebox.showinfo('Error', 'Not fully implemented')
     
-    def update_years_investigating(self):
-        print("TRACE: View: update_years_investigating")
+    def update_years_histogram_interval(self):
+        print("TRACE: View: update_years_histogram_interval")
         value = int(self.spin_years.get())
-        self.controller.update_years_investigating(value)
+        self.controller.update_years_histogram_interval(value)
 
     def update_harvest_point(self):
         print("TRACE: View: update_harvest_point")

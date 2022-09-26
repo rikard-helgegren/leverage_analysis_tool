@@ -2,6 +2,7 @@ import os
 from os import listdir
 from os.path import isfile, join
 import datetime 
+import sys
 
 
 def check_if_data_files_are_clean(data_file_path):
@@ -12,6 +13,7 @@ def check_if_data_files_are_clean(data_file_path):
         all_data_files = [f for f in listdir(data_file_path) if isfile(join(data_file_path, f))]
     except:
         print("ERROR: Path to data files is wrong.")
+        sys.exit(1)
 
     # Check each file
     for file_itter in all_data_files:

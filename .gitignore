@@ -2,5 +2,6 @@ __pycache__
 data/
 images/historic_graphs/
 .idea/
+.vscode/
 Notes
 *.so

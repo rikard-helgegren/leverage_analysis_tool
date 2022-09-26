@@ -3,56 +3,54 @@ import numpy as np
 from code.model.harvest_refill_hist_cpp_adapter import harvest_refill_hist_ctypes
 
 
-def calculate_histogram(self):
+def calculate_histogram(model):
     print("TRACE: Model: calculate_histogram")
 
-    markets_selected     = self.get_markets_selected()
-    instruments_selected = self.get_instruments_selected()
+    markets_selected     = model.get_markets_selected()
+    instruments_selected = model.get_instruments_selected()
 
     # Check if empty
     if instruments_selected == []:
         print("NOTIFY: Model: calculate_histogram: instruments_selected is empty")
-        self.set_results_for_intervals([])
+        model.set_results_for_intervals([])
         return
 
     if markets_selected == []:
         print("NOTIFY: Model: calculate_histogram: no loaded data files")
-        self.set_results_for_intervals([])
+        model.set_results_for_intervals([])
         return
 
     #Return after construction
-    strategy = self.get_portfolio_strategy()
+    strategy = model.get_portfolio_strategy()
     if strategy == constants.PORTFOLIO_STRATEGIES[0]:  # Do nothing
-        return_data = do_nothing_hist(self)
+        return_data = do_nothing_hist(model)
     elif strategy == constants.PORTFOLIO_STRATEGIES[1]:  # Harvest/Refill
-        return_data = harvest_refill_hist_ctypes(self)
+        return_data = harvest_refill_hist_ctypes(model)
     else:
         return_data = [1, 2, 2, 3]
 
-    return self.set_results_for_intervals(return_data)
+    return model.set_results_for_intervals(return_data)
 
 
-##################### The actual do nothing ###################
-def do_nothing_hist(self):
+def do_nothing_hist(model):
 
     print("TRACE: Model: calculate_histogram")
-    markets_selected     = self.get_markets_selected()
-    instruments_selected = self.get_instruments_selected()
-    proportion_funds     = self.get_proportion_funds()
-    proportion_leverage  = self.get_proportion_leverage()
+    markets_selected     = model.get_markets_selected()
+    instruments_selected = model.get_instruments_selected()
+    proportion_funds     = model.get_proportion_funds()
+    proportion_leverage  = model.get_proportion_leverage()
 
     # Check if empty
     if instruments_selected == []:
         print("NOTIFY: Model: calculate_histogram: instruments_selected is empty")
-        self.set_results_for_intervals([])
+        model.set_results_for_intervals([])
         return
 
     if markets_selected == []:
         print("NOTIFY: Model: calculate_histogram: no loaded data files")
-        self.set_results_for_intervals([])
+        model.set_results_for_intervals([])
         return
 
-    # Duplicate code of calc graph
     outcomes_of_normal_investments = []
     outcomes_of_leveraged_investments = []
 
@@ -67,7 +65,7 @@ def do_nothing_hist(self):
         market = markets_selected[instrument[0]]
         daily_change = market.get_daily_change()
         cutoff = 0
-        values_to_check = self.years_investigating*constants.MARKET_DAYS_IN_YEAR
+        values_to_check = model.years_histogram_interval*constants.MARKET_DAYS_IN_YEAR
 
         if leverage == 1:
             number_of_non_leveraged_selected += 1
@@ -127,12 +125,7 @@ def combine_leveraged_instruments(number_of_leveraged_selected, outcomes_of_leve
             unified_leveraged = [a + b for a, b in zip(unified_leveraged, outcomes_of_leveraged_investments[i])]
         unified_leveraged = np.divide(unified_leveraged, number_of_leveraged_selected)
     return unified_leveraged
-    # End duplicate code of  calc graph
 
-
-    #######################################################
-    ###                  Algorithms                     ###
-    #######################################################
 
 def percentage_change(values):
     changes = []

@@ -4,27 +4,27 @@ from code.model.portfolio_item_class import Portfolio_Item
 import code.model.constants as constants
 
 
-def calculate_graph_outcomes(self):
+def calculate_graph_outcomes(model):
     print("TRACE: Model: calculate_graph_outcomes")
-    markets_selected     = self.get_markets_selected()
-    instruments_selected = self.get_instruments_selected()
-    proportion_funds     = self.get_proportion_funds()
-    proportion_leverage  = self.get_proportion_leverage()
-    strategy             = self.get_portfolio_strategy()
-    loan                 = self.get_loan()
-    harvest_point        = self.get_harvest_point()/100  # dont keep percentage
-    refill_point         = self.get_refill_point()/100 # dont keep percentage
+    markets_selected     = model.get_markets_selected()
+    instruments_selected = model.get_instruments_selected()
+    proportion_funds     = model.get_proportion_funds()
+    proportion_leverage  = model.get_proportion_leverage()
+    strategy             = model.get_portfolio_strategy()
+    loan                 = model.get_loan()
+    harvest_point        = model.get_harvest_point() / 100  # dont keep percentage
+    refill_point         = model.get_refill_point() / 100  # dont keep percentage
 
 
     # Check if empty
     if instruments_selected == []:
         print("NOTIFY: Model: calculate_graph_outcomes: instruments_selected is empty")
-        self.set_portfolio_results_full_time([])
+        model.set_portfolio_results_full_time([])
         return
 
     if markets_selected  == []:
         print("NOTIFY: Model: calculate_graph_outcomes: no loaded data files")
-        self.set_portfolio_results_full_time([])
+        model.set_portfolio_results_full_time([])
         return
 
     # Get common start and end time
@@ -107,7 +107,7 @@ def calculate_graph_outcomes(self):
 
     portfolio_results_full_time = total_results
 
-    self.set_portfolio_results_full_time(portfolio_results_full_time)
+    model.set_portfolio_results_full_time(portfolio_results_full_time)
 
 
 def hold_strategy():

@@ -8,9 +8,6 @@ Improvements of calculate_histogram:
     Speed up: 1.46s --> 0.004s
 
 Changed harvest/refill algorithm:
-    Change: from Python to C++ with ctypes
-    speed up: 14s --> 0.2 (depends on input)
+    Change: from Python to C++ with ctypes and multithread
+    speed up: 14s --> 0.05
 
-Improvments of harvest/refill algorithm:
-    Change: use async in loop
-    speed up: 1s -> 0.5s (Only have 2 cores on this laptop)
