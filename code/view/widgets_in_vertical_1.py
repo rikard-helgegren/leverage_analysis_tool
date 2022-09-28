@@ -6,7 +6,16 @@ import code.model.constants as CST
 from code.view.menu_of_strategies import Menu_Of_Strategies
 
 def setup_vertical_frame_1(view, super_frame):
-    # Slide amount leverage
+
+    insert_slide_for_leverage(view, super_frame)
+    insert_fee_checkbox(view, super_frame)
+    insert_years_and_loan(view, super_frame)
+    insert_strategy_menue(view, super_frame)
+    insert_harvest_refill(view, super_frame)
+    insert_rebalance_time(view, super_frame)
+
+
+def insert_slide_for_leverage(view, super_frame):
     view.frame_leverage = tk.Frame(super_frame, padx=5, pady=5)
     view.frame_leverage.pack()
 
@@ -17,7 +26,8 @@ def setup_vertical_frame_1(view, super_frame):
     view.scale.set(CST.DEFULT_PROPORTION_LEVERAGE*100)
     view.scale.pack()
 
-    # Checkbox
+
+def insert_fee_checkbox(view, super_frame):
     view.frame_Checkbox = tk.Frame(super_frame, padx=5, pady=5)
     view.frame_Checkbox.pack()
     view.checkbutton_fee_state = tk.IntVar()
@@ -27,11 +37,13 @@ def setup_vertical_frame_1(view, super_frame):
                                           command=view.update_fee_status)
     view.checkbutton_fee.pack()
 
-    # Horizontal with "Years" and "Loan"
+
+def insert_years_and_loan(view, super_frame):
+    # make spinbox pair horisontal
     view.frame_group1 = tk.Frame(super_frame, padx=5, pady=5)
     view.frame_group1.pack()
 
-    # Spinbox Years
+
     view.frame_years = tk.Frame(view.frame_group1, padx=5, pady=5)
     view.frame_years.pack(side=tk.LEFT)
     view.label_years = tk.Label(view.frame_years, text='Years\nInvesting')
@@ -41,37 +53,34 @@ def setup_vertical_frame_1(view, super_frame):
     view.spin_years.insert(0, CST.DEFULT_YEARS_HISTOGRAM_INTERVAL)
     view.spin_years.pack()
 
-    # Spinbox Loan
     view.frame_loan = tk.Frame(view.frame_group1, padx=5, pady=5)
     view.frame_loan.pack(side=tk.LEFT)
     view.label_loan = tk.Label(view.frame_loan, text='\nLoan')
     view.label_loan.pack()
-
     view.spin_loan = tk.Spinbox(view.frame_loan, from_=0, to=100, width=5, command=view.update_loan)
     view.spin_loan.delete(0)
     view.spin_loan.insert(0, CST.DEFULT_LOAN)
     view.spin_loan.pack()
 
 
-    # Dropdown menu
-
+def insert_strategy_menue(view, super_frame):
     view.menu_of_strategies = Menu_Of_Strategies(super_frame, view)
 
-    # Horizontal with "Harvest" and "Refill"
+
+def insert_harvest_refill(view, super_frame):
+    # make spinbox pair horisontal
     view.frame_group2 = tk.Frame(super_frame, padx=5, pady=5)
     view.frame_group2.pack()
 
-    # Spinbox harvest point
     view.frame_harvest_point = tk.Frame(view.frame_group2, padx=5, pady=5)
     view.frame_harvest_point.pack(side=tk.LEFT)
     view.label_harvest_point = tk.Label(view.frame_harvest_point, text='Harvest\nPoint %')
     view.label_harvest_point.pack()
     view.spin_harvest_point = tk.Spinbox(view.frame_harvest_point, from_=101, to=2000, width=5, command=view.update_harvest_point)
-    view.spin_harvest_point.delete(0)
+    view.spin_harvest_point.delete(0,"end")
     view.spin_harvest_point.insert(0, CST.DEFULT_HARVEST_POINT)
     view.spin_harvest_point.pack()
 
-    # Spinbox refill point
     view.frame_refill_point = tk.Frame(view.frame_group2, padx=5, pady=5)
     view.frame_refill_point.pack(side=tk.LEFT)
     view.label_refill_point = tk.Label(view.frame_refill_point, text='Refill\nPoint %')
@@ -80,3 +89,13 @@ def setup_vertical_frame_1(view, super_frame):
     view.spin_refill_point.delete(0)
     view.spin_refill_point.insert(0, CST.DEFULT_REFILL_POINT)
     view.spin_refill_point.pack()
+
+def insert_rebalance_time(view, super_frame):
+    view.frame_rebalance_point = tk.Frame(super_frame, padx=5, pady=5)
+    view.frame_rebalance_point.pack(side=tk.LEFT)
+    view.label_rebalance_point = tk.Label(view.frame_rebalance_point, text='Rebalance\nMonth')
+    view.label_rebalance_point.pack()
+    view.spin_rebalance_point = tk.Spinbox(view.frame_rebalance_point, from_=0, to=100, width=5, command=view.update_rebalance_point)
+    view.spin_rebalance_point.delete(0,"end")
+    view.spin_rebalance_point.insert(0, CST.DEFULT_REBALANCE_PERIOD_MONTHS)
+    view.spin_rebalance_point.pack()

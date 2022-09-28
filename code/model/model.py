@@ -6,17 +6,13 @@ import sys
 ###### IMPORT DATA MANAGER ######
 from code.data_manager.check_if_data_files_are_clean import check_if_data_files_are_clean
 from code.data_manager.read_and_manage_raw_data      import read_and_manage_raw_data
-from code.data_manager.manage_preproccessed_data     import are_files_preproccessed
-from code.data_manager.manage_preproccessed_data     import load_preproccessed_files
-from code.data_manager.manage_preproccessed_data     import save_preproccessed_files
 
 ###### IMPORT MODEL ######
 from code.model.calcultate_daily_change            import calcultate_daily_change
 from code.model.calculate_graph_outcomes_strategy  import calculate_graph_outcomes
-from code.model.fill_in_missing_dates              import fill_in_missing_dates
-from code.model.fill_in_missing_dates_improved     import fill_gaps_data
+from code.model.fill_in_missing_dates              import fill_gaps_data
 from code.model.calculate_common_time_interval     import calculate_common_time_interval
-from code.model.calculate_histograms_strategy      import calculate_histogram
+from code.model.histogram.calculate_histograms_strategy      import calculate_histogram
 from code.model.performance_key_values_class       import Performance_Key_values
 
 import code.model.constants as constants
@@ -45,6 +41,7 @@ class Model:
         self.harvest_point                        = constants.DEFULT_HARVEST_POINT
         self.refill_point                         = constants.DEFULT_REFILL_POINT
         self.update_harvest_refill                = constants.DEFULT_UPDATE_HARVEST_REFILL
+        self.rebalance_period_months              = constants.DEFULT_REBALANCE_PERIOD_MONTHS
         self.proportion_cash                      = constants.DEFULT_PROPORTION_CASH
         self.proportion_funds                     = constants.DEFULT_PROPORTION_FUNDS 
         self.proportion_leverage                  = constants.DEFULT_PROPORTION_LEVERAGE
@@ -202,7 +199,15 @@ class Model:
         print("TRACE: Model: get_update_harvest_refill")
         return self.update_harvest_refill
     def set_update_harvest_refill(self, update_harvest_refill):
+        print("TRACE: Model: set_update_harvest_refill")
         self.update_harvest_refill = update_harvest_refill
+
+    def get_rebalance_period_months(self):
+        print("TRACE: Model: get_rebalance_period_months")
+        return self.rebalance_period_months
+    def set_rebalance_period_months(self, rebalance_period_months):
+        print("TRACE: Model: set_rebalance_period_months", rebalance_period_months)
+        self.rebalance_period_months = rebalance_period_months
 
     def get_proportion_cash(self):
         print("TRACE: Model: get_proportion_cash")

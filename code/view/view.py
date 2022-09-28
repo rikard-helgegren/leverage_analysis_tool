@@ -102,6 +102,12 @@ class View(tk.Frame):
         value = int(self.spin_refill_point.get())
         self.controller.update_refill_point(value)
 
+    def update_rebalance_point(self):
+        print("TRACE: View: update_rebalance_point")
+        value = int(self.spin_rebalance_point.get())
+        self.controller.update_rebalance_point(value)
+
+
 
     def update_loan(self):
         print("TRACE: View: update_loan")

@@ -6,14 +6,14 @@ from code.model.determine_longest_common_timespan   import determine_longest_com
 import code.model.constants as constants
 
 
-def harvest_refill_hist_ctypes(model):
+def rebalance_hist_ctypes(model):
 
     ## C++ interactions ##
     cpp_so_file = constants.program_folder + constants.hist_harvest_refill_algo_file
     lib_object_cpp = ctypes.CDLL(cpp_so_file)
 
     ## get variables and pass to function ##
-    cpp_algorithm = lib_object_cpp.cppHarvestRefillAlgo  # Set upp function call
+    cpp_algorithm = lib_object_cpp.cppRebalanceAlgo  # Set upp function call
 
     # input types and values
     [all_argtypes_list, all_values_list] = get_indata(model)
@@ -111,6 +111,17 @@ def get_indata(model):
     all_values.append(model.get_harvest_point()/constants.CONVERT_PERCENT)
     all_argtypes.append(ctypes.c_float)
     all_values.append(model.get_refill_point()/constants.CONVERT_PERCENT)
+
+    ### rebalance period ###
+    all_argtypes.append(ctypes.c_int)
+    all_values.append(int(model.get_rebalance_period_months()*constants.MARKET_DAYS_IN_YEAR/constants.MONTHS_IN_YEAR))
+
+    # strategy
+    all_argtypes.append(ctypes.c_int)
+    if model.get_portfolio_strategy() == constants.PORTFOLIO_STRATEGIES[1]:
+        all_values.append(1)
+    elif model.get_portfolio_strategy() == constants.PORTFOLIO_STRATEGIES[2]:
+        all_values.append(2)
 
     ### Out data ###
     all_argtypes.append(ctypes.c_float * nr_days_in_data)  # out data

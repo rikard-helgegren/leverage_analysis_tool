@@ -111,6 +111,12 @@ class Controller:
         self.update_model()
         self.update_view()
 
+    def update_rebalance_point(self, rebalance_period):
+        print("TRACE: Controller: update_rebalance_point")
+        self.model.set_rebalance_period_months(rebalance_period)
+
+        self.update_model()
+        self.update_view()
 
     def update_loan(self, loan):
         print("TRACE: Controller: update_loan")

@@ -1,6 +1,6 @@
 import code.model.constants as constants
 import numpy as np
-from code.model.harvest_refill_hist_cpp_adapter import harvest_refill_hist_ctypes
+from code.model.histogram.histogram_cpp_adapter import rebalance_hist_ctypes
 
 
 def calculate_histogram(model):
@@ -22,10 +22,12 @@ def calculate_histogram(model):
 
     #Return after construction
     strategy = model.get_portfolio_strategy()
-    if strategy == constants.PORTFOLIO_STRATEGIES[0]:  # Do nothing
+    if strategy == constants.PORTFOLIO_STRATEGIES[0]:  # Hold
         return_data = do_nothing_hist(model)
-    elif strategy == constants.PORTFOLIO_STRATEGIES[1]:  # Harvest/Refill
-        return_data = harvest_refill_hist_ctypes(model)
+    elif (strategy == constants.PORTFOLIO_STRATEGIES[1]) or (strategy == constants.PORTFOLIO_STRATEGIES[2]):  # Harvest/Refill or # Rebalance on time cycle
+        return_data = rebalance_hist_ctypes(model)
+    elif strategy == constants.PORTFOLIO_STRATEGIES[3]:  # Do nothing
+        return_data = [1]  # TODO change when implementing inflation
     else:
         return_data = [1, 2, 2, 3]
 

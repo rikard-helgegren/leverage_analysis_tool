@@ -6,14 +6,15 @@ import code.model.constants as constants
 
 def calculate_graph_outcomes(model):
     print("TRACE: Model: calculate_graph_outcomes")
-    markets_selected     = model.get_markets_selected()
-    instruments_selected = model.get_instruments_selected()
-    proportion_funds     = model.get_proportion_funds()
-    proportion_leverage  = model.get_proportion_leverage()
-    strategy             = model.get_portfolio_strategy()
-    loan                 = model.get_loan()
-    harvest_point        = model.get_harvest_point() / 100  # dont keep percentage
-    refill_point         = model.get_refill_point() / 100  # dont keep percentage
+    markets_selected        = model.get_markets_selected()
+    instruments_selected    = model.get_instruments_selected()
+    proportion_funds        = model.get_proportion_funds()
+    proportion_leverage     = model.get_proportion_leverage()
+    strategy                = model.get_portfolio_strategy()
+    loan                    = model.get_loan()
+    harvest_point           = model.get_harvest_point() / 100  # dont keep percentage
+    refill_point            = model.get_refill_point() / 100  # dont keep percentage
+    rebalance_period_months = model.get_rebalance_period_months()
 
 
     # Check if empty
@@ -89,6 +90,10 @@ def calculate_graph_outcomes(model):
                 applied_change = hold_strategy()
             elif strategy == constants.PORTFOLIO_STRATEGIES[1]:  # Harvest/Refill
                 applied_change = harvest_refill(item, portfolio_items, number_of_funds, harvest_point, refill_point)
+            elif strategy == constants.PORTFOLIO_STRATEGIES[2]:  # Rebalance on time cycle
+                applied_change = rebalance_time_cycle(item, portfolio_items, number_of_funds, day, rebalance_period_months)
+            else:
+                raise Exception("Strategy not implemeted for graph: ", strategy)
 
             # Update reference values
             if applied_change:
@@ -117,6 +122,34 @@ def hold_strategy():
 
 def harvest_refill(inspected_instrument, all_instruments, number_of_funds, harvest_point, refill_point):
 
+    if not need_rebalance(inspected_instrument, number_of_funds, all_instruments):
+        return False
+
+    current_value = inspected_instrument.get_current_value()
+    reference_value = inspected_instrument.get_reference_value()
+
+    if current_value > harvest_point * reference_value or current_value < refill_point * reference_value:
+
+       rebalence(current_value, reference_value, inspected_instrument, all_instruments, number_of_funds)
+
+    return True
+
+def rebalance_time_cycle(inspected_instrument, all_instruments, number_of_funds, day, rebalance_period_months):
+
+    if not need_rebalance(inspected_instrument, number_of_funds, all_instruments):
+        return False
+
+    current_value = inspected_instrument.get_current_value()
+    reference_value = inspected_instrument.get_reference_value()
+
+    rebalance_period_days = rebalance_period_months*constants.MARKET_DAYS_IN_YEAR/constants.MONTHS_IN_YEAR
+
+    if day % rebalance_period_days == 0:
+       rebalence(current_value, reference_value, inspected_instrument, all_instruments, number_of_funds)
+
+    return True
+
+def need_rebalance(inspected_instrument, number_of_funds, all_instruments):
     # No fund can trigger this rule
     if inspected_instrument.get_leverage() == 1:
         return False
@@ -125,6 +158,7 @@ def harvest_refill(inspected_instrument, all_instruments, number_of_funds, harve
     if number_of_funds == 0:
         return False
 
+    # Is there money for rebalancing
     current_value = inspected_instrument.get_current_value()
     reference_value = inspected_instrument.get_reference_value()
 
@@ -133,15 +167,16 @@ def harvest_refill(inspected_instrument, all_instruments, number_of_funds, harve
         if instrument.get_leverage() == 1:
             tot_for_rebalancing += instrument.get_current_value()
 
-    # Check if activating strategy
-    if tot_for_rebalancing > (reference_value - current_value):  # Is there money for rebalancing
-        if current_value > harvest_point * reference_value or current_value < refill_point * reference_value:
-
-            change_in_value = current_value - reference_value
-            inspected_instrument.set_current_value(reference_value)
-
-            for instrument in all_instruments:
-                if instrument.get_leverage() == 1:
-                    instrument.set_current_value(instrument.get_current_value()+(change_in_value/number_of_funds))
+    if tot_for_rebalancing <= (reference_value - current_value):
+        return False
 
     return True
+
+def rebalence(current_value, reference_value, inspected_instrument, all_instruments, number_of_funds):
+
+    change_in_value = current_value - reference_value
+    inspected_instrument.set_current_value(reference_value)
+
+    for instrument in all_instruments:
+        if instrument.get_leverage() == 1:
+            instrument.set_current_value(instrument.get_current_value()+(change_in_value/number_of_funds))
