@@ -32,6 +32,10 @@ Beyond Python3 standard libraries this program also requires:
 * matplotlib
 * tkinter
 
+and c++ compilator
+
+* g++
+
 ### Data
 
 Data files are not included due to copy write uncertainties but can be downloaded at

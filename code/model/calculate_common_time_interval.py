@@ -1,4 +1,5 @@
 
+import logging
 import numpy as np
 
 from code.model.determine_longest_common_timespan import determine_longest_common_timespan
@@ -12,11 +13,11 @@ def calculate_common_time_interval(model):
 
     # Check if empty
     if instruments_selected == []:
-        print("NOTIFY: Model: calculate_outcomes: instruments_selected is empty")
+        logging.debug("NOTIFY: Model: calculate_outcomes: instruments_selected is empty")
         return []
 
     if markets_selected  == []:
-        print("NOTIFY: Model: calculate_outcomes: no loaded data files")
+        logging.debug("NOTIFY: Model: calculate_outcomes: no loaded data files")
         return []
 
     # Get select data of a random instrument

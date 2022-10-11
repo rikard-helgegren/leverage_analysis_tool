@@ -2,11 +2,12 @@
 import os
 import json
 import sys
+import logging
 
 from code.model.convert_between_market_and_dict import dict_of_market_dicts_to_dict_of_market_classes, dict_of_market_classes_to_dict_of_market_dicts
 
 def are_files_preproccessed(clean_file_names):
-    print("TRACE: are_files_preproccessed")
+    logging.debug("are_files_preproccessed")
 
     file_name = get_filname_based_on_markets(clean_file_names)
     path = "data/pre_calculated/" + file_name
@@ -18,7 +19,7 @@ def are_files_preproccessed(clean_file_names):
 
 
 def load_preproccessed_files(clean_file_names):
-    print("TRACE: load_preproccessed_files")
+    logging.debug("load_preproccessed_files")
     
     file_name = get_filname_based_on_markets(clean_file_names)
     path = "data/pre_calculated/" + file_name
@@ -33,7 +34,7 @@ def load_preproccessed_files(clean_file_names):
 
 
 def save_preproccessed_files(clean_file_names, market_dict):
-    print("TRACE: save_preproccessed_files")
+    logging.debug("save_preproccessed_files")
     
     file_name = get_filname_based_on_markets(clean_file_names)
     path = "data/pre_calculated/" + file_name
@@ -50,7 +51,7 @@ def save_preproccessed_files(clean_file_names, market_dict):
 
 
 def get_filname_based_on_markets(market_names):
-    print("TRACE: get_filname_based_on_markets")
+    logging.debug("get_filname_based_on_markets")
     #market_names.sort() #TODO: should i sort or not sort.
     joined_file_string = "".join(market_names)
 

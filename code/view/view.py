@@ -1,5 +1,6 @@
 
 import tkinter as tk
+import logging
 
 
 from code.view.histogram import Histogram
@@ -18,7 +19,7 @@ class View(tk.Frame):
        with the view to the controller
     """
     def __init__(self, parent):
-        print("TRACE: View: __init__")
+        logging.debug("View: __init__")
 
         super().__init__(parent)
 
@@ -78,73 +79,68 @@ class View(tk.Frame):
     ###############
 
     def set_controller(self, controller):
-        print("TRACE: View: set_controller")
+        logging.debug("View: set_controller")
         self.controller = controller
 
     def update_fee_status(self):
-        print("TRACE: View: update_fee_status")
-        print("View, fee_status:", self.checkbutton_fee_state.get())
+        logging.debug("View: update_fee_status")
         self.controller.update_fee_status(self.checkbutton_fee_state.get())
         tk.messagebox.showinfo('Error', 'Not fully implemented')
     
     def update_years_histogram_interval(self):
-        print("TRACE: View: update_years_histogram_interval")
+        logging.debug("View: update_years_histogram_interval")
         value = int(self.spin_years.get())
         self.controller.update_years_histogram_interval(value)
 
     def update_harvest_point(self):
-        print("TRACE: View: update_harvest_point")
+        logging.debug("View: update_harvest_point")
         value = int(self.spin_harvest_point.get())
         self.controller.update_harvest_point(value)
 
     def update_refill_point(self):
-        print("TRACE: View: update_refill_point")
+        logging.debug("View: update_refill_point")
         value = int(self.spin_refill_point.get())
         self.controller.update_refill_point(value)
 
     def update_rebalance_point(self):
-        print("TRACE: View: update_rebalance_point")
+        logging.debug("View: update_rebalance_point")
         value = int(self.spin_rebalance_point.get())
         self.controller.update_rebalance_point(value)
 
 
 
     def update_loan(self):
-        print("TRACE: View: update_loan")
+        logging.debug("View: update_loan")
         value = int(self.spin_loan.get())
         self.controller.update_loan(value/100)
         # TODO not fully implemented
 
     def update_amount_leverage(self, value):
-        print("TRACE: View: update_amount_leverage")
+        logging.debug("View: update_amount_leverage")
         self.controller.set_update_amount_leverage(value)
 
     def draw_histogram(self, data):
-        print("TRACE: View: draw_histogram")
+        logging.debug("View: draw_histogram")
         self.histogram.draw(data)
 
     def draw_line_graph(self, values, time_span):
-        print("TRACE: View: draw_line_graph")
+        logging.debug("View: draw_line_graph")
         self.line_graph_full_time.draw(values, time_span)
 
     def set_table_of_instruments(self, names, countries):
-        print("TRACE: View: set_market_table")
+        logging.debug("View: set_market_table")
         self.table_of_instruments.set_table(names, countries)
         
     def update_instrument_selected(self, table_focus_item):
-        print("TRACE: View: table_item_focused")
+        logging.debug("View: table_item_focused")
         self.controller.update_instrument_selected(table_focus_item)
 
     def update_strategy_selected(self, menu_focus_item):
         self.controller.update_strategy_selected(menu_focus_item)
 
     def update_time_limits(self, from_time, to_time):
-        print("TRACE: View: update_time_limits, needs implementing")
-        print("from_time, to_time", from_time, to_time)
-
+        logging.debug("View: update_time_limits, needs implementing")
         self.controller.set_time_limits(from_time, to_time)
-
-        # TODO implement
 
     def update_table_of_statistics(self, key_values):
         self.table_of_statistics.set_table(key_values)

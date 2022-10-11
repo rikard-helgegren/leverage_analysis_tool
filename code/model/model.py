@@ -2,6 +2,7 @@ from copy import deepcopy
 import os
 import subprocess
 import sys
+import logging
 
 ###### IMPORT DATA MANAGER ######
 from code.data_manager.check_if_data_files_are_clean import check_if_data_files_are_clean
@@ -26,7 +27,7 @@ class Model:
         the model have plenty of variables.
     """
     def __init__(self):
-        print("TRACE: Model: __init__")
+        logging.debug("Model: __init__")
 
         ################ Data Files ################
 
@@ -108,14 +109,14 @@ class Model:
         """ Check if data files are clean and store the market data in
             Market class objects
         """
-        print("TRACE: Model: model_import_data")
+        logging.debug("Model: model_import_data")
         clean_file_names = check_if_data_files_are_clean(self.data_files_path)
         self.markets = read_and_manage_raw_data(self.data_files_path, clean_file_names)
 
 
     def update_model(self):
         """ Make the markets selected compatible, and calculate the new results"""
-        print("TRACE: Model: update_model")
+        logging.debug("Model: update_model")
 
         self.markets_selected = fill_gaps_data(self.markets_selected,
                                                self.chosen_time_interval_start_date,
@@ -140,7 +141,7 @@ class Model:
 
             Param: table_focus_item_data: [Name: String, leverage: Int]
         """
-        print("TRACE: Model: update_instrument_selected")
+        logging.debug("Model: update_instrument_selected")
         if table_focus_item_data in self.instruments_selected:
             self.instruments_selected.remove(table_focus_item_data)
         else:
@@ -153,7 +154,7 @@ class Model:
         """ Copy the markets of the instruments selected in the instrument
             table, into the variable self.markets_selected.
         """
-        print("TRACE: Model: update_market_selected")
+        logging.debug("Model: update_market_selected")
 
         # TODO: this part maybe tries to add same market multiple times, takes some extra time
         self.markets_selected = {}
@@ -167,189 +168,189 @@ class Model:
     ##########################
 
     def get_loan(self):
-        print("TRACE: Model: get_loan")
+        logging.debug("Model: get_loan")
         return self.loan
         return self.loan
     def set_loan(self, loan):
-        print("TRACE: Model: set_loan")
+        logging.debug("Model: set_loan")
         self.loan = loan
     
     def get_years_histogram_interval(self):
-        print("TRACE: Model: get_years_histogram_interval")
+        logging.debug("Model: get_years_histogram_interval")
         return self.years_histogram_interval
     def set_years_histogram_interval(self, years):
-        print("TRACE: Model: set_years_histogram_interval")
+        logging.debug("Model: set_years_histogram_interval")
         self.years_histogram_interval = years
 
     def get_harvest_point(self):
-        print("TRACE: Model: get_harvest_point")
+        logging.debug("Model: get_harvest_point")
         return self.harvest_point
     def set_harvest_point(self, harvest_point):
-        print("TRACE: Model: set_harvest_point")
+        logging.debug("Model: set_harvest_point")
         self.harvest_point = harvest_point
 
     def get_refill_point(self):
-        print("TRACE: Model: get_refill_point")
+        logging.debug("Model: get_refill_point")
         return self.refill_point
     def set_refill_point(self, refill_point):
-        print("TRACE: Model: set_refill_point")
+        logging.debug("Model: set_refill_point")
         self.refill_point = refill_point
 
     def get_update_harvest_refill(self):
-        print("TRACE: Model: get_update_harvest_refill")
+        logging.debug("Model: get_update_harvest_refill")
         return self.update_harvest_refill
     def set_update_harvest_refill(self, update_harvest_refill):
-        print("TRACE: Model: set_update_harvest_refill")
+        logging.debug("Model: set_update_harvest_refill")
         self.update_harvest_refill = update_harvest_refill
 
     def get_rebalance_period_months(self):
-        print("TRACE: Model: get_rebalance_period_months")
+        logging.debug("Model: get_rebalance_period_months")
         return self.rebalance_period_months
     def set_rebalance_period_months(self, rebalance_period_months):
-        print("TRACE: Model: set_rebalance_period_months", rebalance_period_months)
+        logging.debug("Model: set_rebalance_period_months", rebalance_period_months)
         self.rebalance_period_months = rebalance_period_months
 
     def get_proportion_cash(self):
-        print("TRACE: Model: get_proportion_cash")
+        logging.debug("Model: get_proportion_cash")
         return self.proportion_cash
     def set_proportion_cash(self, proportion_cash):
-        print("TRACE: Model: set_proportion_cash")
+        logging.debug("Model: set_proportion_cash")
         self.proportion_cash = proportion_cash
 
     def get_proportion_funds(self):
-        print("TRACE: Model: get_proportion_funds")
+        logging.debug("Model: get_proportion_funds")
         return self.proportion_funds
     def set_proportion_funds(self, proportion_funds):
-        print("TRACE: Model: set_proportion_funds", proportion_funds)
+        logging.debug("Model: set_proportion_funds", proportion_funds)
         self.proportion_funds = proportion_funds
 
     def get_proportion_leverage(self):
-        print("TRACE: Model: get_proportion_leverage")
+        logging.debug("Model: get_proportion_leverage")
         return self.proportion_leverage
     def set_proportion_leverage(self, proportion_leverage):
-        print("TRACE: Model: set_proportion_leverage", proportion_leverage)
+        logging.debug("Model: set_proportion_leverage", proportion_leverage)
         self.proportion_leverage = proportion_leverage
 
     def get_include_fees_status(self):
-        print("TRACE: Model: get_include_fees_status")
+        logging.debug("Model: get_include_fees_status")
         return self.include_fees_status
     def set_include_fee_status(self, include_fee_status):
-        print("TRACE: Model: set_include_fee_status")
+        logging.debug("Model: set_include_fee_status")
         self.include_fees_status = include_fee_status
-        print("Model, fee_status:", include_fee_status)
+        logging.debug("Model, fee_status:", include_fee_status)
 
     def get_rebalance_status(self):
-        print("TRACE: Model: get_rebalance_status")
+        logging.debug("Model: get_rebalance_status")
         return self.rebalance_status
     def set_rebalance_status(self, rebalance_status):
-        print("TRACE: Model: set_rebalance_status")
+        logging.debug("Model: set_rebalance_status")
         self.rebalance_status = rebalance_status
 
     def get_rebalance_between_instruments_status(self):
-        print("TRACE: Model: get_rebalance_between_instruments_status")
+        logging.debug("Model: get_rebalance_between_instruments_status")
         return self.rebalance_between_instruments_status
     def set_rebalance_between_instruments_status(self, rebalance_between_instruments_status):
-        print("TRACE: Model: set_rebalance_between_instruments_status")
+        logging.debug("Model: set_rebalance_between_instruments_status")
         self.rebalance_between_instruments_status = rebalance_between_instruments_status
 
     def get_correction_of_inflation_status(self):
-        print("TRACE: Model: get_correction_of_inflation_status")
+        logging.debug("Model: get_correction_of_inflation_status")
         return self.correction_of_inflation_status
     def set_correction_of_inflation_status(self, correction_of_inflation_status):
-        print("TRACE: Model: set_rebalance_between_instruments_status")
+        logging.debug("Model: set_rebalance_between_instruments_status")
         self.correction_of_inflation_status = correction_of_inflation_status
 
     def get_correction_of_currency_status(self):
-        print("TRACE: Model: get_correction_of_currency_status")
+        logging.debug("Model: get_correction_of_currency_status")
         return self.correction_of_currency_status
     def set_correction_of_currency_status(self, correction_of_currency_status):
-        print("TRACE: Model: set_correction_of_currency_status")
+        logging.debug("Model: set_correction_of_currency_status")
         self.correction_of_currency_status = correction_of_currency_status
 
     def get_delay_of_correction(self):
-        print("TRACE: Model: get_delay_of_correction")
+        logging.debug("Model: get_delay_of_correction")
         return self.delay_of_correction
     def set_delay_of_correction(self, delay_of_correction):
-        print("TRACE: Model: set_delay_of_correction")
+        logging.debug("Model: set_delay_of_correction")
         self.delay_of_correction = delay_of_correction
 
     def get_markets(self):
-        print("TRACE: Model: get_markets")
+        logging.debug("Model: get_markets")
         return self.markets
     def set_markets(self, markets):
-        print("TRACE: Model: set_markets")
+        logging.debug("Model: set_markets")
         self.markets = markets
 
     def get_instruments_selected(self):
-        print("TRACE: Model: get_instruments_selected")
+        logging.debug("Model: get_instruments_selected")
         return self.instruments_selected
     def set_instruments_selected(self, instruments_selected):
-        print("TRACE: Model: set_instruments_selected")
+        logging.debug("Model: set_instruments_selected")
         self.instruments_selected = instruments_selected
 
     def get_portfolio_results_full_time(self):
-        print("TRACE: Model: get_portfolio_results_full_time")
+        logging.debug("Model: get_portfolio_results_full_time")
         return self.portfolio_results_full_time
     def set_portfolio_results_full_time(self, portfolio_results_full_time):
-        print("TRACE: Model: set_portfolio_results_full_time")
+        logging.debug("Model: set_portfolio_results_full_time")
         self.portfolio_results_full_time = portfolio_results_full_time
 
     def get_common_time_interval(self):
-        print("TRACE: Model: get_common_time_interval")
+        logging.debug("Model: get_common_time_interval")
         return self.common_time_interval
     def set_common_time_interval(self, common_time_interval):
-        print("TRACE: Model: set_common_time_interval")
+        logging.debug("Model: set_common_time_interval")
         self.common_time_interval = common_time_interval
 
     def get_markets_selected(self):
-        print("TRACE: Model: get_markets_selected")
+        logging.debug("Model: get_markets_selected")
         return self.markets_selected
     def set_markets_selected(self, markets_selected):
-        print("TRACE: Model: set_markets_selected")
+        logging.debug("Model: set_markets_selected")
         self.markets_selected = markets_selected
 
     def get_results_for_intervals(self):
-        print("TRACE: Model: get_results_for_intervals")
+        logging.debug("Model: get_results_for_intervals")
         return self.results_for_intervals
     def set_results_for_intervals(self, results_for_intervals):
-        print("TRACE: Model: set_results_for_intervals")
+        logging.debug("Model: set_results_for_intervals")
         self.results_for_intervals = results_for_intervals
 
     def set_chosen_start_date_time_limit(self, start_date):
-        print("TRACE: Model: set_chosen_start_date_time_limit")
+        logging.debug("Model: set_chosen_start_date_time_limit")
         self.chosen_time_interval_start_date = start_date
     def get_chosen_start_date_time_limit(self):
-        print("TRACE: Model: get_chosen_start_date_time_limit")
+        logging.debug("Model: get_chosen_start_date_time_limit")
         return self.chosen_time_interval_start_date
 
     def set_chosen_end_date_time_limit(self, end_date):
-        print("TRACE: Model: set_chosen_end_date_time_limit")
+        logging.debug("Model: set_chosen_end_date_time_limit")
         self.chosen_time_interval_end_date = end_date
     def get_chosen_end_date_time_limit(self):
-        print("TRACE: Model: get_chosen_end_date_time_limit")
+        logging.debug("Model: get_chosen_end_date_time_limit")
         return self.chosen_time_interval_end_date
 
     def set_chosen_time_interval_status(self, status_time_limit):
-        print("TRACE: Model: set_chosen_time_interval_status")
+        logging.debug("Model: set_chosen_time_interval_status")
         self.chosen_time_interval_status = status_time_limit
         # Need to refresh markets in order to not keep old times
         self.update_market_selected()
 
     def get_chosen_time_interval_status(self):
-        print("TRACE: Model: get_chosen_time_interval_status")
+        logging.debug("Model: get_chosen_time_interval_status")
         return self.chosen_time_interval_status
 
     def get_all_portfolio_strategies(self):
-        print("TRACE: Model: get_all_portfolio_strategies")
+        logging.debug("Model: get_all_portfolio_strategies")
         return constants.PORTFOLIO_STRATEGIES
 
     def set_portfolio_strategy(self, portfolio_strategy):
-        print("TRACE: Model: set_portfolio_strategy")
+        logging.debug("Model: set_portfolio_strategy")
         if portfolio_strategy in constants.PORTFOLIO_STRATEGIES:
             self.portfolio_strategy = portfolio_strategy
         else:
-            print("ERROR: portfolio_strategy from view is valid in Model")
+            logging.error(" portfolio_strategy from view is valid in Model")
 
     def get_portfolio_strategy(self):
-        print("TRACE: Model: get_portfolio_strategy")
+        logging.debug("Model: get_portfolio_strategy")
         return self.portfolio_strategy

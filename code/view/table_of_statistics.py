@@ -1,12 +1,13 @@
 
 import tkinter as tk
 from tkinter import ttk
+import logging
 
 
 class Table_Of_Statistics:
     """A table of statistical values describing the portfolios properties"""
     def __init__(self, super_frame):
-        print("TRACE: View: Statistics_self.table: __init__")
+        logging.debug("View: Statistics_self.table: __init__")
 
         self.frame = tk.Frame(super_frame, padx=5, pady=5)
         self.frame.pack()
@@ -48,7 +49,7 @@ class Table_Of_Statistics:
 
     def set_table(self, stats_dict):
         """ Add all the statistics to the table"""
-        print("TRACE: View: Statistics_self.table: set_self.table")
+        logging.debug("View: Statistics_self.table: set_self.table")
 
         self.clear_table()
 

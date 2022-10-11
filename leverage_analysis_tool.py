@@ -5,13 +5,32 @@
 # This software is only allowed for private use. As a private user you are allowed to copy,
 # modify, use, and compile the software. You are NOT however allowed to publish, sell, or
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
-# commercial or non-commercial, and by any means.
+# commercial or non-commercial, by any means.
 #
 
 import tkinter as tk
 from code.model.model import Model
 from code.view.view import View
 from code.controller.controller import Controller
+import logging
+import sys
+
+def set_debug_level():
+    if len(sys.argv) >= 2:
+        debug_level = sys.argv[1] 
+
+        if (debug_level == "-debug" or
+            debug_level == "-Debug" or
+            debug_level == "-DEBUG"):
+
+            logging.getLogger().setLevel('DEBUG')
+        
+        elif(debug_level == "-info" or
+            debug_level == "-Info" or
+            debug_level == "-INFO"):
+
+            logging.getLogger().setLevel('INFO')
+
 
 class Leverage_Application(tk.Tk):
     """ GUI for analyzing investments with leveraged certificates.
@@ -44,5 +63,6 @@ class Leverage_Application(tk.Tk):
 
 # Create an instance and run the application
 if __name__ == '__main__':
+    set_debug_level()
     app = Leverage_Application()
     app.mainloop()

@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+import logging
 
 class Menu_Of_Strategies:
     def __init__(self, super_frame, view_object):
@@ -26,12 +27,12 @@ class Menu_Of_Strategies:
         self.drop_menu.bind('<<drop_menuSelect>>', self.update_menu_item_focused)
 
     def get_menu_item_focused(self):
-        print("TRACE: Menu_Of_Strategies: get_menu_item_focused")
+        logging.debug("Menu_Of_Strategies: get_menu_item_focused")
         item = self.clicked.get()
         return item
 
     def update_menu_item_focused(self, _):
-        print("TRACE: Menu_Of_Strategies: update_menu_item_focused")
+        logging.debug("Menu_Of_Strategies: update_menu_item_focused")
         menu_focus_item = self.get_menu_item_focused()
         self.view_object.update_strategy_selected(menu_focus_item)
 

@@ -2,10 +2,11 @@
 from code.model.determine_longest_common_timespan   import determine_longest_common_timespan
 from code.model.portfolio_item_class import Portfolio_Item
 import code.model.constants as constants
+import logging
 
 
 def calculate_graph_outcomes(model):
-    print("TRACE: Model: calculate_graph_outcomes")
+    logging.debug("Model: calculate_graph_outcomes")
     markets_selected        = model.get_markets_selected()
     instruments_selected    = model.get_instruments_selected()
     proportion_funds        = model.get_proportion_funds()
@@ -19,12 +20,12 @@ def calculate_graph_outcomes(model):
 
     # Check if empty
     if instruments_selected == []:
-        print("NOTIFY: Model: calculate_graph_outcomes: instruments_selected is empty")
+        logging.debug("NOTIFY: Model: calculate_graph_outcomes: instruments_selected is empty")
         model.set_portfolio_results_full_time([])
         return
 
     if markets_selected  == []:
-        print("NOTIFY: Model: calculate_graph_outcomes: no loaded data files")
+        logging.debug("NOTIFY: Model: calculate_graph_outcomes: no loaded data files")
         model.set_portfolio_results_full_time([])
         return
 

@@ -3,6 +3,7 @@ from os import listdir
 from os.path import isfile, join
 import datetime 
 import sys
+import logging
 
 
 def check_if_data_files_are_clean(data_file_path):
@@ -12,7 +13,7 @@ def check_if_data_files_are_clean(data_file_path):
     try:
         all_data_files = [f for f in listdir(data_file_path) if isfile(join(data_file_path, f))]
     except:
-        print("ERROR: Path to data files is wrong.")
+        logging.error(" Path to data files is wrong.")
         sys.exit(1)
 
     # Check each file
@@ -21,46 +22,46 @@ def check_if_data_files_are_clean(data_file_path):
         try:
             file = open(data_file_path+"/"+file_itter, 'r')
         except:
-            print("ERROR: Could not open file: ", data_file_path+"/"+file_itter)
+            logging.error(" Could not open file: ", data_file_path+"/"+file_itter)
         lines_of_file = file.readlines()
         
         # Check data is more than 600 days
         if len(lines_of_file) > 600:
-            print("SUCCESS: ", file_itter, "\t File passed size")
+            logging.debug("SUCCESS: ", file_itter, "\t File passed size")
         else:
-            print("FAIL:    ", file_itter, "\t File failed size")
+            logging.debug("FAIL:    ", file_itter, "\t File failed size")
             continue
 
         # Check format on first row
         if check_first_line(lines_of_file[0]):
-            print("SUCCESS: ", file_itter, "\t File passed first row format")
+            logging.debug("SUCCESS: ", file_itter, "\t File passed first row format")
         else:
-            print("FAIL:    ", file_itter, "\t File failed first row format")
+            logging.debug("FAIL:    ", file_itter, "\t File failed first row format")
             continue
         
         # Check format on first uppcomming rows
         if check_value_rows(lines_of_file[1:]):
-            print("SUCCESS: ", file_itter, "\t File passed value format")
+            logging.debug("SUCCESS: ", file_itter, "\t File passed value format")
         else:
-            print("FAIL:    ", file_itter, "\t File failed value format")
+            logging.debug("FAIL:    ", file_itter, "\t File failed value format")
             continue
 
         # Check time decreases for each row
         if check_time_decreases_for_each_row(lines_of_file[1:]):
-            print("SUCCESS: ", file_itter, "\t File passed time decreasing with row number")
+            logging.debug("SUCCESS: ", file_itter, "\t File passed time decreasing with row number")
         else:
-            print("FAIL:    ", file_itter, "\t File failed time decreasing with row number")
+            logging.debug("FAIL:    ", file_itter, "\t File failed time decreasing with row number")
             continue
 
         # Check daily change for each row
         if check_daily_change(lines_of_file[1:]):
-            print("SUCCESS: ", file_itter, "\t File passed daily change")
+            logging.debug("SUCCESS: ", file_itter, "\t File passed daily change")
         else:
-            print("FAIL:    ", file_itter, "\t File failed daily change")
+            logging.debug("FAIL:    ", file_itter, "\t File failed daily change")
             continue
 
         # After passing all tests
-        print("SUCCESS: ", file_itter, "\t Passed all tests")
+        logging.debug("SUCCESS: ", file_itter, "\t Passed all tests")
         clean_files.append(file_itter)
 
         file.close()
@@ -94,8 +95,8 @@ def check_value_rows(lines):
             if date_value < 18000000 or date_value > today:
                 return_value = False
         except :
-            print("ERROR:  Date format in data file is in wrong format.")
-            print("TMP words_in_line[0]", words_in_line[0])
+            logging.error("  Date format in data file is in wrong format.")
+            
             return False
 
         
@@ -103,9 +104,7 @@ def check_value_rows(lines):
         try:
             opening_value = float(words_in_line[2])
         except :
-            print("ERROR:  Market opening value in data file is in wrong format.")
-            print("TMP words_in_line[2]", words_in_line[2])
-            print("TMP words_in_line",words_in_line)
+            logging.error("  Market opening value in data file is in wrong format.")
             return False
 
 
@@ -120,7 +119,7 @@ def check_time_decreases_for_each_row(lines):
     
         date_value = int(words_in_line[0])
         if date_value > previous_date:
-            print("Time FAILED date_value > previous_date", date_value ,">", previous_date)
+            logging.error("Time FAILED date_value > previous_date", date_value ,">", previous_date)
             return False
         previous_date = date_value
     return True
@@ -140,7 +139,7 @@ def check_daily_change(lines):
             #all is well, do nothing
             continue
         else:
-            print("ERROR: Unprobable daily change:" ,\
+            logging.error(" Unprobable daily change:" ,\
                 round(change*100,0), "%. Check line ", i-1 )
             return False
     return True

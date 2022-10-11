@@ -1,6 +1,7 @@
 
 import tkinter as tk
 from tkinter import ttk
+import logging
 
 class Table_Of_Instuments:
     def __init__(self, super_frame, view_object):
@@ -35,7 +36,7 @@ class Table_Of_Instuments:
 
 
     def set_table(self, names, countries):
-        print("TRACE: table_of_instruments: set_table")
+        logging.debug("table_of_instruments: set_table")
 
         all_item_values = self.get_all_item_values()
         all_item_texts = self.get_all_item_texts()
@@ -57,7 +58,7 @@ class Table_Of_Instuments:
 
 
     def get_table_item_focused(self):
-        print("TRACE: table_of_instruments: get_table_item_focused")
+        logging.debug("table_of_instruments: get_table_item_focused")
         cur_item = self.table.focus()
         item = self.table.item(cur_item)
 
@@ -65,7 +66,7 @@ class Table_Of_Instuments:
 
 
     def update_item_color(self):
-        print("TRACE: table_of_instruments: update_item_color")
+        logging.debug("table_of_instruments: update_item_color")
 
         cur_item = self.table.focus()
         current_item_tag = self.table.item(cur_item)["tags"]
@@ -77,7 +78,7 @@ class Table_Of_Instuments:
 
 
     def get_all_item_texts(self):
-        print("TRACE: table_of_instruments: get_all_item_texts")
+        logging.debug("table_of_instruments: get_all_item_texts")
 
         all_item_texts = []
 
@@ -89,7 +90,7 @@ class Table_Of_Instuments:
 
 
     def get_all_item_values(self):
-        print("TRACE: table_of_instruments: get_all_item_values")
+        logging.debug("table_of_instruments: get_all_item_values")
 
         all_item_values = []
 
@@ -101,7 +102,7 @@ class Table_Of_Instuments:
 
 
     def update_unfolding_status(self):
-        print("TRACE: View: update_unfolding_status")
+        logging.debug("View: update_unfolding_status")
 
         rows_folding_status = []
         for item in self.table.get_children():
@@ -132,7 +133,7 @@ class Table_Of_Instuments:
 
     def update_table_item_focused(self, _ ):
         #TODO move parts of code to the table class and rename method
-        print("TRACE: View: table_item_focused")
+        logging.debug("View: table_item_focused")
 
         did_unfolding = self.only_did_unfolding()
 

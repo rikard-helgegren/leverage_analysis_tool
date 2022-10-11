@@ -1,11 +1,12 @@
 import numpy as np
+import logging
 
 class Performance_Key_values:
     """ A class for all performance parameters for easier access.
 
         e.g. Mean, median, volatility, beta
     """
-    print("TRACE: model, Performance_Key_values: __init__")
+    logging.debug("model, Performance_Key_values: __init__")
 
     def __init__(self, model):
 
@@ -44,7 +45,7 @@ class Performance_Key_values:
 
     def update_values(self, performance_intervals, performance_full_time):
         """Update key values du to changes in the model"""
-        print("TRACE: model, performance_key_values: update_values")
+        logging.debug("model, performance_key_values: update_values")
 
         #set all key values to default value
         if performance_full_time == []:
@@ -129,7 +130,7 @@ class Performance_Key_values:
         """ Calculate the largest loss during a time span of x_days measured in percent.
             A positive loss value is a negative change.
         """
-        print("TRACE: model, performance_key_values: calc_worst_fall_X_days")
+        logging.debug("model, performance_key_values: calc_worst_fall_X_days")
         worst_fall = 0
 
         for i in range(len(performance_full_time) - x_days):
@@ -140,7 +141,7 @@ class Performance_Key_values:
 
     def calc_variance(self, performance_full_time):
         """ Calculate the variance* of the full time period"""
-        print("TRACE: model, performance_key_values: calc_variance")
+        logging.debug("model, performance_key_values: calc_variance")
 
         # Look att mean values over <mean_size> values # TODO check that this is the right approach
         mean_size = 30

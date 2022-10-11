@@ -1,4 +1,4 @@
-
+import logging
 
 class List_node:
     def __init__(self, data=None):
@@ -121,7 +121,7 @@ def fix_gaps2(lists_of_indexes, latest_first, earliest_last):
 
 
 def fill_gaps_data(markets_selected, chosen_time_interval_start_date, chosen_time_interval_end_date):
-    print("TRACE: Model: fill_gaps_data")
+    logging.debug("Model: fill_gaps_data")
 
     if markets_selected == {}:
         return {}

@@ -1,4 +1,4 @@
-
+import logging
 
 class Controller:
     """ This is the controller of the application. Which has access to
@@ -15,7 +15,7 @@ class Controller:
     def update_fee_status(self, checkbutton_fee_state):
 
         #Update model
-        print("TRACE: Controller: fee_status:", checkbutton_fee_state)
+        logging.debug("Controller: fee_status:", checkbutton_fee_state)
         self.model.set_include_fee_status(checkbutton_fee_state)
         self.update_model()
 
@@ -24,12 +24,12 @@ class Controller:
 
 
     def update_model(self):
-        print("TRACE: Controller: update_model")
+        logging.debug("Controller: update_model")
         #TODO not complete (update_model)?
         self.model.update_model()
 
     def update_view(self):
-        print("TRACE: Controller: update_view")
+        logging.debug("Controller: update_view")
         #TODO not complete (update_view)
 
         ### Update histogram ###
@@ -47,16 +47,16 @@ class Controller:
 
 
     def draw_histogram(self, data):
-        print("TRACE: Controller: draw_histogram")
+        logging.debug("Controller: draw_histogram")
         self.view.draw_histogram(data)
 
     def draw_line_graph(self, data, time_interval):
-        print("TRACE: Controller: draw_line_graph")
+        logging.debug("Controller: draw_line_graph")
         self.view.draw_line_graph(data, time_interval)
 
     def set_table_of_instruments(self):
         """ Set the table with information of instruments available"""
-        print("TRACE: Controller: set_table_of_instruments")
+        logging.debug("Controller: set_table_of_instruments")
         names = []
         countries = []
 
@@ -67,7 +67,7 @@ class Controller:
         self.view.set_table_of_instruments(names, countries)
 
     def update_instrument_selected(self, table_focus_item_data ):
-        print("TRACE: Controller: update_instrument_selected")
+        logging.debug("Controller: update_instrument_selected")
 
         self.model.update_instrument_selected(table_focus_item_data)
 
@@ -75,14 +75,14 @@ class Controller:
         self.update_view()
 
     def update_strategy_selected(self, new_strategy):
-        print("TRACE: Controller: update_strategy_selected")
+        logging.debug("Controller: update_strategy_selected")
         self.model.set_portfolio_strategy(new_strategy)
 
         self.update_model()
         self.update_view()
 
     def set_update_amount_leverage(self, value_percent):
-        print("TRACE: Controller: set_update_amount_leverage")
+        logging.debug("Controller: set_update_amount_leverage")
         value = int(value_percent)/100
         self.model.set_proportion_leverage(value)
         self.model.set_proportion_funds(1-value)
@@ -91,42 +91,42 @@ class Controller:
         self.update_view()
 
     def update_years_histogram_interval(self, years):
-        print("TRACE: Controller: update_years_histogram_interval")
+        logging.debug("Controller: update_years_histogram_interval")
         self.model.set_years_histogram_interval(years)
 
         self.update_model()
         self.update_view()
 
     def update_harvest_point(self, harvest_point):
-        print("TRACE: Controller: update_harvest_point")
+        logging.debug("Controller: update_harvest_point")
         self.model.set_harvest_point(harvest_point)
 
         self.update_model()
         self.update_view()
 
     def update_refill_point(self, refill_point):
-        print("TRACE: Controller: update_refill_point")
+        logging.debug("Controller: update_refill_point")
         self.model.set_refill_point(refill_point)
 
         self.update_model()
         self.update_view()
 
     def update_rebalance_point(self, rebalance_period):
-        print("TRACE: Controller: update_rebalance_point")
+        logging.debug("Controller: update_rebalance_point")
         self.model.set_rebalance_period_months(rebalance_period)
 
         self.update_model()
         self.update_view()
 
     def update_loan(self, loan):
-        print("TRACE: Controller: update_loan")
+        logging.debug("Controller: update_loan")
         self.model.set_loan(loan)
 
         self.update_model()
         self.update_view()
 
     def set_time_limits(self, from_time, to_time):
-        print("TRACE: Controller: set_time_limits")
+        logging.debug("Controller: set_time_limits")
 
         self.model.set_chosen_start_date_time_limit(from_time)
         self.model.set_chosen_end_date_time_limit(to_time)

@@ -44,7 +44,7 @@ def setup_time_limiters(view, super_frame):
         try:
             time_string = int(time_string)
         except:
-            print("ERROR: Input to limiters is in wrong format")
+            logging.error(" Input to limiters is in wrong format")
             # Standardizing failed do not use limits
             time_string = 0
 

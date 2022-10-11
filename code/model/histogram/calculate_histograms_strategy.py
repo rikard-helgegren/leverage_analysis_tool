@@ -1,22 +1,23 @@
 import code.model.constants as constants
 import numpy as np
 from code.model.histogram.histogram_cpp_adapter import rebalance_hist_ctypes
+import logging
 
 
 def calculate_histogram(model):
-    print("TRACE: Model: calculate_histogram")
+    logging.debug("Model: calculate_histogram")
 
     markets_selected     = model.get_markets_selected()
     instruments_selected = model.get_instruments_selected()
 
     # Check if empty
     if instruments_selected == []:
-        print("NOTIFY: Model: calculate_histogram: instruments_selected is empty")
+        logging.debug("NOTIFY: Model: calculate_histogram: instruments_selected is empty")
         model.set_results_for_intervals([])
         return
 
     if markets_selected == []:
-        print("NOTIFY: Model: calculate_histogram: no loaded data files")
+        logging.debug("NOTIFY: Model: calculate_histogram: no loaded data files")
         model.set_results_for_intervals([])
         return
 
@@ -36,7 +37,7 @@ def calculate_histogram(model):
 
 def do_nothing_hist(model):
 
-    print("TRACE: Model: calculate_histogram")
+    logging.debug("Model: calculate_histogram")
     markets_selected     = model.get_markets_selected()
     instruments_selected = model.get_instruments_selected()
     proportion_funds     = model.get_proportion_funds()
@@ -44,12 +45,12 @@ def do_nothing_hist(model):
 
     # Check if empty
     if instruments_selected == []:
-        print("NOTIFY: Model: calculate_histogram: instruments_selected is empty")
+        logging.debug("NOTIFY: Model: calculate_histogram: instruments_selected is empty")
         model.set_results_for_intervals([])
         return
 
     if markets_selected == []:
-        print("NOTIFY: Model: calculate_histogram: no loaded data files")
+        logging.debug("NOTIFY: Model: calculate_histogram: no loaded data files")
         model.set_results_for_intervals([])
         return
 
@@ -78,7 +79,7 @@ def do_nothing_hist(model):
             performance = improved_calc(daily_change, leverage, cutoff, values_to_check)
             outcomes_of_leveraged_investments.append(performance)
         else:
-            print("ERROR: Non valid leverage used")
+            logging.error(" Non valid leverage used")
 
     combined_normal = combine_normal_instruments(number_of_non_leveraged_selected, outcomes_of_normal_investments)
 

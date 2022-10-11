@@ -2,10 +2,11 @@
 import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+import logging
 
 class Line_Graph_Full_Time:
     def __init__(self, super_frame):
-        print("TRACE: View: Line_Graph_Full_Time: __init__")
+        logging.debug("View: Line_Graph_Full_Time: __init__")
 
         self.frame = tk.Frame(super_frame, padx=5, pady=5)
         self.frame.pack()
@@ -22,7 +23,7 @@ class Line_Graph_Full_Time:
         self.toolbar.pack(side=tk.BOTTOM)
 
     def draw(self, values, time_span):
-        print("TRACE: View: Line_Graph_Full_Time: draw")
+        logging.debug("View: Line_Graph_Full_Time: draw")
         plt.figure(self.fig.number)
 
         #if clear_before_drawing: #TODO implement with this input
@@ -36,7 +37,7 @@ class Line_Graph_Full_Time:
         self.canvas.draw()
 
     def set_time_on_x_axis(self, plt, time_span):
-        print("TRACE: View: Line_Graph_Full_Time: set_time_on_x_axis")
+        logging.debug("View: Line_Graph_Full_Time: set_time_on_x_axis")
         pos = []
         labels = []
 
