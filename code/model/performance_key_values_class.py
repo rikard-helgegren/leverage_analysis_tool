@@ -1,5 +1,6 @@
 import numpy as np
 import logging
+import code.model.constants as constants
 
 class Performance_Key_values:
     """ A class for all performance parameters for easier access.
@@ -82,10 +83,10 @@ class Performance_Key_values:
 
         #calculate key values
         else:
-            self.variance = round(self.calc_variance(performance_full_time), 2)
-            self.volatility = round(np.sqrt(self.calc_variance(performance_full_time)), 2)
-            self.worst_fall_10_days = round(self.calc_worst_fall_X_days(performance_full_time, 10), 2)
-            self.worst_fall_30_days = round(self.calc_worst_fall_X_days(performance_full_time, 30), 2)
+            self.variance = round(calc_variance(performance_full_time), 2)
+            self.volatility = round(np.sqrt(calc_variance(performance_full_time)), 2)
+            self.worst_fall_10_days = round(calc_worst_fall_X_days(performance_full_time, 10), 2)
+            self.worst_fall_30_days = round(calc_worst_fall_X_days(performance_full_time, 30), 2)
 
             if performance_intervals == [] :
                 self.mean = 0
@@ -103,14 +104,13 @@ class Performance_Key_values:
                 self.percentile_50 = round(np.percentile(performance_intervals, 50), 2)
                 self.percentile_75 = round(np.percentile(performance_intervals, 75), 2)
                 self.percentile_95 = round(np.percentile(performance_intervals, 95), 2)
-
+                self.risk = round(calc_risk(performance_intervals),2)  # TODO: should be risk neg returns, risk losing 10%, risk losing 50%
 
         # TODO: Have not been properly set yet, some wait for larger code implementations
         self.beta = 0
         self.alpha = 0
         self.severity = 0
         self.fees_payed = 0  # needs to be set in calculations
-        self.risk = 0
         self.rpi = 0
         self.apr = 0
         self.boiling_band = 0
@@ -122,45 +122,9 @@ class Performance_Key_values:
         self.proportion_returns_leverage = 0
         self.exposure_funds_mean = 0
         self.exposure_leverage_mean = 0
-        self.exposure_funds_mean = 0
-        self.exposure_leverage_mean = 0
+        self.exposure_funds_median = 0
+        self.exposure_leverage_median = 0
         self.sharpe_ratio = 0
-
-    def calc_worst_fall_X_days(self, performance_full_time, x_days):
-        """ Calculate the largest loss during a time span of x_days measured in percent.
-            A positive loss value is a negative change.
-        """
-        logging.debug("model, performance_key_values: calc_worst_fall_X_days")
-        worst_fall = 0
-
-        for i in range(len(performance_full_time) - x_days):
-            this_fall = (performance_full_time[i + x_days] - performance_full_time[i])/(performance_full_time[i]+10**(-10))
-            worst_fall = max(worst_fall, this_fall)
-
-        return worst_fall*100
-
-    def calc_variance(self, performance_full_time):
-        """ Calculate the variance* of the full time period"""
-        logging.debug("model, performance_key_values: calc_variance")
-
-        # Look att mean values over <mean_size> values # TODO check that this is the right approach
-        mean_size = 30
-        mean = np.sum(performance_full_time[:mean_size])/mean_size
-        sum_total_dif = 0
-        elements_to_sum = (len(performance_full_time) - mean_size - 1)
-        for i in range(elements_to_sum):
-            sum_total_dif += ((performance_full_time[i+mean_size] - mean)/mean)**2  # NOTE: normalized variance
-
-            # Update mean of last of the new group
-            mean -= performance_full_time[i]  # Remove first value
-            mean += performance_full_time[i + mean_size]  # Add first value
-        if elements_to_sum > 0:
-            variance = sum_total_dif/elements_to_sum
-        else:
-            variance = 1000  # set random large value
-        return variance
-
-
 
 
 
@@ -180,9 +144,9 @@ class Performance_Key_values:
                 "Alpha": self.alpha,
                 "Severity": self.severity,
                 "Fees Payed": self.fees_payed,
-                "Risk": self.risk,
-                "Worst fall in 10 days": str(self.worst_fall_10_days)+"%",
-                "Worst fall in 30 days": str(self.worst_fall_30_days)+"%",
+                "Risk": str(self.risk*constants.CONVERT_PERCENT)+"%",
+                "Worst fall in 10 days": str(self.worst_fall_10_days*constants.CONVERT_PERCENT)+"%",
+                "Worst fall in 30 days": str(self.worst_fall_30_days*constants.CONVERT_PERCENT)+"%",
                 "RPI": self.rpi,
                 "APR": self.apr,
                 "Boiling band": self.boiling_band,
@@ -348,3 +312,53 @@ class Performance_Key_values:
         self.sharpe_ratio = sharpe_ratio
     def get_sharpe_ratio(self):
         return self.sharpe_ratio
+
+
+
+
+def calc_worst_fall_X_days(performance_full_time, x_days):
+    """ Calculate the largest loss during a time span of x_days measured in percent.
+        A positive loss value is a negative change.
+    """
+    logging.debug("model, performance_key_values: calc_worst_fall_X_days")
+    worst_fall = 0
+
+    for i in range(len(performance_full_time) - x_days):
+        this_fall = (performance_full_time[i + x_days] - performance_full_time[i])/(performance_full_time[i]+10**(-10))
+        worst_fall = max(worst_fall, this_fall)
+
+    return worst_fall
+
+def calc_variance(performance_full_time):
+    """ Calculate the variance* of the full time period"""
+    logging.debug("model, performance_key_values: calc_variance")
+
+    # Look att mean values over <mean_size> values # TODO check that this is the right approach
+    mean_size = 10
+    mean = np.sum(performance_full_time[:mean_size])/mean_size
+    sum_total_dif = 0
+    elements_to_sum = (len(performance_full_time) - mean_size - 1)
+    for i in range(elements_to_sum):
+        sum_total_dif += ((performance_full_time[i+mean_size] - mean)/mean)**2  # NOTE: normalized variance
+
+        # Update mean of last of the new group
+        mean -= performance_full_time[i]/mean_size  # Remove impact from first value
+        mean += performance_full_time[i + mean_size]/mean_size  # Add impact from last value
+    if elements_to_sum > 0:
+        variance = sum_total_dif/elements_to_sum
+    else:
+        variance = 1000  # set random large value
+    return variance
+
+def calc_risk(performance_intervals):
+    """Calculates risk of losing money"""
+    
+    loses = 0
+
+    for investment_return in performance_intervals:
+        if investment_return < 1:
+            loses = loses + 1
+
+        risk = loses/len(performance_intervals)
+
+    return risk
