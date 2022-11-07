@@ -5,18 +5,18 @@ import sys
 import logging
 
 ###### IMPORT DATA MANAGER ######
-from code.data_manager.check_if_data_files_are_clean import check_if_data_files_are_clean
-from code.data_manager.read_and_manage_raw_data      import read_and_manage_raw_data
+from src.managing_data.check_if_data_files_are_clean import check_if_data_files_are_clean
+from src.managing_data.read_and_manage_raw_data      import read_and_manage_raw_data
 
 ###### IMPORT MODEL ######
-from code.model.calcultate_daily_change            import calcultate_daily_change
-from code.model.calculate_graph_outcomes_strategy  import calculate_graph_outcomes
-from code.model.fill_in_missing_dates              import fill_gaps_data
-from code.model.calculate_common_time_interval     import calculate_common_time_interval
-from code.model.histogram.calculate_histograms_strategy      import calculate_histogram
-from code.model.performance_key_values_class       import Performance_Key_values
+from src.model.calcultate_daily_change            import calcultate_daily_change
+from src.model.calculate_graph_outcomes_strategy  import calculate_graph_outcomes
+from src.model.fill_in_missing_dates              import fill_gaps_data
+from src.model.calculate_common_time_interval     import calculate_common_time_interval
+from src.model.histogram.calculate_histograms_strategy      import calculate_histogram
+from src.model.performance_key_values_class       import Performance_Key_values
 
-import code.model.constants as constants
+import src.model.constants as constants
 
 class Model:
     """ This is the model of the application. It models stock market index

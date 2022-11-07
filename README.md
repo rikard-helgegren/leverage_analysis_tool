@@ -1,10 +1,10 @@
 # LAT - Leverage Analysis Tool
 
-This is an analyzing tool for gaining understanding if and how leveraged instruments
+LAT is an analyzing tool for gaining understanding if and how leveraged instruments
 can be used to build an investment portfolio that matches ones preferences. The tool is
 still under construction.
 
-![Screenshot of application](/images/Sample.png)
+![Image of screenshot of application](/images/Sample.png)
 
 ### Background
 
@@ -16,13 +16,15 @@ Development of this application was started after a series increasingly more rea
 
 ### How to run
 
-Run the application by executing leverage_analysis_tool.py
+Run the application by executing Makefile
 
 ```
-python3 leverage_analysis_tool.py
+make
 ```
 
-*NOTE*: Does not work with Windows currently.
+This compiles the C++ files, and then runs the program.
+
+*NOTE*: The program does not work with Windows currently.
 
 ### Required libraries
 
@@ -36,9 +38,15 @@ and c++ compilator
 
 * g++
 
+### Walktrhough
+
+To get started select a market by clicking on a market in the top right table. Unfold the levereaged products by klicking the arrow to the left of the market, and then select desiered leverage.
+
+To the left are widgits to change input parameters and strategy. And in the middle is a histogram which displays the distribution of outcomes of the portfolio when investing for *Years Investing*, and a graph showing the performance from *Start date* to *End date*. 
+
 ### Data
 
-Data files are not included due to copy write uncertainties but can be downloaded at
+Data files are not included due to copyright uncertainties but can be downloaded at
 
 * https://www.investing.com/
 * https://www.kaggle.com/
@@ -71,7 +79,7 @@ and you may not get the invested capital back.
 
 In the end the graphical user interface will be built by using Kivy (https://kivy.org/) to achieve something in this style:
 
-![Design goal](/images/Goal.jpeg)
+![Image of design goal](/images/Goal.jpeg)
 
 
 But during development of the model tkinter will be used to swiftly test and experiment with the model.

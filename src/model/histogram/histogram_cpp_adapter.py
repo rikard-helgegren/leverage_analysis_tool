@@ -2,8 +2,8 @@ import ctypes
 import os
 import subprocess
 
-from code.model.determine_longest_common_timespan   import determine_longest_common_timespan
-import code.model.constants as constants
+from src.model.determine_longest_common_timespan   import determine_longest_common_timespan
+import src.model.constants as constants
 
 
 def rebalance_hist_ctypes(model):

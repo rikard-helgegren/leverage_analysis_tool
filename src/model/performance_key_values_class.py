@@ -1,6 +1,6 @@
 import numpy as np
 import logging
-import code.model.constants as constants
+import src.model.constants as constants
 
 class Performance_Key_values:
     """ A class for all performance parameters for easier access.

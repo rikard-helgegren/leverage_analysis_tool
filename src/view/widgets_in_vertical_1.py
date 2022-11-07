@@ -2,8 +2,8 @@
 
 import tkinter as tk
 
-import code.model.constants as CST
-from code.view.menu_of_strategies import Menu_Of_Strategies
+import src.model.constants as CST
+from src.view.menu_of_strategies import Menu_Of_Strategies
 
 def setup_vertical_frame_1(view, super_frame):
 

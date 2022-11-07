@@ -1,4 +1,4 @@
-from code.model.market_class import Market
+from src.model.market_class import Market
 
 def market_dict_to_market_class(market_name ,market_dict):
 

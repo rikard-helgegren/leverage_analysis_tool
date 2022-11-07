@@ -9,9 +9,9 @@
 #
 
 import tkinter as tk
-from code.model.model import Model
-from code.view.view import View
-from code.controller.controller import Controller
+from src.model.model import Model
+from src.view.view import View
+from src.controller.controller import Controller
 import logging
 import sys
 

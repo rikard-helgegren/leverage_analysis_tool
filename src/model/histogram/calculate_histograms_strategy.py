@@ -1,6 +1,6 @@
-import code.model.constants as constants
+import src.model.constants as constants
 import numpy as np
-from code.model.histogram.histogram_cpp_adapter import rebalance_hist_ctypes
+from src.model.histogram.histogram_cpp_adapter import rebalance_hist_ctypes
 import logging
 
 

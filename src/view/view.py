@@ -3,12 +3,12 @@ import tkinter as tk
 import logging
 
 
-from code.view.histogram import Histogram
-from code.view.line_graph_full_time import Line_Graph_Full_Time
-from code.view.table_of_instruments import Table_Of_Instuments
-from code.view.widgets_in_vertical_1 import setup_vertical_frame_1
-from code.view.table_of_statistics import Table_Of_Statistics
-from code.view.setup_time_limiters import setup_time_limiters
+from src.view.histogram import Histogram
+from src.view.line_graph_full_time import Line_Graph_Full_Time
+from src.view.table_of_instruments import Table_Of_Instuments
+from src.view.widgets_in_vertical_1 import setup_vertical_frame_1
+from src.view.table_of_statistics import Table_Of_Statistics
+from src.view.setup_time_limiters import setup_time_limiters
 
 
 class View(tk.Frame):
