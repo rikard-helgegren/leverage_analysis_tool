@@ -19,9 +19,10 @@ def calc_variance(performance_full_time, sample_size = constants.DEFULT_VARIANCE
         sub_total = 0
         mean_line = calc_mean_line_fit(performance_full_time[i:sample_size+i])
         for j in range(sample_size):
-            sub_total += ((performance_full_time[i+sample_size] - mean_line[j])/mean_line[j])**2  # NOTE: normalized variance
+            sub_total += ((performance_full_time[i+sample_size] - mean_line[j])/mean_line[j])**2
+            
 
-    total_dif += sub_total
+        total_dif += sub_total
 
     if elements_to_sum > 0:
         variance = total_dif/elements_to_sum

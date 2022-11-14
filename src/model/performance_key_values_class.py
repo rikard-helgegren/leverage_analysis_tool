@@ -339,7 +339,7 @@ def calc_variance(performance_full_time):
     sum_total_dif = 0
     elements_to_sum = (len(performance_full_time) - mean_size - 1)
     for i in range(elements_to_sum):
-        sum_total_dif += ((performance_full_time[i+mean_size] - mean)/mean)**2  # NOTE: normalized variance
+        sum_total_dif += ((performance_full_time[i+mean_size] - mean)/mean)**2
 
         # Update mean of last of the new group
         mean -= performance_full_time[i]/mean_size  # Remove impact from first value

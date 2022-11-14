@@ -125,7 +125,7 @@ def insert_varinace_togles(view, super_frame):
     view.label_volatility_strategie_sample_size = tk.Label(view.frame_volatility_strategie_sample_size, text='Sample size\nstartegy decition')
     view.label_volatility_strategie_sample_size.pack()
     view.spin_volatility_strategie_sample_size = tk.Spinbox(view.frame_volatility_strategie_sample_size, from_=0, to=2000, width=5, command=view.update_volatility_strategie_sample_size)
-    view.spin_volatility_strategie_sample_size.delete(0)
+    view.spin_volatility_strategie_sample_size.delete(0,"end")
     view.spin_volatility_strategie_sample_size.insert(0, CST.DEFULT_VOLATILITY_STRATEGIE_SAMPLE_SIZE)
     view.spin_volatility_strategie_sample_size.pack()
 
@@ -134,6 +134,6 @@ def insert_varinace_togles(view, super_frame):
     view.label_volatility_strategie_level = tk.Label(view.frame_volatility_strategie_level, text='Volatility\ntrigger level')
     view.label_volatility_strategie_level.pack()
     view.spin_volatility_strategie_level = tk.Spinbox(view.frame_volatility_strategie_level, from_=0, to=99, width=5, command=view.update_volatility_strategie_level, format="%.3f", increment=0.001)
-    view.spin_volatility_strategie_level.delete(0)
-    view.spin_volatility_strategie_level.insert(0, CST.DEFULT_VOLATILITY_STRATEGIE_LEVEL)
+    view.spin_volatility_strategie_level.delete(0,"end")
+    view.spin_volatility_strategie_level.insert(0, str(CST.DEFULT_VOLATILITY_STRATEGIE_LEVEL).replace(".", ",")+"0")
     view.spin_volatility_strategie_level.pack()

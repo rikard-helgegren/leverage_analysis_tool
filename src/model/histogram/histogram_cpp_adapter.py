@@ -1,8 +1,6 @@
 import ctypes
-import os
-import subprocess
+import logging
 
-from src.model.determine_longest_common_timespan   import determine_longest_common_timespan
 import src.model.constants as constants
 
 
@@ -22,14 +20,20 @@ def rebalance_hist_ctypes(model):
     # make actual call
     cpp_algorithm(*all_values_list)
     
-    list_index_outdata = -1
+    # Magic values based on list order
+    list_index_outdata = -1 
     list_index_data_size = 6
     
     [return_data, size_days_in] = [all_values_list[list_index_outdata], all_values_list[list_index_data_size]]
 
     size_return_data = size_days_in - model.years_histogram_interval * constants.MARKET_DAYS_IN_YEAR
 
-    return_data_python_format = [return_data[i] for i in range(size_return_data)]
+    # Do not include days only used for strategy
+    
+    if model.get_portfolio_strategy() == constants.PORTFOLIO_STRATEGIES[4]:
+        return_data_python_format = [return_data[i] for i in range(model.get_volatility_strategie_sample_size(), size_return_data)]
+    else:
+        return_data_python_format = [return_data[i] for i in range(size_return_data)]
 
     return return_data_python_format
 
@@ -118,10 +122,26 @@ def get_indata(model):
 
     # strategy
     all_argtypes.append(ctypes.c_int)
-    if model.get_portfolio_strategy() == constants.PORTFOLIO_STRATEGIES[1]:
+    strategy = model.get_portfolio_strategy()
+    if strategy == constants.PORTFOLIO_STRATEGIES[1]:
         all_values.append(1)
-    elif model.get_portfolio_strategy() == constants.PORTFOLIO_STRATEGIES[2]:
+    elif strategy == constants.PORTFOLIO_STRATEGIES[2]:
         all_values.append(2)
+    elif strategy == constants.PORTFOLIO_STRATEGIES[4]:
+        all_values.append(4)
+    else:
+        logging.error("Unexpected startegy")
+
+
+    ### Variance ###
+    all_argtypes.append(ctypes.c_int)
+    all_values.append(model.get_volatility_strategie_sample_size())
+    
+    all_argtypes.append(ctypes.c_int)
+    all_values.append(model.get_variance_calc_sample_size())
+    
+    all_argtypes.append(ctypes.c_float)
+    all_values.append(model.get_volatility_strategie_level())
 
     ### Out data ###
     all_argtypes.append(ctypes.c_float * nr_days_in_data)  # out data

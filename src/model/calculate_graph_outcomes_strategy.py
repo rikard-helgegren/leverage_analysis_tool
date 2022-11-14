@@ -7,6 +7,9 @@ import logging
 
 
 def calculate_graph_outcomes(model):
+    """
+        The main function for calculating the values of the portfolio shown in the graph.
+    """
     logging.debug("Model: calculate_graph_outcomes")
     markets_selected        = model.get_markets_selected()
     instruments_selected    = model.get_instruments_selected()
@@ -87,6 +90,9 @@ def calculate_graph_outcomes(model):
     model.set_portfolio_results_full_time(portfolio_results_full_time)
 
 def do_not_invest(end_pos):
+    """
+        The strategy of not investing
+    """
     #TODO inflation decline not implemented, need data
     total_results = []
     for day in range(0, end_pos):
@@ -94,6 +100,9 @@ def do_not_invest(end_pos):
     return total_results
 
 def do_always_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, proportion_leverage, model, harvest_point, refill_point, rebalance_period_months, number_of_leveraged_instruments):
+    """
+        All strageties that choose to always invest
+    """
     for day in range(0, end_pos):
         for item in portfolio_items:
 
@@ -134,7 +143,9 @@ def do_always_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, 
     return portfolio_results_full_time
 
 def do_sometimes_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, proportion_leverage, model, harvest_point, refill_point, rebalance_period_months, number_of_leveraged_instruments):
-
+    """
+        All strageties that choose to somtimes just wait for better oppertuity
+    """
     for day in range(model.get_volatility_strategie_sample_size(), end_pos):  # start with previous days to calc variance on
         for item in portfolio_items:
             if item.get_leverage() > 1:
@@ -143,6 +154,7 @@ def do_sometimes_invest(end_pos, portfolio_items, loan, strategy, number_of_fund
                 # get recent volatility
                 total_value_list = convert_change_to_total_value(item.get_daily_change()[day-model.get_volatility_strategie_sample_size():day])
                 volatility = calculate.calc_volatility(total_value_list, model.get_variance_calc_sample_size())
+
                 #if vola. too high jump to next day
                 if (volatility > model.get_volatility_strategie_level()):
                     item.set_values(item.get_values() + [item.get_current_value()-loan])
@@ -165,13 +177,19 @@ def do_sometimes_invest(end_pos, portfolio_items, loan, strategy, number_of_fund
     return portfolio_results_full_time
 
 def hold_strategy():
-    # Do nothing to the instruments
+    """
+        The strategy of not investing.
+    """
     return False
 
 
 def harvest_refill(inspected_instrument, all_instruments, number_of_funds, harvest_point, refill_point):
+    """
+        Do a harvest or refill (rebalance) if the leveraged product have increased or 
+        decresed enough to trigger the rule
+    """
 
-    if not need_rebalance(inspected_instrument, number_of_funds, all_instruments):
+    if not can_rebalance(inspected_instrument, number_of_funds, all_instruments):
         return False
 
     current_value = inspected_instrument.get_current_value()
@@ -184,8 +202,11 @@ def harvest_refill(inspected_instrument, all_instruments, number_of_funds, harve
     return True
 
 def rebalance_time_cycle(inspected_instrument, all_instruments, number_of_funds, day, rebalance_period_months):
+    """
+        Do the rebalance, if possible, baced on time cycle
+    """
 
-    if not need_rebalance(inspected_instrument, number_of_funds, all_instruments):
+    if not can_rebalance(inspected_instrument, number_of_funds, all_instruments):
         return False
 
     current_value = inspected_instrument.get_current_value()
@@ -198,7 +219,11 @@ def rebalance_time_cycle(inspected_instrument, all_instruments, number_of_funds,
 
     return True
 
-def need_rebalance(inspected_instrument, number_of_funds, all_instruments):
+def can_rebalance(inspected_instrument, number_of_funds, all_instruments):
+    """
+        Check if a rebalance is possible
+    """
+
     # No fund can trigger this rule
     if inspected_instrument.get_leverage() == 1:
         return False
@@ -222,7 +247,10 @@ def need_rebalance(inspected_instrument, number_of_funds, all_instruments):
     return True
 
 def rebalence(current_value, reference_value, inspected_instrument, all_instruments, number_of_funds):
-
+    """
+        Rebalance the portfolio to what is set to be the prefered 
+        balance between levreaged products and funds
+    """
     change_in_value = current_value - reference_value
     inspected_instrument.set_current_value(reference_value)
 
@@ -232,6 +260,10 @@ def rebalence(current_value, reference_value, inspected_instrument, all_instrume
 
 
 def low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, proportion_leverage, rebalance_period_months, number_of_leveraged_instruments):
+    """
+        Strategy that only invests when the recent volatility has been low.
+        When volatility is low it uses periodic rebalancing strategy.
+    """
     # update value with daily change
     new_value = item.get_current_value() * (1 + item.get_daily_change()[day] * item.get_leverage())
     item.set_current_value(new_value)
@@ -251,6 +283,9 @@ def low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, pro
 
 
 def convert_change_to_total_value(change_day_list):
+    """
+        Converting change to the representative market value for this period
+    """
 
     total_value_list = [1]
     for day_change in change_day_list:

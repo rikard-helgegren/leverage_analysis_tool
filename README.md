@@ -68,7 +68,7 @@ Date, Close, Open
 20220101, 1, 0
 ```
 
-The file path is set in *code/model/constants*
+The file path is set in *src/model/constants*
 
 ### Disclaimer
 
