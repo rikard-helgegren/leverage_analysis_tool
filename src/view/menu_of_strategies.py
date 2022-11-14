@@ -14,7 +14,7 @@ class Menu_Of_Strategies:
         self.label_dropdown = tk.Label(self.frame_dropdown, text='Strategy')
         self.label_dropdown.pack()
 
-        self.options = ["Hold", "Harvest/Refill", "Rebalance Time", "Do not invest"]
+        self.options = ["Hold", "Harvest/Refill", "Rebalance Time", "Do not invest", "Variance Dependent"]
 
         # datatype of menu text
         self.clicked = tk.StringVar() # TODO "self.clicked" I do not understand this variable name.

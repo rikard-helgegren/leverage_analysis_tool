@@ -92,6 +92,12 @@ class View(tk.Frame):
         value = int(self.spin_years.get())
         self.controller.update_years_histogram_interval(value)
 
+    def update_loan(self):
+        logging.debug("View: update_loan")
+        value = int(self.spin_loan.get())
+        self.controller.update_loan(value/100)
+        # TODO not fully implemented (hist)
+
     def update_harvest_point(self):
         logging.debug("View: update_harvest_point")
         value = int(self.spin_harvest_point.get())
@@ -107,13 +113,21 @@ class View(tk.Frame):
         value = int(self.spin_rebalance_point.get())
         self.controller.update_rebalance_point(value)
 
+    def update_variance_calc_sample_size(self):
+        logging.debug("View: update_variance_calc_sample_size")
+        value = int(self.spin_variance_calc_sample_size.get())
+        self.controller.update_variance_calc_sample_size(value)
 
+    def update_volatility_strategie_sample_size(self):
+        logging.debug("View: update_volatility_strategie_sample_size")
+        value = int(self.spin_volatility_strategie_sample_size.get())
+        self.controller.update_volatility_strategie_sample_size(value)
 
-    def update_loan(self):
-        logging.debug("View: update_loan")
-        value = int(self.spin_loan.get())
-        self.controller.update_loan(value/100)
-        # TODO not fully implemented
+    def update_volatility_strategie_level(self):
+        logging.debug("View: update_volatility_strategie_level")
+        value = float(self.spin_volatility_strategie_level.get().replace(",", "."))
+        self.controller.update_volatility_strategie_level(value)
+   
 
     def update_amount_leverage(self, value):
         logging.debug("View: update_amount_leverage")
@@ -139,7 +153,7 @@ class View(tk.Frame):
         self.controller.update_strategy_selected(menu_focus_item)
 
     def update_time_limits(self, from_time, to_time):
-        logging.debug("View: update_time_limits, needs implementing")
+        logging.debug("View: update_time_limits")
         self.controller.set_time_limits(from_time, to_time)
 
     def update_table_of_statistics(self, key_values):

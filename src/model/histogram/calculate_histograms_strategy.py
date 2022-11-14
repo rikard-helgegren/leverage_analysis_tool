@@ -30,6 +30,7 @@ def calculate_histogram(model):
     elif strategy == constants.PORTFOLIO_STRATEGIES[3]:  # Do nothing
         return_data = [1]  # TODO change when implementing inflation
     else:
+        print("Strategy not implemented for histogram: ", strategy)
         return_data = [1, 2, 2, 3]
 
     return model.set_results_for_intervals(return_data)

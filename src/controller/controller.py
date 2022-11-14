@@ -118,6 +118,27 @@ class Controller:
         self.update_model()
         self.update_view()
 
+    def update_variance_calc_sample_size(self, variance_calc_sample_size):
+        logging.debug("Controller: update_variance_calc_sample_size")
+        self.model.set_variance_calc_sample_size(variance_calc_sample_size)
+
+        self.update_model()
+        self.update_view()
+
+    def update_volatility_strategie_sample_size(self, volatility_strategie_sample_size):
+        logging.debug("Controller: update_volatility_strategie_sample_size")
+        self.model.set_volatility_strategie_sample_size(volatility_strategie_sample_size)
+        
+        self.update_model()
+        self.update_view()
+
+    def update_volatility_strategie_level(self, volatility_strategie_level):
+        logging.debug("Controller: update_volatility_strategie_level")
+        self.model.set_volatility_strategie_level(volatility_strategie_level)
+        
+        self.update_model()
+        self.update_view()
+
     def update_loan(self, loan):
         logging.debug("Controller: update_loan")
         self.model.set_loan(loan)

@@ -56,6 +56,10 @@ class Model:
         self.chosen_time_interval_end_date        = 0
         self.chosen_time_interval_status          = False
         self.portfolio_strategy                   = constants.PORTFOLIO_STRATEGIES[0]
+        self.defult_variance_sample_size          = constants.DEFULT_VARIANCE_SAMPLE_SIZE
+        self.defult_volatility_strategie_sample_size  =constants.DEFULT_VOLATILITY_STRATEGIE_SAMPLE_SIZE
+        self.defult_volatility_strategie_level    = constants.DEFULT_VOLATILITY_STRATEGIE_LEVEL
+
 
         ################ Data Processed ################
 
@@ -169,7 +173,6 @@ class Model:
 
     def get_loan(self):
         logging.debug("Model: get_loan")
-        return self.loan
         return self.loan
     def set_loan(self, loan):
         logging.debug("Model: set_loan")
@@ -354,3 +357,26 @@ class Model:
     def get_portfolio_strategy(self):
         logging.debug("Model: get_portfolio_strategy")
         return self.portfolio_strategy
+
+    
+    def get_variance_calc_sample_size(self):
+        logging.debug("Model: get_variance_calc_sample_size")
+        return self.defult_variance_sample_size
+    def set_variance_calc_sample_size(self, variance_calc_sample_size):
+        logging.debug("Model: set_variance_calc_sample_size")
+        self.defult_variance_sample_size = variance_calc_sample_size
+
+
+    def get_volatility_strategie_sample_size(self):
+        logging.debug("Model: get_volatility_strategie_sample_size")
+        return self.defult_volatility_strategie_sample_size 
+    def set_volatility_strategie_sample_size(self, volatility_strategie_sample_size):
+        logging.debug("Model: set_volatility_strategie_sample_size")
+        self.defult_volatility_strategie_sample_size = volatility_strategie_sample_size
+    
+    def get_volatility_strategie_level(self):
+        logging.debug("Model: get_volatility_strategie_level")
+        return self.defult_volatility_strategie_level
+    def set_volatility_strategie_level(self, volatility_strategie_level):
+        logging.debug("Model: set_volatility_strategie_level")
+        self.defult_volatility_strategie_level = volatility_strategie_level

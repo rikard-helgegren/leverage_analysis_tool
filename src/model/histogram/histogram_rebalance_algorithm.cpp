@@ -406,21 +406,21 @@ void launchStartegy(int                      numberOfFunds,
 
 extern "C" {
     void cppRebalanceAlgo(float  loan,
-                              int*    instrumentLeverages,
-                              int     nrOfInstruments,
-                              char*   instrumentNames_chr,
-                              float   proportionFunds,
-                              float   proportionLeverage,
-                              int     totNrDays,
-                              int     nrMarketsSelected,
-                              float** marketDailyChanges,
-                              char*   indexNames_chr,
-                              int     daysInvesting,
-                              float   harvestPoint,
-                              float   refillPoint,
-                              int     rebalance_period_months,
-                              int     strategy,
-                              float*  outData){
+                          int*    instrumentLeverages,
+                          int     nrOfInstruments,
+                          char*   instrumentNames_chr,
+                          float   proportionFunds,
+                          float   proportionLeverage,
+                          int     totNrDays,
+                          int     nrMarketsSelected,
+                          float** marketDailyChanges,
+                          char*   indexNames_chr,
+                          int     daysInvesting,
+                          float   harvestPoint,
+                          float   refillPoint,
+                          int     rebalance_period_months,
+                          int     strategy,
+                          float*  outData){
 
 
         std::vector<std::string> instrumentNames;

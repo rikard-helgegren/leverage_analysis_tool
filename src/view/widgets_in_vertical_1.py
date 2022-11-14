@@ -13,6 +13,7 @@ def setup_vertical_frame_1(view, super_frame):
     insert_strategy_menue(view, super_frame)
     insert_harvest_refill(view, super_frame)
     insert_rebalance_time(view, super_frame)
+    insert_varinace_togles(view, super_frame)
 
 
 def insert_slide_for_leverage(view, super_frame):
@@ -91,7 +92,11 @@ def insert_harvest_refill(view, super_frame):
     view.spin_refill_point.pack()
 
 def insert_rebalance_time(view, super_frame):
-    view.frame_rebalance_point = tk.Frame(super_frame, padx=5, pady=5)
+
+    view.frame_group3 = tk.Frame(super_frame, padx=5, pady=5)
+    view.frame_group3.pack()
+
+    view.frame_rebalance_point = tk.Frame(view.frame_group3, padx=5, pady=5)
     view.frame_rebalance_point.pack(side=tk.LEFT)
     view.label_rebalance_point = tk.Label(view.frame_rebalance_point, text='Rebalance\nMonth')
     view.label_rebalance_point.pack()
@@ -99,3 +104,36 @@ def insert_rebalance_time(view, super_frame):
     view.spin_rebalance_point.delete(0,"end")
     view.spin_rebalance_point.insert(0, CST.DEFULT_REBALANCE_PERIOD_MONTHS)
     view.spin_rebalance_point.pack()
+
+def insert_varinace_togles(view, super_frame):
+    
+    # make spinbox trio horisontal
+    view.frame_group4 = tk.Frame(super_frame, padx=5, pady=5)
+    view.frame_group4.pack()
+
+    view.frame_variance_calc_sample_size = tk.Frame(view.frame_group4, padx=5, pady=5)
+    view.frame_variance_calc_sample_size.pack(side=tk.LEFT)
+    view.label_variance_calc_sample_size = tk.Label(view.frame_variance_calc_sample_size, text='Sample size\ncalc variance')
+    view.label_variance_calc_sample_size.pack()
+    view.spin_variance_calc_sample_size = tk.Spinbox(view.frame_variance_calc_sample_size, from_=2, to=2000, width=5, command=view.update_variance_calc_sample_size)
+    view.spin_variance_calc_sample_size.delete(0,"end")
+    view.spin_variance_calc_sample_size.insert(0, CST.DEFULT_VARIANCE_SAMPLE_SIZE)
+    view.spin_variance_calc_sample_size.pack()
+
+    view.frame_volatility_strategie_sample_size = tk.Frame(view.frame_group4, padx=5, pady=5)
+    view.frame_volatility_strategie_sample_size.pack(side=tk.LEFT)
+    view.label_volatility_strategie_sample_size = tk.Label(view.frame_volatility_strategie_sample_size, text='Sample size\nstartegy decition')
+    view.label_volatility_strategie_sample_size.pack()
+    view.spin_volatility_strategie_sample_size = tk.Spinbox(view.frame_volatility_strategie_sample_size, from_=0, to=2000, width=5, command=view.update_volatility_strategie_sample_size)
+    view.spin_volatility_strategie_sample_size.delete(0)
+    view.spin_volatility_strategie_sample_size.insert(0, CST.DEFULT_VOLATILITY_STRATEGIE_SAMPLE_SIZE)
+    view.spin_volatility_strategie_sample_size.pack()
+
+    view.frame_volatility_strategie_level = tk.Frame(view.frame_group4, padx=5, pady=5)
+    view.frame_volatility_strategie_level.pack(side=tk.LEFT)
+    view.label_volatility_strategie_level = tk.Label(view.frame_volatility_strategie_level, text='Volatility\ntrigger level')
+    view.label_volatility_strategie_level.pack()
+    view.spin_volatility_strategie_level = tk.Spinbox(view.frame_volatility_strategie_level, from_=0, to=99, width=5, command=view.update_volatility_strategie_level, format="%.3f", increment=0.001)
+    view.spin_volatility_strategie_level.delete(0)
+    view.spin_volatility_strategie_level.insert(0, CST.DEFULT_VOLATILITY_STRATEGIE_LEVEL)
+    view.spin_volatility_strategie_level.pack()

@@ -1,6 +1,7 @@
 
 from src.model.determine_longest_common_timespan   import determine_longest_common_timespan
 from src.model.portfolio_item_class import Portfolio_Item
+import src.model.calculations.calculations as calculate
 import src.model.constants as constants
 import logging
 
@@ -13,8 +14,8 @@ def calculate_graph_outcomes(model):
     proportion_leverage     = model.get_proportion_leverage()
     strategy                = model.get_portfolio_strategy()
     loan                    = model.get_loan()
-    harvest_point           = model.get_harvest_point() / 100  # dont keep percentage
-    refill_point            = model.get_refill_point() / 100  # dont keep percentage
+    harvest_point           = model.get_harvest_point() / constants.CONVERT_PERCENT
+    refill_point            = model.get_refill_point() / constants.CONVERT_PERCENT
     rebalance_period_months = model.get_rebalance_period_months()
 
 
@@ -57,7 +58,7 @@ def calculate_graph_outcomes(model):
         # create portfolio item
         portfolio_item = Portfolio_Item(name, leverage)
 
-        ### set extra values ###
+        # set extra values
         if leverage == 1:
             if number_of_leveraged_instruments > 0:
                 portfolio_item.set_current_value((1+loan) * proportion_funds/number_of_funds)
@@ -76,6 +77,23 @@ def calculate_graph_outcomes(model):
 
         portfolio_items.append(portfolio_item)
 
+    if strategy == constants.PORTFOLIO_STRATEGIES[3]:  # Do not invest money
+        portfolio_results_full_time = do_not_invest(end_pos)
+    elif strategy == constants.PORTFOLIO_STRATEGIES[4]:  # Paus leverage when volatile
+        portfolio_results_full_time = do_sometimes_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, proportion_leverage, model, harvest_point, refill_point, rebalance_period_months, number_of_leveraged_instruments)
+    else:
+        portfolio_results_full_time = do_always_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, proportion_leverage, model, harvest_point, refill_point, rebalance_period_months, number_of_leveraged_instruments)
+    
+    model.set_portfolio_results_full_time(portfolio_results_full_time)
+
+def do_not_invest(end_pos):
+    #TODO inflation decline not implemented, need data
+    total_results = []
+    for day in range(0, end_pos):
+        total_results.append(1)
+    return total_results
+
+def do_always_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, proportion_leverage, model, harvest_point, refill_point, rebalance_period_months, number_of_leveraged_instruments):
     for day in range(0, end_pos):
         for item in portfolio_items:
 
@@ -113,8 +131,38 @@ def calculate_graph_outcomes(model):
 
     portfolio_results_full_time = total_results
 
-    model.set_portfolio_results_full_time(portfolio_results_full_time)
+    return portfolio_results_full_time
 
+def do_sometimes_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, proportion_leverage, model, harvest_point, refill_point, rebalance_period_months, number_of_leveraged_instruments):
+
+    for day in range(model.get_volatility_strategie_sample_size(), end_pos):  # start with previous days to calc variance on
+        for item in portfolio_items:
+            if item.get_leverage() > 1:
+
+                
+                # get recent volatility
+                total_value_list = convert_change_to_total_value(item.get_daily_change()[day-model.get_volatility_strategie_sample_size():day])
+                volatility = calculate.calc_volatility(total_value_list, model.get_variance_calc_sample_size())
+                #if vola. too high jump to next day
+                if (volatility > model.get_volatility_strategie_level()):
+                    item.set_values(item.get_values() + [item.get_current_value()-loan])
+                    continue
+            
+            
+            #make func cal to strategy and somtimes rebalance
+            low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, proportion_leverage, rebalance_period_months, number_of_leveraged_instruments)
+
+    # sum total results
+    total_results = []
+    for item in portfolio_items:
+        if total_results == []:
+            total_results = item.get_values()
+        else:
+            total_results = [start + adding for start, adding in zip(total_results, item.get_values())]
+
+    portfolio_results_full_time = total_results
+
+    return portfolio_results_full_time
 
 def hold_strategy():
     # Do nothing to the instruments
@@ -181,3 +229,31 @@ def rebalence(current_value, reference_value, inspected_instrument, all_instrume
     for instrument in all_instruments:
         if instrument.get_leverage() == 1:
             instrument.set_current_value(instrument.get_current_value()+(change_in_value/number_of_funds))
+
+
+def low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, proportion_leverage, rebalance_period_months, number_of_leveraged_instruments):
+    # update value with daily change
+    new_value = item.get_current_value() * (1 + item.get_daily_change()[day] * item.get_leverage())
+    item.set_current_value(new_value)
+
+    item.set_values(item.get_values() + [new_value-loan])
+
+    # Apply rule
+    applied_change = False
+    applied_change = rebalance_time_cycle(item, portfolio_items, number_of_funds, day, rebalance_period_months)
+
+    # Update reference values
+    if applied_change:
+        total_value = sum([i.get_current_value() for i in portfolio_items])
+        for i in portfolio_items:
+            if i.get_leverage() > 1:
+                i.set_reference_value(total_value * proportion_leverage / number_of_leveraged_instruments)
+
+
+def convert_change_to_total_value(change_day_list):
+
+    total_value_list = [1]
+    for day_change in change_day_list:
+        total_value_list.append(total_value_list[-1] + total_value_list[-1]*day_change)
+
+    return total_value_list

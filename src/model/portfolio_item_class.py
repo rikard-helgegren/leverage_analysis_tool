@@ -149,11 +149,11 @@ class Portfolio_Item:
     def get_last_day(self):
         return self.time_span[-1]
 
-    def string(self):
-        print("name: ",self.name,
-        "\nleverage: ", self.leverage,
-        "\nvalues len: ", len(self.values),
-        "\ncountry: ", self.country,
-        "\ndaily_change len: ",len(self.daily_change),
-        "\nreference_value: ",self.reference_value,
-        "\ncurrent_value: ",self.current_value)
+    def to_string(self):
+        return "name: " + self.name + ...
+        "\nleverage: "+ self.leverage + ...
+        "\nvalues len: "+ len(self.values) + ...
+        "\ncountry: " + self.country + ...
+        "\ndaily_change len: " + len(self.daily_change) + ...
+        "\nreference_value: " +self.reference_value + ...
+        "\ncurrent_value: " + self.current_value
