@@ -32,7 +32,7 @@ class Line_Graph_Full_Time:
         if values != []:
             self.set_time_on_x_axis(plt, time_span)
             plt.plot(values)
-
+            plt.tight_layout()
 
         self.canvas.draw()
 
