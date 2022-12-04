@@ -17,7 +17,7 @@ void calcRegressionline(std::vector<float> xVec,
 	float xPosI{0.0f};
 	float yPosI{0.0f};
 
-	// create sums
+	// create sums // TODO use std librarys for scalar product and summ.
 	for (int i = 0; i < size; i++) {
 			// In a csv file all the values of
 			// xi and yi are separated by commas

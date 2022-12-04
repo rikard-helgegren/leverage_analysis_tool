@@ -26,7 +26,7 @@ float calcVariance(float* performance_full_time, int sizeArray, int sample_size)
         subTotal = 0.0f;
         calc_mean_line_fit(performance_full_time, i,sample_size+i, meanLine);
         for (int j = 0; j<sample_size; j++){
-            subTotal += std::pow(((performance_full_time[i+sample_size] - meanLine[j])/meanLine[j]),2);
+            subTotal += ((performance_full_time[i+sample_size] - meanLine[j])/meanLine[j])*((performance_full_time[i+sample_size] - meanLine[j])/meanLine[j]);
         }
     
         totalDif += subTotal;

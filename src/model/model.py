@@ -34,28 +34,28 @@ class Model:
 
         ############## Simple values ###################
 
-        self.loan                                 = constants.DEFULT_LOAN
-        self.years_histogram_interval             = constants.DEFULT_YEARS_HISTOGRAM_INTERVAL
-        self.harvest_point                        = constants.DEFULT_HARVEST_POINT
-        self.refill_point                         = constants.DEFULT_REFILL_POINT
-        self.update_harvest_refill                = constants.DEFULT_UPDATE_HARVEST_REFILL
-        self.rebalance_period_months              = constants.DEFULT_REBALANCE_PERIOD_MONTHS
-        self.proportion_cash                      = constants.DEFULT_PROPORTION_CASH
-        self.proportion_funds                     = constants.DEFULT_PROPORTION_FUNDS 
-        self.proportion_leverage                  = constants.DEFULT_PROPORTION_LEVERAGE
-        self.include_fees_status                  = constants.DEFULT_INCLUDE_FEES_STATUS
-        self.rebalance_status                     = constants.DEFULT_REBALANCE_STATUS
-        self.rebalance_between_instruments_status = constants.DEFULT_REBALANCE_BETWEEN_INSTRUMENTS_STATUS
-        self.correction_of_inflation_status       = constants.DEFULT_CORRECTION_OF_INFLATION_STATUS
-        self.correction_of_currency_status        = constants.DEFULT_CORRECTION_OF_CURRENCY_STATUS
-        self.delay_of_correction                  = constants.DEFULT_DELAY_OF_CORRECTION
-        self.chosen_time_interval_start_date      = 0
-        self.chosen_time_interval_end_date        = 0
-        self.chosen_time_interval_status          = False
-        self.portfolio_strategy                   = constants.PORTFOLIO_STRATEGIES[0]
-        self.defult_variance_sample_size          = constants.DEFULT_VARIANCE_SAMPLE_SIZE
-        self.defult_volatility_strategie_sample_size  =constants.DEFULT_VOLATILITY_STRATEGIE_SAMPLE_SIZE
-        self.defult_volatility_strategie_level    = constants.DEFULT_VOLATILITY_STRATEGIE_LEVEL
+        self.loan                                     = constants.DEFULT_LOAN
+        self.years_histogram_interval                 = constants.DEFULT_YEARS_HISTOGRAM_INTERVAL
+        self.harvest_point                            = constants.DEFULT_HARVEST_POINT
+        self.refill_point                             = constants.DEFULT_REFILL_POINT
+        self.update_harvest_refill                    = constants.DEFULT_UPDATE_HARVEST_REFILL
+        self.rebalance_period_months                  = constants.DEFULT_REBALANCE_PERIOD_MONTHS
+        self.proportion_cash                          = constants.DEFULT_PROPORTION_CASH
+        self.proportion_funds                         = constants.DEFULT_PROPORTION_FUNDS 
+        self.proportion_leverage                      = constants.DEFULT_PROPORTION_LEVERAGE
+        self.include_fees_status                      = constants.DEFULT_INCLUDE_FEES_STATUS
+        self.rebalance_status                         = constants.DEFULT_REBALANCE_STATUS
+        self.rebalance_between_instruments_status     = constants.DEFULT_REBALANCE_BETWEEN_INSTRUMENTS_STATUS
+        self.correction_of_inflation_status           = constants.DEFULT_CORRECTION_OF_INFLATION_STATUS
+        self.correction_of_currency_status            = constants.DEFULT_CORRECTION_OF_CURRENCY_STATUS
+        self.delay_of_correction                      = constants.DEFULT_DELAY_OF_CORRECTION
+        self.chosen_time_interval_start_date          = 0
+        self.chosen_time_interval_end_date            = 0
+        self.chosen_time_interval_status              = False
+        self.portfolio_strategy                       = constants.PORTFOLIO_STRATEGIES[0]
+        self.defult_variance_sample_size              = constants.DEFULT_VARIANCE_SAMPLE_SIZE
+        self.defult_volatility_strategie_sample_size  = constants.DEFULT_VOLATILITY_STRATEGIE_SAMPLE_SIZE
+        self.defult_volatility_strategie_level        = constants.DEFULT_VOLATILITY_STRATEGIE_LEVEL
 
 
         ################ Data Processed ################

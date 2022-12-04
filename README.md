@@ -46,9 +46,8 @@ To the left are widgits to change input parameters and strategy. And in the midd
 
 ### Data
 
-Data files are not included due to copyright uncertainties but can be downloaded at
+Data files are not included due to copyright uncertainties but can be downloaded online, for example at
 
-* https://www.investing.com/
 * https://www.kaggle.com/
 
 The data should be stored as csv files and need to have a specific format, this is checked in the beginning of the program.

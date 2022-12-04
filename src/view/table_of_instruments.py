@@ -2,6 +2,7 @@
 import tkinter as tk
 from tkinter import ttk
 import logging
+import src.model.constants as constants
 
 class Table_Of_Instuments:
     def __init__(self, super_frame, view_object):
@@ -50,7 +51,7 @@ class Table_Of_Instuments:
                 added_new_item = True
 
                 self.table.insert(parent='', index=tk.END, iid=market_name, text=market_name, values=(country,1))
-                for i in range(2,4): #leverage span
+                for i in range(2,constants.HIGHEST_LEVERAGE_AVAILABLE + 1): #leverage span
                     self.table.insert(parent=market_name, index=tk.END, text=market_name, values=(country,i))
 
         if added_new_item:

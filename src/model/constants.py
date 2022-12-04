@@ -32,6 +32,7 @@ DEFULT_VOLATILITY_STRATEGIE_LEVEL = 0.01 # Need to try what is resonable
 
 
 PORTFOLIO_STRATEGIES = ["Hold", "Harvest/Refill", "Rebalance Time", "Do not invest", "Variance Dependent"]  # Should match view
+HIGHEST_LEVERAGE_AVAILABLE = 5
 
 ############## VARIOUS CONSTANTS ##############
 
