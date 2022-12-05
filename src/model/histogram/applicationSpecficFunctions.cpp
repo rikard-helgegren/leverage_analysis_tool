@@ -1,7 +1,11 @@
+
 #include <iostream>
 #include <string>
 #include <vector>
 #include <map>
+
+#include "../calculations/sumFloats.cpp"
+#include "Parameters.cpp"
 
 #pragma once
 
@@ -29,83 +33,70 @@ void mapIndexNrToMarketNr(std::map<int,int> indexToMarket,
 /**
  * In start of new intervall the starting values have to be set
  */
-void setStartValuesOfInstruments(int nrOfInstruments,
-                                int* instrumentLeverages,
-                                int numberOfLeveragedInstruments,
-                                float* currentValues,
-                                float loan,
-                                float proportionFunds,
-                                int numberOfFunds,
-                                float proportionLeverage){
+void setStartValuesOfInstruments(Parameters parameters, float* currentValues){
     
-    for (int i = 0; i<nrOfInstruments; i++){
-        if (instrumentLeverages[i] == 1){
-            if (numberOfLeveragedInstruments > 0){
-                currentValues[i] = (1.0f + loan) * proportionFunds / static_cast<float>(numberOfFunds);
+    for (int i = 0; i<parameters.nrOfInstruments; i++){
+        
+        if (parameters.instrumentLeverages[i] == 1){
+            if (parameters.numberOfLeveragedInstruments > 0){
+                
+                currentValues[i] = (1.0f + parameters.loan) * parameters.proportionFunds / static_cast<float>(parameters.numberOfFunds);
             }
             else{
-                currentValues[i] = (1.0f + loan) / static_cast<float>(numberOfFunds);
+                
+                currentValues[i] = (1.0f + parameters.loan) / static_cast<float>(parameters.numberOfFunds);
             }
         }
         else{
-            if (numberOfFunds > 0){
-                currentValues[i] = (1.0f + loan) * proportionLeverage / static_cast<float>(numberOfLeveragedInstruments);
+            if (parameters.numberOfFunds > 0){
+                
+                currentValues[i] = (1.0f + parameters.loan) * parameters.proportionLeverage / static_cast<float>(parameters.numberOfLeveragedInstruments);
             }
             else{
-                currentValues[i] = (1.0f + loan) / static_cast<float>(numberOfLeveragedInstruments);
+                
+                currentValues[i] = (1.0f + parameters.loan) / static_cast<float>(parameters.numberOfLeveragedInstruments);
             }
         }
     }
+    
 }
 
 /**
  * Update instrument value with the daily change times its leverage 
  */
-float updateCurrentInstrumentValue(float*             currentValues,
-                                   int                item,
-                                   float**            marketDailyChanges,
-                                   std::map<int, int> indexToMarket,
-                                   int                day,
-                                   int*               instrumentLeverages){
+float updateCurrentInstrumentValue(Parameters parameters, float* currentValues, int item, int day){
     
-    return currentValues[item] * (1.0f + marketDailyChanges[indexToMarket[item]][day] * static_cast<float>(instrumentLeverages[item]));
+    return currentValues[item] * (1.0f + parameters.marketDailyChanges[parameters.indexToMarket[item]][day] * static_cast<float>(parameters.instrumentLeverages[item]));
 }
 
 
-bool checkPreConditionsRebalanceTime(int day,
-                                     int rebalance_period_months,
-                                     int* instrumentLeverages,
-                                     int item,
-                                     int numberOfFunds){
+bool checkPreConditionsRebalanceTime(Parameters parameters, int day, int item){
     
     //  Rebalance only leveraged         Need funds to do strategy
-    if (instrumentLeverages[item] == 1 || numberOfFunds == 0 ){
+    if (parameters.instrumentLeverages[item] == 1 || parameters.numberOfFunds == 0 ){
         return false;
     }
 
     // Check it is the right day for rebalancing
-    if (day % rebalance_period_months != 0  || day == 0){
+    if (day % parameters.rebalance_period_months != 0  || day == 0){
         return false;
     }
     return true;
 }
 
 
-bool checkPreConditionsHarvestRefill(float  harvestPoint,
-                                     float  refillPoint,
+bool checkPreConditionsHarvestRefill(Parameters parameters,
                                      float* referenceValue,
                                      float* currentValues,
-                                     int*   instrumentLeverages,
-                                     int    item,
-                                     int    numberOfFunds){
+                                     int    item){
     
     //  Rebalance only leveraged         Need funds to do strategy
-    if (instrumentLeverages[item] == 1 || numberOfFunds == 0 ){
+    if (parameters.instrumentLeverages[item] == 1 || parameters.numberOfFunds == 0 ){
         return false;
     }
     // Check if not activating strategy
-    if (currentValues[item] < harvestPoint * referenceValue[item] &&
-        currentValues[item] > refillPoint * referenceValue[item]){
+    if (currentValues[item] < parameters.harvestPoint * referenceValue[item] &&
+        currentValues[item] > parameters.refillPoint * referenceValue[item]){
 
         return false;
     }
@@ -116,31 +107,27 @@ bool checkPreConditionsHarvestRefill(float  harvestPoint,
 /**
  * Implement rebalance
  */
-void rebalance(int* instrumentLeverages,
+void rebalance(Parameters parameters,
                int item,
-               int numberOfFunds,
                float* currentValues,
-               float* referenceValue,
-               int numberOfLeveragedInstruments,
-               int nrOfInstruments,
-               float proportionLeverage){
-
+               float* referenceValue){
+                
     float totForRebalancing{0.0f};
     float changeInValue{0.0f};
     float totalValue{0.0f};
 
     // Check total value in funds available for rebalancing
-    for (int instrument = 0; instrument< numberOfLeveragedInstruments; instrument++){
-        if (instrumentLeverages[instrument] == 1){
+    for (int instrument = 0; instrument< parameters.numberOfLeveragedInstruments; instrument++){
+        if (parameters.instrumentLeverages[instrument] == 1){
             totForRebalancing += currentValues[instrument];
         }
     }
 
     // Update reference values
-    totalValue = sumFloats(currentValues, nrOfInstruments);
-    for (int i = 0; i< nrOfInstruments; i++){
-        if (instrumentLeverages[i] > 1){
-            referenceValue[i] = (totalValue * proportionLeverage / static_cast<float>(numberOfLeveragedInstruments));
+    totalValue = sumFloats(currentValues, parameters.nrOfInstruments);
+    for (int i = 0; i< parameters.nrOfInstruments; i++){
+        if (parameters.instrumentLeverages[i] > 1){
+            referenceValue[i] = (totalValue * parameters.proportionLeverage / static_cast<float>(parameters.numberOfLeveragedInstruments));
         }
     }
 
@@ -148,9 +135,9 @@ void rebalance(int* instrumentLeverages,
         changeInValue = currentValues[item] - referenceValue[item];
         currentValues[item] = referenceValue[item];
 
-        for (int instrument = 0; instrument< nrOfInstruments; instrument++){
-            if (instrumentLeverages[instrument] == 1){
-                currentValues[instrument] = currentValues[instrument] + (changeInValue / static_cast<float>(numberOfFunds));
+        for (int instrument = 0; instrument< parameters.nrOfInstruments; instrument++){
+            if (parameters.instrumentLeverages[instrument] == 1){
+                currentValues[instrument] = currentValues[instrument] + (changeInValue / static_cast<float>(parameters.numberOfFunds));
             }
         }
     }

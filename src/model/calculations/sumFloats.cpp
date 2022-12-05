@@ -1,3 +1,5 @@
+#pragma once
+
 
 float sumFloats(float* floatArray, int nrOfFloats){
     float sum = 0.0f;

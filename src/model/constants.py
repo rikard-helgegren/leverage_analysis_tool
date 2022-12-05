@@ -5,7 +5,7 @@ import sys
 
 data_files_path = "data/raw_data/all"
 program_folder = os.path.dirname(os.path.realpath(sys.argv[0]))
-hist_harvest_refill_algo_file = '/src/compiled_code/histogram_rebalance_algorithm.so'
+hist_harvest_refill_algo_file = '/src/compiled_code/calculateHistogramOutput.so'
 
 ############### MODEL VALUES #################
 

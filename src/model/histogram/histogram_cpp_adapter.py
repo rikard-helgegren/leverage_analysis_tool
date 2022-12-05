@@ -11,7 +11,7 @@ def rebalance_hist_ctypes(model):
     lib_object_cpp = ctypes.CDLL(cpp_so_file)
 
     ## get variables and pass to function ##
-    cpp_algorithm = lib_object_cpp.cppRebalanceAlgo  # Set upp function call
+    cpp_algorithm = lib_object_cpp.calculateHistogramOutput # Set upp function call
 
     # input types and values
     [all_argtypes_list, all_values_list] = get_indata(model)

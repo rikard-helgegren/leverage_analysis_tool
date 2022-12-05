@@ -6,7 +6,7 @@ import src.model.constants as constants
 import logging
 
 
-def calculate_graph_outcomes(model):
+def calculate_graph_outcomes(model):  #TODO, graph should not be able to have negative values, china X5
     """
         The main function for calculating the values of the portfolio shown in the graph.
     """
