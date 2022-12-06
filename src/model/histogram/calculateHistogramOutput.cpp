@@ -1,3 +1,11 @@
+/**
+ * Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+ *
+ * This software is only allowed for private use. As a private user you are allowed to copy,
+ * modify, use, and compile the software. You are NOT however allowed to publish, sell, or
+ * distribute this software, either in source code form or as a compiled binary, for any purpose,
+ * commercial or non-commercial, by any means.
+ */
 
 // TODO clean and remove unused
 #include <iostream>
@@ -10,9 +18,9 @@
 #include <sstream>
 #include <iterator>
 
-#include "../calculations/varianceAndVolatility.cpp"
-#include "../conversions/convertArrayChangeToTotalValue.cpp"
-#include "../conversions/convertCharPointerToStringVector.cpp"
+#include "../common/varianceAndVolatility.cpp"
+#include "../common/convertArrayChangeToTotalValue.cpp"
+#include "../common/convertCharPointerToStringVector.cpp"
 #include "applicationSpecficFunctions.cpp"
 #include "Parameters.cpp"
 #include "ParametersBuilder.cpp"
@@ -85,13 +93,14 @@ extern "C" {
 
         std::vector<std::string> instrumentNames;
         std::vector<std::string> indexNames;
-
+        
         instrumentNames = convertCharPointerToStringVector(instrumentNames_chr);
         indexNames      = convertCharPointerToStringVector(indexNames_chr);
 
         std::map<int, int> indexToMarket; 
         mapIndexNrToMarketNr(indexToMarket, indexNames, nrMarketsSelected, instrumentNames, nrOfInstruments);
 
+        // TODO: make to seperate function and and make it return array or vector  
         // prepare right proportions
         int numberOfLeveragedInstruments = 0;
         int numberOfFunds = 0;

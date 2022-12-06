@@ -6,7 +6,7 @@
 # modify, use, and compile the software. You are NOT however allowed to publish, sell, or
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
-#
+
 
 import tkinter as tk
 from src.model.model import Model

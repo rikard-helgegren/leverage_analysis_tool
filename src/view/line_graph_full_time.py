@@ -1,8 +1,17 @@
+#!/usr/bin/env python3
+#
+# Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+#
+# This software is only allowed for private use. As a private user you are allowed to copy,
+# modify, use, and compile the software. You are NOT however allowed to publish, sell, or
+# distribute this software, either in source code form or as a compiled binary, for any purpose,
+# commercial or non-commercial, by any means.
 
+import logging
 import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-import logging
+
 
 class Line_Graph_Full_Time:
     def __init__(self, super_frame):
@@ -10,6 +19,7 @@ class Line_Graph_Full_Time:
 
         self.frame = tk.Frame(super_frame, padx=5, pady=5)
         self.frame.pack()
+
         # specify the window as master
         self.fig = plt.figure(figsize=(5, 3))
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame)
@@ -50,5 +60,3 @@ class Line_Graph_Full_Time:
                 labels.append(str(time)[:4])
 
         plt.xticks(pos, labels, rotation='vertical')
-
-

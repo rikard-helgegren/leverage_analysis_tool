@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+ *
+ * This software is only allowed for private use. As a private user you are allowed to copy,
+ * modify, use, and compile the software. You are NOT however allowed to publish, sell, or
+ * distribute this software, either in source code form or as a compiled binary, for any purpose,
+ * commercial or non-commercial, by any means.
+ */
+
 #include <cmath>
 #include <iostream>
 #include "regression.cpp"
@@ -7,7 +16,7 @@
 /*
 * Calculate fitting line to dataset
 */
-void calc_mean_line_fit(float* performance_full_time, int fromIndex, int toIndex, float* meanLine){
+void calcLeastSquareFit(float* performance_full_time, int fromIndex, int toIndex, float* meanLine){
 
     regressionLine(performance_full_time, meanLine, fromIndex, toIndex);
 }
@@ -24,7 +33,7 @@ float calcVariance(float* performance_full_time, int sizeArray, int sample_size)
 
     for (int i = 0; i<elementsToSum; i +=sample_size ){
         subTotal = 0.0f;
-        calc_mean_line_fit(performance_full_time, i,sample_size+i, meanLine);
+        calcLeastSquareFit(performance_full_time, i,sample_size+i, meanLine);
         for (int j = 0; j<sample_size; j++){
             subTotal += ((performance_full_time[i+sample_size] - meanLine[j])/meanLine[j])*((performance_full_time[i+sample_size] - meanLine[j])/meanLine[j]);
         }

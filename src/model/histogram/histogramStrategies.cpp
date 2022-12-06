@@ -1,15 +1,20 @@
+/**
+ * Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+ *
+ * This software is only allowed for private use. As a private user you are allowed to copy,
+ * modify, use, and compile the software. You are NOT however allowed to publish, sell, or
+ * distribute this software, either in source code form or as a compiled binary, for any purpose,
+ * commercial or non-commercial, by any means.
+ */
+
 // TODO clean and remove unused
 #include <iostream>
 #include <cstring>
-#include <string>
-#include <vector>
 #include <stdexcept>
-#include <future>  // library used for std::async and std::future
-#include <map>
 #include <sstream>
 #include <iterator>
 
-#include "../calculations/sumFloats.cpp"
+#include "../common/sumFloats.cpp"
 #include "applicationSpecficFunctions.cpp"
 #include "Parameters.cpp"
 
@@ -18,10 +23,8 @@
 // Almost duplicate of cppRebalanceTimeAlgoSubPart due to speed
 void harvestRefillStrategy(Parameters parameters, int firstStartDay, int lastStartDay){
     
-    // Set up needed variables
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];
-
     float cutOfValue = 0.0f;
 
     for (int startDay = firstStartDay; startDay < lastStartDay; startDay++){
@@ -41,7 +44,7 @@ void harvestRefillStrategy(Parameters parameters, int firstStartDay, int lastSta
                 }
 
                 if  (checkPreConditionsHarvestRefill(parameters, referenceValue, currentValues,  item)){
-                    rebalance(parameters, item, currentValues, referenceValue);
+                    rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue);
                 }
             }
         }
@@ -53,10 +56,9 @@ void harvestRefillStrategy(Parameters parameters, int firstStartDay, int lastSta
 
 // Almost duplicate of cppHarvestRefillAlgoSubPart due to speed
 void rebalanceTimeStrategy(Parameters parameters, int firstStartDay, int lastStartDay){
-    // Set up needed variables
+    
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];
-
     float cutOfValue = 0.0f; //TODO move to constants file
 
     for (int startDay = firstStartDay; startDay < lastStartDay; startDay++){
@@ -77,7 +79,7 @@ void rebalanceTimeStrategy(Parameters parameters, int firstStartDay, int lastSta
 
                 if (checkPreConditionsRebalanceTime(parameters, day-startDay, item)){
 
-                    rebalance(parameters, item, currentValues, referenceValue);
+                    rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue);
                 }
             }
         }
@@ -133,8 +135,7 @@ void varianceStrategy(Parameters parameters, int firstStartDay, int lastStartDay
                 }
 
                 if (checkPreConditionsRebalanceTime(parameters, day-startDay, item)){
-
-                    rebalance(parameters, item, currentValues, referenceValue);
+                    rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue);
                 }
             }
         }

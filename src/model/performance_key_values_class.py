@@ -1,6 +1,16 @@
-import numpy as np
+#!/usr/bin/env python3
+#
+# Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+#
+# This software is only allowed for private use. As a private user you are allowed to copy,
+# modify, use, and compile the software. You are NOT however allowed to publish, sell, or
+# distribute this software, either in source code form or as a compiled binary, for any purpose,
+# commercial or non-commercial, by any means.
+
 import logging
+import numpy as np
 import src.model.constants as constants
+from src.model.common.variance_and_volatility import calc_variance
 
 class Performance_Key_values:
     """ A class for all performance parameters for easier access.
@@ -125,7 +135,6 @@ class Performance_Key_values:
         self.exposure_funds_median = 0
         self.exposure_leverage_median = 0
         self.sharpe_ratio = 0
-
 
 
     ################## Getters and setters ##############
@@ -314,8 +323,6 @@ class Performance_Key_values:
         return self.sharpe_ratio
 
 
-
-
 def calc_worst_fall_X_days(performance_full_time, x_days):
     """ Calculate the largest loss during a time span of x_days measured in percent.
         A positive loss value is a negative change.
@@ -329,36 +336,16 @@ def calc_worst_fall_X_days(performance_full_time, x_days):
 
     return worst_fall
 
-def calc_variance(performance_full_time):
-    """ Calculate the variance* of the full time period"""
-    logging.debug("model, performance_key_values: calc_variance")
-
-    # Look att mean values over <mean_size> values # TODO check that this is the right approach
-    mean_size = 10
-    mean = np.sum(performance_full_time[:mean_size])/mean_size
-    sum_total_dif = 0
-    elements_to_sum = (len(performance_full_time) - mean_size - 1)
-    for i in range(elements_to_sum):
-        sum_total_dif += ((performance_full_time[i+mean_size] - mean)/mean)**2
-
-        # Update mean of last of the new group
-        mean -= performance_full_time[i]/mean_size  # Remove impact from first value
-        mean += performance_full_time[i + mean_size]/mean_size  # Add impact from last value
-    if elements_to_sum > 0:
-        variance = sum_total_dif/elements_to_sum
-    else:
-        variance = 1000  # set random large value
-    return variance
 
 def calc_risk(performance_intervals):
     """Calculates risk of losing money"""
     
-    loses = 0
+    nbr_lost_money = 0
 
     for investment_return in performance_intervals:
         if investment_return < 1:
-            loses = loses + 1
+            nbr_lost_money = nbr_lost_money + 1
 
-        risk = loses/len(performance_intervals)
+        risk = nbr_lost_money/len(performance_intervals)
 
     return risk

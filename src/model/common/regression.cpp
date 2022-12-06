@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+ *
+ * This software is only allowed for private use. As a private user you are allowed to copy,
+ * modify, use, and compile the software. You are NOT however allowed to publish, sell, or
+ * distribute this software, either in source code form or as a compiled binary, for any purpose,
+ * commercial or non-commercial, by any means.
+ */
+
 #include <vector>
 
 // Calculate linear fit to data
@@ -17,7 +26,7 @@ void calcRegressionline(std::vector<float> xVec,
 	float xPosI{0.0f};
 	float yPosI{0.0f};
 
-	// create sums // TODO use std librarys for scalar product and summ.
+	// create sums // TODO use std librarys for scalar product and sum.
 	for (int i = 0; i < size; i++) {
 			// In a csv file all the values of
 			// xi and yi are separated by commas

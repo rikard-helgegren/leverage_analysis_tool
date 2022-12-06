@@ -1,6 +1,17 @@
+#!/usr/bin/env python3
+#
+# Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+#
+# This software is only allowed for private use. As a private user you are allowed to copy,
+# modify, use, and compile the software. You are NOT however allowed to publish, sell, or
+# distribute this software, either in source code form or as a compiled binary, for any purpose,
+# commercial or non-commercial, by any means.
+
+from src.model.common.check_data_is_empty import check_data_is_empty
+from src.model.histogram.histogram_cpp_adapter import rebalance_hist_ctypes
+
 import src.model.constants as constants
 import numpy as np
-from src.model.histogram.histogram_cpp_adapter import rebalance_hist_ctypes
 import logging
 
 
@@ -10,14 +21,7 @@ def calculate_histogram(model):
     markets_selected     = model.get_markets_selected()
     instruments_selected = model.get_instruments_selected()
 
-    # Check if empty
-    if instruments_selected == []:
-        logging.debug("NOTIFY: Model: calculate_histogram: instruments_selected is empty")
-        model.set_results_for_intervals([])
-        return
-
-    if markets_selected == []:
-        logging.debug("NOTIFY: Model: calculate_histogram: no loaded data files")
+    if check_data_is_empty(instruments_selected, markets_selected):
         model.set_results_for_intervals([])
         return
 
@@ -25,7 +29,7 @@ def calculate_histogram(model):
     strategy = model.get_portfolio_strategy()
     if strategy == constants.PORTFOLIO_STRATEGIES[0]:  # Hold
         return_data = do_nothing_hist(model)
-    elif (strategy == constants.PORTFOLIO_STRATEGIES[1]) or (strategy == constants.PORTFOLIO_STRATEGIES[2]) or (strategy == constants.PORTFOLIO_STRATEGIES[4]) :  # Harvest/Refill or # Rebalance on time cycle
+    elif (strategy == constants.PORTFOLIO_STRATEGIES[1]) or (strategy == constants.PORTFOLIO_STRATEGIES[2]) or (strategy == constants.PORTFOLIO_STRATEGIES[4]) :  # Harvest/Refill or # Rebalance on time cycle or variance
         return_data = rebalance_hist_ctypes(model)
     elif strategy == constants.PORTFOLIO_STRATEGIES[3]:  # Do nothing
         return_data = [1]  # TODO change when implementing inflation
@@ -44,14 +48,7 @@ def do_nothing_hist(model):
     proportion_funds     = model.get_proportion_funds()
     proportion_leverage  = model.get_proportion_leverage()
 
-    # Check if empty
-    if instruments_selected == []:
-        logging.debug("NOTIFY: Model: calculate_histogram: instruments_selected is empty")
-        model.set_results_for_intervals([])
-        return
-
-    if markets_selected == []:
-        logging.debug("NOTIFY: Model: calculate_histogram: no loaded data files")
+    if check_data_is_empty(instruments_selected, markets_selected):
         model.set_results_for_intervals([])
         return
 
@@ -132,13 +129,15 @@ def combine_leveraged_instruments(number_of_leveraged_selected, outcomes_of_leve
 
 
 def percentage_change(values):
+    """ Calculate the relative change between two dadys e.g. increasing 2% or decreasing 1%
+    """
     changes = []
     for i in range(len(values) - 1):
         changes.append((values[i + 1] - values[i]) / values[i])
     return changes
 
 def improved_calc(daily_change, leverage, cutoff, values_to_check):
-    """Uses the fact that lots of calculations in the naive version are repeated.
+    """ Uses the fact that lots of calculations in the naive version are repeated.
         This can be avoided if we know that nothing interesting will happen in the
         interval inspected.
     """
@@ -152,11 +151,9 @@ def improved_calc(daily_change, leverage, cutoff, values_to_check):
     lowest_value_index = 0
     has_appended = False
 
-
     # Setup, a first run through
     for i, change in enumerate(changes[0:values_to_check]):
         value_thus_far *= 1 + change * leverage
-
 
         # Check if new extreme
         if value_thus_far < lowest_value:

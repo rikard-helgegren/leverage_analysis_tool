@@ -1,17 +1,27 @@
-from copy import deepcopy
+#!/usr/bin/env python3
+#
+# Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+#
+# This software is only allowed for private use. As a private user you are allowed to copy,
+# modify, use, and compile the software. You are NOT however allowed to publish, sell, or
+# distribute this software, either in source code form or as a compiled binary, for any purpose,
+# commercial or non-commercial, by any means.
+
 import logging
+
+from copy import deepcopy
 
 ###### IMPORT DATA MANAGER ######
 from src.managing_data.check_if_data_files_are_clean import check_if_data_files_are_clean
 from src.managing_data.read_and_manage_raw_data      import read_and_manage_raw_data
 
 ###### IMPORT MODEL ######
-from src.model.calcultate_daily_change            import calcultate_daily_change
-from src.model.calculate_graph_outcomes_strategy  import calculate_graph_outcomes
-from src.model.fill_in_missing_dates              import fill_gaps_data
-from src.model.calculate_common_time_interval     import calculate_common_time_interval
-from src.model.histogram.calculate_histograms_strategy      import calculate_histogram
-from src.model.performance_key_values_class       import Performance_Key_values
+from src.model.calcultate_daily_change                  import calcultate_daily_change
+from src.model.graph.calculate_graph_outcomes_strategy  import calculate_graph_outcomes
+from src.model.fill_in_missing_dates                    import fill_gaps_data
+from src.model.calculate_common_time_interval           import calculate_common_time_interval
+from src.model.histogram.calculate_histograms_strategy  import calculate_histogram
+from src.model.performance_key_values_class             import Performance_Key_values
 
 import src.model.constants as constants
 

@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+#
+# Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+#
+# This software is only allowed for private use. As a private user you are allowed to copy,
+# modify, use, and compile the software. You are NOT however allowed to publish, sell, or
+# distribute this software, either in source code form or as a compiled binary, for any purpose,
+# commercial or non-commercial, by any means.
+
 import numpy as np
 import logging
 import src.model.constants as constants
@@ -17,7 +26,7 @@ def calc_variance(performance_full_time, sample_size = constants.DEFULT_VARIANCE
     for i in range(0, elements_to_sum, sample_size):
 
         sub_total = 0
-        mean_line = calc_mean_line_fit(performance_full_time[i:sample_size+i])
+        mean_line = calc_least_square_fit(performance_full_time[i:sample_size+i])
         for j in range(sample_size):
             sub_total += ((performance_full_time[i+sample_size] - mean_line[j])/mean_line[j])**2
             
@@ -27,11 +36,12 @@ def calc_variance(performance_full_time, sample_size = constants.DEFULT_VARIANCE
     if elements_to_sum > 0:
         variance = total_dif/elements_to_sum
     else:
+        variance = 1000 # set suitable large value
         logging.error("To few values to calculate variance from")
     return variance
 
 
-def calc_mean_line_fit(value_data):
+def calc_least_square_fit(value_data):
     """calculate a least square linear fit to data"""
 
     x = np.array([i+1 for i in range(len(value_data))])

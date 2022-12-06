@@ -1,10 +1,18 @@
+/**
+ * Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+ *
+ * This software is only allowed for private use. As a private user you are allowed to copy,
+ * modify, use, and compile the software. You are NOT however allowed to publish, sell, or
+ * distribute this software, either in source code form or as a compiled binary, for any purpose,
+ * commercial or non-commercial, by any means.
+ */
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include <map>
 
-#include "../calculations/sumFloats.cpp"
+#include "../common/sumFloats.cpp"
 #include "Parameters.cpp"
 
 #pragma once
@@ -38,22 +46,18 @@ void setStartValuesOfInstruments(Parameters parameters, float* currentValues){
     for (int i = 0; i<parameters.nrOfInstruments; i++){
         
         if (parameters.instrumentLeverages[i] == 1){
-            if (parameters.numberOfLeveragedInstruments > 0){
-                
+            if (parameters.numberOfLeveragedInstruments > 0){ 
                 currentValues[i] = (1.0f + parameters.loan) * parameters.proportionFunds / static_cast<float>(parameters.numberOfFunds);
             }
             else{
-                
                 currentValues[i] = (1.0f + parameters.loan) / static_cast<float>(parameters.numberOfFunds);
             }
         }
         else{
             if (parameters.numberOfFunds > 0){
-                
                 currentValues[i] = (1.0f + parameters.loan) * parameters.proportionLeverage / static_cast<float>(parameters.numberOfLeveragedInstruments);
             }
             else{
-                
                 currentValues[i] = (1.0f + parameters.loan) / static_cast<float>(parameters.numberOfLeveragedInstruments);
             }
         }
@@ -72,7 +76,7 @@ float updateCurrentInstrumentValue(Parameters parameters, float* currentValues, 
 
 bool checkPreConditionsRebalanceTime(Parameters parameters, int day, int item){
     
-    //  Rebalance only leveraged         Need funds to do strategy
+    //  Rebalance only leveraged                     Need funds to do strategy
     if (parameters.instrumentLeverages[item] == 1 || parameters.numberOfFunds == 0 ){
         return false;
     }
@@ -90,10 +94,11 @@ bool checkPreConditionsHarvestRefill(Parameters parameters,
                                      float* currentValues,
                                      int    item){
     
-    //  Rebalance only leveraged         Need funds to do strategy
+    //  Rebalance only leveraged                      Need funds to do strategy
     if (parameters.instrumentLeverages[item] == 1 || parameters.numberOfFunds == 0 ){
         return false;
     }
+
     // Check if not activating strategy
     if (currentValues[item] < parameters.harvestPoint * referenceValue[item] &&
         currentValues[item] > parameters.refillPoint * referenceValue[item]){
@@ -105,9 +110,9 @@ bool checkPreConditionsHarvestRefill(Parameters parameters,
 
 
 /**
- * Implement rebalance
+ * Implement rebalance of investment cirtificates (items)
  */
-void rebalance(Parameters parameters,
+void rebalanceInvestmentCirtificates(Parameters parameters,
                int item,
                float* currentValues,
                float* referenceValue){

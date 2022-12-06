@@ -7,15 +7,17 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-import os
-import sys
-import subprocess
+import logging
 
-import model.constants as constants
 
-# Compile c++ algorithms
-program_folder = os.path.dirname(os.path.realpath(sys.argv[0]))
-command = ['g++','-O2','-pthread','-fPIC','-shared','-o',
-          constants.program_folder + '/compiled_code/calculateHistogramOutput.so',
-          constants.program_folder + '/model/histogram/calculateHistogramOutput.cpp']
-subprocess.run(command)
+def check_data_is_empty(instruments_selected, markets_selected):
+    logging.debug("Common utils: check_data_is_empty")
+    
+    if instruments_selected == []:
+        logging.debug("NOTIFY: Model: instruments_selected is empty")
+        return True
+
+    if markets_selected  == []:
+        logging.debug("NOTIFY: Model: no loaded data files")
+        return True
+        

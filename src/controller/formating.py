@@ -7,15 +7,13 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-import os
-import sys
-import subprocess
+def formatDate(date):
+    """Change format from 20220101 to 2022-01-01"""
 
-import model.constants as constants
+    date = str(date)
+    date = list(date)
+    date.insert(6, '-')
+    date.insert(4, '-')
+    date = ''.join(date)
 
-# Compile c++ algorithms
-program_folder = os.path.dirname(os.path.realpath(sys.argv[0]))
-command = ['g++','-O2','-pthread','-fPIC','-shared','-o',
-          constants.program_folder + '/compiled_code/calculateHistogramOutput.so',
-          constants.program_folder + '/model/histogram/calculateHistogramOutput.cpp']
-subprocess.run(command)
+    return date

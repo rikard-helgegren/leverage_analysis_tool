@@ -1,5 +1,16 @@
+#!/usr/bin/env python3
+#
+# Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+#
+# This software is only allowed for private use. As a private user you are allowed to copy,
+# modify, use, and compile the software. You are NOT however allowed to publish, sell, or
+# distribute this software, either in source code form or as a compiled binary, for any purpose,
+# commercial or non-commercial, by any means.
+
 import logging
 
+
+# TODO improve styling of this file
 class List_node:
     def __init__(self, data=None):
         self.data = data
@@ -9,30 +20,6 @@ class List_node:
 class LinkedList:
     def __init__(self):
         self.head = None
-
-
-def linked_list_to_string(linked_list):
-    node = linked_list.head
-    string = ''
-    while node != None:
-        string += str(node.data)
-        string += '-'
-        node = node.next
-    string += 'None'
-    return string
-
-
-def list_to_linked_list(list_to_convert):
-    if len(list_to_convert) == 0:
-        return LinkedList()
-    start_node = List_node(list_to_convert[0])
-    node = start_node
-    for i in range(1, len(list_to_convert)):
-        node.next = List_node(list_to_convert[i])
-        node = node.next
-    linked_list = LinkedList()
-    linked_list.head = start_node
-    return linked_list
 
 
 # This one is faster
@@ -73,6 +60,11 @@ def find_last_common_market_day(lists_of_indexes, chosen_time_interval_end_date)
 
 
 def fix_gaps2(lists_of_indexes, latest_first, earliest_last):
+    logging.debug("Model: fix_gaps2")
+    """ The different market have hollydays on different occations but need a vallid value,
+        on closed days when other markets are open. This finction fills those gaps with the
+        value of the previous day.
+    """
     master_node = List_node() # Dummy node
     previous_node = master_node
     current_node = None

@@ -1,4 +1,16 @@
+#!/usr/bin/env python3
+#
+# Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+#
+# This software is only allowed for private use. As a private user you are allowed to copy,
+# modify, use, and compile the software. You are NOT however allowed to publish, sell, or
+# distribute this software, either in source code form or as a compiled binary, for any purpose,
+# commercial or non-commercial, by any means.
+
 import logging
+import src.model.constants as constants
+import src.controller.formating as format
+
 
 class Controller:
     """ This is the controller of the application. Which has access to
@@ -14,27 +26,22 @@ class Controller:
 
     def update_fee_status(self, checkbutton_fee_state):
 
-        #Update model
         logging.debug("Controller: fee_status:", checkbutton_fee_state)
         self.model.set_include_fee_status(checkbutton_fee_state)
         self.update_model()
 
-        #Update View
         self.update_view()
 
 
     def update_model(self):
         logging.debug("Controller: update_model")
-        #TODO not complete (update_model)?
         self.model.update_model()
 
     def update_view(self):
         logging.debug("Controller: update_view")
-        #TODO not complete (update_view)
 
         ### Update histogram ###
-
-        self.draw_histogram(self.model.get_results_for_intervals())  # TODO fix histogram visuals
+        self.draw_histogram(self.model.get_results_for_intervals()) 
 
         ### Update line graph ###
         time_interval = self.model.get_common_time_interval()
@@ -55,7 +62,7 @@ class Controller:
         self.view.draw_line_graph(data, time_interval)
 
     def set_table_of_instruments(self):
-        """ Set the table with information of instruments available"""
+        """ Set the table with information of available instruments"""
         logging.debug("Controller: set_table_of_instruments")
         names = []
         countries = []
@@ -83,7 +90,7 @@ class Controller:
 
     def set_update_amount_leverage(self, value_percent):
         logging.debug("Controller: set_update_amount_leverage")
-        value = int(value_percent)/100
+        value = int(value_percent)/constants.CONVERT_PERCENT
         self.model.set_proportion_leverage(value)
         self.model.set_proportion_funds(1-value)
 
@@ -163,30 +170,19 @@ class Controller:
 
     def update_chosen_time_intervals(self):
         """ Update the manually selected time intervals in the view"""
-        start = self.model.get_chosen_start_date_time_limit()
-        end = self.model.get_chosen_end_date_time_limit()
+        
+        start_date = self.model.get_chosen_start_date_time_limit()
+        end_date = self.model.get_chosen_end_date_time_limit()
 
         # If start day is 0 then no date is set
-        if start != 0:
-            start = str(start)
+        if start_date != 0:
+            start_date = format.formatDate(start_date)
+            self.view.text_box_left.set_text(start_date)
 
-            start = list(start)
-            start.insert(6, '-')
-            start.insert(4, '-')
-            start = ''.join(start)
-
-            self.view.text_box_left.set_text(start)
-
-        # If start day is 0 then no date is set
-        if end != 0:
-            end = str(end)
-
-            end = list(end)
-            end.insert(6, '-')
-            end.insert(4, '-')
-            end = ''.join(end)
-
-            self.view.text_box_right.set_text(end)
+        # If end day is 0 then no date is set
+        if end_date != 0:
+            end_date = format.formatDate(end_date)
+            self.view.text_box_right.set_text(end_date)
 
     def update_table_of_statistics(self, key_values):
         self.view.update_table_of_statistics(key_values)
