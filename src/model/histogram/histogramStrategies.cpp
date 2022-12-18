@@ -15,7 +15,7 @@
 #include <iterator>
 
 #include "../common/sumFloats.cpp"
-#include "applicationSpecficFunctions.cpp"
+#include "utils.cpp"
 #include "Parameters.cpp"
 
 #pragma once

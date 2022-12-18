@@ -35,7 +35,7 @@ def do_always_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, 
         for item in portfolio_items:
 
             # update value with daily change
-            new_value = item.get_current_value() * (1 + item.get_daily_change()[day] * item.get_leverage())
+            new_value = utils.update_value_with_daily_change(item, day, model)
             item.set_current_value(new_value)
 
             item.set_values(item.get_values() + [new_value-loan])
@@ -86,11 +86,11 @@ def do_sometimes_invest(end_pos, portfolio_items, loan, strategy, number_of_fund
 
                 #if vola. too high jump to next day
                 if (volatility > model.get_volatility_strategie_level()):
-                    item.set_values(item.get_values() + [item.get_current_value()-loan])
+                    item.set_values(item.get_values() + [item.get_current_value()-loan/number_of_funds])
                     continue
             
             #make func cal to strategy and somtimes rebalance
-            low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, proportion_leverage, rebalance_period_months, number_of_leveraged_instruments)
+            low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, proportion_leverage, rebalance_period_months, number_of_leveraged_instruments, model)
 
     portfolio_results_full_time = utils.sum_porfolio_results_full_time(portfolio_items)
 
@@ -181,12 +181,15 @@ def rebalence(current_value, reference_value, inspected_instrument, all_instrume
     change_in_value = current_value - reference_value
     inspected_instrument.set_current_value(reference_value)
 
+    if (changeInValue < 0):
+        changeInValue = changeInValue*constants.SPREAD
+
     for instrument in all_instruments:
         if instrument.get_leverage() == 1:
             instrument.set_current_value(instrument.get_current_value()+(change_in_value/number_of_funds))
 
 
-def low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, proportion_leverage, rebalance_period_months, number_of_leveraged_instruments):
+def low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, proportion_leverage, rebalance_period_months, number_of_leveraged_instruments, model):
     """
         Strategy that only invests when the recent volatility has been low.
         When volatility is low it uses periodic rebalancing strategy.
@@ -195,7 +198,7 @@ def low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, pro
     logging.debug("Graph Strategies: low_variance_strategy")
     
 
-    new_value = utils.update_value_with_daily_change(item, day)
+    new_value = utils.update_value_with_daily_change(item, day, model)
 
     item.set_current_value(new_value)
     item.set_values(item.get_values() + [new_value-loan])

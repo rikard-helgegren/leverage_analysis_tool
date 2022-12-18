@@ -92,7 +92,6 @@ class View(tk.Frame):
     def update_fee_status(self):
         logging.debug("View: update_fee_status")
         self.controller.update_fee_status(self.checkbutton_fee_state.get())
-        tk.messagebox.showinfo('Error', 'Not fully implemented')
     
     def update_years_histogram_interval(self):
         logging.debug("View: update_years_histogram_interval")
@@ -102,7 +101,7 @@ class View(tk.Frame):
     def update_loan(self):
         logging.debug("View: update_loan")
         value = int(self.spin_loan.get())
-        self.controller.update_loan(value/100)
+        self.controller.update_loan(value / 100)
         # TODO not fully implemented (hist)
 
     def update_harvest_point(self):

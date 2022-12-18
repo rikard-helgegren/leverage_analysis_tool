@@ -35,5 +35,6 @@ class Parameters{
         float*  outData;
         int     numberOfLeveragedInstruments;
         int     numberOfFunds;
+        bool    includeFeeStatus;
         std::map<int, int>        indexToMarket;
 };

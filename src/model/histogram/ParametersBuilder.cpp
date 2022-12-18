@@ -37,6 +37,7 @@ class ParametersBuilder{
         float*  outData;
         int     numberOfLeveragedInstruments;
         int     numberOfFunds;
+        bool    includeFeeStatus;
         std::map<int, int>   indexToMarket;
     
     Parameters build(){
@@ -115,10 +116,6 @@ class ParametersBuilder{
         parameters.volatilityStrategieLevel = volatilityStrategieLevel;
         return *this;
     }
-    ParametersBuilder setOutData (float* outData){
-        parameters.outData = outData;
-        return *this;
-    }
     ParametersBuilder setNumberOfLeveragedInstruments(int numberOfLeveragedInstruments){
         parameters.numberOfLeveragedInstruments = numberOfLeveragedInstruments;
         return *this;
@@ -131,4 +128,13 @@ class ParametersBuilder{
         parameters.indexToMarket = indexToMarket;
         return *this;
     }
+    ParametersBuilder setIncludeFeeStatus(bool includeFeeStatus){
+        parameters.includeFeeStatus = includeFeeStatus;
+        return *this;
+    }
+    ParametersBuilder setOutData (float* outData){
+        parameters.outData = outData;
+        return *this;
+    }
+    
 };

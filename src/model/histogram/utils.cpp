@@ -11,7 +11,9 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <stdexcept>
 
+#include "../common/constants.h"
 #include "../common/sumFloats.cpp"
 #include "Parameters.cpp"
 
@@ -66,11 +68,42 @@ void setStartValuesOfInstruments(Parameters parameters, float* currentValues){
 }
 
 /**
+ * Return the fee rate related to the different leverage levels
+ */
+float getFeeLevel(int leverage){
+    if (leverage == 1){
+        return constants::fee_bull_1;
+    }
+    else if (leverage >= 2 || leverage <= 4){
+        return constants::fee_bull_2_to_4;
+    }
+    else if (leverage >= 5){
+        return constants::fee_bull_5_and_more;
+    }
+    else{
+        throw std::invalid_argument("received non positive value");
+        return -1;
+    }
+}
+
+/**
  * Update instrument value with the daily change times its leverage 
  */
 float updateCurrentInstrumentValue(Parameters parameters, float* currentValues, int item, int day){
-    
-    return currentValues[item] * (1.0f + parameters.marketDailyChanges[parameters.indexToMarket[item]][day] * static_cast<float>(parameters.instrumentLeverages[item]));
+
+    float currentValue = currentValues[item]; 
+    float oneDayChange = currentValue * parameters.marketDailyChanges[parameters.indexToMarket[item]][day] * static_cast<float>(parameters.instrumentLeverages[item]);
+    float currencyChange = 1.0f; //TODO change in currency for this day compared to choosen default currency
+    float dailyFee;
+
+    if(parameters.includeFeeStatus){
+        dailyFee = currentValue * getFeeLevel(parameters.instrumentLeverages[item]);
+    }
+    else{
+        dailyFee = 0.0f;
+    }
+
+    return (currentValue + oneDayChange - dailyFee) * currencyChange; 
 }
 
 
@@ -109,9 +142,33 @@ bool checkPreConditionsHarvestRefill(Parameters parameters,
 }
 
 
+void doRebalancing(Parameters parameters,
+                   float totForRebalancing,
+                   float* referenceValue,
+                   float* currentValues,
+                   int item ){
+     // Do rebalancing
+    if (totForRebalancing > (referenceValue[item] - currentValues[item])){
+        float changeInValue = currentValues[item] - referenceValue[item];
+        currentValues[item] = referenceValue[item];
+
+        if (changeInValue < 0){
+            changeInValue = changeInValue*constants::spread;
+        }
+
+        for (int instrument = 0; instrument< parameters.nrOfInstruments; instrument++){
+            if (parameters.instrumentLeverages[instrument] == 1){
+                currentValues[instrument] = currentValues[instrument] + (changeInValue / static_cast<float>(parameters.numberOfFunds));
+            }
+        }
+    }
+}
+
+
 /**
  * Implement rebalance of investment cirtificates (items)
  */
+//TODO decompose
 void rebalanceInvestmentCirtificates(Parameters parameters,
                int item,
                float* currentValues,
@@ -136,14 +193,7 @@ void rebalanceInvestmentCirtificates(Parameters parameters,
         }
     }
 
-    if (totForRebalancing > (referenceValue[item] - currentValues[item])){
-        changeInValue = currentValues[item] - referenceValue[item];
-        currentValues[item] = referenceValue[item];
-
-        for (int instrument = 0; instrument< parameters.nrOfInstruments; instrument++){
-            if (parameters.instrumentLeverages[instrument] == 1){
-                currentValues[instrument] = currentValues[instrument] + (changeInValue / static_cast<float>(parameters.numberOfFunds));
-            }
-        }
-    }
+    doRebalancing(parameters, totForRebalancing, referenceValue, currentValues, item);
 }
+
+

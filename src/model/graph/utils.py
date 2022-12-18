@@ -8,6 +8,7 @@
 # commercial or non-commercial, by any means.
 
 import logging
+import src.model.constants as constants
 from src.model.portfolio_item_class import Portfolio_Item
 
 def create_portfolio(instruments_selected, number_of_leveraged_instruments, loan, proportion_funds, number_of_funds, proportion_leverage, markets_selected):
@@ -40,7 +41,8 @@ def calculate_nbr_of_funds_and_leverages(instruments_selected):
     number_of_funds = 0
     number_of_leveraged_instruments = 0
     for instrument in instruments_selected:
-        if instrument[1] == 1:  # Leverage == 1
+        leverage = instrument[1]
+        if leverage == 1:
             number_of_funds += 1
         else:
             number_of_leveraged_instruments += 1
@@ -72,6 +74,7 @@ def sum_porfolio_results_full_time(portfolio_items):
         Summing the value for all time instances of each portfolio item together
         e.g. [1,2,3] + [1,2,3] = [2,4,6]
     """
+    logging.debug("Graph utils: sum_porfolio_results_full_time")
     portfolio_results_full_time = []
     for item in portfolio_items:
         if portfolio_results_full_time == []:
@@ -95,6 +98,34 @@ def convert_change_to_total_value(change_day_list):
 
     return total_value_list
 
-def update_value_with_daily_change(item, day):
-    new_value = item.get_current_value() * (1 + item.get_daily_change()[day] * item.get_leverage())
-    return new_value
+def update_value_with_daily_change(item, day, model):
+    """
+        Update instrument value with the daily change times its leverage 
+    """  
+    logging.debug("Graph utils: update_value_with_daily_change")
+    current_value = item.get_current_value()
+    oneDayChange = current_value * item.get_daily_change()[day] * item.get_leverage()
+    
+    currencyChange = 1  #TODO requires dat and implementation
+
+    if (model.get_include_fees_status() is True):
+        dailyFee = current_value * getFeeLevel(item.get_leverage())
+    else:
+        dailyFee = 0
+
+    return (current_value  + oneDayChange - dailyFee) * currencyChange 
+
+
+def getFeeLevel(leverage):
+    """
+        Return the fee rate related to the different leverage levels
+    """
+    logging.debug("Graph utils: getFeeLevel")
+    if (leverage == 1):
+        return constants.FEE_BULL_1
+    elif (leverage >= 2 or leverage <= 4):
+        return constants.FEE_BULL_2_TO_4
+    elif (leverage >= 5):
+        return constants.FEE_BULL_5_AND_MORE
+    else:
+        return -1

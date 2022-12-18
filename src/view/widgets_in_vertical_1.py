@@ -38,7 +38,8 @@ def insert_slide_for_leverage(view, super_frame):
 def insert_fee_checkbox(view, super_frame):
     view.frame_Checkbox = tk.Frame(super_frame, padx=5, pady=5)
     view.frame_Checkbox.pack()
-    view.checkbutton_fee_state = tk.IntVar()
+    view.checkbutton_fee_state = tk.BooleanVar() 
+    view.checkbutton_fee_state.set(True)
     view.checkbutton_fee = tk.Checkbutton(view.frame_Checkbox,
                                           text="Include Fees",
                                           variable=view.checkbutton_fee_state,

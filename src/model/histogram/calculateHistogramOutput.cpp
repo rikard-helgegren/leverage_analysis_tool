@@ -21,7 +21,7 @@
 #include "../common/varianceAndVolatility.cpp"
 #include "../common/convertArrayChangeToTotalValue.cpp"
 #include "../common/convertCharPointerToStringVector.cpp"
-#include "applicationSpecficFunctions.cpp"
+#include "utils.cpp"
 #include "Parameters.cpp"
 #include "ParametersBuilder.cpp"
 #include "histogramStrategies.cpp"
@@ -89,6 +89,7 @@ extern "C" {
                                   int     volatilityStrategieSampleSize,
                                   int     varianceCalcSampleSize,
                                   float   volatilityStrategieLevel,
+                                  bool    includeFeeStatus,
                                   float*  outData){
 
         std::vector<std::string> instrumentNames;
@@ -135,6 +136,7 @@ extern "C" {
                                                    .setNumberOfLeveragedInstruments(numberOfLeveragedInstruments)
                                                    .setNumberOfFunds(numberOfFunds)
                                                    .setIndexToMarket(indexToMarket)
+                                                   .setIncludeFeeStatus(includeFeeStatus)
                                                    .build();
         
 

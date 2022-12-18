@@ -47,6 +47,7 @@ def do_nothing_hist(model):
     instruments_selected = model.get_instruments_selected()
     proportion_funds     = model.get_proportion_funds()
     proportion_leverage  = model.get_proportion_leverage()
+    include_fee_status   = model.get_include_fees_status()
 
     if check_data_is_empty(instruments_selected, markets_selected):
         model.set_results_for_intervals([])
@@ -70,11 +71,11 @@ def do_nothing_hist(model):
 
         if leverage == 1:
             number_of_non_leveraged_selected += 1
-            performance = improved_calc(daily_change, leverage, cutoff, values_to_check)
+            performance = improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_status)
             outcomes_of_normal_investments.append(performance)
         elif leverage > 1:
             number_of_leveraged_selected += 1
-            performance = improved_calc(daily_change, leverage, cutoff, values_to_check)
+            performance = improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_status)
             outcomes_of_leveraged_investments.append(performance)
         else:
             logging.error(" Non valid leverage used")
@@ -136,7 +137,7 @@ def percentage_change(values):
         changes.append((values[i + 1] - values[i]) / values[i])
     return changes
 
-def improved_calc(daily_change, leverage, cutoff, values_to_check):
+def improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_status):
     """ Uses the fact that lots of calculations in the naive version are repeated.
         This can be avoided if we know that nothing interesting will happen in the
         interval inspected.
@@ -153,7 +154,7 @@ def improved_calc(daily_change, leverage, cutoff, values_to_check):
 
     # Setup, a first run through
     for i, change in enumerate(changes[0:values_to_check]):
-        value_thus_far *= 1 + change * leverage
+        value_thus_far = update_value_with_daily_change(value_thus_far, change, leverage, include_fee_status)
 
         # Check if new extreme
         if value_thus_far < lowest_value:
@@ -203,3 +204,36 @@ def improved_calc(daily_change, leverage, cutoff, values_to_check):
             gains.append(value_thus_far)
 
     return gains
+
+
+def update_value_with_daily_change(current_value, change, leverage, fees_status):
+    """
+        Update instrument value with the daily change times its leverage 
+    """  
+    logging.debug("Graph utils: update_value_with_daily_change")
+    
+    oneDayChange = current_value * change * leverage
+    
+    currencyChange = 1  #TODO requires dat and implementation
+
+    if (fees_status is True):
+        dailyFee = current_value * getFeeLevel(leverage)
+    else:
+        dailyFee = 0
+
+    return (current_value  + oneDayChange - dailyFee) * currencyChange 
+
+
+def getFeeLevel(leverage):
+    """
+        Return the fee rate related to the different leverage levels
+    """
+    logging.debug("Graph utils: getFeeLevel")
+    if (leverage == 1):
+        return constants.FEE_BULL_1
+    elif (leverage >= 2 or leverage <= 4):
+        return constants.FEE_BULL_2_TO_4
+    elif (leverage >= 5):
+        return constants.FEE_BULL_5_AND_MORE
+    else:
+        return -1

@@ -152,6 +152,10 @@ def get_indata(model):
     all_argtypes.append(ctypes.c_float)
     all_values.append(model.get_volatility_strategie_level())
 
+    ### Use Fee ###
+    all_argtypes.append(ctypes.c_bool)
+    all_values.append(model.get_include_fees_status())
+
     ### Out data ###
     all_argtypes.append(ctypes.c_float * nr_days_in_data)  # out data
     return_data = [0] * nr_days_in_data  # initiate with zeros   # TODO whait should not this be too many? should be - days in intervall. but no?!?

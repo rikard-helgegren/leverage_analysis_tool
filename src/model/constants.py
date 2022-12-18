@@ -55,4 +55,6 @@ FEE_BULL_1 = 0.002/MARKET_DAYS_IN_YEAR  # 0.2% each year
 FEE_BULL_2_TO_4 = 0.00001  # 0.01% each day
 FEE_BULL_5_AND_MORE = 0.00002  # 0.02% each day
 
+SPREAD = 1  #No spread at Avanza (1% spread would result in const beeing 1.01)
+
 CONVERT_PERCENT = 100
