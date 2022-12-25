@@ -7,9 +7,10 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-from src.model.determine_longest_common_timespan   import determine_longest_common_timespan
+from src.model.common.determine_longest_common_timespan   import determine_longest_common_timespan
 from src.model.common.check_data_is_empty import check_data_is_empty
-import src.model.constants as constants
+import src.model.common.constants_model as constants_model
+import src.constants as constants
 import src.model.graph.strategies as strategies
 import src.model.graph.utils as utils
 import logging

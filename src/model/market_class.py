@@ -23,14 +23,11 @@ class Market:
         self.country = ""
         self.daily_change = []
 
-    
     def get_first_day(self):
         return self.time_span[0]
 
     def get_last_day(self):
         return self.time_span[-1]
-
-    ################## Getters for variables ##############
 
     def get_name(self):
         return self.name

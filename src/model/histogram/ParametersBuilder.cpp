@@ -16,7 +16,7 @@ class ParametersBuilder{
         Parameters parameters;
 
     public:
-        float  loan;
+        float   loan;
         int*    instrumentLeverages;
         int     nrOfInstruments;
         std::vector<std::string>   instrumentNames;

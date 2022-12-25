@@ -16,14 +16,16 @@ from src.managing_data.check_if_data_files_are_clean import check_if_data_files_
 from src.managing_data.read_and_manage_raw_data      import read_and_manage_raw_data
 
 ###### IMPORT MODEL ######
-from src.model.calcultate_daily_change                  import calcultate_daily_change
+from src.Config import Config
+from src.model.common.calcultate_daily_change           import calcultate_daily_change
 from src.model.graph.calculate_graph_outcomes_strategy  import calculate_graph_outcomes
-from src.model.fill_in_missing_dates                    import fill_gaps_data
-from src.model.calculate_common_time_interval           import calculate_common_time_interval
+from src.model.common.fill_in_missing_dates             import fill_gaps_data
+from src.model.common.calculate_common_time_interval    import calculate_common_time_interval
 from src.model.histogram.calculate_histograms_strategy  import calculate_histogram
 from src.model.performance_key_values_class             import Performance_Key_values
 
-import src.model.constants as constants
+import src.model.common.constants_model as constants_model
+import src.constants as constants
 
 class Model:
     """ This is the model of the application. It models stock market index
@@ -36,36 +38,37 @@ class Model:
     def __init__(self):
         logging.debug("Model: __init__")
 
+        
+        config = Config()
         ################ Data Files ################
 
-        self.data_files_path  = constants.data_files_path
+        self.data_files_path  = constants_model.data_files_path
         self.clean_file_names = []
 
 
         ############## Simple values ###################
 
-        self.loan                                     = constants.DEFULT_LOAN
-        self.years_histogram_interval                 = constants.DEFULT_YEARS_HISTOGRAM_INTERVAL
-        self.harvest_point                            = constants.DEFULT_HARVEST_POINT
-        self.refill_point                             = constants.DEFULT_REFILL_POINT
-        self.update_harvest_refill                    = constants.DEFULT_UPDATE_HARVEST_REFILL
-        self.rebalance_period_months                  = constants.DEFULT_REBALANCE_PERIOD_MONTHS
-        self.proportion_cash                          = constants.DEFULT_PROPORTION_CASH
-        self.proportion_funds                         = constants.DEFULT_PROPORTION_FUNDS 
-        self.proportion_leverage                      = constants.DEFULT_PROPORTION_LEVERAGE
-        self.include_fees_status                      = constants.DEFULT_INCLUDE_FEES_STATUS
-        self.rebalance_status                         = constants.DEFULT_REBALANCE_STATUS
-        self.rebalance_between_instruments_status     = constants.DEFULT_REBALANCE_BETWEEN_INSTRUMENTS_STATUS
-        self.correction_of_inflation_status           = constants.DEFULT_CORRECTION_OF_INFLATION_STATUS
-        self.correction_of_currency_status            = constants.DEFULT_CORRECTION_OF_CURRENCY_STATUS
-        self.delay_of_correction                      = constants.DEFULT_DELAY_OF_CORRECTION
+        self.loan                                     = config.DEFAUT_LOAN
+        self.years_histogram_interval                 = config.DEFAUT_YEARS_HISTOGRAM_INTERVAL
+        self.harvest_point                            = config.DEFAUT_HARVEST_POINT
+        self.refill_point                             = config.DEFAUT_REFILL_POINT
+        self.update_harvest_refill                    = config.DEFAUT_UPDATE_HARVEST_REFILL
+        self.rebalance_period_months                  = config.DEFAUT_REBALANCE_PERIOD_MONTHS
+        #self.proportion_cash                          = config.DEFAUT_PROPORTION_CASH
+        self.proportion_funds                         = config.DEFAUT_PROPORTION_FUNDS 
+        self.proportion_leverage                      = config.DEFAUT_PROPORTION_LEVERAGE
+        self.include_fees_status                      = config.DEFAUT_INCLUDE_FEES_STATUS
+        self.rebalance_between_instruments_status     = config.DEFAUT_REBALANCE_BETWEEN_INSTRUMENTS_STATUS
+        self.correction_of_inflation_status           = config.DEFAUT_CORRECTION_OF_INFLATION_STATUS
+        self.correction_of_currency_status            = config.DEFAUT_CORRECTION_OF_CURRENCY_STATUS
+        self.delay_of_correction                      = config.DEFAUT_DELAY_OF_CORRECTION
         self.chosen_time_interval_start_date          = 0
         self.chosen_time_interval_end_date            = 0
         self.chosen_time_interval_status              = False
         self.portfolio_strategy                       = constants.PORTFOLIO_STRATEGIES[0]
-        self.defult_variance_sample_size              = constants.DEFULT_VARIANCE_SAMPLE_SIZE
-        self.defult_volatility_strategie_sample_size  = constants.DEFULT_VOLATILITY_STRATEGIE_SAMPLE_SIZE
-        self.defult_volatility_strategie_level        = constants.DEFULT_VOLATILITY_STRATEGIE_LEVEL
+        self.default_variance_sample_size              = config.DEFAUT_VARIANCE_SAMPLE_SIZE
+        self.default_volatility_strategie_sample_size  = config.DEFAUT_VOLATILITY_STRATEGIE_SAMPLE_SIZE
+        self.default_volatility_strategie_level        = config.DEFAUT_VOLATILITY_STRATEGIE_LEVEL
 
 
         ################ Data Processed ################
@@ -249,12 +252,6 @@ class Model:
         self.include_fees_status = include_fee_status
         logging.debug("Model, fee_status:", include_fee_status)
 
-    def get_rebalance_status(self):
-        logging.debug("Model: get_rebalance_status")
-        return self.rebalance_status
-    def set_rebalance_status(self, rebalance_status):
-        logging.debug("Model: set_rebalance_status")
-        self.rebalance_status = rebalance_status
 
     def get_rebalance_between_instruments_status(self):
         logging.debug("Model: get_rebalance_between_instruments_status")
@@ -368,22 +365,22 @@ class Model:
     
     def get_variance_calc_sample_size(self):
         logging.debug("Model: get_variance_calc_sample_size")
-        return self.defult_variance_sample_size
+        return self.default_variance_sample_size
     def set_variance_calc_sample_size(self, variance_calc_sample_size):
         logging.debug("Model: set_variance_calc_sample_size")
-        self.defult_variance_sample_size = variance_calc_sample_size
+        self.default_variance_sample_size = variance_calc_sample_size
 
 
     def get_volatility_strategie_sample_size(self):
         logging.debug("Model: get_volatility_strategie_sample_size")
-        return self.defult_volatility_strategie_sample_size 
+        return self.default_volatility_strategie_sample_size 
     def set_volatility_strategie_sample_size(self, volatility_strategie_sample_size):
         logging.debug("Model: set_volatility_strategie_sample_size")
-        self.defult_volatility_strategie_sample_size = volatility_strategie_sample_size
+        self.default_volatility_strategie_sample_size = volatility_strategie_sample_size
     
     def get_volatility_strategie_level(self):
         logging.debug("Model: get_volatility_strategie_level")
-        return self.defult_volatility_strategie_level
+        return self.default_volatility_strategie_level
     def set_volatility_strategie_level(self, volatility_strategie_level):
         logging.debug("Model: set_volatility_strategie_level")
-        self.defult_volatility_strategie_level = volatility_strategie_level
+        self.default_volatility_strategie_level = volatility_strategie_level

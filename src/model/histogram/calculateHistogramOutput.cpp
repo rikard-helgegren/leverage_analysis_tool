@@ -71,7 +71,7 @@ void runAsyncCalculations(Parameters parameters){
 
 
 extern "C" {
-    void calculateHistogramOutput(float  loan,
+    float* calculateHistogramOutput(float  loan,
                                   int*    instrumentLeverages,
                                   int     nrOfInstruments,
                                   char*   instrumentNames_chr,
@@ -132,14 +132,16 @@ extern "C" {
                                                    .setVolatilityStrategieSampleSize(volatilityStrategieSampleSize)
                                                    .setVarianceCalcSampleSize(varianceCalcSampleSize)
                                                    .setVolatilityStrategieLevel(volatilityStrategieLevel)
-                                                   .setOutData(outData)
                                                    .setNumberOfLeveragedInstruments(numberOfLeveragedInstruments)
                                                    .setNumberOfFunds(numberOfFunds)
                                                    .setIndexToMarket(indexToMarket)
                                                    .setIncludeFeeStatus(includeFeeStatus)
+                                                   .setOutData(outData)
                                                    .build();
         
 
         runAsyncCalculations(parameters);
+
+        return outData;
     }
 }

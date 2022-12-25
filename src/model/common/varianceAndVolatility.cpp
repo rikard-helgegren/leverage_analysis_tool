@@ -48,7 +48,7 @@ float calcVariance(float* performance_full_time, int sizeArray, int sample_size)
         //logging logging.error("To few values to calculate variance from")
     }
     return 0;
-    
+
 }
 
 

@@ -8,7 +8,7 @@
 # commercial or non-commercial, by any means.
 
 import logging
-import src.model.constants as constants
+import src.constants as constants
 import src.controller.formating as format
 
 

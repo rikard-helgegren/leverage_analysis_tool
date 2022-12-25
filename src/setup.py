@@ -11,11 +11,11 @@ import os
 import sys
 import subprocess
 
-import model.constants as constants
+import model.common.constants_model as constants_model
 
 # Compile c++ algorithms
 program_folder = os.path.dirname(os.path.realpath(sys.argv[0]))
 command = ['g++','-O2','-pthread','-fPIC','-shared','-o',
-          constants.program_folder + '/compiled_code/calculateHistogramOutput.so',
-          constants.program_folder + '/model/histogram/calculateHistogramOutput.cpp']
+          constants_model.program_folder + '/compiled_code/calculateHistogramOutput.so',
+          constants_model.program_folder + '/model/histogram/calculateHistogramOutput.cpp']
 subprocess.run(command)

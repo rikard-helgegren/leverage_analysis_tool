@@ -7,7 +7,8 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-import src.model.constants as constants
+import src.model.common.constants_model as constants_model
+import src.constants as constants
 import logging
 from src.model.common.variance_and_volatility import calc_volatility
 import src.model.graph.utils as utils 
@@ -84,12 +85,13 @@ def do_sometimes_invest(end_pos, portfolio_items, loan, strategy, number_of_fund
                 total_value_list = utils.convert_change_to_total_value(item.get_daily_change()[day-model.get_volatility_strategie_sample_size():day])
                 volatility = calc_volatility(total_value_list, model.get_variance_calc_sample_size())
 
-                #if vola. too high jump to next day
+                # if vola. too high jump to next day
                 if (volatility > model.get_volatility_strategie_level()):
-                    item.set_values(item.get_values() + [item.get_current_value()-loan/number_of_funds])
+                    item.set_values(item.get_values() + [item.get_current_value()-loan/len(portfolio_items)])
+                    item.set_has_done_action(False)
                     continue
             
-            #make func cal to strategy and somtimes rebalance
+            # make func cal to strategy and somtimes rebalance
             low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, proportion_leverage, rebalance_period_months, number_of_leveraged_instruments, model)
 
     portfolio_results_full_time = utils.sum_porfolio_results_full_time(portfolio_items)
@@ -136,7 +138,7 @@ def rebalance_time_cycle(inspected_instrument, all_instruments, number_of_funds,
     current_value = inspected_instrument.get_current_value()
     reference_value = inspected_instrument.get_reference_value()
 
-    rebalance_period_days = rebalance_period_months*constants.MARKET_DAYS_IN_YEAR/constants.MONTHS_IN_YEAR
+    rebalance_period_days = rebalance_period_months*constants_model.MARKET_DAYS_IN_YEAR/constants_model.MONTHS_IN_YEAR
 
     if day % rebalance_period_days == 0:
        rebalence(current_value, reference_value, inspected_instrument, all_instruments, number_of_funds)
@@ -181,8 +183,8 @@ def rebalence(current_value, reference_value, inspected_instrument, all_instrume
     change_in_value = current_value - reference_value
     inspected_instrument.set_current_value(reference_value)
 
-    if (changeInValue < 0):
-        changeInValue = changeInValue*constants.SPREAD
+    if (change_in_value < 0):
+        change_in_value = change_in_value*constants_model.SPREAD
 
     for instrument in all_instruments:
         if instrument.get_leverage() == 1:
@@ -196,9 +198,12 @@ def low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, pro
     """
 
     logging.debug("Graph Strategies: low_variance_strategy")
-    
 
     new_value = utils.update_value_with_daily_change(item, day, model)
+
+    if (not item.get_has_done_action()) and model.get_include_fees_status():
+        item.set_has_done_action(True)
+        new_value /= constants_model.SPREAD
 
     item.set_current_value(new_value)
     item.set_values(item.get_values() + [new_value-loan])

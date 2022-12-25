@@ -11,7 +11,7 @@ import logging
 import numpy as np
 
 from src.model.common.check_data_is_empty import check_data_is_empty
-from src.model.determine_longest_common_timespan import determine_longest_common_timespan
+from src.model.common.determine_longest_common_timespan import determine_longest_common_timespan
 
 
 def calculate_common_time_interval(model):

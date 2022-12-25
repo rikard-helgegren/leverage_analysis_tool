@@ -10,6 +10,7 @@
 import logging
 import tkinter as tk
 from tkinter import ttk
+import src.constants as constants
 
 
 class Menu_Of_Strategies:
@@ -24,7 +25,7 @@ class Menu_Of_Strategies:
         self.label_dropdown = tk.Label(self.frame_dropdown, text='Strategy')
         self.label_dropdown.pack()
 
-        self.options = ["Hold", "Harvest/Refill", "Rebalance Time", "Do not invest", "Variance Dependent"]
+        self.options = constants.PORTFOLIO_STRATEGIES
 
         # datatype of menu text
         self.clicked = tk.StringVar() # TODO "self.clicked" I do not understand this variable name.

@@ -14,6 +14,7 @@
 #include <sstream>
 #include <iterator>
 
+#include "../common/constants.h"
 #include "../common/sumFloats.cpp"
 #include "utils.cpp"
 #include "Parameters.cpp"
@@ -94,6 +95,7 @@ void varianceStrategy(Parameters parameters, int firstStartDay, int lastStartDay
     // Set up needed variables
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];
+    bool hasDoneAction[parameters.nrOfInstruments];
     float total_value_list[parameters.volatilityStrategieSampleSize]; 
 
     float cutOfValue = 0.0f;
@@ -123,12 +125,17 @@ void varianceStrategy(Parameters parameters, int firstStartDay, int lastStartDay
 
                     //if vola. too high jump to next day
                     if (volatility > parameters.volatilityStrategieLevel){
+                        hasDoneAction[item] = false;
                         continue;
                     }
                 }
                 // Update with daily change
                 currentValues[item] = updateCurrentInstrumentValue(parameters, currentValues, item, day);
                 
+                if (!hasDoneAction[item] && parameters.includeFeeStatus){
+                    currentValues[item] /= constants::spread;
+                }
+
                 // If instrument reaches cut off level it is sold before going lower
                 if (parameters.instrumentLeverages[item] > 1 && currentValues[item] < cutOfValue){
                     currentValues[item] = cutOfValue;

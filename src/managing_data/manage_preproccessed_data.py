@@ -12,7 +12,7 @@ import json
 import sys
 import logging
 
-from src.model.convert_between_market_and_dict import dict_of_market_dicts_to_dict_of_market_classes, dict_of_market_classes_to_dict_of_market_dicts
+from src.model.common.convert_between_market_and_dict import dict_of_market_dicts_to_dict_of_market_classes, dict_of_market_classes_to_dict_of_market_dicts
 
 def are_files_preproccessed(clean_file_names):
     logging.debug("are_files_preproccessed")

@@ -8,7 +8,7 @@
 # commercial or non-commercial, by any means.
 
 import logging
-import src.model.constants as constants
+import src.model.common.constants_model as constants_model
 from src.model.portfolio_item_class import Portfolio_Item
 
 def create_portfolio(instruments_selected, number_of_leveraged_instruments, loan, proportion_funds, number_of_funds, proportion_leverage, markets_selected):
@@ -122,10 +122,10 @@ def getFeeLevel(leverage):
     """
     logging.debug("Graph utils: getFeeLevel")
     if (leverage == 1):
-        return constants.FEE_BULL_1
+        return constants_model.FEE_BULL_1
     elif (leverage >= 2 or leverage <= 4):
-        return constants.FEE_BULL_2_TO_4
+        return constants_model.FEE_BULL_2_TO_4
     elif (leverage >= 5):
-        return constants.FEE_BULL_5_AND_MORE
+        return constants_model.FEE_BULL_5_AND_MORE
     else:
         return -1

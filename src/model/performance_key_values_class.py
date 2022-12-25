@@ -9,7 +9,7 @@
 
 import logging
 import numpy as np
-import src.model.constants as constants
+import src.constants as constants
 from src.model.common.variance_and_volatility import calc_variance
 
 class Performance_Key_values:

@@ -10,14 +10,15 @@
 import ctypes
 import logging
 
-import src.model.constants as constants
+import src.model.common.constants_model as constants_model
+import src.constants as constants
 
 
 def rebalance_hist_ctypes(model):
 
     ## C++ interactions ##
-    cpp_so_file = constants.program_folder + constants.hist_harvest_refill_algo_file
-    lib_object_cpp = ctypes.CDLL(cpp_so_file)
+    cpp_compiled_so_file = constants_model.program_folder + constants_model.hist_harvest_refill_algo_file
+    lib_object_cpp = ctypes.CDLL(cpp_compiled_so_file)
 
     ## get variables and pass to function ##
     cpp_algorithm = lib_object_cpp.calculateHistogramOutput # Set upp function call
@@ -25,20 +26,16 @@ def rebalance_hist_ctypes(model):
     # input types and values
     [all_argtypes_list, all_values_list] = get_indata(model)
     cpp_algorithm.argtypes = all_argtypes_list
+    cpp_algorithm.restype = ctypes.POINTER(ctypes.c_float)
 
     # make actual call
-    cpp_algorithm(*all_values_list)
+    return_data = cpp_algorithm(*all_values_list) #TODO fix return value is cpp float pointer
     
-    # Magic values based on list order
-    list_index_outdata = -1 
-    list_index_data_size = 6
-    
-    [return_data, size_days_in] = [all_values_list[list_index_outdata], all_values_list[list_index_data_size]]
+    nr_days_in_data = get_nbr_of_days_in_investment_items(model)
 
-    size_return_data = size_days_in - model.years_histogram_interval * constants.MARKET_DAYS_IN_YEAR
+    size_return_data = nr_days_in_data - model.years_histogram_interval * constants_model.MARKET_DAYS_IN_YEAR
 
     # Do not include days only used for strategy
-    
     if model.get_portfolio_strategy() == constants.PORTFOLIO_STRATEGIES[4]:
         return_data_python_format = [return_data[i] for i in range(model.get_volatility_strategie_sample_size(), size_return_data)]
     else:
@@ -86,9 +83,7 @@ def get_indata(model):
 
     ### markets_selected ###
     markets_selected = model.get_markets_selected()
-    a_instrument = instruments_selected[0]
-    market = markets_selected[a_instrument[0]]
-    nr_days_in_data = len(market.get_time_span())
+    nr_days_in_data = get_nbr_of_days_in_investment_items(model)
 
     # end pos
     all_argtypes.append(ctypes.c_int)
@@ -117,7 +112,7 @@ def get_indata(model):
 
     # time horizon days investing
     all_argtypes.append(ctypes.c_int)
-    all_values.append(model.years_histogram_interval*constants.MARKET_DAYS_IN_YEAR)
+    all_values.append(model.years_histogram_interval*constants_model.MARKET_DAYS_IN_YEAR)
 
     ### Harvest refill limits ###
     all_argtypes.append(ctypes.c_float)
@@ -127,7 +122,7 @@ def get_indata(model):
 
     ### rebalance period ###
     all_argtypes.append(ctypes.c_int)
-    all_values.append(int(model.get_rebalance_period_months()*constants.MARKET_DAYS_IN_YEAR/constants.MONTHS_IN_YEAR))
+    all_values.append(int(model.get_rebalance_period_months()*constants_model.MARKET_DAYS_IN_YEAR/constants_model.MONTHS_IN_YEAR))
 
     # strategy
     all_argtypes.append(ctypes.c_int)
@@ -157,8 +152,21 @@ def get_indata(model):
     all_values.append(model.get_include_fees_status())
 
     ### Out data ###
-    all_argtypes.append(ctypes.c_float * nr_days_in_data)  # out data
+    all_argtypes.append(ctypes.c_float * nr_days_in_data)
     return_data = [0] * nr_days_in_data  # initiate with zeros   # TODO whait should not this be too many? should be - days in intervall. but no?!?
     all_values.append((ctypes.c_float * len(return_data))(*return_data))
 
     return [all_argtypes, all_values]
+
+
+def get_nbr_of_days_in_investment_items(model):
+    """ All items have the same number of days.
+        This function takes the first item and returns its number of days
+    """
+    instruments_selected = model.get_instruments_selected()
+    markets_selected = model.get_markets_selected()
+    a_instrument = instruments_selected[0]
+    market = markets_selected[a_instrument[0]]
+    nbr_of_days_in_investment_item = len(market.get_time_span())
+
+    return nbr_of_days_in_investment_item

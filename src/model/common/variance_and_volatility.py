@@ -9,14 +9,15 @@
 
 import numpy as np
 import logging
-import src.model.constants as constants
+import src.model.common.constants_model as constants_model
+from src.Config import Config
 
 
-def calc_volatility(performance_full_time, sample_size = constants.DEFULT_VARIANCE_SAMPLE_SIZE):
+def calc_volatility(performance_full_time, sample_size = Config().DEFAUT_VARIANCE_SAMPLE_SIZE):
     """Calculate volatility of time period"""
     return np.sqrt(calc_variance(performance_full_time, sample_size))
 
-def calc_variance(performance_full_time, sample_size = constants.DEFULT_VARIANCE_SAMPLE_SIZE):
+def calc_variance(performance_full_time, sample_size = Config().DEFAUT_VARIANCE_SAMPLE_SIZE):
     """ Calculate the variance* of the full time period"""
     logging.debug("model, performance_key_values: calc_variance")
 

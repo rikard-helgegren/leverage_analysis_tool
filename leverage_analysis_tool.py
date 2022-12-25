@@ -7,28 +7,23 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-
+import logging
+import sys
 import tkinter as tk
+
 from src.model.model import Model
 from src.view.view import View
 from src.controller.controller import Controller
-import logging
-import sys
+
 
 def set_debug_level():
     if len(sys.argv) >= 2:
         debug_level = sys.argv[1] 
 
-        if (debug_level == "-debug" or
-            debug_level == "-Debug" or
-            debug_level == "-DEBUG"):
-
+        if (debug_level == "-debug"):
             logging.getLogger().setLevel('DEBUG')
         
-        elif(debug_level == "-info" or
-            debug_level == "-Info" or
-            debug_level == "-INFO"):
-
+        elif(debug_level == "-info"):
             logging.getLogger().setLevel('INFO')
 
 
@@ -41,15 +36,13 @@ class Leverage_Application(tk.Tk):
 
         self.title('Leverage Analysis Tool')
 
-        # create a model
         model = Model()
         model.model_import_data()
 
-        # create a view and place it on the root window
+        # place view on the root window
         view = View(self)
         view.pack()
 
-        # create a controller
         controller = Controller(model, view)
 
         # set the controller to view
@@ -58,9 +51,6 @@ class Leverage_Application(tk.Tk):
         # make the view updated
         controller.update_view()
     
-
-############################
-
 # Create an instance and run the application
 if __name__ == '__main__':
     set_debug_level()

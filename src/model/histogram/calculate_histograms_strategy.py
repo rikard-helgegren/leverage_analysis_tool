@@ -10,7 +10,8 @@
 from src.model.common.check_data_is_empty import check_data_is_empty
 from src.model.histogram.histogram_cpp_adapter import rebalance_hist_ctypes
 
-import src.model.constants as constants
+import src.model.common.constants_model as constants_model
+import src.constants as constants
 import numpy as np
 import logging
 
@@ -67,7 +68,7 @@ def do_nothing_hist(model):
         market = markets_selected[instrument[0]]
         daily_change = market.get_daily_change()
         cutoff = 0
-        values_to_check = model.years_histogram_interval*constants.MARKET_DAYS_IN_YEAR
+        values_to_check = model.years_histogram_interval*constants_model.MARKET_DAYS_IN_YEAR
 
         if leverage == 1:
             number_of_non_leveraged_selected += 1
@@ -230,10 +231,10 @@ def getFeeLevel(leverage):
     """
     logging.debug("Graph utils: getFeeLevel")
     if (leverage == 1):
-        return constants.FEE_BULL_1
+        return constants_model.FEE_BULL_1
     elif (leverage >= 2 or leverage <= 4):
-        return constants.FEE_BULL_2_TO_4
+        return constants_model.FEE_BULL_2_TO_4
     elif (leverage >= 5):
-        return constants.FEE_BULL_5_AND_MORE
+        return constants_model.FEE_BULL_5_AND_MORE
     else:
         return -1
