@@ -23,6 +23,9 @@ def calcultate_daily_change(markets_dict):
 
         # Calculate change in index value since last input
         for i, value in enumerate(market_values[1:]):
+            if market_values[i] <=0:
+                logging.error("Stock value can not be negative")
+                continue
             change = (value-market_values[i])/market_values[i]
             daily_change.append(change)
         

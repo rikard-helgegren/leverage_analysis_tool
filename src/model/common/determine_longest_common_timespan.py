@@ -11,6 +11,7 @@ import logging
 
 
 def determine_longest_common_timespan(instruments_selected, market_dict):
+    
     logging.debug("Model: determine_longest_common_timespan")
 
     min_time = []
@@ -22,5 +23,15 @@ def determine_longest_common_timespan(instruments_selected, market_dict):
 
     start_time = max(min_time)
     end_time   = min(max_time)
+
+    # Check time intervalls are overlapping 
+    for instrument in instruments_selected:
+        if market_dict[instrument[0]].get_first_day() > end_time:
+            logging.error("First day of "+ instrument[0] + " is after the last common day")
+            return [0, 0]
+        
+        if market_dict[instrument[0]].get_last_day() < start_time:
+            logging.error("last day of " + instrument[0] + "is before the first common day")
+            return [0, 0]
 
     return [start_time, end_time]

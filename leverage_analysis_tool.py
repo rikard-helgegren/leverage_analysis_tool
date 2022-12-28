@@ -11,9 +11,9 @@ import logging
 import sys
 import tkinter as tk
 
-from src.model.model import Model
-from src.view.view import View
-from src.controller.controller import Controller
+from src.model.Model import Model
+from src.view.View import View
+from src.controller.Controller import Controller
 
 
 def set_debug_level():

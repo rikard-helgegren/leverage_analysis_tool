@@ -5,3 +5,4 @@ images/historic_graphs/
 .vscode/
 Notes
 *.so
+tests.out

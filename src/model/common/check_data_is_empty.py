@@ -11,13 +11,16 @@ import logging
 
 
 def check_data_is_empty(instruments_selected, markets_selected):
+    """If ither of the entries are empty return False"""
     logging.debug("Common utils: check_data_is_empty")
     
-    if instruments_selected == []:
+    if not instruments_selected:
         logging.debug("NOTIFY: Model: instruments_selected is empty")
         return True
 
-    if markets_selected  == []:
+    if not markets_selected:
         logging.debug("NOTIFY: Model: no loaded data files")
         return True
+    
+    return False
         

@@ -7,12 +7,9 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-import subprocess
+import os
+import sys
 
-import model.common.constants_model as constants_model
-
-# Compile c++ algorithms
-command = ['g++','-O2','-pthread','-fPIC','-shared','-o',
-          constants_model.program_folder + '/compiled_code/calculateHistogramOutput.so',
-          constants_model.program_folder + '/model/histogram/calculateHistogramOutput.cpp']
-subprocess.run(command)
+def set_path_to_find_src_folder():
+    PROJECT_PATH = os.getcwd()
+    sys.path.append(PROJECT_PATH)

@@ -38,9 +38,10 @@ class Config():
         self.DEFAUT_VOLATILITY_STRATEGIE_LEVEL = json_data["DEFAUT_VOLATILITY_STRATEGIE_LEVEL"]
         self.HIGHEST_LEVERAGE_AVAILABLE = json_data["HIGHEST_LEVERAGE_AVAILABLE"]
 
-    
+
 def read_json():
-    program_folder = os.path.dirname(os.path.realpath(sys.argv[0]))
+    #program_folder = os.path.dirname(os.path.realpath(sys.argv[0]))  # TODO: not working for tests runing from /tmp 
+    program_folder = os.getcwd()  # TODO: not working when running from other folder then project folder
     config_path = program_folder + '/config.json'
 
     json_data = {}

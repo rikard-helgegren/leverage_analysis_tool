@@ -9,6 +9,7 @@
 
 from os import listdir
 from os.path import isfile, join
+from src.Config import Config
 import datetime 
 import sys
 import logging
@@ -33,37 +34,37 @@ def check_if_data_files_are_clean(data_file_path):
         lines_of_file = file.readlines()
         
         if check_minimum_two_years_of_data(lines_of_file):
-            logging.debug("SUCCESS: ", file_itter, "\t File passed size")
+            logging.info("SUCCESS: ", file_itter, " File passed size")
         else:
-            logging.debug("FAIL:    ", file_itter, "\t File failed size")
+            logging.info("FAIL:    ", file_itter, " File failed size")
             continue
 
         if check_format_first_line(lines_of_file[0]):
-            logging.debug("SUCCESS: ", file_itter, "\t File passed first row format")
+            logging.info("SUCCESS: ", file_itter, " File passed first row format")
         else:
-            logging.debug("FAIL:    ", file_itter, "\t File failed first row format")
+            logging.info("FAIL:    ", file_itter, " File failed first row format")
             continue
         
         if check_value_on_rows(lines_of_file[1:]):
-            logging.debug("SUCCESS: ", file_itter, "\t File passed value format")
+            logging.info("SUCCESS: ", file_itter, " File passed value format")
         else:
-            logging.debug("FAIL:    ", file_itter, "\t File failed value format")
+            logging.info("FAIL:    ", file_itter, " File failed value format")
             continue
 
         if check_time_decreases_for_each_row(lines_of_file[1:]):
-            logging.debug("SUCCESS: ", file_itter, "\t File passed time decreasing with row number")
+            logging.info("SUCCESS: ", file_itter, " File passed time decreasing with row number")
         else:
-            logging.debug("FAIL:    ", file_itter, "\t File failed time decreasing with row number")
+            logging.info("FAIL:    ", file_itter, " File failed time decreasing with row number")
             continue
 
         if check_daily_change_on_rows(lines_of_file[1:]):
-            logging.debug("SUCCESS: ", file_itter, "\t File passed daily change")
+            logging.info("SUCCESS: ", file_itter, " File passed daily change")
         else:
-            logging.debug("FAIL:    ", file_itter, "\t File failed daily change")
+            logging.info("FAIL:    ", file_itter, " File failed daily change")
             continue
 
         # After passing all tests
-        logging.debug("SUCCESS: ", file_itter, "\t Passed all tests")
+        logging.info("SUCCESS: ", file_itter, " Passed all tests")
         clean_files.append(file_itter)
 
         file.close()
@@ -74,11 +75,11 @@ def read_data_files(data_file_path):
     try:
         return [f for f in listdir(data_file_path) if isfile(join(data_file_path, f))]
     except:
-        logging.error(" Path to data files is wrong.")
+        logging.error("Path to data files is wrong.")
         sys.exit(1)
 
 def check_format_first_line(line):
-    words_in_line = line.split(',')
+    words_in_line = line.strip().split(',')
 
     if words_in_line[0] != "Date":
         return False
@@ -89,7 +90,8 @@ def check_format_first_line(line):
     return True
 
 def check_minimum_two_years_of_data(lines_of_file):
-    size_of_year = 300
+    config = Config()
+    size_of_year = config.DEFAUT_YEARS_HISTOGRAM_INTERVAL
     return len(lines_of_file) > size_of_year*2
 
 def check_value_on_rows(lines):

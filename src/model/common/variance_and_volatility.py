@@ -28,14 +28,15 @@ def calc_variance(performance_full_time, sample_size = Config().DEFAUT_VARIANCE_
 
         sub_total = 0
         mean_line = calc_least_square_fit(performance_full_time[i:sample_size+i])
+        
         for j in range(sample_size):
-            sub_total += ((performance_full_time[i+sample_size] - mean_line[j])/mean_line[j])**2
+            sub_total += ((performance_full_time[i + j] - mean_line[j])/mean_line[j])**2
             
 
         total_dif += sub_total
 
     if elements_to_sum > 0:
-        variance = total_dif/elements_to_sum
+        variance = round(total_dif/elements_to_sum,10)
     else:
         variance = 1000 # set suitable large value
         logging.error("To few values to calculate variance from")
@@ -54,6 +55,6 @@ def calc_least_square_fit(value_data):
 
     ret_list =[]
     for itteration_index in range(len(x)):
-        ret_list.append(rise+(itteration_index+1)*slope)
+        ret_list.append(round(rise + (itteration_index + 1) * slope, 10))
 
     return ret_list

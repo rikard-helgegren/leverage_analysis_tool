@@ -45,8 +45,7 @@ class Model:
         self.data_files_path  = constants_model.data_files_path
         self.clean_file_names = []
 
-
-        ############## Simple values ###################
+        ############## Config values ###################
 
         self.loan                                     = config.DEFAUT_LOAN
         self.years_histogram_interval                 = config.DEFAUT_YEARS_HISTOGRAM_INTERVAL

@@ -13,6 +13,8 @@ class Market:
 
         params Values
 
+        E.g. Market("Name", [1,2,3], [20200103,20200102,20200101])
+
     """
     def __init__(self, name, values=[], time_span=[]):
 

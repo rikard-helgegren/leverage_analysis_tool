@@ -21,3 +21,11 @@ debug_run:
 
 info_run:
 	python3 leverage_analysis_tool.py -info
+
+test: pytest cpp_test
+
+pytest:
+	pytest -v tests/set_path_for_import.py tests/
+
+cpp_test:
+	g++ tests/runAllCppTests.cpp -o tests.out && ./tests.out

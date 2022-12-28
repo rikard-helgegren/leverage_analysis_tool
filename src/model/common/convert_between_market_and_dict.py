@@ -35,20 +35,20 @@ def market_class_to_dict_market(market_class):
     return [key, market_dict]
 
 
-def dict_of_market_dicts_to_dict_of_market_classes(dict_of_dicts):
+def dict_of_market_dicts_to_dict_of_market_classes(dict_of_market_dicts):
     logging.debug("Model: dict_of_market_dicts_to_dict_of_market_classes")
-    new_dict = {}
+    dict_of_market_classes = {}
 
-    for key in dict_of_dicts.keys():
-        new_dict[key] = market_dict_to_market_class(key, dict_of_dicts[key])
+    for key in dict_of_market_dicts.keys():
+        dict_of_market_classes[key] = market_dict_to_market_class(key, dict_of_market_dicts[key])
 
-    return new_dict
+    return dict_of_market_classes
 
 def dict_of_market_classes_to_dict_of_market_dicts(dict_of_classes):
     logging.debug("Model: dict_of_market_classes_to_dict_of_market_dicts")
-    new_dict = {}
+    dict_of_market_dicts = {}
 
     for key in dict_of_classes.keys():
-        new_dict[key] = market_class_to_dict_market(dict_of_classes[key])[1]
+        dict_of_market_dicts[key] = market_class_to_dict_market(dict_of_classes[key])[1]
 
-    return new_dict
+    return dict_of_market_dicts

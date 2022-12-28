@@ -17,7 +17,7 @@ import src.constants as constants
 def rebalance_hist_ctypes(model):
 
     ## C++ interactions ##
-    cpp_compiled_so_file = constants_model.program_folder + constants_model.hist_harvest_refill_algo_file
+    cpp_compiled_so_file = constants_model.hist_harvest_refill_algo_file
     lib_object_cpp = ctypes.CDLL(cpp_compiled_so_file)
 
     ## get variables and pass to function ##
