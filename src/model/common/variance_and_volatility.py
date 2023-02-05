@@ -28,10 +28,9 @@ def calc_variance(performance_full_time, sample_size = Config().DEFAUT_VARIANCE_
 
         sub_total = 0
         mean_line = calc_least_square_fit(performance_full_time[i:sample_size+i])
-        
+
         for j in range(sample_size):
             sub_total += ((performance_full_time[i + j] - mean_line[j])/mean_line[j])**2
-            
 
         total_dif += sub_total
 

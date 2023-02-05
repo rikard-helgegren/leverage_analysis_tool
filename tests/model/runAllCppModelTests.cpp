@@ -9,3 +9,4 @@
 
 #include "common/test_SumFloat.cpp"
 #include "common/test_convertArrayChangeToTotalValue.cpp"
+#include "common/test_convertCharPointerToStringVector.cpp"

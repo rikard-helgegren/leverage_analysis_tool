@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+# Copyright (C) 2023 Rikard Helgegren <rikard.helgegren@gmail.com>
 #
 # This software is only allowed for private use. As a private user you are allowed to copy,
 # modify, use, and compile the software. You are NOT however allowed to publish, sell, or
@@ -9,32 +9,10 @@
 
 import logging
 
+from src.model.common.Linked_list import Linked_list, List_node, linked_list_to_list
 
 # TODO improve styling of this file
-class List_node:
-    def __init__(self, data=None):
-        self.data = data
-        self.next = None
 
-
-class LinkedList:
-    def __init__(self):
-        self.head = None
-
-
-# This one is faster
-def linked_list_to_list(linked_list):
-    temp_list = []
-    node = linked_list.head
-    while node != None:
-        temp_list.append(node.data)
-        node = node.next
-    return temp_list
-
-
-#######################################################
-###                  Algorithms                     ###
-#######################################################
 def find_first_common_market_day(lists_of_indexes, chosen_time_interval_start_date):
     """ Returns the earliest day that all selected indexes have in common
         or
@@ -107,7 +85,7 @@ def fix_gaps2(lists_of_indexes, latest_first, earliest_last):
         previous_node = master_node
         current_node = master_node.next
 
-    master_index_list = LinkedList()
+    master_index_list = Linked_list()
     master_index_list.head = master_node.next
     return master_index_list
 
