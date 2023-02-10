@@ -8,7 +8,7 @@
 # commercial or non-commercial, by any means.
 
 
-from src.model.market_class import Market
+from src.model.Market import Market
 from src.model.Model import Model
 from src.model.common.calculate_common_time_interval import calculate_common_time_interval
 from src.model.common.calculate_common_time_interval import compare_available_times_to_view_selected

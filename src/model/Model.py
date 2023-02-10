@@ -22,7 +22,7 @@ from src.model.graph.calculate_graph_outcomes_strategy  import calculate_graph_o
 from src.model.common.fill_in_missing_dates             import fill_gaps_data
 from src.model.common.calculate_common_time_interval    import calculate_common_time_interval
 from src.model.histogram.calculate_histograms_strategy  import calculate_histogram
-from src.model.performance_key_values_class             import Performance_Key_values
+from src.model.Performance_key_values             import Performance_Key_values
 
 import src.model.common.constants_model as constants_model
 import src.constants as constants

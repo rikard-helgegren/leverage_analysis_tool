@@ -16,7 +16,7 @@ Development of this application was started after a series increasingly more rea
 
 ### How to run
 
-Run the application by executing Makefile
+Run the application by executing the Makefile
 
 ```
 make
@@ -38,7 +38,78 @@ and c++ compilator
 
 * g++
 
-### Walktrhough
+### Project structure
+For getting an undestanding of this code you are recomended to start with leverage_analysis_tool.py, and then Model.py and View.py.
+
+```
+.
+├── config.json
+├── leverage_analysis_tool.py
+├── LICENSE.md
+├── Makefile
+├── README.md
+├── src
+│         ├── Config.py
+│         ├── constants.py
+│         ├── controller
+│         │         ├── Controller.py
+│         │         ├── formating.py
+│         ├── managing_data
+│         │         ├── check_if_data_files_are_clean.py
+│         │         ├── manage_preproccessed_data.py
+│         │         └── read_and_manage_raw_data.py
+│         ├── model
+│         │         ├── common
+│         │         │         ├── calculate_common_time_interval.py
+│         │         │         ├── calcultate_daily_change.py
+│         │         │         ├── check_data_is_empty.py
+│         │         │         ├── constants.h
+│         │         │         ├── constants_model.py
+│         │         │         ├── convertArrayChangeToTotalValue.cpp
+│         │         │         ├── convert_between_market_and_dict.py
+│         │         │         ├── convertCharPointerToStringVector.cpp
+│         │         │         ├── determine_longest_common_timespan.py
+│         │         │         ├── fill_in_missing_dates.py
+│         │         │         ├── Linked_list.py
+│         │         │         ├── regression.cpp
+│         │         │         ├── sumFloats.cpp
+│         │         │         ├── varianceAndVolatility.cpp
+│         │         │         └── variance_and_volatility.py
+│         │         ├── graph
+│         │         │         ├── calculate_graph_outcomes_strategy.py
+│         │         │         ├── strategies.py
+│         │         │         └── utils.py
+│         │         ├── histogram
+│         │         │         ├── calculateHistogramOutput.cpp
+│         │         │         ├── calculate_histograms_strategy.py
+│         │         │         ├── histogram_cpp_adapter.py
+│         │         │         ├── histogramStrategies.cpp
+│         │         │         ├── ParametersBuilder.cpp
+│         │         │         ├── Parameters.cpp
+│         │         │         └── utils.cpp
+│         │         ├── market_class.py
+│         │         ├── Model.py
+│         │         ├── Performance_key_values.py
+│         │         ├── Portfolio_item.py
+│         ├── setup.py
+│         └── view
+│             ├── constants_view.py
+│             ├── Frame_schema.png
+│             ├── histogram.py
+│             ├── line_graph_full_time.py
+│             ├── menu_of_strategies.py
+│             ├── preview.png
+│             ├── setup_time_limiters.py
+│             ├── table_of_instruments.py
+│             ├── table_of_statistics.py
+│             ├── View.py
+│             └── widgets_in_vertical_1.py
+├── tests
+│         ├── ...
+```
+
+
+### Walkthrough
 
 To get started select a market by clicking on a market in the top right table. Unfold the levereaged products by klicking the arrow to the left of the market, and then select desiered leverage.
 
@@ -71,8 +142,7 @@ The file path is set in *src/model/constants*
 
 ### Disclaimer
 
-Historical returns are no guarantee of future returns. An investment in securities or funds can both increase and decrease in value,
-and you may not get the invested capital back.
+Historical returns are no guarantee of future returns. An investment in securities or funds can both increase and decrease in value, and you may not get the invested capital back.
 
 ### Goal
 
@@ -84,9 +154,3 @@ In the end the graphical user interface will be built by using Kivy (https://kiv
 But during development of the model tkinter will be used to swiftly test and experiment with the model.
 
 The aim is to make a tool for both beginner and experts where there are two display options. One simplistic with only the most important features and values viewable. And one with all controls and all statistical performance meters.
-
-### Help out
-
-If you would like to contribute, tasks for further development can be found in the project boards linked to this repository.
-
-(https://github.com/rikard-helgegren/leverage_analysis_tool/projects)

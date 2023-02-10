@@ -9,7 +9,7 @@
 
 import logging
 
-from src.model.market_class import Market
+from src.model.Market import Market
 
 def market_dict_to_market_class(market_name ,market_dict):
     """ Convert a dictionary represenattion of a market class to a market object"""

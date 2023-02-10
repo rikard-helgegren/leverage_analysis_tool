@@ -10,13 +10,9 @@
 import tkinter as tk
 import logging
 
-from src.view.histogram import Histogram
-from src.view.line_graph_full_time import Line_Graph_Full_Time
-from src.view.table_of_instruments import Table_Of_Instuments
 from src.view.widgets_in_vertical_1 import setup_vertical_frame_1
-from src.view.table_of_statistics import Table_Of_Statistics
-from src.view.setup_time_limiters import setup_time_limiters
-
+from src.view.widgets_in_vertical_2 import setup_vertical_frame_2
+from src.view.widgets_in_vertical_3 import setup_vertical_frame_3
 
 class View(tk.Frame):
     """This is the view of the application. It is the interface between
@@ -33,57 +29,10 @@ class View(tk.Frame):
         # placeholder for controller
         self.controller = None
 
-        #############
-        # Vertical 1
-        #############
+        setup_vertical_frame_1(self)
+        setup_vertical_frame_2(self)
+        setup_vertical_frame_3(self)
 
-        self.vertical_frame_1 = tk.Frame(self, padx=5, pady=5)
-        self.vertical_frame_1.pack(side=tk.LEFT)
-
-        setup_vertical_frame_1(self, self.vertical_frame_1)
-
-        #############
-        # Vertical 2
-        #############
-
-        self.vertical_frame_2 = tk.Frame(self, padx=5, pady=5)
-        self.vertical_frame_2.pack(side=tk.LEFT)
-
-        self.histogram = Histogram(self.vertical_frame_2)
-        """ The histogram displays a distribution of outcomes from all continuous
-            time intervals of the selected length.
-        """
-
-        self.line_graph_full_time = Line_Graph_Full_Time(self.vertical_frame_2)
-        """ This line graph displays the performance of the created portfolio
-            for the full time span available
-        """
-
-        setup_time_limiters(self, self.vertical_frame_2)
-
-        #############
-        # Vertical 3
-        #############
-
-        self.vertical_frame_3 = tk.Frame(self, padx=5, pady=5)
-        self.vertical_frame_3.pack(side=tk.LEFT)
-
-        self.table_of_instruments = Table_Of_Instuments(self.vertical_frame_3, self)
-        """ The table of instruments is a table from which the user can select
-            instruments with or without leverage to use in their portfolio
-        """
-
-        self.table_of_statistics = Table_Of_Statistics(self.vertical_frame_3)
-
-
-        #############
-        # Vertical 4
-        #############
-
-
-    ###############
-    # Commands
-    ###############
 
     def set_controller(self, controller):
         logging.debug("View: set_controller")

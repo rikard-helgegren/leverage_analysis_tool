@@ -16,7 +16,7 @@ from src.model.common.Linked_list import linked_list_to_list
 from src.model.common.Linked_list import list_to_linked_list
 
 
-from src.model.market_class import Market
+from src.model.Market import Market
 
 def test_find_first_common_market_day():
     

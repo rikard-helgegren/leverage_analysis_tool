@@ -9,7 +9,7 @@
 
 import logging
 import src.model.common.constants_model as constants_model
-from src.model.portfolio_item_class import Portfolio_Item
+from src.model.Portfolio_item import Portfolio_Item
 
 def create_portfolio(instruments_selected, number_of_leveraged_instruments, loan, proportion_funds, number_of_funds, proportion_leverage, markets_selected):
     logging.debug("Graph utils: create_portfolio")

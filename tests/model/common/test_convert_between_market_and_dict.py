@@ -8,14 +8,11 @@
 # commercial or non-commercial, by any means.
 
 
-from src.model.market_class import Market
+from src.model.Market import Market
 from src.model.common.convert_between_market_and_dict import market_dict_to_market_class
 from src.model.common.convert_between_market_and_dict import market_class_to_dict_market
 from src.model.common.convert_between_market_and_dict import dict_of_market_dicts_to_dict_of_market_classes
 from src.model.common.convert_between_market_and_dict import dict_of_market_classes_to_dict_of_market_dicts
-
-
-from src.model.market_class import Market
 
 def test_market_dict_to_market_class():
     
@@ -74,7 +71,7 @@ def test_dict_of_market_dicts_to_dict_of_market_classes():
                                  'daily_change': daily_change2}}
 
     dict_of_market_classes = dict_of_market_dicts_to_dict_of_market_classes(dict_of_market_dicts)
-
+                            #convert_dict_items_from_dict_to_market_classes
     # Test first market
     assert isinstance(dict_of_market_classes[market_name1], Market)
     assert dict_of_market_classes[market_name1].get_name() == market_name1

@@ -7,7 +7,7 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-from src.model.market_class import Market
+from src.model.Market import Market
 from src.model.common.calcultate_daily_change import calcultate_daily_change
 
 def test_calcultate_daily_change():

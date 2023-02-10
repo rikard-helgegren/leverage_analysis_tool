@@ -8,7 +8,7 @@
 # commercial or non-commercial, by any means.
 
 from src.model.common.determine_longest_common_timespan import determine_longest_common_timespan
-from src.model.market_class import Market
+from src.model.Market import Market
 
 
 def test_determine_longest_common_timespan():

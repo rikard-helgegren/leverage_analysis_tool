@@ -8,7 +8,7 @@
 # commercial or non-commercial, by any means.
 
 import csv
-from src.model.market_class import Market
+from src.model.Market import Market
 
 
 def read_and_manage_raw_data(data_file_path, markets_file_name_list):

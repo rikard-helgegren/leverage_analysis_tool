@@ -14,7 +14,10 @@ from src.view.menu_of_strategies import Menu_Of_Strategies
 
 
 
-def setup_vertical_frame_1(view, super_frame):
+def setup_vertical_frame_1(view):
+
+    super_frame = tk.Frame(view, padx=5, pady=5)
+    super_frame.pack(side=tk.LEFT)
 
     insert_slide_for_leverage(view, super_frame)
     insert_fee_checkbox(view, super_frame)
