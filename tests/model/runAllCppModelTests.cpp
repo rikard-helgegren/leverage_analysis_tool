@@ -11,3 +11,4 @@
 #include "common/test_convertArrayChangeToTotalValue.cpp"
 #include "common/test_convertCharPointerToStringVector.cpp"
 #include "common/test_regression.cpp"
+#include "common/test_varianceAndVolatility.cpp"

@@ -16,9 +16,9 @@
 /*
 * Calculate fitting line to dataset
 */
-void calcLeastSquareFit(float* performance_full_time, int fromIndex, int toIndex, float* meanLine){
+std::vector<float> calcLeastSquareFit(float* performance_full_time, int fromIndex, int toIndex){
 
-    regressionLine(performance_full_time, meanLine, fromIndex, toIndex);
+    return regressionLine(performance_full_time, fromIndex, toIndex);
 }
 
 /*
@@ -29,11 +29,11 @@ float calcVariance(float* performance_full_time, int sizeArray, int sample_size)
     int elementsToSum = (sizeArray - sample_size);
     float subTotal{0.0f};
 
-    float meanLine[sample_size];
+    std::vector<float> meanLine;
 
     for (int i = 0; i<elementsToSum; i +=sample_size ){
         subTotal = 0.0f;
-        calcLeastSquareFit(performance_full_time, i,sample_size+i, meanLine);
+        meanLine = calcLeastSquareFit(performance_full_time, i,sample_size+i);
         for (int j = 0; j<sample_size; j++){
             subTotal += ((performance_full_time[i+sample_size] - meanLine[j])/meanLine[j])*((performance_full_time[i+sample_size] - meanLine[j])/meanLine[j]);
         }

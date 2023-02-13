@@ -9,12 +9,15 @@
 
 #include <vector>
 
+#pragma once
+
 // Calculate linear fit to data
-void calcRegressionline(std::vector<float> xVec,
+std::vector<float> calcRegressionline(std::vector<float> xVec,
 						std::vector<float> yVec,
-						int size,
-						float* coeff,
-						float* constTerm){
+						int size){
+
+	float coeff;
+	float constTerm;
 
 	float sumXY{0.0f};
 	float sumX{0.0f};
@@ -22,7 +25,7 @@ void calcRegressionline(std::vector<float> xVec,
 
 	float sumXSquare{0.0f};
 	float sumYSquare{0.0f};
-
+             
 	float xPosI{0.0f};
 	float yPosI{0.0f};
 
@@ -46,33 +49,45 @@ void calcRegressionline(std::vector<float> xVec,
 	// Calc coefficient of slope
 	numerator = ( size_float * sumXY - sumX * sumy);
 	denominator = (size_float * sumXSquare - sumX * sumX);
-	*coeff = numerator / denominator;
+	coeff = numerator / denominator;
 
 	// Calc constant
 	numerator	= (sumy * sumXSquare - sumX * sumXY);
 	denominator = (size_float * sumXSquare - sumX * sumX);
-	*constTerm = numerator / denominator;
+	constTerm = numerator / denominator;
+
+	std::vector<float> returnValues = {coeff, constTerm};
+
+	return returnValues;
+
 }
 
 
 // Driver code
-void regressionLine(float* inputvalues, float* fittedValues, int from_index, int to_index)
+std::vector<float> regressionLine(float* inputvalues, int from_index, int to_index)
 {	
+
+	int size = to_index-from_index;
+
+	std::vector<float> fittedValues;
 	std::vector<float> yVec = std::vector<float>(inputvalues + from_index, inputvalues + to_index);
 	std::vector<float> xVec;
 
-	int size = to_index-from_index;
 
     for (int i = 0; i < size; i++){
         xVec.push_back(static_cast<float>(i));
     }
 	
-	float constTerm{0.0f};
-	float coeff{0.0f};
-
-	calcRegressionline(xVec, yVec, size, &coeff, &constTerm);
+	std::vector<float> constTermAndCoeff;
 	
+	constTermAndCoeff = calcRegressionline(xVec, yVec, size);
+	
+	float constTerm = constTermAndCoeff[1];
+	float coeff = constTermAndCoeff[0];
+
 	for (int i = 0; i < size; i++){
-        fittedValues[i] = constTerm + i * coeff;
+        fittedValues.push_back(constTerm + i * coeff);
     }
+
+	return fittedValues;
 }

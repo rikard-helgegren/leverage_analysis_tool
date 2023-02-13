@@ -7,19 +7,15 @@
  * commercial or non-commercial, by any means.
  */
 
-
 #include <vector>
 
 #define CATCH_CONFIG_MAIN
 #include "../../catch.hpp"
-#include "../../fakeit.hpp"
 #include "../../../src/model/common/regression.cpp"
-
-using namespace fakeit;
 
 //TODO: Tests only what it should do and not what it shouldnt
 TEST_CASE( "Test calcRegressionline function", "[calcRegressionline]" ) {
-    
+
     int size = 4;
     std::vector<float> yVec = {1, 2, 3, 4};
 	std::vector<float> xVec;
@@ -31,7 +27,12 @@ TEST_CASE( "Test calcRegressionline function", "[calcRegressionline]" ) {
 	float constTerm{0.0f};
 	float coeff{0.0f};
 
-    calcRegressionline(xVec, yVec, size, &coeff, &constTerm);
+    std::vector<float> constTermAndCoeff;
+	
+	constTermAndCoeff = calcRegressionline(xVec, yVec, size);
+
+    coeff = constTermAndCoeff[0];
+    constTerm = constTermAndCoeff[1];
 
     float expectedCoeff = 1;
     float expectedConstTerm = 1;
@@ -43,41 +44,43 @@ TEST_CASE( "Test calcRegressionline function", "[calcRegressionline]" ) {
     yVec = {-2,-4, -6, -8};
     expectedCoeff = -2;
     expectedConstTerm = -2;
+	
+	constTermAndCoeff = calcRegressionline(xVec, yVec, size);
 
-    calcRegressionline(xVec, yVec, size, &coeff, &constTerm);
+    coeff = constTermAndCoeff[0];
+    constTerm = constTermAndCoeff[1];
 
     REQUIRE(coeff == expectedCoeff);
     REQUIRE(constTerm == expectedConstTerm);
 }
 
 
-TEST_CASE( "Test calcRegressionline function", "[calcRegressionline]" ) {
+TEST_CASE( "Test regressionLine function", "[regressionLine]" ) {
 
-    float inputvalues[8] = {1,2,3,4,-2,-4,-6,-8};
-    float fittedValues[8];
+    float inputvalues[4] = {1,2,3,4};
+    std::vector<float> fittedValues;
     int from_index = 0;
     int to_index =3;
 
+    std::vector<float> expectedFittedValues = {1,2,3};
+
+    fittedValues = regressionLine(inputvalues, from_index, to_index);
+
+    REQUIRE(fittedValues == expectedFittedValues);
 
 
+    inputvalues[0] = -1;
+    inputvalues[1] = -2;
+    inputvalues[2] = -3;
+    inputvalues[3] = -4;
+    from_index = 0;
+    to_index =3;
 
-    // Setup mock behavior.
-    struct SomeInterface {
-        virtual int calcRegressionline(
-                std::vector<float>,
-                std::vector<float>,
-                int, 
-                float*, 
-                float*) = 0;
-    };
-    Mock<SomeInterface> mock;
+    expectedFittedValues = {-1,-2,-3};
 
-    //When(Method(calcRegressionline)).; // Method mock.foo will return 1 once.
-    Verify(Method(mock, calcRegressionline));
-
-    float expectedFittedValues[4] = {1,2,3,4};
-
-    regressionLine(inputvalues, fittedValues, from_index, to_index);
+    fittedValues = regressionLine(inputvalues, from_index, to_index);
 
     REQUIRE(fittedValues == expectedFittedValues);
 }
+
+
