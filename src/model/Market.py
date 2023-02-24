@@ -25,6 +25,12 @@ class Market:
         self.country = ""
         self.daily_change = []
 
+    def __str__(self):
+        return f"Name: {self.name}, Values: {self.values}, Time Span: {self.time_span}, Country: {self.country}, Daily Change: {self.daily_change}"
+
+    def to_string(self):
+        return self.__str__()
+
     def get_first_day(self):
         return self.time_span[0]
 
@@ -37,9 +43,9 @@ class Market:
         self.name = name
 
     def get_country(self):
-        return self.contry
-    def set_country(self, contry):
-        self.contry = contry
+        return self.country
+    def set_country(self, country):
+        self.country = country
 
     def get_values(self):
         return self.values

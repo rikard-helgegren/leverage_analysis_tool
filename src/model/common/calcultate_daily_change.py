@@ -19,16 +19,20 @@ def calcultate_daily_change(markets_dict):
 
         market_values = market.get_values()
 
-        daily_change = []
-
-        # Calculate change in index value since last input
-        for i, value in enumerate(market_values[1:]):
-            if market_values[i] <=0:
-                logging.error("Stock value can not be negative")
-                continue
-            change = (value-market_values[i])/market_values[i]
-            daily_change.append(change)
-        
-        market.set_daily_change(daily_change)
+        market.set_daily_change(calculate_daily_change_from_value(market_values))
 
     return markets_dict
+
+def calculate_daily_change_from_value(values):
+
+    daily_change = []
+
+    # Calculate change in index value since last input
+    for i, value in enumerate(values[1:]):
+        if values[i] <=0:
+            logging.error("Stock value can not be negative")
+            continue
+        change = (value-values[i])/values[i]
+        daily_change.append(change)
+    
+    return daily_change

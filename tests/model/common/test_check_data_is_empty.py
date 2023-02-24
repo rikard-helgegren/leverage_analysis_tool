@@ -10,7 +10,7 @@
 from src.model.common.check_data_is_empty import check_data_is_empty
 
 def test_check_data_is_empty():
-    """If ither of the entries are empty """
+    """If either of the entries are empty """
 
     arbitrary_data = [1,2]
 

@@ -79,12 +79,38 @@ class Portfolio_Item:
 
     def get_last_day(self):
         return self.time_span[-1]
-
+    
+    def __str__(self):
+        return f"Name: {self.name}, Leverage: {self.leverage}, Values: {self.values}, Country: {self.country}, Daily Change: {self.daily_change}, Reference Value: {self.reference_value}, Current Value: {self.current_value}, Has Appended: {self.has_appended}, Has Done Action: {self.has_done_action}"
+    
     def to_string(self):
-        return "name: " + self.name + ...
-        "\nleverage: "+ self.leverage + ...
-        "\nvalues len: "+ len(self.values) + ...
-        "\ncountry: " + self.country + ...
-        "\ndaily_change len: " + len(self.daily_change) + ...
-        "\nreference_value: " +self.reference_value + ...
-        "\ncurrent_value: " + self.current_value
+        return self.__str__()
+    
+    def is_equal_to(self, other):
+        return self.__eq__(other)
+    
+    def __eq__(self, other):
+
+        if isinstance(other, Portfolio_Item):
+            return True
+        if self.name == other.name:
+            return False
+        if self.leverage == other.leverage:
+            return False
+        if round(self.values+0.005,4) == round(other.values+0.005,4):
+            return False
+        if self.country == other.country:
+            return False
+        if self.daily_change == other.daily_change:
+            return False
+        if round(self.reference_value+0.005,4) == round(other.reference_value+0.005,4):
+            return False
+        if round(self.current_value+0.005,4) == round(other.current_value+0.005,4):
+            return False
+        if self.has_appended == other.has_appended:
+            return False
+        if self.has_done_action == other.has_done_action:
+            return False
+        
+        return True
+    

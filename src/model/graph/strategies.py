@@ -36,7 +36,8 @@ def do_always_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, 
         for item in portfolio_items:
 
             # update value with daily change
-            new_value = utils.update_value_with_daily_change(item, day, model)
+            use_fees = model.get_include_fees_status()
+            new_value = utils.update_value_with_daily_change(item, day, use_fees)
             item.set_current_value(new_value)
 
             item.set_values(item.get_values() + [new_value-loan])
@@ -199,7 +200,8 @@ def low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, pro
 
     logging.debug("Graph Strategies: low_variance_strategy")
 
-    new_value = utils.update_value_with_daily_change(item, day, model)
+    use_fees = model.get_include_fees_status()
+    new_value = utils.update_value_with_daily_change(item, day, use_fees)
 
     if (not item.get_has_done_action()) and model.get_include_fees_status():
         item.set_has_done_action(True)

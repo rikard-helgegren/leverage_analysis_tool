@@ -27,5 +27,8 @@ test: pytest cpp_test
 pytest:
 	pytest -v tests/set_path_for_import.py tests/
 
+pytest_debug:
+	pytest --pdb -v tests/set_path_for_import.py tests/
+
 cpp_test:
 	g++ tests/runAllCppTests.cpp -o tests.out && ./tests.out
