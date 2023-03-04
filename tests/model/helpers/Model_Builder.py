@@ -7,18 +7,16 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
+from copy import deepcopy
 import logging
 
-from tests.model.Market_Builder import Market_Builder
-
-from src.model.Market import Market
 from src.model.Model import Model
-from copy import deepcopy
+from src.model.Performance_key_values import Performance_Key_values
+from tests.model.helpers.Market_Builder import Market_Builder
 
-from src.model.Performance_key_values             import Performance_Key_values
-
-import src.model.common.constants_model as constants_model
 import src.constants as constants
+import src.model.common.constants_model as constants_model
+
 
 class Model_Builder:
     """ This is the model of the application. It models stock market index
@@ -89,17 +87,17 @@ class Model_Builder:
         """
 
         self.model.instruments_selected = [["A",1],
-                                            ["A",2],
-                                            ["A",3],
-                                            ["B",1],
-                                            ["B",2],
-                                            ["B",3],
-                                            ["C",1],
-                                            ["C",2],
-                                            ["C",3],
-                                            ["D",1],
-                                            ["D",2],
-                                            ["D",3]]
+                                           ["A",2],
+                                           ["A",3],
+                                           ["B",1],
+                                           ["B",2],
+                                           ["B",3],
+                                           ["C",1],
+                                           ["C",2],
+                                           ["C",3],
+                                           ["D",1],
+                                           ["D",2],
+                                           ["D",3]]
         """ List of the instruments selected from the GUI Instrument table
             each item is a list with instrument name and leverage
             e.g. [[SP500, 1], [SP500, 5], [OMXS30, 1], ...]
@@ -157,19 +155,27 @@ def markets_selected(instruments_selected, markets):
 
 def generate_markets():
 
-    market1 = Market_Builder().build()
+    marketA = Market_Builder() \
+            .time_span([20200101,20200102,20200103]) \
+            .values([1,2,3]) \
+            .build()
+    marketB = Market_Builder() \
+            .time_span([20200102,20200103,20200104]) \
+            .values([1,2,3]) \
+            .build()
+    marketC = Market_Builder() \
+            .time_span([20100102,20100103,20100104]) \
+            .values([1,1.1,1.2]) \
+            .build()
+    marketD = Market_Builder() \
+            .time_span([20220102,20220103,20220104]) \
+            .values([1,1,1]) \
+            .build()
 
-    timespan_overlapping_A       = [20200101,20200102,20200103]
-    timespan_overlapping_B       = [20200102,20200103,20200104]
-    timespan_earlier_than_others = [20100102,20100103,20100104]
-    timespan_later_than_others   = [20220102,20220103,20220104]
-
-    value1 = [1,2,3]
-
-    markets = {"A": market1,
-               "B": Market("B", value1, timespan_overlapping_B),
-               "C": Market("C", value1, timespan_earlier_than_others),
-               "D": Market("D", value1, timespan_later_than_others)}
+    markets = {"A": marketA,
+               "B": marketB,
+               "C": marketC,
+               "D": marketD}
 
     return markets
 

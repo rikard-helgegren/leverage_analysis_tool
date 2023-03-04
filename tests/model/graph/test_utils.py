@@ -19,9 +19,9 @@ from src.model.graph.utils import update_value_with_daily_change
 from src.model.graph.utils import getFeeLevel
 
 import src.model.common.constants_model as constants_model
-from tests.model.Model_Builder import Model_Builder
-from tests.model.Market_Builder import Market_Builder
-from tests.model.Portfolio_Item_Builder import Portfolio_Item_Builder
+from tests.model.helpers.Model_Builder import Model_Builder
+from tests.model.helpers.Market_Builder import Market_Builder
+from tests.model.helpers.Portfolio_Item_Builder import Portfolio_Item_Builder
 
 
 def test_create_portfolio():
@@ -78,8 +78,16 @@ def test_create_portfolio():
                       model.proportion_leverage,
                       model.markets_selected)
     
-    excpectedPortfolio_item1 = Portfolio_Item_Builder().values([0.5]).reference_value(0.5).current_value(0.5).build()
-    excpectedPortfolio_item2 = Portfolio_Item_Builder().values([0.5]).reference_value(0.5).current_value(0.5).build()
+    excpectedPortfolio_item1 = Portfolio_Item_Builder() \
+            .values([0.5]) \
+            .reference_value(0.5) \
+            .current_value(0.5) \
+            .build()
+    excpectedPortfolio_item2 = Portfolio_Item_Builder() \
+            .values([0.5]) \
+            .reference_value(0.5) \
+            .current_value(0.5) \
+            .build()
     
     assert portfolio_items[0].is_equal_to(excpectedPortfolio_item1)
     assert portfolio_items[1].is_equal_to(excpectedPortfolio_item2)
@@ -136,7 +144,13 @@ def test_set_initial_portfolio_values():
     print(markets_selected['A'])
 
 
-    set_initial_portfolio_values(portfolio_item.leverage, number_of_leveraged_instruments, loan, proportion_funds, number_of_funds, portfolio_item, proportion_leverage, name, markets_selected)
+    set_initial_portfolio_values(  \
+            portfolio_item.leverage, \
+            number_of_leveraged_instruments, \
+            loan, proportion_funds, \
+            number_of_funds, portfolio_item, \
+            proportion_leverage, \
+            name, markets_selected)
 
     assert portfolio_item.current_value == 1
     assert portfolio_item.reference_value == 1
@@ -157,7 +171,16 @@ def test_set_initial_portfolio_values():
     print(markets_selected['A'])
 
 
-    set_initial_portfolio_values(portfolio_item.leverage, number_of_leveraged_instruments, loan, proportion_funds, number_of_funds, portfolio_item, proportion_leverage, name, markets_selected)
+    set_initial_portfolio_values( \
+            portfolio_item.leverage, \
+            number_of_leveraged_instruments, \
+            loan, \
+            proportion_funds, \
+            number_of_funds, \
+            portfolio_item, \
+            proportion_leverage, \
+            name, \
+            markets_selected)
 
     assert portfolio_item.current_value == 0.5
     assert portfolio_item.reference_value == 0.5
@@ -180,7 +203,16 @@ def test_set_initial_portfolio_values():
     print(markets_selected['A'])
 
 
-    set_initial_portfolio_values(portfolio_item.leverage, number_of_leveraged_instruments, loan, proportion_funds, number_of_funds, portfolio_item, proportion_leverage, name, markets_selected)
+    set_initial_portfolio_values( \
+            portfolio_item.leverage, \
+            number_of_leveraged_instruments, \
+            loan, \
+            proportion_funds, \
+            number_of_funds, \
+            portfolio_item, \
+            proportion_leverage, \
+            name, \
+            markets_selected)
 
     assert portfolio_item.current_value == 1
     assert portfolio_item.reference_value == 1
@@ -202,7 +234,16 @@ def test_set_initial_portfolio_values():
     print(markets_selected['A'])
 
 
-    set_initial_portfolio_values(portfolio_item.leverage, number_of_leveraged_instruments, loan, proportion_funds, number_of_funds, portfolio_item, proportion_leverage, name, markets_selected)
+    set_initial_portfolio_values(
+            portfolio_item.leverage, \
+            number_of_leveraged_instruments, \
+            loan, \
+            proportion_funds, \
+            number_of_funds, \
+            portfolio_item, \
+            proportion_leverage, \
+            name, \
+            markets_selected)
 
     assert portfolio_item.current_value == 0.5
     assert portfolio_item.reference_value == 0.5
@@ -279,4 +320,3 @@ def test_getFeeLevel():
     leverage = 5
     fee_level = getFeeLevel(leverage)
     assert fee_level == constants_model.FEE_BULL_5_AND_MORE
-

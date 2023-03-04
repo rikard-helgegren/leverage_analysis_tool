@@ -7,7 +7,7 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-
+from tests.model.helpers.Market_Builder import Market_Builder
 from src.model.Market import Market
 from src.model.common.convert_between_market_and_dict import market_dict_to_market_class
 from src.model.common.convert_between_market_and_dict import market_class_to_dict_market
@@ -36,13 +36,8 @@ def test_market_dict_to_market_class():
 
 def test_market_class_to_dict_market():
 
-    market_name = "A"
-    timespan = [20200101,20200102,20200103]
-    values  = [1,2,3]
-    daily_change = [1, 0.5]
-    
-    market_class = Market(market_name, values, timespan)
-    market_class.set_daily_change(daily_change)
+
+    market_class = Market_Builder().build()
 
     [key, market_dict] = market_class_to_dict_market(market_class)
     
@@ -54,56 +49,51 @@ def test_market_class_to_dict_market():
 
 def test_dict_of_market_dicts_to_dict_of_market_classes():
 
-    market_name1 = "A"
-    market_name2 = "B"
-    timespan1 = [20200101,20200102,20200103]
-    timespan2 = [20100101,20100102,20100103]
-    values1  = [1,2,3]
-    values2  = [4,8,16]
-    daily_change1 = [1, 0.5]
-    daily_change2 = [1, 1]
-    
-    dict_of_market_dicts ={market_name1: {'index_value' : values1,
-                                 'time' : timespan1,
-                                 'daily_change': daily_change1},
-                  market_name2: {'index_value' : values2,
-                                 'time' : timespan2,
-                                 'daily_change': daily_change2}}
 
+    market_class1 = Market_Builder().build()
+    market_class2 = Market_Builder() \
+            .name('B') \
+            .time_span([20100101,20100102,20100103]) \
+            .values([4,8,16]) \
+            .build()
+
+    
+    dict_of_market_dicts ={market_class1.name: 
+                                {'index_value' : market_class1.values,
+                                 'time' : market_class1.time_span,
+                                 'daily_change': market_class1.daily_change},
+                           market_class2.name: 
+                                {'index_value' : market_class2.values,
+                                 'time' : market_class2.time_span,
+                                 'daily_change': market_class2.daily_change}}
+    
     dict_of_market_classes = dict_of_market_dicts_to_dict_of_market_classes(dict_of_market_dicts)
                             #convert_dict_items_from_dict_to_market_classes
     # Test first market
-    assert isinstance(dict_of_market_classes[market_name1], Market)
-    assert dict_of_market_classes[market_name1].get_name() == market_name1
-    assert dict_of_market_classes[market_name1].get_values() == values1
-    assert dict_of_market_classes[market_name1].get_time_span() == timespan1
-    assert dict_of_market_classes[market_name1].get_daily_change() == daily_change1
+    assert isinstance(dict_of_market_classes[market_class1.name], Market)
+    assert dict_of_market_classes[market_class1.name].get_name() == market_class1.name
+    assert dict_of_market_classes[market_class1.name].get_values() == market_class1.values
+    assert dict_of_market_classes[market_class1.name].get_time_span() == market_class1.time_span
+    assert dict_of_market_classes[market_class1.name].get_daily_change() == market_class1.daily_change
 
     # Test second market
-    assert isinstance(dict_of_market_classes[market_name2], Market)
-    assert dict_of_market_classes[market_name2].get_name() == market_name2
-    assert dict_of_market_classes[market_name2].get_values() == values2
-    assert dict_of_market_classes[market_name2].get_time_span() == timespan2
-    assert dict_of_market_classes[market_name2].get_daily_change() == daily_change2
+    assert isinstance(dict_of_market_classes[market_class2.name], Market)
+    assert dict_of_market_classes[market_class2.name].get_name() == market_class2.name
+    assert dict_of_market_classes[market_class2.name].get_values() == market_class2.values
+    assert dict_of_market_classes[market_class2.name].get_time_span() == market_class2.time_span
+    assert dict_of_market_classes[market_class2.name].get_daily_change() == market_class2.daily_change
 
 def test_dict_of_market_classes_to_dict_of_market_dicts():
 
-    market_name1 = "A"
-    market_name2 = "B"
-    timespan1 = [20200101,20200102,20200103]
-    timespan2 = [20100101,20100102,20100103]
-    values1  = [1,2,3]
-    values2  = [4,8,16]
-    daily_change1 = [1, 0.5]
-    daily_change2 = [1, 1]
-    
-    market_class1 = Market(market_name1, values1, timespan1)
-    market_class1.set_daily_change(daily_change1)
-    market_class2 = Market(market_name2, values2, timespan2)
-    market_class2.set_daily_change(daily_change2)
+    market_class1 = Market_Builder().build()
+    market_class2 = Market_Builder() \
+            .name('B') \
+            .time_span([20100101,20100102,20100103]) \
+            .values([4,8,16]) \
+            .build()
 
-    dict_of_classes = {market_name1: market_class1,
-                       market_name2: market_class2}
+    dict_of_classes = {market_class1.name: market_class1,
+                       market_class2.name: market_class2}
 
     dict_of_market_dicts = dict_of_market_classes_to_dict_of_market_dicts(dict_of_classes)
     
@@ -111,12 +101,12 @@ def test_dict_of_market_classes_to_dict_of_market_dicts():
 
     assert dict_key_list == ["A", "B"]
 
-    assert dict_key_list[0] == market_name1
-    assert dict_of_market_dicts[market_name1]['index_value'] == market_class1.get_values()
-    assert dict_of_market_dicts[market_name1]['time'] == market_class1.get_time_span()
-    assert dict_of_market_dicts[market_name1]['daily_change'] == market_class1.get_daily_change()
+    assert dict_key_list[0] == market_class1.name
+    assert dict_of_market_dicts[market_class1.name]['index_value'] == market_class1.get_values()
+    assert dict_of_market_dicts[market_class1.name]['time'] == market_class1.get_time_span()
+    assert dict_of_market_dicts[market_class1.name]['daily_change'] == market_class1.get_daily_change()
 
-    assert dict_key_list[1] == market_name2
-    assert dict_of_market_dicts[market_name2]['index_value'] == market_class2.get_values()
-    assert dict_of_market_dicts[market_name2]['time'] == market_class2.get_time_span()
-    assert dict_of_market_dicts[market_name2]['daily_change'] == market_class2.get_daily_change()
+    assert dict_key_list[1] == market_class2.name
+    assert dict_of_market_dicts[market_class2.name]['index_value'] == market_class2.get_values()
+    assert dict_of_market_dicts[market_class2.name]['time'] == market_class2.get_time_span()
+    assert dict_of_market_dicts[market_class2.name]['daily_change'] == market_class2.get_daily_change()

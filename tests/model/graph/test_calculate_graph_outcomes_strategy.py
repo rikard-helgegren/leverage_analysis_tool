@@ -8,19 +8,31 @@
 # commercial or non-commercial, by any means.
 
 
-from src.model.Market import Market
-from src.model.Model import Model
-from tests.model.Model_Builder import Model_Builder
+from tests.model.helpers.Model_Builder import Model_Builder
+import pytest
 
 from src.model.graph.calculate_graph_outcomes_strategy import calculate_graph_outcomes
 
 
-
+# TODO Make less specific asserts
 def test_calculate_graph_outcomes():
 
     model = Model_Builder().instruments_selected([["A",1]]).build()
-
     calculate_graph_outcomes(model)
+    assert model.get_portfolio_results_full_time() == \
+            pytest.approx([1.0, 1.9999925, 2.999974])
+    
 
-    assert model.get_portfolio_results_full_time() == [1.0, 1.9999925925925925, 2.999974074128944]
+    model = Model_Builder().instruments_selected([["A",2]]).build()
+    calculate_graph_outcomes(model)
+    assert model.get_portfolio_results_full_time() == \
+            pytest.approx([1.0, 2.99999, 5.99995])
+
+
+
+    model = Model_Builder().instruments_selected([["A",1], ["A",2]]).build()
+    calculate_graph_outcomes(model)
+    assert model.get_portfolio_results_full_time() == \
+            pytest.approx([1.0, 2.099992, 3.299971])
+    
     
