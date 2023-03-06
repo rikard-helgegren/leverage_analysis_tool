@@ -27,14 +27,13 @@ class Portfolio_Item_Builder:
 
         self.portfolio_item.values = [1.0] # gets populated when running
         self.portfolio_item.country = "a"
-        self.portfolio_item.daily_change = []#calculate_daily_change_from_value(self.portfolio_item.values)
+        self.portfolio_item.daily_change = [1, 0.5]
         self.portfolio_item.reference_value = 1.0
         self.portfolio_item.current_value = 1.0
 
         # For Histogram purposes
         self.portfolio_item.has_appended = False
         self.portfolio_item.has_done_action = False
-  
 
     def name(self, name):
         self.portfolio_item.name = name
@@ -46,6 +45,7 @@ class Portfolio_Item_Builder:
     
     def values(self, values):
         self.portfolio_item.values = values
+        self.portfolio_item.current_value = values[0]
         #self.portfolio_item.daily_change = calculate_daily_change_from_value(self.portfolio_item.values)
         return self
    

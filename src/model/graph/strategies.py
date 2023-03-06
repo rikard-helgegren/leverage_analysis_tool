@@ -7,11 +7,13 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
+import logging
+import math
+
 import src.model.common.constants_model as constants_model
 import src.constants as constants
-import logging
-from src.model.common.variance_and_volatility import calc_volatility
 import src.model.graph.utils as utils 
+from src.model.common.variance_and_volatility import calc_volatility
 
 
 def do_not_invest(end_pos):
@@ -30,7 +32,6 @@ def do_always_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, 
     """
         All strageties that choose to always invest
     """
-
     logging.debug("Graph Strategies: do_always_invest")
     for day in range(0, end_pos):
         for item in portfolio_items:
@@ -44,7 +45,7 @@ def do_always_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, 
 
             # Apply rule
             applied_change = False
-            if strategy == constants.PORTFOLIO_STRATEGIES[0]:  # Do nothing
+            if strategy == constants.PORTFOLIO_STRATEGIES[0]:  # Invest and do nothing
                 applied_change = hold_strategy()
             elif strategy == constants.PORTFOLIO_STRATEGIES[1]:  # Harvest/Refill
                 applied_change = harvest_refill(item, portfolio_items, number_of_funds, harvest_point, refill_point)
@@ -67,7 +68,7 @@ def do_always_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, 
             total_results = item.get_values()
         else:
             total_results = [start + adding for start, adding in zip(total_results, item.get_values())]
-
+        
     portfolio_results_full_time = total_results
 
     return portfolio_results_full_time
@@ -123,7 +124,7 @@ def harvest_refill(inspected_instrument, all_instruments, number_of_funds, harve
 
     if current_value > harvest_point * reference_value or current_value < refill_point * reference_value:
 
-       rebalence(current_value, reference_value, inspected_instrument, all_instruments, number_of_funds)
+       rebalence(inspected_instrument, all_instruments, number_of_funds)
 
     return True
 
@@ -136,13 +137,10 @@ def rebalance_time_cycle(inspected_instrument, all_instruments, number_of_funds,
     if not can_rebalance(inspected_instrument, number_of_funds, all_instruments):
         return False
 
-    current_value = inspected_instrument.get_current_value()
-    reference_value = inspected_instrument.get_reference_value()
+    rebalance_period_days = math.ceil(rebalance_period_months*constants_model.MARKET_DAYS_IN_YEAR/constants_model.MONTHS_IN_YEAR)
 
-    rebalance_period_days = rebalance_period_months*constants_model.MARKET_DAYS_IN_YEAR/constants_model.MONTHS_IN_YEAR
-
-    if day % rebalance_period_days == 0:
-       rebalence(current_value, reference_value, inspected_instrument, all_instruments, number_of_funds)
+    if (day+1) % rebalance_period_days == 0: # +1 to not rebalance the first (0th) day  
+       rebalence(inspected_instrument, all_instruments, number_of_funds)
 
     return True
 
@@ -163,24 +161,28 @@ def can_rebalance(inspected_instrument, number_of_funds, all_instruments):
     # Is there money for rebalancing
     current_value = inspected_instrument.get_current_value()
     reference_value = inspected_instrument.get_reference_value()
+    needed_for_rebalancing = (reference_value - current_value)
 
     tot_for_rebalancing = 0
     for instrument in all_instruments:
         if instrument.get_leverage() == 1:
             tot_for_rebalancing += instrument.get_current_value()
 
-    if tot_for_rebalancing <= (reference_value - current_value):
+    if tot_for_rebalancing <= needed_for_rebalancing:
         return False
 
     return True
 
-def rebalence(current_value, reference_value, inspected_instrument, all_instruments, number_of_funds):
+def rebalence(inspected_instrument, all_instruments, number_of_funds):
     """
         Rebalance the portfolio to what is set to be the prefered 
         balance between levreaged products and funds
     """
 
     logging.debug("Graph Strategies: rebalence")
+    current_value = inspected_instrument.get_current_value()
+    reference_value = inspected_instrument.get_reference_value()
+
     change_in_value = current_value - reference_value
     inspected_instrument.set_current_value(reference_value)
 

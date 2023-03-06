@@ -130,7 +130,14 @@ class Model_Builder:
     
     def instruments_selected(self, list_of_instruments):
         self.model.instruments_selected = list_of_instruments
-
+        return self
+    
+    def portfolio_strategy(self, portfolio_strategy):
+        self.model.portfolio_strategy = portfolio_strategy
+        return self
+    
+    def rebalance_period_months(self, rebalance_period_months):
+        self.rebalance_period_months = rebalance_period_months
         return self
 
     def build(self):

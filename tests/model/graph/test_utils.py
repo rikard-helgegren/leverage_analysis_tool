@@ -97,7 +97,6 @@ def test_get_last_index_of_days_from_instrument():
 
     market = Market_Builder().build()
     markets_selected = {market.name: market}
-    print(markets_selected['A'])
     a_instrument = ['A',1]
     end_time = market.get_time_span()[-1]
 
@@ -141,7 +140,6 @@ def test_set_initial_portfolio_values():
     proportion_leverage = 0
     name='A'
     markets_selected = {'A':Market_Builder().build()}
-    print(markets_selected['A'])
 
 
     set_initial_portfolio_values(  \
@@ -168,7 +166,6 @@ def test_set_initial_portfolio_values():
     proportion_leverage = 0
     name='A'
     markets_selected = {'A':Market_Builder().build()}
-    print(markets_selected['A'])
 
 
     set_initial_portfolio_values( \
@@ -200,7 +197,6 @@ def test_set_initial_portfolio_values():
     number_of_leveraged_instruments = 1
     name='A'
     markets_selected = {'A':Market_Builder().build()}
-    print(markets_selected['A'])
 
 
     set_initial_portfolio_values( \
@@ -231,7 +227,6 @@ def test_set_initial_portfolio_values():
     number_of_leveraged_instruments = 2
     name='A'
     markets_selected = {'A':Market_Builder().build()}
-    print(markets_selected['A'])
 
 
     set_initial_portfolio_values(
@@ -298,6 +293,23 @@ def test_update_value_with_daily_change():
     new_value = update_value_with_daily_change(item, day, use_fees)
 
     assert round(new_value,10) == 1.9999925926
+
+    item = Portfolio_Item_Builder().values([0.1]).daily_change([1,1]).build()
+    day = 1
+    use_fees = False
+
+    new_value = update_value_with_daily_change(item, day, use_fees)
+
+    assert new_value == 0.2
+
+    item = Portfolio_Item_Builder().values([1]).daily_change([1,2,2,2,2,2,2]).build()
+    use_fees = False
+
+    item.set_current_value(update_value_with_daily_change(item, 0, use_fees))
+    item.set_current_value(update_value_with_daily_change(item, 1, use_fees))
+    new_value = update_value_with_daily_change(item, 2, use_fees)
+
+    assert new_value == 18
 
 def test_getFeeLevel():
 

@@ -108,7 +108,7 @@ def update_value_with_daily_change(item, day, use_fees):
     logging.debug("Graph utils: update_value_with_daily_change")
     current_value = item.get_current_value()
     oneDayChange = current_value * item.get_daily_change()[day] * item.get_leverage()
-    
+
     currencyChange = 1  #TODO requires data and implementation
 
     if (use_fees is True):
