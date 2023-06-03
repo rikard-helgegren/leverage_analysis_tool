@@ -6,3 +6,4 @@ images/historic_graphs/
 Notes
 *.so
 tests.out
+.DS_Store

@@ -73,25 +73,25 @@ void runAsyncCalculations(Parameters parameters){
 
 extern "C" {
     float* calculateHistogramOutput(float  loan,
-                                    int*    instrumentLeverages,
-                                    int     nrOfInstruments,
-                                    char*   instrumentNames_chr,
-                                    float   proportionFunds,
-                                    float   proportionLeverage,
-                                    int     totNrDays,
-                                    int     nrMarketsSelected,
-                                    float** marketDailyChanges,
-                                    char*   indexNames_chr,
-                                    int     daysInvesting,
-                                    float   harvestPoint,
-                                    float   refillPoint,
-                                    int     rebalance_period_months,
-                                    int     strategy,
-                                    int     volatilityStrategieSampleSize,
-                                    int     varianceCalcSampleSize,
-                                    float   volatilityStrategieLevel,
-                                    bool    includeFeeStatus,
-                                    float*  outData){
+            int*    instrumentLeverages,
+            int     nrOfInstruments,
+            char*   instrumentNames_chr,
+            float   proportionFunds,
+            float   proportionLeverage,
+            int     totNrDays,
+            int     nrMarketsSelected,
+            float** marketDailyChanges,
+            char*   indexNames_chr,
+            int     daysInvesting,
+            float   harvestPoint,
+            float   refillPoint,
+            int     rebalance_period_months,
+            int     strategy,
+            int     volatilityStrategieSampleSize,
+            int     varianceCalcSampleSize,
+            float   volatilityStrategieLevel,
+            bool    includeFeeStatus,
+            float*  outData){
 
         std::vector<std::string> instrumentNames;
         std::vector<std::string> indexNames;
@@ -116,29 +116,29 @@ extern "C" {
         }
 
         Parameters parameters = ParametersBuilder().setLoan(loan)
-                                                   .setInstrumentLeverages(instrumentLeverages)
-                                                   .setNrOfInstruments(nrOfInstruments)
-                                                   .setInstrumentNames(instrumentNames)
-                                                   .setProportionFunds(proportionFunds)
-                                                   .setProportionLeverage(proportionLeverage)
-                                                   .setTotNrDays(totNrDays)
-                                                   .setNrMarketsSelected(nrMarketsSelected)
-                                                   .setMarketDailyChanges(marketDailyChanges)
-                                                   .setIndexNames(indexNames)
-                                                   .setDaysInvesting(daysInvesting)
-                                                   .setHarvestPoint(harvestPoint)
-                                                   .setRefillPoint(refillPoint)
-                                                   .setRebalance_period_months(rebalance_period_months)
-                                                   .setStrategy(strategy)
-                                                   .setVolatilityStrategieSampleSize(volatilityStrategieSampleSize)
-                                                   .setVarianceCalcSampleSize(varianceCalcSampleSize)
-                                                   .setVolatilityStrategieLevel(volatilityStrategieLevel)
-                                                   .setNumberOfLeveragedInstruments(numberOfLeveragedInstruments)
-                                                   .setNumberOfFunds(numberOfFunds)
-                                                   .setIndexToMarket(indexToMarket)
-                                                   .setIncludeFeeStatus(includeFeeStatus)
-                                                   .setOutData(outData)
-                                                   .build();
+                .setInstrumentLeverages(instrumentLeverages)
+                .setNrOfInstruments(nrOfInstruments)
+                .setInstrumentNames(instrumentNames)
+                .setProportionFunds(proportionFunds)
+                .setProportionLeverage(proportionLeverage)
+                .setTotNrDays(totNrDays)
+                .setNrMarketsSelected(nrMarketsSelected)
+                .setMarketDailyChanges(marketDailyChanges)
+                .setIndexNames(indexNames)
+                .setDaysInvesting(daysInvesting)
+                .setHarvestPoint(harvestPoint)
+                .setRefillPoint(refillPoint)
+                .setRebalance_period_months(rebalance_period_months)
+                .setStrategy(strategy)
+                .setVolatilityStrategieSampleSize(volatilityStrategieSampleSize)
+                .setVarianceCalcSampleSize(varianceCalcSampleSize)
+                .setVolatilityStrategieLevel(volatilityStrategieLevel)
+                .setNumberOfLeveragedInstruments(numberOfLeveragedInstruments)
+                .setNumberOfFunds(numberOfFunds)
+                .setIndexToMarket(indexToMarket)
+                .setIncludeFeeStatus(includeFeeStatus)
+                .setOutData(outData)
+                .build();
         
 
         runAsyncCalculations(parameters);

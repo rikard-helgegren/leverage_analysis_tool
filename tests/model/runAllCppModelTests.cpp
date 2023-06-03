@@ -7,8 +7,9 @@
  * commercial or non-commercial, by any means.
  */
 
-#include "common/test_SumFloat.cpp"
+#include "common/test_sumFloat.cpp"
 #include "common/test_convertArrayChangeToTotalValue.cpp"
 #include "common/test_convertCharPointerToStringVector.cpp"
 #include "common/test_regression.cpp"
 #include "common/test_varianceAndVolatility.cpp"
+#include "histogram/test_utils.cpp"

@@ -31,4 +31,4 @@ pytest_debug:
 	pytest --pdb -v tests/set_path_for_import.py tests/
 
 cpp_test:
-	g++ tests/runAllCppTests.cpp -o tests.out && ./tests.out
+	g++  -std=c++11 tests/runAllCppTests.cpp -o tests.out && ./tests.out

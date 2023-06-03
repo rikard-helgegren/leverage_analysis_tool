@@ -24,7 +24,7 @@ make
 
 This compiles the C++ files, and then runs the program.
 
-*NOTE*: The program does not work with Windows currently.
+*NOTE*: The program does not work with Windows currently, and Mac only can run with C++ version 11
 
 ### Required libraries
 
@@ -33,6 +33,7 @@ Beyond Python3 standard libraries this program also requires:
 * numpy
 * matplotlib
 * tkinter
+* simplejson
 
 and c++ compilator
 

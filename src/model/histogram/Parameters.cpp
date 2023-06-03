@@ -37,4 +37,30 @@ class Parameters{
         int     numberOfFunds;
         bool    includeFeeStatus;
         std::map<int, int>        indexToMarket;
+
+         void print(){
+            std::cout << "loan " << loan <<  std::endl;
+            std::cout << "instrumentLeverages " << instrumentLeverages[0] <<" "<< instrumentLeverages[1] << std::endl;
+            std::cout << "nrOfInstruments " << nrOfInstruments << std::endl;
+            std::cout << "instrumentNames " << instrumentNames[0] << std::endl;
+            std::cout << "proportionFunds " << proportionFunds << std::endl;
+            std::cout << "proportionLeverage " << proportionLeverage << std::endl;
+            std::cout << "totNrDays " << totNrDays << std::endl;
+            std::cout << "nrMarketsSelected " << nrMarketsSelected << std::endl;
+            std::cout << "marketDailyChanges " << marketDailyChanges[0][0] << std::endl;
+            std::cout << "indexNames " << indexNames[0] << std::endl;
+            std::cout << "daysInvesting " << daysInvesting << std::endl;
+            std::cout << "harvestPoint " << harvestPoint << std::endl;
+            std::cout << "refillPoint " << refillPoint << std::endl;
+            std::cout << "rebalance_period_months " << rebalance_period_months << std::endl;
+            std::cout << "strategy " << strategy << std::endl;
+            std::cout << "volatilityStrategieSampleSize " << volatilityStrategieSampleSize << std::endl;
+            std::cout << "varianceCalcSampleSize " << varianceCalcSampleSize << std::endl;
+            std::cout << "volatilityStrategieLevel " << volatilityStrategieLevel << std::endl;
+            //std::cout << "outData" << outData << std::endl;
+            std::cout << "numberOfLeveragedInstruments " << numberOfLeveragedInstruments << std::endl;
+            std::cout << "numberOfFunds " << numberOfFunds << std::endl;
+            std::cout << "includeFeeStatus " << includeFeeStatus << std::endl;
+            // indexToMarket
+        }
 };

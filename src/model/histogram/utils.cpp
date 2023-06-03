@@ -44,9 +44,7 @@ void mapIndexNrToMarketNr(std::map<int,int> indexToMarket,
  * In start of new intervall the starting values have to be set
  */
 void setStartValuesOfInstruments(Parameters parameters, float* currentValues){
-    
     for (int i = 0; i<parameters.nrOfInstruments; i++){
-        
         if (parameters.instrumentLeverages[i] == 1){
             if (parameters.numberOfLeveragedInstruments > 0){ 
                 currentValues[i] = (1.0f + parameters.loan) * parameters.proportionFunds / static_cast<float>(parameters.numberOfFunds);
@@ -63,6 +61,7 @@ void setStartValuesOfInstruments(Parameters parameters, float* currentValues){
                 currentValues[i] = (1.0f + parameters.loan) / static_cast<float>(parameters.numberOfLeveragedInstruments);
             }
         }
+
     }
     
 }
@@ -108,7 +107,7 @@ float updateCurrentInstrumentValue(Parameters parameters, float* currentValues, 
 
 
 bool checkPreConditionsRebalanceTime(Parameters parameters, int day, int item){
-    
+
     //  Rebalance only leveraged                     Need funds to do strategy
     if (parameters.instrumentLeverages[item] == 1 || parameters.numberOfFunds == 0 ){
         return false;
@@ -168,11 +167,11 @@ void doRebalancing(Parameters parameters,
 /**
  * Implement rebalance of investment cirtificates (items)
  */
-//TODO decompose
+//TODO decompose, and make tests
 void rebalanceInvestmentCirtificates(Parameters parameters,
-               int item,
-               float* currentValues,
-               float* referenceValue){
+            int item,
+            float* currentValues,
+            float* referenceValue){
                 
     float totForRebalancing{0.0f};
     float changeInValue{0.0f};
