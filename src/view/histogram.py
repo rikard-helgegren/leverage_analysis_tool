@@ -11,15 +11,19 @@ import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 import logging
+import src.view.constants as constants
 
 class Histogram:
-    def __init__(self, super_frame):
+    def __init__(self, super_frame, tk_frame):
         logging.debug("View: Histogram: __init__")
-        frame = tk.Frame(super_frame, padx=5, pady=5)
+        frame = tk.Frame(super_frame, padx=5, pady=5, width=tk_frame.winfo_width()*0.3, height=tk_frame.winfo_height())
         frame.pack()
 
+        plot_width = tk_frame.winfo_width()*constants.plot_width
+        plot_height = tk_frame.winfo_height()*constants.plot_height
+
         # specify the window as master
-        self.fig = plt.figure(figsize=(5, 3))
+        self.fig = plt.figure(figsize=(plot_width, plot_height))
         self.canvas = FigureCanvasTkAgg(self.fig, master=frame)
         self.canvas.draw()
         self.canvas.get_tk_widget().pack()

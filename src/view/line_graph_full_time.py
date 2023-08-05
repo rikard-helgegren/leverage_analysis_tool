@@ -11,17 +11,21 @@ import logging
 import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+import src.view.constants as constants
 
 
 class Line_Graph_Full_Time:
-    def __init__(self, super_frame):
+    def __init__(self, super_frame, tk_frame):
         logging.debug("View: Line_Graph_Full_Time: __init__")
 
         self.frame = tk.Frame(super_frame, padx=5, pady=5)
         self.frame.pack()
 
+        plot_width = tk_frame.winfo_width()*constants.plot_width
+        plot_height = tk_frame.winfo_height()*constants.plot_height
+
         # specify the window as master
-        self.fig = plt.figure(figsize=(5, 3))
+        self.fig = plt.figure(figsize=(plot_width, plot_height))
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame)
         self.canvas.draw()
         self.canvas.get_tk_widget().pack()

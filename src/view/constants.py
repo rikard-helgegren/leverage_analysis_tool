@@ -9,4 +9,6 @@
 
 """Specific constants for view"""
 
-
+scale_factor_plots = 0.3/21
+plot_height = scale_factor_plots * (3/5)
+plot_width = scale_factor_plots

@@ -14,16 +14,17 @@ from src.view.histogram import Histogram
 from src.view.line_graph_full_time import Line_Graph_Full_Time
 
 
-def setup_vertical_frame_2(view):
+def setup_vertical_frame_2(view, tk_frame):
     view.vertical_frame_2 = tk.Frame(view, padx=5, pady=5)
     view.vertical_frame_2.pack(side=tk.LEFT)
 
-    view.histogram = Histogram(view.vertical_frame_2)
+
+    view.histogram = Histogram(view.vertical_frame_2, tk_frame)
     """ The histogram displays a distribution of outcomes from all continuous
         time intervals of the selected length.
     """
 
-    view.line_graph_full_time = Line_Graph_Full_Time(view.vertical_frame_2)
+    view.line_graph_full_time = Line_Graph_Full_Time(view.vertical_frame_2, tk_frame)
     """ This line graph displays the performance of the created portfolio
         for the full time span available
     """

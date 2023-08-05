@@ -21,16 +21,18 @@ class View(tk.Frame):
        The View contains widgets and plots, and communicates any interactions
        with the view to the controller
     """
-    def __init__(self, parent):
+    def __init__(self, tk_frame):
         logging.debug("View: __init__")
 
-        super().__init__(parent)
+        tk_frame.geometry("800x600")
+
+        super().__init__(tk_frame)
 
         # placeholder for controller
         self.controller = None
 
         setup_vertical_frame_1(self)
-        setup_vertical_frame_2(self)
+        setup_vertical_frame_2(self, tk_frame)
         setup_vertical_frame_3(self)
 
 
