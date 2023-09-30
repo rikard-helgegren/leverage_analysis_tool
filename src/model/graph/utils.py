@@ -131,4 +131,5 @@ def getFeeLevel(leverage):
     elif (leverage >= 5):
         return constants_model.FEE_BULL_5_AND_MORE
     else:
+        logging.ERROR("Graph utils: Invalid leverage")
         return -1

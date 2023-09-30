@@ -12,7 +12,8 @@ from os.path import isfile, join
 from src.Config import Config
 import datetime 
 import sys
-import logging
+#import logging
+from kivy.logger import logging
 
 
 def check_if_data_files_are_clean(data_file_path):
@@ -28,43 +29,43 @@ def check_if_data_files_are_clean(data_file_path):
         try:
             file = open(data_file_path+"/"+file_itter, 'r')
         except:
-            logging.error(" Could not open file: ", data_file_path+"/"+file_itter)
+            logging.error(" Could not open file: ", str(data_file_path)+"/"+str(file_itter))
             continue
 
         lines_of_file = file.readlines()
         
         if check_minimum_two_years_of_data(lines_of_file):
-            logging.info("SUCCESS: ", file_itter, " File passed size")
+            logging.info("SUCCESS: " + str(file_itter)+ " File passed size")
         else:
-            logging.info("FAIL:    ", file_itter, " File failed size")
+            logging.info("FAIL:    " + str(file_itter)+ " File failed size")
             continue
 
         if check_format_first_line(lines_of_file[0]):
-            logging.info("SUCCESS: ", file_itter, " File passed first row format")
+            logging.info("SUCCESS: " + str(file_itter)+ " File passed first row format")
         else:
-            logging.info("FAIL:    ", file_itter, " File failed first row format")
+            logging.info("FAIL:    " + str(file_itter)+ " File failed first row format")
             continue
         
         if check_value_on_rows(lines_of_file[1:]):
-            logging.info("SUCCESS: ", file_itter, " File passed value format")
+            logging.info("SUCCESS: " + str(file_itter)+ " File passed value format")
         else:
-            logging.info("FAIL:    ", file_itter, " File failed value format")
+            logging.info("FAIL:    " + str(file_itter)+ " File failed value format")
             continue
 
         if check_time_decreases_for_each_row(lines_of_file[1:]):
-            logging.info("SUCCESS: ", file_itter, " File passed time decreasing with row number")
+            logging.info("SUCCESS: " + str(file_itter)+ " File passed time decreasing with row number")
         else:
-            logging.info("FAIL:    ", file_itter, " File failed time decreasing with row number")
+            logging.info("FAIL:    " + str(file_itter)+ " File failed time decreasing with row number")
             continue
 
         if check_daily_change_on_rows(lines_of_file[1:]):
-            logging.info("SUCCESS: ", file_itter, " File passed daily change")
+            logging.info("SUCCESS: " + str(file_itter)+ " File passed daily change")
         else:
-            logging.info("FAIL:    ", file_itter, " File failed daily change")
+            logging.info("FAIL:    " + str(file_itter)+ " File failed daily change")
             continue
 
         # After passing all tests
-        logging.info("SUCCESS: ", file_itter, " Passed all tests")
+        logging.info("SUCCESS: " + str(file_itter)+ " Passed all tests")
         clean_files.append(file_itter)
 
         file.close()

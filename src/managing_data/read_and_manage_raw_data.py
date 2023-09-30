@@ -9,6 +9,8 @@
 
 import csv
 from src.model.Market import Market
+#import logging
+from kivy.logger import logging
 
 
 def read_and_manage_raw_data(data_file_path, markets_file_name_list):

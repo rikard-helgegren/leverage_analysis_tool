@@ -7,9 +7,9 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-import logging
+from kivy.logger import Logger
+from kivy.logger import logging
 import sys
-import tkinter as tk
 
 from src.model.Model import Model
 from src.view.View import View
@@ -27,10 +27,10 @@ def set_debug_level():
             logging.getLogger().setLevel('INFO')
 
 
-class Leverage_Application(tk.Tk):
+#class LeverageApp(App):
     """ GUI for analyzing investments with leveraged certificates.
         The code follows the MVC (Model View Controller) architecture
-    """
+    
     def __init__(self):
         super().__init__()
 
@@ -40,19 +40,42 @@ class Leverage_Application(tk.Tk):
         model.model_import_data()
 
         # place view on the root window
-        view = View(self)
-        view.pack()
+        view = View()
+        #view.pack()
+
+       
+
+        controller = Controller(model, view)
+"""
+ 
+        # make the view updated
+        #controller.update_view()
+    
+# Create an instance and run the application
+#if __name__ == '__main__':
+#    set_debug_level()
+#    Leverage_Application().run()
+
+from kivymd.app import MDApp as MDAPP
+from kivy.uix.widget import Widget
+
+
+class LeverageApp(MDAPP):
+    def build(self):
+
+        model = Model()
+        model.model_import_data()
+
+        view = View()
 
         controller = Controller(model, view)
 
         # set the controller to view
         view.set_controller(controller)
 
-        # make the view updated
-        controller.update_view()
+        return view
     
-# Create an instance and run the application
+
 if __name__ == '__main__':
     set_debug_level()
-    app = Leverage_Application()
-    app.mainloop()
+    LeverageApp().run()
