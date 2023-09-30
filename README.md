@@ -24,7 +24,8 @@ make
 
 This compiles the C++ files, and then runs the program.
 
-*NOTE*: The program does not work with Windows currently, and Mac only can run with C++ version 11
+*NOTE*: The program does not work with Windows currently, and Mac only can run with C++ version 11.
+To adjust the program to your screen size and resolution, edit the plot size in config.json.
 
 ### Required libraries
 

@@ -48,7 +48,7 @@ def setup_time_limiters(view, super_frame):
 
         if len(time_string) < 5:  # If only year is set
             time_string = time_string + "0101"
-        elif len(time_string) < 7:  # If year and month is set
+        elif len(time_string) < 7:  # If only year and month is set
             time_string = time_string + "01"
 
         try:

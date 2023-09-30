@@ -7,18 +7,13 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-
-import os
-import sys
-import simplejson as json
-
-
+from src.Json_reader import Json_reader
 
 class Config():
 
     def __init__(self):
                 
-        json_data = read_json()
+        json_data = Json_reader.read_config()
 
         self.DEFAUT_LOAN = json_data["DEFAUT_LOAN"]
         self.DEFAUT_YEARS_HISTOGRAM_INTERVAL = json_data["DEFAUT_YEARS_HISTOGRAM_INTERVAL"]
@@ -37,16 +32,3 @@ class Config():
         self.DEFAUT_VOLATILITY_STRATEGIE_SAMPLE_SIZE = json_data["DEFAUT_VOLATILITY_STRATEGIE_SAMPLE_SIZE"]
         self.DEFAUT_VOLATILITY_STRATEGIE_LEVEL = json_data["DEFAUT_VOLATILITY_STRATEGIE_LEVEL"]
         self.HIGHEST_LEVERAGE_AVAILABLE = json_data["HIGHEST_LEVERAGE_AVAILABLE"]
-
-
-def read_json():
-    #program_folder = os.path.dirname(os.path.realpath(sys.argv[0]))  # TODO: not working for tests runing from /tmp 
-    program_folder = os.getcwd()  # TODO: not working when running from other folder then project folder
-    config_path = program_folder + '/config.json'
-
-    json_data = {}
-    with open(config_path, "r") as file:
-
-        json_data = json.load(file)
-    
-    return json_data

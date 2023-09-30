@@ -11,21 +11,21 @@ import logging
 import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-import src.view.constants as constants
-
+from src.Json_reader import Json_reader
 
 class Line_Graph_Full_Time:
     def __init__(self, super_frame, tk_frame):
         logging.debug("View: Line_Graph_Full_Time: __init__")
+        json_data = Json_reader.read_config()
+
+        self.super_frame = super_frame
+        self.tk_frame = tk_frame
 
         self.frame = tk.Frame(super_frame, padx=5, pady=5)
         self.frame.pack()
 
-        plot_width = tk_frame.winfo_width()*constants.plot_width
-        plot_height = tk_frame.winfo_height()*constants.plot_height
-
         # specify the window as master
-        self.fig = plt.figure(figsize=(plot_width, plot_height))
+        self.fig = plt.figure(figsize=(json_data["PLOT_WIDTH"],json_data["PLOT_HEIGHT"]))
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame)
         self.canvas.draw()
         self.canvas.get_tk_widget().pack()
@@ -35,6 +35,7 @@ class Line_Graph_Full_Time:
         self.toolbarFrame.pack()
         self.toolbar = NavigationToolbar2Tk(self.canvas, self.toolbarFrame)
         self.toolbar.pack(side=tk.BOTTOM)
+        
 
     def draw(self, values, time_span):
         logging.debug("View: Line_Graph_Full_Time: draw")

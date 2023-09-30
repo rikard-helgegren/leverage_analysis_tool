@@ -23,9 +23,6 @@ class View(tk.Frame):
     """
     def __init__(self, tk_frame):
         logging.debug("View: __init__")
-
-        tk_frame.geometry("800x600")
-
         super().__init__(tk_frame)
 
         # placeholder for controller

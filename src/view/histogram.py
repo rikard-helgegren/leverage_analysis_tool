@@ -11,25 +11,27 @@ import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 import logging
-import src.view.constants as constants
+from src.Json_reader import Json_reader
 
 class Histogram:
     def __init__(self, super_frame, tk_frame):
         logging.debug("View: Histogram: __init__")
-        frame = tk.Frame(super_frame, padx=5, pady=5, width=tk_frame.winfo_width()*0.3, height=tk_frame.winfo_height())
-        frame.pack()
+        json_data = Json_reader.read_config()
 
-        plot_width = tk_frame.winfo_width()*constants.plot_width
-        plot_height = tk_frame.winfo_height()*constants.plot_height
+        self.super_frame = super_frame
+        self.tk_frame = tk_frame
+
+        self.frame = tk.Frame(super_frame, padx=5, pady=5, width=tk_frame.winfo_width()*0.3, height=tk_frame.winfo_height())
+        self.frame.pack()
 
         # specify the window as master
-        self.fig = plt.figure(figsize=(plot_width, plot_height))
-        self.canvas = FigureCanvasTkAgg(self.fig, master=frame)
+        self.fig = plt.figure(figsize=(json_data["PLOT_WIDTH"],json_data["PLOT_HEIGHT"]))
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame)
         self.canvas.draw()
         self.canvas.get_tk_widget().pack()
 
         # navigation toolbar
-        toolbarFrame = tk.Frame(master=frame)
+        toolbarFrame = tk.Frame(master=self.frame)
         toolbarFrame.pack()
         toolbar = NavigationToolbar2Tk(self.canvas, toolbarFrame)
         toolbar.pack(side=tk.BOTTOM)
