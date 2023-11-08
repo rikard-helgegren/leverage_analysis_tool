@@ -219,7 +219,7 @@ class Model:
         logging.debug("Model: get_rebalance_period_months")
         return self.rebalance_period_months
     def set_rebalance_period_months(self, rebalance_period_months):
-        logging.debug("Model: set_rebalance_period_months", rebalance_period_months)
+        logging.debug("Model: set_rebalance_period_months %f", rebalance_period_months)
         self.rebalance_period_months = rebalance_period_months
 
     def get_proportion_cash(self):
@@ -233,14 +233,15 @@ class Model:
         logging.debug("Model: get_proportion_funds")
         return self.proportion_funds
     def set_proportion_funds(self, proportion_funds):
-        logging.debug("Model: set_proportion_funds", proportion_funds)
+        logging.debug("Model: set_proportion_funds %f", proportion_funds)
         self.proportion_funds = proportion_funds
 
     def get_proportion_leverage(self):
         logging.debug("Model: get_proportion_leverage")
         return self.proportion_leverage
     def set_proportion_leverage(self, proportion_leverage):
-        logging.debug("Model: set_proportion_leverage", proportion_leverage)
+        """The proportion of leverage should be a value between 0 and 1"""
+        logging.debug("Model: set_proportion_leverage %f", proportion_leverage)
         self.proportion_leverage = proportion_leverage
 
     def get_include_fees_status(self):
@@ -249,7 +250,7 @@ class Model:
     def set_include_fee_status(self, include_fee_status):
         logging.debug("Model: set_include_fee_status")
         self.include_fees_status = include_fee_status
-        logging.debug("Model, fee_status:", include_fee_status)
+        logging.debug("Model, fee_status: %f", include_fee_status)
 
 
     def get_rebalance_between_instruments_status(self):

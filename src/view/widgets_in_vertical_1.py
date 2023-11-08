@@ -10,7 +10,6 @@
 import logging
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
-from kivy.uix.spinner import Spinner
 from kivy.uix.slider import Slider
 from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
@@ -18,14 +17,18 @@ from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 
+from src.view.Strategy_menue import Strategy_menue
+from src.view.utils import make_text_black
+from src.view.Leverage_slider import Leverage_slider
+
 
 def setup_vertical_frame(view):
-    vertical_frame = BoxLayout(orientation='vertical', padding=5, size_hint=(.8, 1))
+    vertical_frame = BoxLayout(orientation='vertical', padding=5, size_hint=(.6, 1))
     insert_space_top(vertical_frame)
-    insert_slider(vertical_frame)
-    insert_check_box(vertical_frame)
-    insert_time_and_loan(vertical_frame)
-    insert_spinner(vertical_frame)
+    view.leverage_slider = Leverage_slider(view, vertical_frame)
+    insert_check_box(view, vertical_frame)
+    insert_time_and_loan(view, vertical_frame)
+    view.strategy_meny = Strategy_menue(view, vertical_frame)
     insert_space_bott(vertical_frame)
 
     view.add_widget(vertical_frame)
@@ -37,31 +40,13 @@ def insert_space_top(frame):
 
 def insert_space_bott(frame):
     frame.add_widget(Widget(size_hint=(1, .8)))
-
-
-def insert_slider(frame):
-    def on_slider_change(instance, value):
-        slide_counter.text=make_text_black(str(int(value)))
-
-    sub_frame = GridLayout(size_hint=(1, .4), cols=1, )
-    label = Label(text=make_text_black('Percent Leverage'),
-    markup = True, size_hint=(1, 1))
-    sub_frame.add_widget(label)
-
-    sub_sub_frame = BoxLayout(size_hint=(1, .2) )
-    slider = Slider(value=10, size_hint =(1, 1))
-    slider.bind(value=on_slider_change)
-    sub_sub_frame.add_widget(slider)
-
-    slide_counter = Label(text=make_text_black('10'),
-    markup = True, size_hint=(.1, 1))
-    sub_sub_frame.add_widget(slide_counter)
-
-    sub_frame.add_widget(sub_sub_frame)
-    frame.add_widget(sub_frame)
     
 
-def insert_check_box(frame):
+def insert_check_box(view, frame):
+    def on_checkbox_active(check_box, state):
+        view.update_fee_status(state)
+
+
     sub_frame = GridLayout(size_hint=(1, .4), cols=4)
 
     sub_frame.add_widget(Widget()) # empty space left
@@ -79,7 +64,22 @@ def insert_check_box(frame):
     frame.add_widget(sub_frame)
 
 
-def insert_time_and_loan(frame):
+def insert_time_and_loan(view, frame):
+    def update_years(text_box):
+        years = text_box._get_text()
+        if years.isdigit():
+            view.update_years_histogram_interval(int(years))
+        else:
+            logging.error('"%r" is not a number', years)
+    
+    def update_loan(text_box):
+        loan = text_box._get_text()
+        if loan.isdigit():
+            view.update_loan(int(loan))
+        else:
+            logging.error('"%r" is not a number', loan)
+        
+
     sub_frame = BoxLayout(size_hint=(1, .2))
     
     sub_frame.add_widget(Widget())
@@ -89,7 +89,7 @@ def insert_time_and_loan(frame):
     markup = True, size_hint=(1, 1))
     time_frame.add_widget(label)
     textinput = TextInput(text='1', multiline=False, size_hint =(.8, .7))
-    textinput.bind(on_text_validate=textbox_on_enter)
+    textinput.bind(on_text_validate=update_years)
     time_frame.add_widget(textinput)
     sub_frame.add_widget(time_frame)
 
@@ -100,41 +100,10 @@ def insert_time_and_loan(frame):
     markup = True)
     loan_frame.add_widget(label)
     textinput = TextInput(text='0', multiline=False, size_hint =(.8, .7))
-    textinput.bind(on_text_validate=textbox_on_enter)
+    textinput.bind(on_text_validate=update_loan)
     loan_frame.add_widget(textinput)
     sub_frame.add_widget(loan_frame)
 
     sub_frame.add_widget(Widget())
     
     frame.add_widget(sub_frame)
-
-
-def insert_spinner(frame):
-    frame.add_widget(Widget(size_hint=(1, .2)))
-
-    spinner = Spinner(
-        text='Strategies',
-        values=('Hold', 'Rebalance', 'Harvest refill', 'Variance', 'Dont invest'),
-        size_hint=(0.2, 0.12),
-        pos_hint={'center_x': .5, 'center_y': .5}
-    )
-    
-    spinner.bind(text=show_selected_value)
-    frame.add_widget(spinner)
-
-
-def make_text_black(text):
-    return '[color=000000]'+ text +'[/color]'
-
-
-def textbox_on_enter(one):
-    print("text")
-
-
-def on_checkbox_active(one, two):
-    print("on_checkbox_active")
-
-
-def show_selected_value(spinner, text):
-    print('The spinner', spinner, 'has text', text)
-    

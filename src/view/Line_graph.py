@@ -6,16 +6,13 @@
 # modify, use, and compile the software. You are NOT however allowed to publish, sell, or
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
-
+import logging
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+
 from kivy.metrics import dp
-
-import logging
 from kivy.uix.widget import Widget
-
 from src.view.Matplot_figure import MatplotFigure
-
 
 
 #optimized draw on Agg backend
@@ -32,14 +29,17 @@ mpl.rcParams['axes.linewidth'] = 1.0
 font_size_axis_title=dp(13)
 font_size_axis_tick=dp(12)        
 
+
 class Line_graph(Widget):
     """class that generate Matplotlib graph."""
-
     def __init__(self, view, frame):  
         super().__init__()
 
-        self.fig, self.ax = plt.subplots(1, 1, facecolor='lightskyblue')
-
+        light_gray = .98
+        self.fig, self.axs = plt.subplots(1, 1, sharey=True, tight_layout=True, facecolor=[light_gray, light_gray, light_gray])
+    
+        self.axs.set_xticks([0,2,4,6,8,10], ['','','','','',''])
+        self.axs.set_yticks([0,2,4,6,8,10], ['','','','','',''])
         self.matplot = MatplotFigure()
         self.matplot.figure = self.fig
         frame.add_widget(self.matplot)
@@ -52,13 +52,15 @@ class Line_graph(Widget):
         plt.figure(self.fig.number)
 
         #if clear_before_drawing: #TODO implement with this input
-        self.ax.clear()
-
+        self.axs.clear()
 
         if values != []:
-            self.set_time_on_x_axis(self.ax, time_span)
-            self.line1, = self.ax.plot(values)
+            self.set_time_on_x_axis(self.axs, time_span)
+            self.line1, = self.axs.plot(values)
             plt.tight_layout()
+        else:
+            self.axs.set_xticks([0,2,4,6,8,10], ['','','','','',''])
+            self.axs.set_yticks([0,2,4,6,8,10], ['','','','','',''])
         
         self.canvas.draw()
 

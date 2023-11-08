@@ -7,8 +7,8 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
+import logging
 from kivy.metrics import dp
-
 from kivymd.uix.datatables import MDDataTable
 
 class Table_of_statistics():
@@ -16,61 +16,21 @@ class Table_of_statistics():
         self.table = MDDataTable(
             rows_num=100,
             column_data=[
-                ("Metrics", dp(20)),
+                ("Metrics", dp(40)),
                 ("Value", dp(30)),
             ],
-            row_data=[
-                (
-                    "Mean",
-                    "1",
-                ),
-                (
-                    "Median",
-                    "1",
-                ),
-                (
-                    "Risk",
-                    "1",
-                ),
-                (
-                    "Dounut",
-                    "1",
-                ),
-                (
-                    "Mean",
-                    "1",
-                ),
-                (
-                    "Median",
-                    "1",
-                ),
-                (
-                    "Risk",
-                    "1",
-                ),
-                (
-                    "Dounut",
-                    "1",
-                ),
-                (
-                    "Mean",
-                    "1",
-                ),
-                (
-                    "Median",
-                    "1",
-                ),
-                (
-                    "Risk",
-                    "1",
-                ),
-                (
-                    "Dounut",
-                    "1",
-                ),
-            ],
-            sorted_on="Contry",
+            row_data=[],
             sorted_order="ASC",
             elevation=0
         )
         frame.add_widget(self.table)
+
+    def set_table(self, stats_dict):
+        """Add all the statistics to the table"""
+        logging.debug("View: Table_of_statistics: set_table")
+        row_data=[]
+
+        for i, key in enumerate(stats_dict):
+            row_data.append((key,stats_dict[key]))
+
+        self.table.row_data = row_data

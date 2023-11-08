@@ -8,13 +8,9 @@
 # commercial or non-commercial, by any means.
 
 import logging
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.boxlayout import BoxLayout
 
 from kivy.metrics import dp
-
 from kivymd.uix.datatables import MDDataTable
-
 
 column_title_leverage_1 = "Leverage 1"
 green = [0.0, 0.5019607843137255, 0.0, 1.0]
@@ -22,8 +18,6 @@ default_color = [0.05, 0.05, 0.05, 0.05]
 default_selected_color = [0.15, 0.15, 0.15, 0.15]
 
 class Table_of_instuments():
-
-
     def __init__(self, view, frame):
         self.view = view
         self.table = MDDataTable(
@@ -69,8 +63,8 @@ class Table_of_instuments():
         elif len(coloumn_title) == 1:
             return int(coloumn_title)
         else:
-            logging.error("Table_of_instruments, get_leverage_from_cell: Error in column title of selected cell")
-            
+            logging.error("""Table_of_instruments, get_leverage_from_cell:
+                           Error in column title of selected cell""") 
 
 
     def get_market_from_cell(self, instance_table, cell):
@@ -95,7 +89,6 @@ class Table_of_instuments():
     def set_table(self, names, countries):
         logging.debug("table_of_instruments: set_table")
 
-        #all_item_texts = self.get_all_item_texts()
         all_item_texts=[]
 
         added_new_item = False
@@ -110,5 +103,4 @@ class Table_of_instuments():
         
         if added_new_item:
             self.table.row_data=all_item_texts
-
-                
+  

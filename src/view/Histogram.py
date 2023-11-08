@@ -13,6 +13,11 @@ import matplotlib.pyplot as plt
 from kivy.metrics import dp
 from src.view.Matplot_figure import MatplotFigure
 
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.stats import gaussian_kde
+import seaborn as sns
+
 #optimized draw on Agg backend
 mpl.rcParams['path.simplify'] = True
 mpl.rcParams['path.simplify_threshold'] = 1.0
@@ -22,6 +27,7 @@ mpl.rcParams['agg.path.chunksize'] = 1000
 mpl.rcParams['axes.spines.top'] = False
 mpl.rcParams['axes.spines.right'] = False
 mpl.rcParams['axes.linewidth'] = 1.0
+mpl.style.use('seaborn-v0_8')
 
 font_size_axis_title=dp(13)
 font_size_axis_tick=dp(12)        
@@ -31,7 +37,17 @@ class Histogram:
     def __init__(self, view, frame):
         super().__init__()
 
-        self.fig, self.axs = plt.subplots(1, 1, sharey=True, tight_layout=True)      
+        light_gray_value = .98
+        light_gray = [light_gray_value, light_gray_value, light_gray_value]
+        self.fig, self.axs = plt.subplots(
+            1,
+            1,
+            sharey=True,
+            tight_layout=True, 
+            facecolor=light_gray,
+            edgecolor=light_gray)
+        self.axs.set_xticks([0,2,4,6,8,10], ['','','','','',''])
+        self.axs.set_yticks([0,2,4,6,8,10], ['','','','','',''])      
         self.matplot = MatplotFigure()
         self.matplot.figure = self.fig
         frame.add_widget(self.matplot)
@@ -47,8 +63,30 @@ class Histogram:
         self.axs.clear()
 
         if data != []:
-            #plt.style.use('seaborn')
-            self.axs.hist(data, bins=80)
+            [begining_trailing_values, end_before_trailing_values] = self.point_of_trailing_values(data)
+            self.axs.set_xlim(xmin=begining_trailing_values, xmax=end_before_trailing_values)   
+            hist_plot = sns.histplot(data, element = "step" ,kde=True, bins=200, discrete=False, ax=self.axs)
+            y_ticks = self.axs.get_yticks()
+            self.axs.set_yticks(y_ticks, ['']*len(y_ticks))
+            self.axs.set_ylabel('')
+            hist_plot
+
             plt.tight_layout()
+        
+        else:
+            self.axs.set_xticks([0,2,4,6,8,10], ['','','','','',''])
+            self.axs.set_yticks([0,2,4,6,8,10], ['','','','','',''])
+
 
         self.canvas.draw()
+
+    def point_of_trailing_values(self, data):
+        sorted_data = sorted(data)
+
+        begining_trailing_values = sorted_data[0]
+
+        size = len(data)
+        last_procentile = int(size/80)
+        end_trailing_values = sorted_data[-last_procentile]
+
+        return [begining_trailing_values, end_trailing_values]

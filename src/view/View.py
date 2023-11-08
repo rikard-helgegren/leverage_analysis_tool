@@ -9,11 +9,6 @@
 
 import logging
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.boxlayout import BoxLayout
-
-from kivymd.app import MDApp as App #MDAPP
-
-
 from kivy.core.window import Window
 
 from src.view.widgets_in_vertical_1 import setup_vertical_frame as setup_vertical_frame_1
@@ -21,60 +16,68 @@ from src.view.widgets_in_vertical_2 import setup_vertical_frame_2
 from src.view.widgets_in_vertical_3 import setup_vertical_frame_3
 
 
-
 class View(GridLayout):
     def __init__(self, *args, **kwargs):
         super(View, self).__init__(*args, **kwargs)
         Window.size = (1700, 900)
 
+        Window.bind(on_key_down=self._keydown)
+        #Window.bind(on_key_up=self._keyup)
+
         # placeholder for controller
         self.controller = None
 
-  
         self.cols=3
 
         setup_vertical_frame_1(self)
         setup_vertical_frame_2(self)
         setup_vertical_frame_3(self)
 
-                               
     
-    def on_checkbox_active():
-        print("on_checkbox_active")
+    def _keydown(self, window, key, scancode, codepoint, modifiers):
+        #TODO only do if hover over. Use widget.collide_point(x, y) need mous pos
+        match key:
+            case 273 | 275: #Up | Right
+                self.leverage_slider.increase_value()
+            case 274 | 276: #Down | Left
+                self.leverage_slider.decrease_value()
+
+
+
+    """def _keyup(self, window, key, scancode):
+        print('keyup:')
+        print('\tkey:',key)
+        print('\tscancode:', scancode)"""
+
 
     def set_controller(self, controller):
         logging.debug("View: set_controller")
         self.controller = controller
 
-    def update_fee_status(self):
+    def update_fee_status(self, status):
         logging.debug("View: update_fee_status")
-        #self.controller.update_fee_status(self.checkbutton_fee_state.get())
+        self.controller.update_fee_status(status)
     
-    def update_years_histogram_interval(self):
+    def update_years_histogram_interval(self, years):
         logging.debug("View: update_years_histogram_interval")
-        #value = int(self.spin_years.get())
-        #self.controller.update_years_histogram_interval(value)
+        self.controller.update_years_histogram_interval(years)
 
-    def update_loan(self):
+    def update_loan(self, loan):
         logging.debug("View: update_loan")
-        #value = int(self.spin_loan.get())
-        #self.controller.update_loan(value / 100)
+        self.controller.update_loan(loan / 100)
         # TODO not fully implemented (hist)
 
-    def update_harvest_point(self):
+    def update_harvest_point(self, harvest_point):
         logging.debug("View: update_harvest_point")
-        #value = int(self.spin_harvest_point.get())
-        #self.controller.update_harvest_point(value)
+        self.controller.update_harvest_point(harvest_point)
 
-    def update_refill_point(self):
+    def update_refill_point(self, refill_point):
         logging.debug("View: update_refill_point")
-        #value = int(self.spin_refill_point.get())
-        #self.controller.update_refill_point(value)
+        self.controller.update_refill_point(refill_point)
 
-    def update_rebalance_point(self):
+    def update_rebalnce_intervall(self, intervall):
         logging.debug("View: update_rebalance_point")
-        #value = int(self.spin_rebalance_point.get())
-        #self.controller.update_rebalance_point(value)
+        self.controller.update_rebalance_point(intervall)
 
     def update_variance_calc_sample_size(self):
         logging.debug("View: update_variance_calc_sample_size")
@@ -93,8 +96,9 @@ class View(GridLayout):
    
 
     def update_amount_leverage(self, value):
+        """The amount of leverage should be a value between 0 and 100"""
         logging.debug("View: update_amount_leverage")
-        #self.controller.set_update_amount_leverage(value)
+        self.controller.set_update_amount_leverage(value)
 
     def draw_histogram(self, data):
         logging.debug("View: draw_histogram")
@@ -114,12 +118,12 @@ class View(GridLayout):
 
     def update_strategy_selected(self, menu_focus_item):
         logging.debug("View: update_strategy_selected")
-        #self.controller.update_strategy_selected(menu_focus_item)
+        self.controller.update_strategy_selected(menu_focus_item)
 
     def update_time_limits(self, from_time, to_time):
         logging.debug("View: update_time_limits")
-        #self.controller.set_time_limits(from_time, to_time)
+        self.controller.set_time_limits(from_time, to_time)
 
     def update_table_of_statistics(self, key_values):
         logging.debug("View update_table_of_statistics")
-        #self.table_of_statistics.set_table(key_values)
+        self.table_of_statistics.set_table(key_values)

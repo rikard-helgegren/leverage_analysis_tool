@@ -26,7 +26,7 @@ class Controller:
 
     def update_fee_status(self, checkbutton_fee_state):
 
-        logging.debug("Controller: fee_status:", checkbutton_fee_state)
+        logging.debug("Controller: fee_status: %r", checkbutton_fee_state)
         self.model.set_include_fee_status(checkbutton_fee_state)
         self.update_model()
 
@@ -177,12 +177,12 @@ class Controller:
         # If start day is 0 then no date is set
         if start_date != 0:
             start_date = format.formatDate(start_date)
-            self.view.text_box_left.set_text(start_date)
+            self.view.text_box_from_date._set_text(start_date)
 
         # If end day is 0 then no date is set
         if end_date != 0:
             end_date = format.formatDate(end_date)
-            self.view.text_box_right.set_text(end_date)
+            self.view.text_box_to_date._set_text(end_date)
 
     def update_table_of_statistics(self, key_values):
         self.view.update_table_of_statistics(key_values)
