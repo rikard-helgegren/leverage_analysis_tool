@@ -11,10 +11,10 @@ import logging
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 
-from src.view.widgets_in_vertical_1 import setup_vertical_frame as setup_vertical_frame_1
-from src.view.widgets_in_vertical_2 import setup_vertical_frame_2
-from src.view.widgets_in_vertical_3 import setup_vertical_frame_3
-
+from src.view.vertical_subframe_left.widgets_in_vertical import setup_vertical_frame as setup_vertical_frame_left
+from src.view.vertical_subframe_middle.widgets_in_vertical import setup_vertical_frame as setup_vertical_frame_middle
+from src.view.vertical_subframe_right.widgets_in_vertical import setup_vertical_frame as setup_vertical_frame_right
+from src.view.Keyboard_observable import Keyboard_observable
 
 class View(GridLayout):
     def __init__(self, *args, **kwargs):
@@ -22,33 +22,23 @@ class View(GridLayout):
         Window.size = (1700, 900)
 
         Window.bind(on_key_down=self._keydown)
-        #Window.bind(on_key_up=self._keyup)
+        Window.bind(mouse_pos=self.set_mouse_position)
+        self.keyboard_observable =Keyboard_observable()
 
-        # placeholder for controller
+        # Placeholder for controller
         self.controller = None
 
         self.cols=3
 
-        setup_vertical_frame_1(self)
-        setup_vertical_frame_2(self)
-        setup_vertical_frame_3(self)
+        setup_vertical_frame_left(self)
+        setup_vertical_frame_middle(self)
+        setup_vertical_frame_right(self)
 
+    def set_mouse_position(self, w, position):
+        self.mouse_position = position
     
     def _keydown(self, window, key, scancode, codepoint, modifiers):
-        #TODO only do if hover over. Use widget.collide_point(x, y) need mous pos
-        match key:
-            case 273 | 275: #Up | Right
-                self.leverage_slider.increase_value()
-            case 274 | 276: #Down | Left
-                self.leverage_slider.decrease_value()
-
-
-
-    """def _keyup(self, window, key, scancode):
-        print('keyup:')
-        print('\tkey:',key)
-        print('\tscancode:', scancode)"""
-
+        self.keyboard_observable.notify_observers(key, self.mouse_position)
 
     def set_controller(self, controller):
         logging.debug("View: set_controller")

@@ -10,9 +10,9 @@
 import tkinter as tk
 import logging
 
-from src.view.widgets_in_vertical_1 import setup_vertical_frame_1
-from src.view.widgets_in_vertical_2 import setup_vertical_frame_2
-from src.view.widgets_in_vertical_3 import setup_vertical_frame_3
+from src.view.vertical_left.widgets_in_vertical import setup_vertical_frame_1
+from src.view.vertical_middle.widgets_in_vertical_2 import setup_vertical_frame_2
+from src.view.vertical_right.widgets_in_vertical_3 import setup_vertical_frame_3
 
 class View(tk.Frame):
     """This is the view of the application. It is the interface between

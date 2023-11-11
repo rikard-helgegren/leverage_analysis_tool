@@ -19,11 +19,12 @@ from src.view.utils import make_text_black
 class Leverage_slider():
     def __init__(self, view, frame):
         self.view = view
-        sub_frame = GridLayout(size_hint=(1, .4), cols=1, )
+        self.view.keyboard_observable.subscribe(self)
+        self.sub_frame = GridLayout(size_hint=(1, .4), cols=1, )
 
         label = Label(text=make_text_black('Percent Leverage'),
         markup = True, size_hint=(1, 1))
-        sub_frame.add_widget(label)
+        self.sub_frame.add_widget(label)
 
         sub_sub_frame = BoxLayout(size_hint=(1, .2) )
         self.slider = Slider(value=10, size_hint =(1, 1))
@@ -34,17 +35,29 @@ class Leverage_slider():
         markup = True, size_hint=(.1, 1))
         sub_sub_frame.add_widget(self.slide_counter)
 
-        sub_frame.add_widget(sub_sub_frame)
-        frame.add_widget(sub_frame)
+        self.sub_frame.add_widget(sub_sub_frame)
+        frame.add_widget(self.sub_frame)
+    
+    def key_event(self, key, mouse_position):
+        if self.sub_frame.collide_point(mouse_position[0], mouse_position[1]):
+            match key:
+                case 273: #Up
+                    self.increase_value(10)
+                case 275:  #Right
+                    self.increase_value(1)
+                case 274: #Down
+                    self.decrease_value(10)
+                case 276: #Left
+                    self.decrease_value(1)
 
-    def decrease_value(self):
+    def decrease_value(self, decrease_amount=1):
         old_value = self.slider.value
-        new_value = max(old_value-1, 0)
+        new_value = max(old_value-decrease_amount, 0)
         self.slider.value = new_value
     
-    def increase_value(self):
+    def increase_value(self, increase_amount=1):
         old_value = self.slider.value
-        new_value = min(old_value+1, 100)
+        new_value = min(old_value+increase_amount, 100)
         self.slider.value = new_value
 
     def on_slider_change(self, instance, value):

@@ -11,13 +11,7 @@ import logging
 from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
-
-from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
-
-from src.view.Histogram import Histogram
-from src.view.Line_graph import Line_graph
-from src.view.Matplot_figure import MatplotFigure
 
 class Time_limiters():
 

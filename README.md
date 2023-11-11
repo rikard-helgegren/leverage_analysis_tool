@@ -45,67 +45,80 @@ For getting an undestanding of this code you are recomended to start with levera
 
 ```
 .
+├── coding_quotes
 ├── config.json
 ├── leverage_analysis_tool.py
 ├── LICENSE.md
 ├── Makefile
 ├── README.md
 ├── src
-│         ├── Config.py
-│         ├── constants.py
-│         ├── controller
-│         │         ├── Controller.py
-│         │         ├── formating.py
-│         ├── managing_data
-│         │         ├── check_if_data_files_are_clean.py
-│         │         ├── manage_preproccessed_data.py
-│         │         └── read_and_manage_raw_data.py
-│         ├── model
-│         │         ├── common
-│         │         │         ├── calculate_common_time_interval.py
-│         │         │         ├── calcultate_daily_change.py
-│         │         │         ├── check_data_is_empty.py
-│         │         │         ├── constants.h
-│         │         │         ├── constants_model.py
-│         │         │         ├── convertArrayChangeToTotalValue.cpp
-│         │         │         ├── convert_between_market_and_dict.py
-│         │         │         ├── convertCharPointerToStringVector.cpp
-│         │         │         ├── determine_longest_common_timespan.py
-│         │         │         ├── fill_in_missing_dates.py
-│         │         │         ├── Linked_list.py
-│         │         │         ├── regression.cpp
-│         │         │         ├── sumFloats.cpp
-│         │         │         ├── varianceAndVolatility.cpp
-│         │         │         └── variance_and_volatility.py
-│         │         ├── graph
-│         │         │         ├── calculate_graph_outcomes_strategy.py
-│         │         │         ├── strategies.py
-│         │         │         └── utils.py
-│         │         ├── histogram
-│         │         │         ├── calculateHistogramOutput.cpp
-│         │         │         ├── calculate_histograms_strategy.py
-│         │         │         ├── histogram_cpp_adapter.py
-│         │         │         ├── histogramStrategies.cpp
-│         │         │         ├── ParametersBuilder.cpp
-│         │         │         ├── Parameters.cpp
-│         │         │         └── utils.cpp
-│         │         ├── market_class.py
-│         │         ├── Model.py
-│         │         ├── Performance_key_values.py
-│         │         ├── Portfolio_item.py
-│         ├── setup.py
-│         └── view
-│             ├── constants_view.py
-│             ├── Frame_schema.png
-│             ├── histogram.py
-│             ├── line_graph_full_time.py
-│             ├── menu_of_strategies.py
-│             ├── preview.png
-│             ├── setup_time_limiters.py
-│             ├── table_of_instruments.py
-│             ├── table_of_statistics.py
-│             ├── View.py
-│             └── widgets_in_vertical_1.py
+│   ├── Config.py
+│   ├── constants.py
+│   ├── controller
+│   │   ├── Controller.py
+│   │   ├── formating.py
+│   ├── Json_reader.py
+│   ├── managing_data
+│   │   ├── check_if_data_files_are_clean.py
+│   │   ├── manage_preproccessed_data.py
+│   │   └── read_and_manage_raw_data.py
+│   ├── model
+│   │   ├── common
+│   │   │   ├── calculate_common_time_interval.py
+│   │   │   ├── calcultate_daily_change.py
+│   │   │   ├── check_data_is_empty.py
+│   │   │   ├── constants.h
+│   │   │   ├── constants_model.py
+│   │   │   ├── convertArrayChangeToTotalValue.cpp
+│   │   │   ├── convert_between_market_and_dict.py
+│   │   │   ├── convertCharPointerToStringVector.cpp
+│   │   │   ├── determine_longest_common_timespan.py
+│   │   │   ├── fill_in_missing_dates.py
+│   │   │   ├── Linked_list.py
+│   │   │   ├── regression.cpp
+│   │   │   ├── sumFloats.cpp
+│   │   │   ├── varianceAndVolatility.cpp
+│   │   │   └── variance_and_volatility.py
+│   │   ├── graph
+│   │   │   ├── calculate_graph_outcomes_strategy.py
+│   │   │   ├── strategies.py
+│   │   │   └── utils.py
+│   │   ├── histogram
+│   │   │   ├── calculateHistogramOutput.cpp
+│   │   │   ├── calculate_histograms_strategy.py
+│   │   │   ├── histogram_cpp_adapter.py
+│   │   │   ├── histogramStrategies.cpp
+│   │   │   ├── ParametersBuilder.cpp
+│   │   │   ├── Parameters.cpp
+│   │   │   └── utils.cpp
+│   │   ├── Market.py
+│   │   ├── Model.py
+│   │   ├── Performance_key_values.py
+│   │   ├── Portfolio_item.py
+│   ├── preview.png
+│   ├── setup.py
+│   ├── view
+│   │   ├── Matplot_figure.py
+│   │   ├── strategies
+│   │   │   ├── Harvest_refill_strategy.py
+│   │   │   └── Rebalance_strategy.py
+│   │   ├── utils.py
+│   │   ├── vertical_subframe_left
+│   │   │   ├── Investment_intervall.py
+│   │   │   ├── Leverage_slider.py
+│   │   │   ├── Loan.py
+│   │   │   ├── Strategy_menue.py
+│   │   │   ├── Time_limiters.py
+│   │   │   └── widgets_in_vertical.py
+│   │   ├── vertical_subframe_middle
+│   │   │   ├── Histogram.py
+│   │   │   ├── Line_graph.py
+│   │   │   └── widgets_in_vertical.py
+│   │   ├── vertical_subframe_right
+│   │   │   ├── Table_of_instruments.py
+│   │   │   ├── Table_of_statistics.py
+│   │   │   └── widgets_in_vertical.py
+│   │   └── View.py
 ├── tests
 │         ├── ...
 ```

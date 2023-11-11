@@ -14,8 +14,6 @@ from kivy.metrics import dp
 from src.view.Matplot_figure import MatplotFigure
 
 import matplotlib.pyplot as plt
-import numpy as np
-from scipy.stats import gaussian_kde
 import seaborn as sns
 
 #optimized draw on Agg backend
@@ -86,7 +84,7 @@ class Histogram:
         begining_trailing_values = sorted_data[0]
 
         size = len(data)
-        last_procentile = int(size/80)
+        last_procentile = int(size/40)
         end_trailing_values = sorted_data[-last_procentile]
 
         return [begining_trailing_values, end_trailing_values]

@@ -8,21 +8,17 @@
 # commercial or non-commercial, by any means.
 
 import logging
-from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 
+from src.view.vertical_subframe_middle.Histogram import Histogram
+from src.view.vertical_subframe_middle.Line_graph import Line_graph
+from src.view.vertical_subframe_left.Time_limiters import Time_limiters
 
-from src.view.Table_of_instruments import Table_of_instuments
-from src.view.Table_of_statistics import Table_of_statistics
+def setup_vertical_frame(view):
+    frame = BoxLayout(orientation='vertical', padding=5)
 
+    view.histogram = Histogram(view, frame)
+    view.line_graph = Line_graph(view, frame)
+    view.time_limiters = Time_limiters(view, frame)
 
-def setup_vertical_frame_3(view):
-
-    frame = BoxLayout(orientation='vertical', padding=5, size_hint=(0.7, 1))
-    
-    view.table_of_instruments = Table_of_instuments(view, frame)
-
-    view.table_of_statistics = Table_of_statistics(view, frame)
-    
     view.add_widget(frame)
-

@@ -10,17 +10,15 @@
 import logging
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
-from kivy.uix.slider import Slider
-from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
-
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 
-from src.view.Strategy_menue import Strategy_menue
+from src.view.vertical_subframe_left.Strategy_menue import Strategy_menue
+from src.view.vertical_subframe_left.Leverage_slider import Leverage_slider
+from src.view.vertical_subframe_left.Investment_intervall import Investment_intervall
+from src.view.vertical_subframe_left.Loan import Loan
 from src.view.utils import make_text_black
-from src.view.Leverage_slider import Leverage_slider
-
 
 def setup_vertical_frame(view):
     vertical_frame = BoxLayout(orientation='vertical', padding=5, size_hint=(.6, 1))
@@ -65,45 +63,13 @@ def insert_check_box(view, frame):
 
 
 def insert_time_and_loan(view, frame):
-    def update_years(text_box):
-        years = text_box._get_text()
-        if years.isdigit():
-            view.update_years_histogram_interval(int(years))
-        else:
-            logging.error('"%r" is not a number', years)
+
+    sub_frame = BoxLayout(size_hint=(0.5, .2), pos_hint={'center_x': .5, 'center_y': .5})
     
-    def update_loan(text_box):
-        loan = text_box._get_text()
-        if loan.isdigit():
-            view.update_loan(int(loan))
-        else:
-            logging.error('"%r" is not a number', loan)
-        
-
-    sub_frame = BoxLayout(size_hint=(1, .2))
-    
-    sub_frame.add_widget(Widget())
-
-    time_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
-    label = Label(text=make_text_black('Time Investing'),
-    markup = True, size_hint=(1, 1))
-    time_frame.add_widget(label)
-    textinput = TextInput(text='1', multiline=False, size_hint =(.8, .7))
-    textinput.bind(on_text_validate=update_years)
-    time_frame.add_widget(textinput)
-    sub_frame.add_widget(time_frame)
+    view.investment_intervall = Investment_intervall(view, sub_frame)
 
     sub_frame.add_widget(Widget())
 
-    loan_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
-    label = Label(text=make_text_black('Loan'),
-    markup = True)
-    loan_frame.add_widget(label)
-    textinput = TextInput(text='0', multiline=False, size_hint =(.8, .7))
-    textinput.bind(on_text_validate=update_loan)
-    loan_frame.add_widget(textinput)
-    sub_frame.add_widget(loan_frame)
-
-    sub_frame.add_widget(Widget())
+    view.loan = Loan(view, sub_frame)
     
     frame.add_widget(sub_frame)
