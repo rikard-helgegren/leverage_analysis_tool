@@ -16,6 +16,7 @@ from kivy.uix.gridlayout import GridLayout
 
 from src.view.utils import make_text_black
 
+
 class Leverage_slider():
     def __init__(self, view, frame):
         self.view = view

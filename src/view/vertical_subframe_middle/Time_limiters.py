@@ -23,7 +23,8 @@ class Time_limiters():
 
         box_in_box2 = BoxLayout(orientation='vertical', size_hint=(1, 1))
         label = Label(text='[color=000000]Start Date[/color]',
-        markup = True, size_hint=(1, .8))
+                markup = True, 
+                size_hint=(1, .8))
         box_in_box2.add_widget(label)
         view.text_box_from_date = TextInput(text='', multiline=False, size_hint =(1, 1))
         view.text_box_from_date.bind(on_text_validate=self.extract_data)
@@ -35,7 +36,8 @@ class Time_limiters():
 
         box_in_box3 = BoxLayout(orientation='vertical', size_hint=(1, 1))
         label = Label(text='[color=000000]End Date[/color]',
-        markup = True, size_hint=(1, .8))
+                markup = True,
+                size_hint=(1, .8))
         box_in_box3.add_widget(label)
         view.text_box_to_date = TextInput(text='', multiline=False, size_hint =(1, 1))
         view.text_box_to_date.bind(on_text_validate=self.extract_data)

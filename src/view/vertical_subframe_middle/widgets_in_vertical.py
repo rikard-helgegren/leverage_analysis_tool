@@ -12,7 +12,7 @@ from kivy.uix.boxlayout import BoxLayout
 
 from src.view.vertical_subframe_middle.Histogram import Histogram
 from src.view.vertical_subframe_middle.Line_graph import Line_graph
-from src.view.vertical_subframe_left.Time_limiters import Time_limiters
+from src.view.vertical_subframe_middle.Time_limiters import Time_limiters
 
 def setup_vertical_frame(view):
     frame = BoxLayout(orientation='vertical', padding=5)

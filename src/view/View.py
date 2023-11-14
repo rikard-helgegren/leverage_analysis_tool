@@ -11,6 +11,9 @@ import logging
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 
+from kivy.config import Config
+Config.set('input', 'mouse', 'mouse,multitouch_on_demand') #remove bug: red dot on right click
+
 from src.view.vertical_subframe_left.widgets_in_vertical import setup_vertical_frame as setup_vertical_frame_left
 from src.view.vertical_subframe_middle.widgets_in_vertical import setup_vertical_frame as setup_vertical_frame_middle
 from src.view.vertical_subframe_right.widgets_in_vertical import setup_vertical_frame as setup_vertical_frame_right
@@ -117,3 +120,11 @@ class View(GridLayout):
     def update_table_of_statistics(self, key_values):
         logging.debug("View update_table_of_statistics")
         self.table_of_statistics.set_table(key_values)
+
+    def update_pie_chart(self, key_values):
+        logging.debug("View update_pie_chart")
+        self.pie_frame1.draw(key_values['Mean'])
+        self.pie_frame2.draw(key_values['Median'])
+        self.pie_frame3.draw(key_values['Risk'])
+
+    

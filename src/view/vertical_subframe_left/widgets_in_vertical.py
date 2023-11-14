@@ -14,20 +14,28 @@ from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 
+from src.view.vertical_subframe_left.Loan import Loan
 from src.view.vertical_subframe_left.Strategy_menue import Strategy_menue
 from src.view.vertical_subframe_left.Leverage_slider import Leverage_slider
 from src.view.vertical_subframe_left.Investment_intervall import Investment_intervall
-from src.view.vertical_subframe_left.Loan import Loan
+from src.view.vertical_subframe_left.Table_of_instruments import Table_of_instuments
 from src.view.utils import make_text_black
 
 def setup_vertical_frame(view):
-    vertical_frame = BoxLayout(orientation='vertical', padding=5, size_hint=(.6, 1))
-    insert_space_top(vertical_frame)
-    view.leverage_slider = Leverage_slider(view, vertical_frame)
-    insert_check_box(view, vertical_frame)
-    insert_time_and_loan(view, vertical_frame)
-    view.strategy_meny = Strategy_menue(view, vertical_frame)
-    insert_space_bott(vertical_frame)
+    vertical_frame = BoxLayout(orientation='vertical', padding=5, size_hint=(.7, 1))
+
+    vertical_sub_frame_top = BoxLayout(orientation='vertical', padding=5, size_hint=(1, 1))
+    #insert_space_top(vertical_frame)
+    view.leverage_slider = Leverage_slider(view, vertical_sub_frame_top)
+    insert_check_box(view, vertical_sub_frame_top)
+    insert_time_and_loan(view, vertical_sub_frame_top)
+    view.strategy_meny = Strategy_menue(view, vertical_sub_frame_top)
+    vertical_frame.add_widget(vertical_sub_frame_top)
+
+    vertical_sub_frame_bot = BoxLayout(orientation='vertical', padding=5, size_hint=(1, .7))
+    view.table_of_instruments = Table_of_instuments(view, vertical_sub_frame_bot)
+    #insert_space_bott(vertical_frame)
+    vertical_frame.add_widget(vertical_sub_frame_bot)
 
     view.add_widget(vertical_frame)
 

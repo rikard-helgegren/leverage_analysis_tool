@@ -20,6 +20,7 @@ default_selected_color = [0.15, 0.15, 0.15, 0.15]
 class Table_of_instuments():
     def __init__(self, view, frame):
         self.view = view
+        self.selected_cels = [] #Cell index is in list if selected.
         self.table = MDDataTable(
                 rows_num=100,
                 column_data=[
@@ -40,9 +41,17 @@ class Table_of_instuments():
         self.table.bind(on_row_press=self.select_cell)
         frame.add_widget(self.table)
     
+    def get_row_and_column_from_cell(self, cell):
+        cell_nr = cell.index
+        nbr_table_columns = len(self.table.column_data)
+        column = cell_nr%nbr_table_columns
+        row = int(cell_nr/nbr_table_columns)
+
+        return [row, column]
+
 
     def select_cell(self, instance_table, cell):
-
+        row, column = self.get_row_and_column_from_cell(cell)
         if cell.text == '':
             self.update_color_on_press(cell)
 
@@ -74,17 +83,21 @@ class Table_of_instuments():
         return row_data[1]
 
     def update_color_on_press(self, cell):
+        row_nbr, column_nbr = self.get_row_and_column_from_cell(cell)
+        #current_color = cell.background_color_selected_cell
 
-        current_color = cell.background_color_selected_cell
-
-        if current_color == green:
-            cell.background_color_selected_cell = default_selected_color
-            cell.background_color_cell = default_color
-        elif cell.text == '' :
-            cell.background_color_selected_cell = 'green'
-            cell.background_color_cell = 'green'
+        if cell.index in self.selected_cels:
+            self.selected_cels.remove(cell.index)
+            prev_row = list(self.table.row_data[row_nbr])
+            prev_row[column_nbr] = ''
+            self.table.row_data[row_nbr] = tuple(prev_row)
+        else :
+            self.selected_cels.append(cell.index)
+            prev_row = list(self.table.row_data[row_nbr])
+            prev_row[column_nbr] = ("checkbox-marked-circle",[39 / 256, 174 / 256, 96 / 256, 1],"")
+            self.table.row_data[row_nbr] = tuple(prev_row)
+            
  
-
 
     def set_table(self, names, countries):
         logging.debug("table_of_instruments: set_table")

@@ -22,6 +22,7 @@ class Controller:
         self.view = view
 
         self.set_table_of_instruments()
+        self.set_table_of_statistics()
 
 
     def update_fee_status(self, checkbutton_fee_state):
@@ -52,6 +53,8 @@ class Controller:
 
         self.update_table_of_statistics(self.model.key_values.get_all_values())
 
+        self.draw_pie_chart(self.model.key_values.get_all_values())
+
 
     def draw_histogram(self, data):
         logging.debug("Controller: draw_histogram")
@@ -60,7 +63,12 @@ class Controller:
     def draw_line_graph(self, data, time_interval):
         logging.debug("Controller: draw_line_graph")
         self.view.draw_line_graph(data, time_interval)
-
+    
+    def set_table_of_statistics(self):
+        """ Set the table with key values"""
+        logging.debug("Controller: set_table_of_statistics")
+        self.update_table_of_statistics(self.model.key_values.get_all_values())
+    
     def set_table_of_instruments(self):
         """ Set the table with information of available instruments"""
         logging.debug("Controller: set_table_of_instruments")
@@ -186,3 +194,7 @@ class Controller:
 
     def update_table_of_statistics(self, key_values):
         self.view.update_table_of_statistics(key_values)
+
+    def draw_pie_chart(self, key_values):
+        self.view.update_pie_chart(key_values)
+
