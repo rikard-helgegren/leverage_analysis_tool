@@ -33,7 +33,10 @@ def setup_vertical_frame(view):
 
 
     frame.add_widget(sub_frame_super)
-    
-    view.table_of_statistics = Table_of_statistics(view, frame)
+
+    sub_frame2 =BoxLayout(size_hint=(1, 1))
+    view.table_of_statistics = Table_of_statistics(view, sub_frame2)
+
+    frame.add_widget(sub_frame2)
     
     view.add_widget(frame)

@@ -12,16 +12,17 @@ import logging
 from kivy.metrics import dp
 from kivymd.uix.datatables import MDDataTable
 
+from src.view.styling.light_mode.table import get_styling
+
+from src.view.styling.light_mode.Color_data_table import Color_data_table
+
 column_title_leverage_1 = "Leverage 1"
-green = [0.0, 0.5019607843137255, 0.0, 1.0]
-default_color = [0.05, 0.05, 0.05, 0.05]
-default_selected_color = [0.15, 0.15, 0.15, 0.15]
 
 class Table_of_instuments():
     def __init__(self, view, frame):
         self.view = view
         self.selected_cels = [] #Cell index is in list if selected.
-        self.table = MDDataTable(
+        self.table = Color_data_table(
                 rows_num=100,
                 column_data=[
                     ("Contry", dp(30)),
@@ -34,9 +35,7 @@ class Table_of_instuments():
                 row_data=[],
                 sorted_on="Contry",
                 sorted_order="ASC",
-                background_color_cell = default_color,
-                background_color_selected_cell = default_selected_color,
-                elevation=0
+                **get_styling()
             )
         self.table.bind(on_row_press=self.select_cell)
         frame.add_widget(self.table)
@@ -97,21 +96,17 @@ class Table_of_instuments():
             prev_row[column_nbr] = ("checkbox-marked-circle",[39 / 256, 174 / 256, 96 / 256, 1],"")
             self.table.row_data[row_nbr] = tuple(prev_row)
             
- 
 
     def set_table(self, names, countries):
         logging.debug("table_of_instruments: set_table")
 
         all_item_texts=[]
-
         added_new_item = False
 
         for market_name, country in zip(names, countries):
             #only add if market not in table
             if market_name not in all_item_texts:
-
                 added_new_item = True
-
                 all_item_texts.append((country, market_name, '', '', '', ''))
         
         if added_new_item:

@@ -50,7 +50,7 @@ class Pie_frame():
 
         self.axs.pie(data1, radius=1, colors=(outer_colors),
             wedgeprops=dict(width=with_size, edgecolor='w'))
-        self.axs.set_title(self.title, pad=0, 
+        self.axs.set_title(self.title, pad=0, y=0.95, 
                     fontdict={'fontsize': 15,
                             'fontweight': 'bold',
                             'color': 'k'})
@@ -65,11 +65,13 @@ class Pie_frame():
 
         self.canvas = self.matplot.figcanvas
 
+        #REMOVE AFTER CLEAN UP
+        self.draw(0)
+
+
     def draw(self, data):
         logging.debug("View: Pie_frame: draw")
         plt.figure(self.fig.number)
-
-        print("data ", data)
 
         if isinstance(data, str):
             data = float(data.replace('%',''))
@@ -86,14 +88,12 @@ class Pie_frame():
         self.axs.clear()
 
         if data != 0:
-
             display_text = ""
             if data>=1:
                 outer_colors = [light_gray,self.default_color,light_gray]
                 val2 = max(0, (data - 1) * 100) #Cant draw a negative amount in pie chart
                 val1 = max(0, self.max_value - val2)
                 val3 = val1 + val2
-
                 
             else:
                 outer_colors = [light_gray,[1,0.4,0.4],light_gray]
@@ -106,13 +106,7 @@ class Pie_frame():
             val2 = int(val2) #round to whole integer
             display_text = display_text + str(val2) + "%"
             
-
-
-            #data1 = np.array([1,2,2.8])
-            #data2 = np.array([0.7,2.3,2.8])
-
-            #inner_colors = [light_gray,'r',light_gray]
-            self.axs.set_title(self.title, pad=0, 
+            self.axs.set_title(self.title, pad=0, y=0.95, 
                     fontdict={'fontsize': 15,
                             'fontweight': 'bold',
                             'color': 'k'})
@@ -126,6 +120,11 @@ class Pie_frame():
                     fontsize=20,
                     fontweight='bold')
 
+            #data1 = np.array([1,2,2.8])
+            #data2 = np.array([0.7,2.3,2.8])
+
+            #inner_colors = [light_gray,'r',light_gray]
+
             #self.axs.pie(data2, radius=1-with_size, colors=inner_colors,
                 #wedgeprops=dict(width=with_size, edgecolor='w'))
 
@@ -133,27 +132,29 @@ class Pie_frame():
         
         else:
             thin=0.05
+            fade_black_val = 0.45
+            fade_black = [fade_black_val, fade_black_val, fade_black_val]
 
-            self.axs.set_title(self.title, pad=0, 
+            self.axs.set_title(self.title, pad=0, y=0.95, 
                     fontdict={'fontsize': 15,
                             'fontweight': 'bold',
                             'color': 'k'})
-            self.axs.pie([1], radius=1, colors=(['k']),
+            self.axs.pie([1], radius=1, colors=([fade_black]),
                 wedgeprops=dict(width=thin, edgecolor='w'))
             self.axs.pie([1], radius=1-thin, colors=([light_gray]),
                 wedgeprops=dict(width=with_size*2, edgecolor='w'))
-            self.axs.pie([1], radius=1-thin-(with_size*2), colors=(['k']),
-                wedgeprops=dict(width=thin, edgecolor='w'))
+            #self.axs.pie([1], radius=1-thin-(with_size*2), colors=(['k']),
+            #    wedgeprops=dict(width=thin, edgecolor='w'))
             self.axs.text(0.5, 0.5, '0%',
                     horizontalalignment='center',
                     verticalalignment='center',
                     transform=self.axs.transAxes,
                     fontsize=30,
-                    fontweight='bold')
-
-
+                    fontweight='bold',
+                    color=fade_black)
 
         self.canvas.draw()
+
 
     def set_default_color(self, color):
         self.default_color = color
@@ -163,4 +164,3 @@ class Pie_frame():
 
     def set_max_value(self, max_value):
         self.max_value = max_value
-

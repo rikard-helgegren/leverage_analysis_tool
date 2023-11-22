@@ -11,9 +11,12 @@ import logging
 from kivy.metrics import dp
 from kivymd.uix.datatables import MDDataTable
 
+from src.view.styling.light_mode.table import get_styling
+from src.view.styling.light_mode.Color_data_table import Color_data_table
+
 class Table_of_statistics():
     def __init__(self, view, frame):
-        self.table = MDDataTable(
+        self.table = Color_data_table(
             rows_num=100,
             column_data=[
                 ("Metrics", dp(40)),
@@ -21,7 +24,7 @@ class Table_of_statistics():
             ],
             row_data=[],
             sorted_order="ASC",
-            elevation=0
+            **get_styling()
         )
         frame.add_widget(self.table)
 

@@ -9,6 +9,8 @@
 
 from kivy.logger import Logger
 from kivy.logger import logging
+from kivymd.app import MDApp as MDAPP
+from kivy.uix.widget import Widget
 import sys
 
 from src.model.Model import Model
@@ -27,39 +29,6 @@ def set_debug_level():
             logging.getLogger().setLevel('INFO')
 
 
-#class LeverageApp(App):
-    """ GUI for analyzing investments with leveraged certificates.
-        The code follows the MVC (Model View Controller) architecture
-    
-    def __init__(self):
-        super().__init__()
-
-        self.title('Leverage Analysis Tool')
-
-        model = Model()
-        model.model_import_data()
-
-        # place view on the root window
-        view = View()
-        #view.pack()
-
-       
-
-        controller = Controller(model, view)
-"""
- 
-        # make the view updated
-        #controller.update_view()
-    
-# Create an instance and run the application
-#if __name__ == '__main__':
-#    set_debug_level()
-#    Leverage_Application().run()
-
-from kivymd.app import MDApp as MDAPP
-from kivy.uix.widget import Widget
-
-
 class LeverageApp(MDAPP):
     def build(self):
 
@@ -72,6 +41,8 @@ class LeverageApp(MDAPP):
 
         # set the controller to view
         view.set_controller(controller)
+
+        #self.theme_cls.theme_style = "Dark"
 
         return view
     

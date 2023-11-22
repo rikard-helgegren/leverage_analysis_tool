@@ -16,6 +16,7 @@ from kivy.uix.textinput import TextInput
 
 from src.view.strategies.Rebalance_strategy import Rebalance_strategy
 from src.view.strategies.Harvest_refill_strategy import Harvest_refill_strategy
+from src.view.strategies.Variance_strategy import Variance_strategy
 import src.constants as constants
 from src.view.utils import make_text_black
 
@@ -81,12 +82,13 @@ class Strategy_menue:
         strategy_frames = {}
         self.view.rebalance_strategy = Rebalance_strategy(self.view)
         self.view.harvest_refill_strategy = Harvest_refill_strategy(self.view)
+        self.view.variance_strategy = Variance_strategy(self.view)
         
         strategy_frames['Hold'] = BoxLayout(size_hint=(0.0, 0.1))
         strategy_frames['Harvest/Refill'] = self.view.harvest_refill_strategy.get_frame()
         strategy_frames['Rebalance Time'] = self.view.rebalance_strategy.get_frame()
         strategy_frames['Do not invest'] = BoxLayout(size_hint=(0.0, 0.1))
-        strategy_frames['Variance Dependent'] = BoxLayout(size_hint=(0.0, 0.1))
+        strategy_frames['Variance Dependent'] = self.view.variance_strategy.get_frame()
 
         return strategy_frames
      
