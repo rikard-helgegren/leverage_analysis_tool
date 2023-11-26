@@ -1,14 +1,13 @@
 # LAT - Leverage Analysis Tool
 
 LAT is an analyzing tool for gaining understanding if and how leveraged instruments
-can be used to build an investment portfolio that matches ones preferences. The tool is
-still under construction.
+can be used to build an investment portfolio that matches ones preferences. The tool is still under construction.
 
-![Image of screenshot of application](/images/Sample.png)
+![Screenshot sample of the application](/images/sample-Kivy.png)
 
 ### Background
 
-Development of this application was started after a series increasingly more realistic models. Experiment with the previous model resulted in a whitepaper, concluding that leveraged instruments could increase the expected returns of a portfolio. This application will enable non-programmes to experiment with leveraged certificates, and allow different strategies for buying and selling the certificates in order to minimize risk or to increase returns.
+Development of this application was started after a series increasingly more realistic models. Experiment with the previous model resulted in a whitepaper, concluding that leveraged instruments could increase the expected returns of a portfolio. This application will enable non-programmes to experiment with leveraged certificates, and allow for different strategies of buying and selling the certificates in order to minimize risk or to increase returns.
 
 <kbd>
 <img src="/images/Leveraged_Certificates.png" alt="Whitepaper first page" width="50%"/>
@@ -25,7 +24,6 @@ make
 This compiles the C++ files, and then runs the program.
 
 *NOTE*: The program does not work with Windows currently, and Mac only can run with C++ version 11.
-To adjust the program to your screen size and resolution, edit the plot size in config.json.
 
 ### Required libraries
 
@@ -33,7 +31,8 @@ Beyond Python3 standard libraries this program also requires:
 
 * numpy
 * matplotlib
-* tkinter
+* kivy
+* kivymd
 * simplejson
 
 and c++ compilator
@@ -43,92 +42,13 @@ and c++ compilator
 ### Project structure
 For getting an undestanding of this code you are recomended to start with leverage_analysis_tool.py, and then Model.py and View.py.
 
-```
-.
-├── coding_quotes
-├── config.json
-├── leverage_analysis_tool.py
-├── LICENSE.md
-├── Makefile
-├── README.md
-├── src
-│   ├── Config.py
-│   ├── constants.py
-│   ├── controller
-│   │   ├── Controller.py
-│   │   ├── formating.py
-│   ├── Json_reader.py
-│   ├── managing_data
-│   │   ├── check_if_data_files_are_clean.py
-│   │   ├── manage_preproccessed_data.py
-│   │   └── read_and_manage_raw_data.py
-│   ├── model
-│   │   ├── common
-│   │   │   ├── calculate_common_time_interval.py
-│   │   │   ├── calcultate_daily_change.py
-│   │   │   ├── check_data_is_empty.py
-│   │   │   ├── constants.h
-│   │   │   ├── constants_model.py
-│   │   │   ├── convertArrayChangeToTotalValue.cpp
-│   │   │   ├── convert_between_market_and_dict.py
-│   │   │   ├── convertCharPointerToStringVector.cpp
-│   │   │   ├── determine_longest_common_timespan.py
-│   │   │   ├── fill_in_missing_dates.py
-│   │   │   ├── Linked_list.py
-│   │   │   ├── regression.cpp
-│   │   │   ├── sumFloats.cpp
-│   │   │   ├── varianceAndVolatility.cpp
-│   │   │   └── variance_and_volatility.py
-│   │   ├── graph
-│   │   │   ├── calculate_graph_outcomes_strategy.py
-│   │   │   ├── strategies.py
-│   │   │   └── utils.py
-│   │   ├── histogram
-│   │   │   ├── calculateHistogramOutput.cpp
-│   │   │   ├── calculate_histograms_strategy.py
-│   │   │   ├── histogram_cpp_adapter.py
-│   │   │   ├── histogramStrategies.cpp
-│   │   │   ├── ParametersBuilder.cpp
-│   │   │   ├── Parameters.cpp
-│   │   │   └── utils.cpp
-│   │   ├── Market.py
-│   │   ├── Model.py
-│   │   ├── Performance_key_values.py
-│   │   ├── Portfolio_item.py
-│   ├── preview.png
-│   ├── setup.py
-│   ├── view
-│   │   ├── Matplot_figure.py
-│   │   ├── strategies
-│   │   │   ├── Harvest_refill_strategy.py
-│   │   │   └── Rebalance_strategy.py
-│   │   ├── utils.py
-│   │   ├── vertical_subframe_left
-│   │   │   ├── Investment_intervall.py
-│   │   │   ├── Leverage_slider.py
-│   │   │   ├── Loan.py
-│   │   │   ├── Strategy_menue.py
-│   │   │   ├── Time_limiters.py
-│   │   │   └── widgets_in_vertical.py
-│   │   ├── vertical_subframe_middle
-│   │   │   ├── Histogram.py
-│   │   │   ├── Line_graph.py
-│   │   │   └── widgets_in_vertical.py
-│   │   ├── vertical_subframe_right
-│   │   │   ├── Table_of_instruments.py
-│   │   │   ├── Table_of_statistics.py
-│   │   │   └── widgets_in_vertical.py
-│   │   └── View.py
-├── tests
-│         ├── ...
-```
-
-
 ### Walkthrough
 
-To get started select a market by clicking on a market in the top right table. Unfold the levereaged products by klicking the arrow to the left of the market, and then select desiered leverage.
+To get started select a market by clicking on a row with a market in the bottom left table. The leverage is selected by the column number of your click.
 
-To the left are widgits to change input parameters and strategy. And in the middle is a histogram which displays the distribution of outcomes of the portfolio when investing for *Years Investing*, and a graph showing the performance from *Start date* to *End date*. 
+To the top left are widgits to change input parameters and strategy. And in the middle is a histogram which displays the distribution of outcomes of the portfolio when investing for a selected amount of years (default is one year). There is also a graph showing the performance from the start date to the end date, which can be specefied benath the graph.
+
+Metrics of the portfolios performance is displayed on the righten side of the application.
 
 ### Data
 
@@ -159,13 +79,15 @@ The file path is set in *src/model/constants*
 
 Historical returns are no guarantee of future returns. An investment in securities or funds can both increase and decrease in value, and you may not get the invested capital back.
 
-### Goal
+### Goal & Journey
 
-In the end the graphical user interface will be built by using Kivy (https://kivy.org/) to achieve something in this style:
+The project started out buy geting the logic in place and making a proof of consept, by using Tkinter as the GUI toolkit. But the goal was all along to change graphical toolkit to something more pleasing, if I managed to get that far without dropping the project.
+
+![Image of the applicatioin when using Tkinter](/images/sample-Tkinter.png)
+
+This phase is now past and the program is now built by using Kivy (https://kivy.org/). At the start of the project I wanted to achieve something in the following style. And it is still my northern star, though Kivy adds a few struggels in dark mode.
 
 ![Image of design goal](/images/Goal.jpeg)
 
-
-But during development of the model tkinter will be used to swiftly test and experiment with the model.
 
 The aim is to make a tool for both beginner and experts where there are two display options. One simplistic with only the most important features and values viewable. And one with all controls and all statistical performance meters.

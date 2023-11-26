@@ -24,15 +24,17 @@ def setup_vertical_frame(view):
     view.pie_frame1 = Pie_frame(sub_frame, "Mean")
     view.pie_frame1.set_default_color(pie_chart_mean_first_color)
     view.pie_frame1.set_refrence_color(pie_chart_mean_first_color)
+    view.pie_frame1.set_display_ending('%')
 
     view.pie_frame2 = Pie_frame(sub_frame, "Median")
     view.pie_frame2.set_default_color(pie_chart_median_first_color)
     view.pie_frame2.set_refrence_color(pie_chart_median_first_color)
+    view.pie_frame2.set_display_ending('%')
 
     sub_frame_super.add_widget(sub_frame)
 
 
-    view.pie_frame3 = Pie_frame(sub_frame_super, "Risk")
+    view.pie_frame3 = Pie_frame(sub_frame_super, "Risk Index")
     view.pie_frame3.set_default_color(pie_chart_risk_first_color)
     view.pie_frame3.set_refrence_color(pie_chart_risk_first_color)
     view.pie_frame3.set_max_value(100)

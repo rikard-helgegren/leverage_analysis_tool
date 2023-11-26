@@ -30,6 +30,7 @@ class Pie_frame():
         self.default_color = None
         self.refrence_color = None
         self.max_value = 20
+        self.display_ending = ''
 
         self.fig, self.axs = plt.subplots(
             sharey=True,
@@ -79,7 +80,7 @@ class Pie_frame():
             data1 = [val1,val2,val3]
             text_color = outer_colors[1]
             val2 = int(val2) #round to whole integer
-            display_text = display_text + str(val2) + "%"
+            display_text = display_text + str(val2) + self.display_ending
             
             self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
             self.axs.pie(data1, radius=1, colors=(outer_colors),
@@ -102,7 +103,7 @@ class Pie_frame():
                 wedgeprops=dict(width=with_size*2, edgecolor='w'))
             #self.axs.pie([1], radius=1-thin-(with_size*2), colors=(['k']),
             #    wedgeprops=dict(width=thin, edgecolor='w'))
-            self.axs.text(0.5, 0.5, '0%',
+            self.axs.text(0.5, 0.5, '0'+self.display_ending,
                     transform=self.axs.transAxes,
                     **get_text_style_no_data())
 
@@ -117,3 +118,6 @@ class Pie_frame():
 
     def set_max_value(self, max_value):
         self.max_value = max_value
+    
+    def set_display_ending(self, display_ending):
+        self.display_ending = display_ending
