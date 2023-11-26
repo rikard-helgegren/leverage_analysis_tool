@@ -8,13 +8,11 @@
 # commercial or non-commercial, by any means.
 
 import logging
-from kivy.uix.spinner import Spinner
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 
-import src.constants as constants
 from src.view.utils import make_text_black
 
 class Harvest_refill_strategy():

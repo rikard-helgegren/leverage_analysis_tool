@@ -16,6 +16,8 @@ from src.view.Matplot_figure import MatplotFigure
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from src.view.styling.set_empty_ticks import set_empty_ticks
+
 #optimized draw on Agg backend
 mpl.rcParams['path.simplify'] = True
 mpl.rcParams['path.simplify_threshold'] = 1.0
@@ -44,8 +46,7 @@ class Histogram:
             tight_layout=True, 
             facecolor=light_gray,
             edgecolor=light_gray)
-        self.axs.set_xticks([0,2,4,6,8,10], ['','','','','',''])
-        self.axs.set_yticks([0,2,4,6,8,10], ['','','','','',''])      
+        set_empty_ticks(self.axs)   
         self.matplot = MatplotFigure()
         self.matplot.figure = self.fig
         frame.add_widget(self.matplot)
@@ -72,8 +73,7 @@ class Histogram:
             plt.tight_layout()
         
         else:
-            self.axs.set_xticks([0,2,4,6,8,10], ['','','','','',''])
-            self.axs.set_yticks([0,2,4,6,8,10], ['','','','','',''])
+            set_empty_ticks(self.axs)
 
 
         self.canvas.draw()

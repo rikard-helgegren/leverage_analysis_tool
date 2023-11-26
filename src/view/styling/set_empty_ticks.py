@@ -7,10 +7,6 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-from src.view.styling.light_mode.color_palet import *
-
-def get_styling():
-    styling = {
-    }
-    
-    return styling
+def set_empty_ticks(graph_axis):
+    graph_axis.set_xticks([0,2,4,6,8,10], ['','','','','',''])
+    graph_axis.set_yticks([0,2,4,6,8,10], ['','','','','',''])

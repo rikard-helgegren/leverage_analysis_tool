@@ -9,3 +9,10 @@
 
 def make_text_black(text):
     return '[color=000000]'+ text +'[/color]'
+
+def is_number(text):
+    try:
+        float(text)
+        return True
+    except ValueError:
+        return False

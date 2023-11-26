@@ -1,9 +1,11 @@
 
-all: src/compiled_code run
+all: src/compiled_code info_run
 
 debug: src/compiled_code debug_run
 
 info: src/compiled_code info_run
+
+trace: src/compiled_code trace_run
 
 clean:
 	rm -rf src/compiled_code
@@ -17,10 +19,13 @@ run:
 	python3 leverage_analysis_tool.py
 
 debug_run:
-	python3 leverage_analysis_tool.py -debug
+	python3 leverage_analysis_tool.py debug
 
 info_run:
-	python3 leverage_analysis_tool.py -info
+	python3 leverage_analysis_tool.py info
+
+trace_run:
+	python3 leverage_analysis_tool.py trace
 
 test: pytest cpp_test
 

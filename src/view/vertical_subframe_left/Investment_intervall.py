@@ -12,7 +12,6 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 
-
 from src.view.utils import make_text_black
 
 class Investment_intervall():
@@ -61,4 +60,4 @@ class Investment_intervall():
         if years.isdigit():
             self.view.update_years_histogram_interval(int(years))
         else:
-            logging.error('"%r" is not a number', years)
+            logging.error('"%r" is not a valid number', years)

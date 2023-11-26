@@ -12,13 +12,11 @@ from kivy.uix.spinner import Spinner
 from kivy.uix.widget import Widget
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.textinput import TextInput
 
 from src.view.strategies.Rebalance_strategy import Rebalance_strategy
 from src.view.strategies.Harvest_refill_strategy import Harvest_refill_strategy
 from src.view.strategies.Variance_strategy import Variance_strategy
 import src.constants as constants
-from src.view.utils import make_text_black
 
 class Strategy_menue:
     def __init__(self, view, frame):
@@ -54,7 +52,7 @@ class Strategy_menue:
         self.strategy_main_frame.add_widget(self.drop_down_menue)
 
         # I don't understand the size settings so this is a ugly hack to make
-        # the strategy menue have acorrect size before selecting a strategy.
+        # the strategy menue have a correct size before selecting a strategy.
         self.no_strategy_box = BoxLayout(size_hint=(0.0, 0.1))
         self.strategy_main_frame.add_widget(self.no_strategy_box)
         
@@ -91,6 +89,3 @@ class Strategy_menue:
         strategy_frames['Variance Dependent'] = self.view.variance_strategy.get_frame()
 
         return strategy_frames
-     
-        
-    

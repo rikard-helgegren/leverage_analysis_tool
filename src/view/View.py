@@ -72,21 +72,17 @@ class View(GridLayout):
         logging.debug("View: update_rebalance_point")
         self.controller.update_rebalance_point(intervall)
 
-    def update_variance_calc_sample_size(self):
+    def update_variance_calc_sample_size(self, value):
         logging.debug("View: update_variance_calc_sample_size")
-        #value = int(self.spin_variance_calc_sample_size.get())
-        #self.controller.update_variance_calc_sample_size(value)
+        self.controller.update_variance_calc_sample_size(value)
 
-    def update_volatility_strategie_sample_size(self):
+    def update_volatility_strategie_sample_size(self, value):
         logging.debug("View: update_volatility_strategie_sample_size")
-        #value = int(self.spin_volatility_strategie_sample_size.get())
-        #self.controller.update_volatility_strategie_sample_size(value)
+        self.controller.update_volatility_strategie_sample_size(value)
 
-    def update_volatility_strategie_level(self):
+    def update_volatility_strategie_level(self, value):
         logging.debug("View: update_volatility_strategie_level")
-        #value = float(self.spin_volatility_strategie_level.get().replace(",", "."))
-        #self.controller.update_volatility_strategie_level(value)
-   
+        self.controller.update_volatility_strategie_level(value)
 
     def update_amount_leverage(self, value):
         """The amount of leverage should be a value between 0 and 100"""

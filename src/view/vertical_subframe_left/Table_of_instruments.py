@@ -10,7 +10,6 @@
 import logging
 
 from kivy.metrics import dp
-from kivymd.uix.datatables import MDDataTable
 
 from src.view.styling.light_mode.table import get_styling
 

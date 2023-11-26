@@ -10,7 +10,6 @@
 from kivy.logger import Logger
 from kivy.logger import logging
 from kivymd.app import MDApp as MDAPP
-from kivy.uix.widget import Widget
 import sys
 
 from src.model.Model import Model
@@ -19,18 +18,33 @@ from src.controller.Controller import Controller
 
 
 def set_debug_level():
+
+    if len(sys.argv) > 1:
+        argument_from_terminal = sys.argv[1]
+        label_text = f"Argument from terminal: {argument_from_terminal}"
+    else:
+        label_text = "No argument provided from the terminal"
+
+    print(label_text)
+
+
+    print("sys.argv",sys.argv)
     if len(sys.argv) >= 2:
         debug_level = sys.argv[1] 
 
-        if (debug_level == "-debug"):
+        if (debug_level == "debug"):
             logging.getLogger().setLevel('DEBUG')
         
-        elif(debug_level == "-info"):
+        elif(debug_level == "info"):
             logging.getLogger().setLevel('INFO')
+        
+        elif(debug_level == "trace"):
+            logging.getLogger().setLevel('TRACE')
 
 
 class LeverageApp(MDAPP):
     def build(self):
+        
 
         model = Model()
         model.model_import_data()

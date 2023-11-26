@@ -13,6 +13,8 @@ from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 
+from src.view.utils import make_text_black
+
 class Time_limiters():
 
     def __init__(self, view, frame):
@@ -22,7 +24,7 @@ class Time_limiters():
         box_in_box.add_widget(Widget(size_hint=(.8, 1)))
 
         box_in_box2 = BoxLayout(orientation='vertical', size_hint=(1, 1))
-        label = Label(text='[color=000000]Start Date[/color]',
+        label = Label(text=make_text_black('Start Date'),
                 markup = True, 
                 size_hint=(1, .8))
         box_in_box2.add_widget(label)
@@ -35,7 +37,7 @@ class Time_limiters():
 
 
         box_in_box3 = BoxLayout(orientation='vertical', size_hint=(1, 1))
-        label = Label(text='[color=000000]End Date[/color]',
+        label = Label(text=make_text_black('End Date'),
                 markup = True,
                 size_hint=(1, .8))
         box_in_box3.add_widget(label)

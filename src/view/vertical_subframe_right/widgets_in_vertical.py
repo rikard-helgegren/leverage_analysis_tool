@@ -10,27 +10,32 @@
 import logging
 from kivy.uix.boxlayout import BoxLayout
 
-
 from src.view.vertical_subframe_right.Table_of_statistics import Table_of_statistics
 from src.view.vertical_subframe_right.Pie_frame import Pie_frame
+from src.view.styling.light_mode.color_palet import *
 
 def setup_vertical_frame(view):
 
     frame = BoxLayout(orientation='vertical', size_hint=(0.5, 1))
 
     sub_frame_super =BoxLayout(orientation='vertical', size_hint=(1, 1))
+    
     sub_frame =BoxLayout(orientation='horizontal', size_hint=(1, 1))
+    view.pie_frame1 = Pie_frame(sub_frame, "Mean")
+    view.pie_frame1.set_default_color(pie_chart_mean_first_color)
+    view.pie_frame1.set_refrence_color(pie_chart_mean_first_color)
 
-    view.pie_frame1 = Pie_frame(view, sub_frame, "Mean")
-    view.pie_frame1.set_default_color([.4,1,.4])
-    view.pie_frame2 = Pie_frame(view, sub_frame, "Median")
+    view.pie_frame2 = Pie_frame(sub_frame, "Median")
+    view.pie_frame2.set_default_color(pie_chart_median_first_color)
+    view.pie_frame2.set_refrence_color(pie_chart_median_first_color)
 
     sub_frame_super.add_widget(sub_frame)
-    view.pie_frame3 = Pie_frame(view, sub_frame_super, "Risk")
-    view.pie_frame3.set_default_color([1,.4,.4])
+
+
+    view.pie_frame3 = Pie_frame(sub_frame_super, "Risk")
+    view.pie_frame3.set_default_color(pie_chart_risk_first_color)
+    view.pie_frame3.set_refrence_color(pie_chart_risk_first_color)
     view.pie_frame3.set_max_value(100)
-
-
 
     frame.add_widget(sub_frame_super)
 

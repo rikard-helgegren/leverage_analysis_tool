@@ -14,6 +14,8 @@ from kivy.metrics import dp
 from kivy.uix.widget import Widget
 from src.view.Matplot_figure import MatplotFigure
 
+from src.view.styling.set_empty_ticks import set_empty_ticks
+
 
 #optimized draw on Agg backend
 mpl.rcParams['path.simplify'] = True
@@ -38,8 +40,7 @@ class Line_graph(Widget):
         light_gray = .98
         self.fig, self.axs = plt.subplots(1, 1, sharey=True, tight_layout=True, facecolor=[light_gray, light_gray, light_gray])
     
-        self.axs.set_xticks([0,2,4,6,8,10], ['','','','','',''])
-        self.axs.set_yticks([0,2,4,6,8,10], ['','','','','',''])
+        set_empty_ticks(self.axs)
         self.matplot = MatplotFigure()
         self.matplot.figure = self.fig
         frame.add_widget(self.matplot)
@@ -59,8 +60,7 @@ class Line_graph(Widget):
             self.line1, = self.axs.plot(values)
             plt.tight_layout()
         else:
-            self.axs.set_xticks([0,2,4,6,8,10], ['','','','','',''])
-            self.axs.set_yticks([0,2,4,6,8,10], ['','','','','',''])
+            set_empty_ticks(self.axs)
         
         self.canvas.draw()
 

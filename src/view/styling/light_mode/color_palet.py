@@ -11,3 +11,14 @@ green = [0.0, 0.5019607843137255, 0.0, 1.0]
 default_color = [0.05, 0.05, 0.05, 0.05]
 default_selected_color = [0.15, 0.15, 0.15, 0.15]
 default_back_ground_color = [0.1, 0.1, 0.1, 0.1]
+
+light_gray = [.98, .98, .98]
+
+pie_chart_mean_first_color = [.4,1,.4]
+pie_chart_mean_second_color = [.4,1,.4]
+pie_chart_median_first_color = [232/255, 184/255, 84/255]
+pie_chart_median_second_color = [232/255, 184/255, 84/255]
+pie_chart_risk_first_color = [1,.4,.4]
+pie_chart_risk_second_color = [1,.4,.4]
+
+pie_chart_faded_black_text = [0.45, 0.45, 0.45]

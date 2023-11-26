@@ -8,7 +8,6 @@
 # commercial or non-commercial, by any means.
 
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
 from kivy.graphics import Color, Rectangle
 
 from src.view.styling.light_mode.color_palet import *

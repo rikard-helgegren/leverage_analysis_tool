@@ -25,7 +25,6 @@ def setup_vertical_frame(view):
     vertical_frame = BoxLayout(orientation='vertical', padding=5, size_hint=(.7, 1))
 
     vertical_sub_frame_top = BoxLayout(orientation='vertical', padding=5, size_hint=(1, 1))
-    #insert_space_top(vertical_frame)
     view.leverage_slider = Leverage_slider(view, vertical_sub_frame_top)
     insert_check_box(view, vertical_sub_frame_top)
     insert_time_and_loan(view, vertical_sub_frame_top)
@@ -34,19 +33,10 @@ def setup_vertical_frame(view):
 
     vertical_sub_frame_bot = BoxLayout(orientation='vertical', padding=5, size_hint=(1, .7))
     view.table_of_instruments = Table_of_instuments(view, vertical_sub_frame_bot)
-    #insert_space_bott(vertical_frame)
     vertical_frame.add_widget(vertical_sub_frame_bot)
 
     view.add_widget(vertical_frame)
 
-
-def insert_space_top(frame):
-    frame.add_widget(Widget(size_hint=(1, .5)))
-
-
-def insert_space_bott(frame):
-    frame.add_widget(Widget(size_hint=(1, .8)))
-    
 
 def insert_check_box(view, frame):
     def on_checkbox_active(check_box, state):
@@ -73,7 +63,7 @@ def insert_check_box(view, frame):
 def insert_time_and_loan(view, frame):
 
     sub_frame = BoxLayout(size_hint=(0.5, .2), pos_hint={'center_x': .5, 'center_y': .5})
-    
+
     view.investment_intervall = Investment_intervall(view, sub_frame)
 
     sub_frame.add_widget(Widget())
