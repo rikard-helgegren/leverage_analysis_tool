@@ -13,7 +13,7 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 
-from src.view.utils import make_text_black
+from src.view.styling.light_mode.label import get_style
 
 class Harvest_refill_strategy():
     def __init__(self, view):
@@ -24,10 +24,11 @@ class Harvest_refill_strategy():
 
         self.harvest_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         self.harvest_frame.add_widget(Widget(size_hint=(1, .2))) #Space
-        label = Label(text=make_text_black('Harvest'),
-        markup = True, size_hint=(1, .8))
+        label = Label(text='Harvest', size_hint=(1, .8), **get_style())
         self.harvest_frame.add_widget(label)
-        self.text_box_harvest_point = TextInput(text='150', multiline=False, size_hint =(1, 1))
+        self.text_box_harvest_point = TextInput(text='150',
+                                                multiline=False,
+                                                size_hint =(1, .7))
         self.text_box_harvest_point.bind(on_text_validate=self.update_harvest_point)
         self.harvest_frame.add_widget(self.text_box_harvest_point)
         self.harvest_refill_frame.add_widget(self.harvest_frame)
@@ -36,10 +37,11 @@ class Harvest_refill_strategy():
 
         self.refill_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         self.refill_frame.add_widget(Widget(size_hint=(1, .2))) #Space
-        label = Label(text=make_text_black('Refill'),
-        markup = True, size_hint=(1, .8))
+        label = Label(text='Refill', size_hint=(1, .8), **get_style())
         self.refill_frame.add_widget(label)
-        self.text_box_refill_point = TextInput(text='50', multiline=False, size_hint =(1, 1))
+        self.text_box_refill_point = TextInput(text='50',
+                                               multiline=False,
+                                               size_hint =(1, .7))
         self.text_box_refill_point.bind(on_text_validate=self.update_refill_point)
         self.refill_frame.add_widget(self.text_box_refill_point)
         self.harvest_refill_frame.add_widget(self.refill_frame)

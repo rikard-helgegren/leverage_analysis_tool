@@ -22,13 +22,9 @@ class Strategy_menue:
     def __init__(self, view, frame):
         self.view = view
 
-        self.main_frame_width = 1
-        self.main_frame_hight = 0.32
         self.strategy_main_frame = BoxLayout(
                 orientation='vertical', 
-                size_hint=(
-                        self.main_frame_width,
-                        self.main_frame_hight))
+                size_hint=(1, 0.32))
 
         self.strategy_frames = self.init_strategy_frames()
         """Dict, key is startegy, value is corresponding frame"""
@@ -39,7 +35,7 @@ class Strategy_menue:
         self.menue_hight = 0.1
 
             
-        frame.add_widget(Widget(size_hint=(1, .2))) #Space
+        frame.add_widget(Widget(size_hint=(1, .1))) #Space
 
         self.drop_down_menue = Spinner(
             text='Strategies',

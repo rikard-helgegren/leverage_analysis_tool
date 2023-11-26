@@ -13,7 +13,7 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 
-from src.view.utils import make_text_black
+from src.view.styling.light_mode.label import get_style_no_font_size
 from src.view.utils import is_number
 
 class Variance_strategy():
@@ -37,11 +37,11 @@ class Variance_strategy():
     def set_sample_size_variance_frame(self):
         self.sample_size_variance_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         self.sample_size_variance_frame.add_widget(Widget(size_hint=(1, .2))) #Space
-        label = Label(text=make_text_black('Sample size\nvariance'),
-                markup = True,
-                size_hint=(1, .8))
+        label = Label(text='Sample size\nvariance',
+                size_hint=(1, .8),
+                **get_style_no_font_size())
         self.sample_size_variance_frame.add_widget(label)
-        self.text_box_sample_size_variance = TextInput(text='10', multiline=False, size_hint =(1, 1))
+        self.text_box_sample_size_variance = TextInput(text='10', multiline=False, size_hint =(1, .7))
         self.text_box_sample_size_variance.bind(on_text_validate=self.update_sample_size_variance)
         self.sample_size_variance_frame.add_widget(self.text_box_sample_size_variance)
         self.variance_frame.add_widget(self.sample_size_variance_frame)
@@ -49,10 +49,11 @@ class Variance_strategy():
     def set_sample_size_decisoin_frame(self):
         self.sample_size_decision_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         self.sample_size_decision_frame.add_widget(Widget(size_hint=(1, .2))) #Space
-        label = Label(text=make_text_black('Sample size\ndecision'),
-        markup = True, size_hint=(1, .8))
+        label = Label(text='Sample size\ndecision',
+                size_hint=(1, .8),
+                **get_style_no_font_size())
         self.sample_size_decision_frame.add_widget(label)
-        self.text_box_sample_size_decision_point = TextInput(text='50', multiline=False, size_hint =(1, 1))
+        self.text_box_sample_size_decision_point = TextInput(text='50', multiline=False, size_hint =(1, .7))
         self.text_box_sample_size_decision_point.bind(on_text_validate=self.update_sample_size_decision_point)
         self.sample_size_decision_frame.add_widget(self.text_box_sample_size_decision_point)
         self.variance_frame.add_widget(self.sample_size_decision_frame)
@@ -60,10 +61,11 @@ class Variance_strategy():
     def set_volatillaty_trigger_frame(self):
         self.volatillaty_trigger_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         self.volatillaty_trigger_frame.add_widget(Widget(size_hint=(1, .2))) #Space
-        label = Label(text=make_text_black('volatillaty trigger'),
-        markup = True, size_hint=(1, .8))
+        label = Label(text='Volatillaty trigger',
+                size_hint=(1, .8),
+                **get_style_no_font_size())
         self.volatillaty_trigger_frame.add_widget(label)
-        self.text_box_volatillaty_trigger_point = TextInput(text='0.010', multiline=False, size_hint =(1, 1))
+        self.text_box_volatillaty_trigger_point = TextInput(text='0.010', multiline=False, size_hint =(1, .7))
         self.text_box_volatillaty_trigger_point.bind(on_text_validate=self.update_volatillaty_trigger)
         self.volatillaty_trigger_frame.add_widget(self.text_box_volatillaty_trigger_point)
         self.variance_frame.add_widget(self.volatillaty_trigger_frame)
@@ -106,7 +108,7 @@ class Variance_strategy():
     def decrease_sample_size_variance_value(self, decrease_amount=1):
         old_value = int(self.text_box_sample_size_variance._get_text())
         if is_number(old_value):
-            new_value = max(old_value-decrease_amount, 100)
+            new_value = old_value-decrease_amount
             self.text_box_sample_size_variance._set_text(str(new_value))
             self.update_sample_size_variance(self.text_box_sample_size_variance)
         else:
@@ -135,7 +137,7 @@ class Variance_strategy():
     def increase_sample_size_decision_value(self, increase_amount=1):
         old_value = int(self.text_box_sample_size_decision_point._get_text())
         if is_number(old_value):
-            new_value = min(old_value+increase_amount,99)
+            new_value = old_value+increase_amount
             self.text_box_sample_size_decision_point._set_text(str(new_value))
             self.update_sample_size_decision_point(self.text_box_sample_size_decision_point)
         else:

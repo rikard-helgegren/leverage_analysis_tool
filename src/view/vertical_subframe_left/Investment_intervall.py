@@ -12,7 +12,7 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 
-from src.view.utils import make_text_black
+from src.view.styling.light_mode.label import get_style
 
 class Investment_intervall():
     def __init__(self, view, frame):
@@ -22,9 +22,10 @@ class Investment_intervall():
 
         self.time_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         label = Label(
-                text=make_text_black('Time Investing'),
+                text='Time Investing',
                 pos_hint={'center_x': .5, 'center_y': .5},
-                markup = True, size_hint=(1, 1))
+                size_hint=(1, 1),
+                **get_style())
         self.time_frame.add_widget(label)
         self.textinput = TextInput(text='1', multiline=False, size_hint =(.8, .7))
         self.textinput.bind(on_text_validate=self.update_years)

@@ -12,7 +12,7 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 
-from src.view.utils import make_text_black
+from src.view.styling.light_mode.label import get_style
 
 class Loan():
     def __init__(self, view, frame):
@@ -22,11 +22,15 @@ class Loan():
 
         self.loan_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         label = Label(
-                text=make_text_black('Loan'),
-                markup = True,
-                pos_hint={'center_x': .5, 'center_y': .5})
+                text='Loan',
+                pos_hint={'center_x': .5, 'center_y': .5},
+                **get_style())
         self.loan_frame.add_widget(label)
-        self.textinput = TextInput(text='0', multiline=False, size_hint =(.8, .7))
+        self.textinput = TextInput(
+                text='0',
+                multiline=False,
+                size_hint =(.8, .7),
+                pos_hint={'center_x': .5, 'center_y': .5})
         self.textinput.bind(on_text_validate=self.update_loan)
         self.loan_frame.add_widget(self.textinput)
         self.frame.add_widget(self.loan_frame)

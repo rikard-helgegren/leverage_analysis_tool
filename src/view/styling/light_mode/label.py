@@ -7,9 +7,17 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-def is_number(text):
-    try:
-        float(text)
-        return True
-    except ValueError:
-        return False
+def get_style():
+    style = {
+        "color" : [0,0,0,1],
+        "markup" : True,
+        "font_size" : 18
+    }
+    return style
+
+def get_style_no_font_size():
+    style = {
+        "color" : [0,0,0,1],
+        "markup" : True,
+    }
+    return style

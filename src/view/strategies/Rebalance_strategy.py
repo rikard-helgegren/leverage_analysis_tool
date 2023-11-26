@@ -13,7 +13,7 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 
-from src.view.utils import make_text_black
+from src.view.styling.light_mode.label import get_style
 
 
 class Rebalance_strategy():
@@ -26,13 +26,14 @@ class Rebalance_strategy():
                 size_hint=(0.4, 0.2),
                 pos_hint={'center_x': .5, 'center_y': .5})
         self.rebalance_time_frame.add_widget(Widget(size_hint=(1, .2))) #Space
-        label = Label(text=make_text_black('Rebalance period (Months)'),
-                markup = True, size_hint=(1, .8))
+        label = Label(text='Rebalance period (Months)',
+                size_hint=(1, .8),
+                **get_style())
         self.rebalance_time_frame.add_widget(label)
         self.text_box = TextInput(
                 text='6',
                 multiline=False,
-                size_hint =(.3, 1),
+                size_hint =(.3, .7),
                 pos_hint={'center_x': .5, 'center_y': .5})
         self.text_box.bind(on_text_validate=self.update_rebalance_point)
         self.rebalance_time_frame.add_widget(self.text_box)

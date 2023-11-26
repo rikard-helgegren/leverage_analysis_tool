@@ -10,33 +10,38 @@
 import logging
 from kivy.uix.label import Label
 from kivy.uix.slider import Slider
+from kivy.uix.widget import Widget
 
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 
-from src.view.utils import make_text_black
+from src.view.styling.light_mode.label import get_style
 
 
 class Leverage_slider():
     def __init__(self, view, frame):
         self.view = view
         self.view.keyboard_observable.subscribe(self)
-        self.sub_frame = GridLayout(size_hint=(1, .4), cols=1, )
+        self.sub_frame = GridLayout(size_hint=(1, .2), cols=1, )
 
-        label = Label(text=make_text_black('Percent Leverage'),
-        markup = True, size_hint=(1, 1))
+
+        self.sub_frame.add_widget(Widget(size_hint=(.3, .4)))  #Space
+
+        label = Label(text='Percent Leverage', size_hint=(1, .3), **get_style())
         self.sub_frame.add_widget(label)
 
-        sub_sub_frame = BoxLayout(size_hint=(1, .2) )
+        self.sub_frame.add_widget(Widget(size_hint=(.3, .15)))  #Space
+
+        sub_sub_frame = BoxLayout(size_hint=(1, .1) )
         self.slider = Slider(value=10, size_hint =(1, 1))
         self.slider.bind(value=self.on_slider_change)
         sub_sub_frame.add_widget(self.slider)
 
-        self.slide_counter = Label(text=make_text_black('10'),
-        markup = True, size_hint=(.1, 1))
+        self.slide_counter = Label(text='10', size_hint=(.1, 1), **get_style())
         sub_sub_frame.add_widget(self.slide_counter)
 
         self.sub_frame.add_widget(sub_sub_frame)
+        self.sub_frame.add_widget(Widget(size_hint=(.3, .1)))  #Space
         frame.add_widget(self.sub_frame)
     
     def key_event(self, key, mouse_position):
@@ -62,5 +67,5 @@ class Leverage_slider():
         self.slider.value = new_value
 
     def on_slider_change(self, instance, value):
-        self.slide_counter.text=make_text_black(str(int(value)))
+        self.slide_counter.text=str(int(value))
         self.view.update_amount_leverage(int(value))

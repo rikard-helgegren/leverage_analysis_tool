@@ -19,19 +19,19 @@ from src.view.vertical_subframe_left.Strategy_menue import Strategy_menue
 from src.view.vertical_subframe_left.Leverage_slider import Leverage_slider
 from src.view.vertical_subframe_left.Investment_intervall import Investment_intervall
 from src.view.vertical_subframe_left.Table_of_instruments import Table_of_instuments
-from src.view.utils import make_text_black
+from src.view.styling.light_mode.label import get_style
 
 def setup_vertical_frame(view):
     vertical_frame = BoxLayout(orientation='vertical', padding=5, size_hint=(.7, 1))
 
-    vertical_sub_frame_top = BoxLayout(orientation='vertical', padding=5, size_hint=(1, 1))
+    vertical_sub_frame_top = BoxLayout(orientation='vertical', size_hint=(1, .5))
     view.leverage_slider = Leverage_slider(view, vertical_sub_frame_top)
     insert_check_box(view, vertical_sub_frame_top)
     insert_time_and_loan(view, vertical_sub_frame_top)
     view.strategy_meny = Strategy_menue(view, vertical_sub_frame_top)
     vertical_frame.add_widget(vertical_sub_frame_top)
 
-    vertical_sub_frame_bot = BoxLayout(orientation='vertical', padding=5, size_hint=(1, .7))
+    vertical_sub_frame_bot = BoxLayout(orientation='vertical', size_hint=(1, .6))
     view.table_of_instruments = Table_of_instuments(view, vertical_sub_frame_bot)
     vertical_frame.add_widget(vertical_sub_frame_bot)
 
@@ -43,7 +43,7 @@ def insert_check_box(view, frame):
         view.update_fee_status(state)
 
 
-    sub_frame = GridLayout(size_hint=(1, .4), cols=4)
+    sub_frame = GridLayout(size_hint=(1, .2), cols=4)
 
     sub_frame.add_widget(Widget()) # empty space left
 
@@ -51,8 +51,8 @@ def insert_check_box(view, frame):
     checkbox.bind(active=on_checkbox_active)
     sub_frame.add_widget(checkbox)
     
-    label = Label(text=make_text_black('Include fees'),
-    markup = True)
+    label = Label(text='Include fees',
+            **get_style())
     sub_frame.add_widget(label)
 
     sub_frame.add_widget(Widget()) # empty space right
