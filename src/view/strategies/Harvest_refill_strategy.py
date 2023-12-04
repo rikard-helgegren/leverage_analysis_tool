@@ -14,13 +14,14 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 
 from src.view.styling.light_mode.label import get_style
+import src.view.constants as constants
 
 class Harvest_refill_strategy():
     def __init__(self, view):
         self.view = view
         self.view.keyboard_observable.subscribe(self)
 
-        self.harvest_refill_frame = BoxLayout(size_hint=(.5, 0.2), pos_hint={'center_x': .5, 'center_y': .5})
+        self.harvest_refill_frame = BoxLayout(size_hint=(.5, 0.2), pos_hint=constants.center)
 
         self.harvest_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         self.harvest_frame.add_widget(Widget(size_hint=(1, .2))) #Space

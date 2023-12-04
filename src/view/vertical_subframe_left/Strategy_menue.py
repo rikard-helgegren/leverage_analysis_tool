@@ -17,6 +17,7 @@ from src.view.strategies.Rebalance_strategy import Rebalance_strategy
 from src.view.strategies.Harvest_refill_strategy import Harvest_refill_strategy
 from src.view.strategies.Variance_strategy import Variance_strategy
 import src.constants as constants
+import src.view.constants as constants_view
 
 class Strategy_menue:
     def __init__(self, view, frame):
@@ -41,7 +42,7 @@ class Strategy_menue:
             text='Strategies',
             values=constants.PORTFOLIO_STRATEGIES,
             size_hint=(self.menue_width, self.menue_hight),
-            pos_hint={'center_x': .5, 'center_y': .5}
+            pos_hint=constants_view.center
         )
 
         self.drop_down_menue.bind(text=self.update_strategy)

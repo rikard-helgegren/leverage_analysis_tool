@@ -12,12 +12,14 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 
 from kivy.config import Config
-Config.set('input', 'mouse', 'mouse,multitouch_on_demand') #remove bug: red dot on right click
+Config.set('input', 'mouse', 'mouse,multitouch_on_demand') #removes bug: red dot on right click
 
 from src.view.vertical_subframe_left.widgets_in_vertical import setup_vertical_frame as setup_vertical_frame_left
 from src.view.vertical_subframe_middle.widgets_in_vertical import setup_vertical_frame as setup_vertical_frame_middle
 from src.view.vertical_subframe_right.widgets_in_vertical import setup_vertical_frame as setup_vertical_frame_right
 from src.view.Keyboard_observable import Keyboard_observable
+
+_MOUSE_STARTER_POSITION = (1.0, 1.0)
 
 class View(GridLayout):
     def __init__(self, *args, **kwargs):
@@ -27,10 +29,11 @@ class View(GridLayout):
         Window.bind(on_key_down=self._keydown)
         Window.bind(mouse_pos=self.set_mouse_position)
         self.keyboard_observable =Keyboard_observable()
+        self.mouse_position = _MOUSE_STARTER_POSITION
 
         # Placeholder for controller
         self.controller = None
-
+        
         self.cols=3
 
         setup_vertical_frame_left(self)
@@ -122,5 +125,3 @@ class View(GridLayout):
         self.pie_frame1.draw(key_values['Mean'])
         self.pie_frame2.draw(key_values['Median'])
         self.pie_frame3.draw(key_values['Risk'])
-
-    

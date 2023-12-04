@@ -32,3 +32,14 @@ class Config():
         self.DEFAUT_VOLATILITY_STRATEGIE_SAMPLE_SIZE = json_data["DEFAUT_VOLATILITY_STRATEGIE_SAMPLE_SIZE"]
         self.DEFAUT_VOLATILITY_STRATEGIE_LEVEL = json_data["DEFAUT_VOLATILITY_STRATEGIE_LEVEL"]
         self.HIGHEST_LEVERAGE_AVAILABLE = json_data["HIGHEST_LEVERAGE_AVAILABLE"]
+
+        self.SORT_RANKING = [
+            'NASDAQ100',
+            'SP500',
+            'DIA',
+            'OMXS30',
+            'OBX',
+            'OMXC',
+            'OMXH',
+            'DAX'
+        ]

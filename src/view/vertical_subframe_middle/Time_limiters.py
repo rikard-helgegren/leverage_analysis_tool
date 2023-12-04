@@ -20,31 +20,31 @@ class Time_limiters():
     def __init__(self, view, frame):
         self.view = view
 
-        box_in_box = BoxLayout(size_hint=(1, .15))
-        box_in_box.add_widget(Widget(size_hint=(.8, 1)))
+        sub_frame = BoxLayout(size_hint=(1, .15))
+        sub_frame.add_widget(Widget(size_hint=(.8, 1)))
 
-        box_in_box2 = BoxLayout(orientation='vertical', size_hint=(1, 1))
+        start_date_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         label = Label(text='Start Date', size_hint=(1, .8), **get_style())
-        box_in_box2.add_widget(label)
+        start_date_frame.add_widget(label)
         view.text_box_from_date = TextInput(text='', multiline=False, size_hint =(1, 1))
         view.text_box_from_date.bind(on_text_validate=self.extract_data)
-        box_in_box2.add_widget(view.text_box_from_date)
-        box_in_box.add_widget(box_in_box2)
+        start_date_frame.add_widget(view.text_box_from_date)
+        sub_frame.add_widget(start_date_frame)
 
-        box_in_box.add_widget(Widget(size_hint=(.7, 1)))
+        sub_frame.add_widget(Widget(size_hint=(.7, 1)))
 
 
-        box_in_box3 = BoxLayout(orientation='vertical', size_hint=(1, 1))
+        end_date_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         label = Label(text='End Date', size_hint=(1, .8), **get_style())
-        box_in_box3.add_widget(label)
+        end_date_frame.add_widget(label)
         view.text_box_to_date = TextInput(text='', multiline=False, size_hint =(1, 1))
         view.text_box_to_date.bind(on_text_validate=self.extract_data)
-        box_in_box3.add_widget(view.text_box_to_date)
-        box_in_box.add_widget(box_in_box3)
+        end_date_frame.add_widget(view.text_box_to_date)
+        sub_frame.add_widget(end_date_frame)
         
-        frame.add_widget(box_in_box)
+        frame.add_widget(sub_frame)
 
-        box_in_box.add_widget(Widget(size_hint=(.8, 1)))
+        sub_frame.add_widget(Widget(size_hint=(.8, 1)))
 
 
     def extract_data(self, Text_box):
@@ -79,4 +79,3 @@ class Time_limiters():
             time_string = 0
 
         return time_string
-

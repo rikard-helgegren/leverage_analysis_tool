@@ -12,8 +12,8 @@ import logging
 from kivy.metrics import dp
 
 from src.view.styling.light_mode.table import get_styling
-
 from src.view.styling.light_mode.Color_data_table import Color_data_table
+from src.view.styling.light_mode.color_palet import *
 
 column_title_leverage_1 = "Leverage 1"
 
@@ -42,8 +42,8 @@ class Table_of_instuments():
     def get_row_and_column_from_cell(self, cell):
         cell_nr = cell.index
         nbr_table_columns = len(self.table.column_data)
-        column = cell_nr%nbr_table_columns
-        row = int(cell_nr/nbr_table_columns)
+        column = cell_nr % nbr_table_columns
+        row = int(cell_nr / nbr_table_columns)
 
         return [row, column]
 
@@ -75,7 +75,6 @@ class Table_of_instuments():
 
 
     def get_market_from_cell(self, instance_table, cell):
-
         row_num = int(cell.index/len(instance_table.column_data))
         row_data = instance_table.row_data[row_num]
         return row_data[1]
@@ -92,7 +91,7 @@ class Table_of_instuments():
         else :
             self.selected_cels.append(cell.index)
             prev_row = list(self.table.row_data[row_nbr])
-            prev_row[column_nbr] = ("checkbox-marked-circle",[39 / 256, 174 / 256, 96 / 256, 1],"")
+            prev_row[column_nbr] = ("checkbox-marked-circle", instrument_table_check_color,"")
             self.table.row_data[row_nbr] = tuple(prev_row)
             
 

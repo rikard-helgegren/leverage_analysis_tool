@@ -20,6 +20,7 @@ from src.view.vertical_subframe_left.Leverage_slider import Leverage_slider
 from src.view.vertical_subframe_left.Investment_intervall import Investment_intervall
 from src.view.vertical_subframe_left.Table_of_instruments import Table_of_instuments
 from src.view.styling.light_mode.label import get_style
+import src.view.constants as constants
 
 def setup_vertical_frame(view):
     vertical_frame = BoxLayout(orientation='vertical', padding=5, size_hint=(.7, 1))
@@ -62,12 +63,8 @@ def insert_check_box(view, frame):
 
 def insert_time_and_loan(view, frame):
 
-    sub_frame = BoxLayout(size_hint=(0.5, .2), pos_hint={'center_x': .5, 'center_y': .5})
-
+    sub_frame = BoxLayout(size_hint=(0.5, .2), pos_hint=constants.center)
     view.investment_intervall = Investment_intervall(view, sub_frame)
-
     sub_frame.add_widget(Widget())
-
     view.loan = Loan(view, sub_frame)
-    
     frame.add_widget(sub_frame)

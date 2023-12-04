@@ -153,7 +153,7 @@ class Performance_Key_values:
                 "Alpha": self.alpha,
                 "Severity": self.severity,
                 "Fees Payed": self.fees_payed,
-                "Risk": str(self.risk*constants.CONVERT_PERCENT)+"%",
+                "Risk": self.risk,
                 "Worst fall in 10 days": str(self.worst_fall_10_days*constants.CONVERT_PERCENT)+"%",
                 "Worst fall in 30 days": str(self.worst_fall_30_days*constants.CONVERT_PERCENT)+"%",
                 "RPI": self.rpi,

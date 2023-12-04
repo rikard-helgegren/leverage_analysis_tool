@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt
 from kivy.metrics import dp
 from kivy.uix.widget import Widget
 from src.view.Matplot_figure import MatplotFigure
-
 from src.view.styling.set_empty_ticks import set_empty_ticks
+from src.view.styling.light_mode.color_palet import *
 
 
 #optimized draw on Agg backend
@@ -37,8 +37,7 @@ class Line_graph(Widget):
     def __init__(self, view, frame):  
         super().__init__()
 
-        light_gray = .98
-        self.fig, self.axs = plt.subplots(1, 1, sharey=True, tight_layout=True, facecolor=[light_gray, light_gray, light_gray])
+        self.fig, self.axs = plt.subplots(1, 1, sharey=True, tight_layout=True, facecolor=light_gray)
     
         set_empty_ticks(self.axs)
         self.matplot = MatplotFigure()

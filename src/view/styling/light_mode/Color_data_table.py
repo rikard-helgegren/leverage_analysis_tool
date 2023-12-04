@@ -24,6 +24,6 @@ class Color_data_table(MDDataTable):
     def on_size(self, instance, value):
         self.rect.size = value
 
-    #over writing
+    # over writing
     def on_pos(self, instance, value):
         self.rect.pos = value

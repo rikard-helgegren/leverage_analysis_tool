@@ -15,13 +15,15 @@ from kivy.uix.textinput import TextInput
 
 from src.view.styling.light_mode.label import get_style_no_font_size
 from src.view.utils import is_number
+import src.view.constants as constants
+
 
 class Variance_strategy():
     def __init__(self, view):
         self.view = view
         self.view.keyboard_observable.subscribe(self)
 
-        self.variance_frame = BoxLayout(size_hint=(.8, 0.2), pos_hint={'center_x': .5, 'center_y': .5})
+        self.variance_frame = BoxLayout(size_hint=(.8, 0.2), pos_hint=constants.center)
 
         self.set_sample_size_variance_frame()
 
@@ -118,7 +120,7 @@ class Variance_strategy():
     def increase_sample_size_variance_value(self, increase_amount=1):
         old_value = int(self.text_box_sample_size_variance._get_text())
         if is_number(old_value):
-            new_value = old_value+increase_amount
+            new_value = old_value + increase_amount
             self.text_box_sample_size_variance._set_text(str(new_value))
             self.update_sample_size_variance(self.text_box_sample_size_variance)
         else:
@@ -137,7 +139,7 @@ class Variance_strategy():
     def increase_sample_size_decision_value(self, increase_amount=1):
         old_value = int(self.text_box_sample_size_decision_point._get_text())
         if is_number(old_value):
-            new_value = old_value+increase_amount
+            new_value = old_value + increase_amount
             self.text_box_sample_size_decision_point._set_text(str(new_value))
             self.update_sample_size_decision_point(self.text_box_sample_size_decision_point)
         else:
@@ -146,7 +148,7 @@ class Variance_strategy():
     def decrease_volatillaty_trigger_value(self, decrease_amount=1):
         old_value = float(self.text_box_volatillaty_trigger_point._get_text().replace(",","."))
         if is_number(old_value):
-            new_value = round(max(old_value-decrease_amount, 0),3)
+            new_value = round(max(old_value - decrease_amount, 0),3)
             self.text_box_volatillaty_trigger_point._set_text(str(new_value))
             self.update_volatillaty_trigger(self.text_box_volatillaty_trigger_point)
         else:
@@ -155,7 +157,7 @@ class Variance_strategy():
     def increase_volatillaty_trigger_value(self, increase_amount=1):
         old_value = float(self.text_box_volatillaty_trigger_point._get_text().replace(",","."))
         if is_number(old_value):
-            new_value = round(old_value+increase_amount,3)
+            new_value = round(old_value + increase_amount,3)
             self.text_box_volatillaty_trigger_point._set_text(str(new_value))
             self.update_volatillaty_trigger(self.text_box_volatillaty_trigger_point)
         else:

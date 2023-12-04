@@ -7,7 +7,6 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-
 from src.view.styling.light_mode.color_palet import *
 
 def get_text_style_no_data():
@@ -36,4 +35,3 @@ def get_title_style():
         'color': 'k'
     }
     return style
-

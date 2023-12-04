@@ -14,6 +14,7 @@ from copy import deepcopy
 
 ###### IMPORT DATA MANAGER ######
 from src.managing_data.check_if_data_files_are_clean import check_if_data_files_are_clean
+from src.managing_data.sort_file_names               import sort_file_names
 from src.managing_data.read_and_manage_raw_data      import read_and_manage_raw_data
 
 ###### IMPORT MODEL ######
@@ -40,7 +41,7 @@ class Model:
         logging.debug("Model: __init__")
 
         
-        config = Config()
+        self.config = Config()
         ################ Data Files ################
 
         self.data_files_path  = constants_model.data_files_path
@@ -48,27 +49,27 @@ class Model:
 
         ############## Config values ###################
 
-        self.loan                                     = config.DEFAUT_LOAN
-        self.years_histogram_interval                 = config.DEFAUT_YEARS_HISTOGRAM_INTERVAL
-        self.harvest_point                            = config.DEFAUT_HARVEST_POINT
-        self.refill_point                             = config.DEFAUT_REFILL_POINT
-        self.update_harvest_refill                    = config.DEFAUT_UPDATE_HARVEST_REFILL
-        self.rebalance_period_months                  = config.DEFAUT_REBALANCE_PERIOD_MONTHS
-        #self.proportion_cash                          = config.DEFAUT_PROPORTION_CASH
-        self.proportion_funds                         = config.DEFAUT_PROPORTION_FUNDS 
-        self.proportion_leverage                      = config.DEFAUT_PROPORTION_LEVERAGE
-        self.include_fees_status                      = config.DEFAUT_INCLUDE_FEES_STATUS
-        self.rebalance_between_instruments_status     = config.DEFAUT_REBALANCE_BETWEEN_INSTRUMENTS_STATUS
-        self.correction_of_inflation_status           = config.DEFAUT_CORRECTION_OF_INFLATION_STATUS
-        self.correction_of_currency_status            = config.DEFAUT_CORRECTION_OF_CURRENCY_STATUS
-        self.delay_of_correction                      = config.DEFAUT_DELAY_OF_CORRECTION
-        self.chosen_time_interval_start_date          = 0
-        self.chosen_time_interval_end_date            = 0
-        self.chosen_time_interval_status              = False
-        self.portfolio_strategy                       = constants.PORTFOLIO_STRATEGIES[0]
-        self.default_variance_sample_size              = config.DEFAUT_VARIANCE_SAMPLE_SIZE
-        self.default_volatility_strategie_sample_size  = config.DEFAUT_VOLATILITY_STRATEGIE_SAMPLE_SIZE
-        self.default_volatility_strategie_level        = config.DEFAUT_VOLATILITY_STRATEGIE_LEVEL
+        self.loan                                      = self.config.DEFAUT_LOAN
+        self.years_histogram_interval                  = self.config.DEFAUT_YEARS_HISTOGRAM_INTERVAL
+        self.harvest_point                             = self.config.DEFAUT_HARVEST_POINT
+        self.refill_point                              = self.config.DEFAUT_REFILL_POINT
+        self.update_harvest_refill                     = self.config.DEFAUT_UPDATE_HARVEST_REFILL
+        self.rebalance_period_months                   = self.config.DEFAUT_REBALANCE_PERIOD_MONTHS
+        #self.proportion_cash                          = self.config.DEFAUT_PROPORTION_CASH
+        self.proportion_funds                          = self.config.DEFAUT_PROPORTION_FUNDS 
+        self.proportion_leverage                       = self.config.DEFAUT_PROPORTION_LEVERAGE
+        self.include_fees_status                       = self.config.DEFAUT_INCLUDE_FEES_STATUS
+        self.rebalance_between_instruments_status      = self.config.DEFAUT_REBALANCE_BETWEEN_INSTRUMENTS_STATUS
+        self.correction_of_inflation_status            = self.config.DEFAUT_CORRECTION_OF_INFLATION_STATUS
+        self.correction_of_currency_status             = self.config.DEFAUT_CORRECTION_OF_CURRENCY_STATUS
+        self.delay_of_correction                       = self.config.DEFAUT_DELAY_OF_CORRECTION
+        self.chosen_time_interval_start_date           = 0
+        self.chosen_time_interval_end_date             = 0
+        self.chosen_time_interval_status               = False
+        self.portfolio_strategy                        = constants.PORTFOLIO_STRATEGIES[0]
+        self.default_variance_sample_size              = self.config.DEFAUT_VARIANCE_SAMPLE_SIZE
+        self.default_volatility_strategie_sample_size  = self.config.DEFAUT_VOLATILITY_STRATEGIE_SAMPLE_SIZE
+        self.default_volatility_strategie_level        = self.config.DEFAUT_VOLATILITY_STRATEGIE_LEVEL
 
 
         ################ Data Processed ################
@@ -125,7 +126,8 @@ class Model:
         """
         logging.debug("Model: model_import_data")
         clean_file_names = check_if_data_files_are_clean(self.data_files_path)
-        self.markets = read_and_manage_raw_data(self.data_files_path, clean_file_names)
+        sorted_files = sort_file_names(clean_file_names, self.config.SORT_RANKING)
+        self.markets = read_and_manage_raw_data(self.data_files_path, sorted_files)
 
 
     def update_model(self):

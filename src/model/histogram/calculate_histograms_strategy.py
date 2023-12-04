@@ -38,7 +38,8 @@ def calculate_histogram(model):
         print("Strategy not implemented for histogram: ", strategy)
         return_data = [1, 2, 2, 3]
 
-    return model.set_results_for_intervals(return_data)
+    model.set_results_for_intervals(return_data)
+    return
 
 
 def do_nothing_hist(model):
@@ -88,9 +89,15 @@ def do_nothing_hist(model):
 
     # Combine normal and leveraged
     if number_of_leveraged_selected == 0:
-        return combined_normal
+        if np.ndarray == type(combined_normal):
+            return combined_normal.tolist()
+        else:
+            return combined_normal
     elif number_of_non_leveraged_selected == 0:
-        return combined_leveraged
+        if np.ndarray == type(combined_leveraged):
+            return combined_leveraged.tolist()
+        else:
+            return combined_leveraged
     else:
         combined_normal_proportionally = np.multiply(proportion_funds,
                                                     combined_normal)  # take in to account how much of total is invested in normal funds

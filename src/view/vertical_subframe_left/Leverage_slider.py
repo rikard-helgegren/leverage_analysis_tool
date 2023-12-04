@@ -58,12 +58,12 @@ class Leverage_slider():
 
     def decrease_value(self, decrease_amount=1):
         old_value = self.slider.value
-        new_value = max(old_value-decrease_amount, 0)
+        new_value = max(old_value - decrease_amount, 0)
         self.slider.value = new_value
     
     def increase_value(self, increase_amount=1):
         old_value = self.slider.value
-        new_value = min(old_value+increase_amount, 100)
+        new_value = min(old_value + increase_amount, 100)
         self.slider.value = new_value
 
     def on_slider_change(self, instance, value):

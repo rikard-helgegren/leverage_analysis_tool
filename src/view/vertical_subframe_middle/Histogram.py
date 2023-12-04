@@ -9,14 +9,13 @@
 import logging
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-
-from kivy.metrics import dp
-from src.view.Matplot_figure import MatplotFigure
-
-import matplotlib.pyplot as plt
 import seaborn as sns
 
+from kivy.metrics import dp
+
+from src.view.Matplot_figure import MatplotFigure
 from src.view.styling.set_empty_ticks import set_empty_ticks
+from src.view.styling.light_mode.color_palet import *
 
 #optimized draw on Agg backend
 mpl.rcParams['path.simplify'] = True
@@ -37,8 +36,6 @@ class Histogram:
     def __init__(self, view, frame):
         super().__init__()
 
-        light_gray_value = .98
-        light_gray = [light_gray_value, light_gray_value, light_gray_value]
         self.fig, self.axs = plt.subplots(
             1,
             1,

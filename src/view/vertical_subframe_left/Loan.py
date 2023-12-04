@@ -13,6 +13,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 
 from src.view.styling.light_mode.label import get_style
+import src.view.constants as constants
 
 class Loan():
     def __init__(self, view, frame):
@@ -23,14 +24,14 @@ class Loan():
         self.loan_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         label = Label(
                 text='Loan',
-                pos_hint={'center_x': .5, 'center_y': .5},
+                pos_hint=constants.center,
                 **get_style())
         self.loan_frame.add_widget(label)
         self.textinput = TextInput(
                 text='0',
                 multiline=False,
                 size_hint =(.8, .7),
-                pos_hint={'center_x': .5, 'center_y': .5})
+                pos_hint=constants.center)
         self.textinput.bind(on_text_validate=self.update_loan)
         self.loan_frame.add_widget(self.textinput)
         self.frame.add_widget(self.loan_frame)
@@ -49,13 +50,13 @@ class Loan():
 
     def decrease_value(self, decrease_amount=1):
         old_value = int(self.textinput._get_text())
-        new_value = max(old_value-decrease_amount, 0)
+        new_value = max(old_value - decrease_amount, 0)
         self.textinput._set_text(str(new_value))
         self.update_loan(self.textinput)
     
     def increase_value(self, increase_amount=1):
         old_value = int(self.textinput._get_text())
-        new_value = old_value+increase_amount
+        new_value = old_value + increase_amount
         self.textinput._set_text(str(new_value))
         self.update_loan(self.textinput)
 

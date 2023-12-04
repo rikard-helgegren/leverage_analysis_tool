@@ -14,6 +14,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 
 from src.view.styling.light_mode.label import get_style
+import src.view.constants as constants
 
 
 class Rebalance_strategy():
@@ -24,7 +25,7 @@ class Rebalance_strategy():
         self.rebalance_time_frame = BoxLayout(
                 orientation='vertical',
                 size_hint=(0.4, 0.2),
-                pos_hint={'center_x': .5, 'center_y': .5})
+                pos_hint=constants.center)
         self.rebalance_time_frame.add_widget(Widget(size_hint=(1, .2))) #Space
         label = Label(text='Rebalance period (Months)',
                 size_hint=(1, .8),
@@ -34,7 +35,7 @@ class Rebalance_strategy():
                 text='6',
                 multiline=False,
                 size_hint =(.3, .7),
-                pos_hint={'center_x': .5, 'center_y': .5})
+                pos_hint=constants.center)
         self.text_box.bind(on_text_validate=self.update_rebalance_point)
         self.rebalance_time_frame.add_widget(self.text_box)
 
@@ -55,13 +56,13 @@ class Rebalance_strategy():
 
     def decrease_value(self, decrease_amount=1):
         old_value = int(self.text_box._get_text())
-        new_value = max(old_value-decrease_amount, 1)
+        new_value = max(old_value - decrease_amount, 1)
         self.text_box._set_text(str(new_value))
         self.update_rebalance_point(self.text_box)
     
     def increase_value(self, increase_amount=1):
         old_value = int(self.text_box._get_text())
-        new_value = old_value+increase_amount
+        new_value = old_value + increase_amount
         self.text_box._set_text(str(new_value))
         self.update_rebalance_point(self.text_box)
 

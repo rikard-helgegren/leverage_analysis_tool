@@ -20,5 +20,6 @@ pie_chart_median_first_color = [232/255, 184/255, 84/255]
 pie_chart_median_second_color = [232/255, 184/255, 84/255]
 pie_chart_risk_first_color = [1,.4,.4]
 pie_chart_risk_second_color = [1,.4,.4]
-
 pie_chart_faded_black_text = [0.45, 0.45, 0.45]
+
+instrument_table_check_color = [39 / 256, 194 / 256, 96 / 256, 1]

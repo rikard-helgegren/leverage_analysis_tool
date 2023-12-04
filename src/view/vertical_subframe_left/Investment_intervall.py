@@ -13,6 +13,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 
 from src.view.styling.light_mode.label import get_style
+import src.view.constants as constants
 
 class Investment_intervall():
     def __init__(self, view, frame):
@@ -23,7 +24,7 @@ class Investment_intervall():
         self.time_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         label = Label(
                 text='Time Investing',
-                pos_hint={'center_x': .5, 'center_y': .5},
+                pos_hint=constants.center,
                 size_hint=(1, 1),
                 **get_style())
         self.time_frame.add_widget(label)
@@ -46,7 +47,7 @@ class Investment_intervall():
 
     def decrease_value(self, decrease_amount=1):
         old_value = int(self.textinput._get_text())
-        new_value = max(old_value-decrease_amount, 1)
+        new_value = max(old_value - decrease_amount, 1)
         self.textinput._set_text(str(new_value))
         self.update_years(self.textinput)
     
