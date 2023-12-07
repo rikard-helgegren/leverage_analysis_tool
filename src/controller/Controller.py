@@ -47,7 +47,8 @@ class Controller:
         ### Update line graph ###
         time_interval = self.model.get_common_time_interval()
         portfolio_results_full_time = self.model.get_portfolio_results_full_time()
-        self.draw_line_graph(portfolio_results_full_time, time_interval)
+        buy_sell_log = self.model.get_buy_sell_log()
+        self.draw_line_graph(portfolio_results_full_time, time_interval, buy_sell_log)
 
         self.update_chosen_time_intervals()
 
@@ -60,9 +61,9 @@ class Controller:
         logging.debug("Controller: draw_histogram")
         self.view.draw_histogram(data)
 
-    def draw_line_graph(self, data, time_interval):
+    def draw_line_graph(self, data, time_interval, buy_sell_log):
         logging.debug("Controller: draw_line_graph")
-        self.view.draw_line_graph(data, time_interval)
+        self.view.draw_line_graph(data, time_interval, buy_sell_log)
     
     def set_table_of_statistics(self):
         """ Set the table with key values"""

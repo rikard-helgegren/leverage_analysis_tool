@@ -96,9 +96,9 @@ class View(GridLayout):
         logging.debug("View: draw_histogram")
         self.histogram.draw(data)
 
-    def draw_line_graph(self, values, time_span):
+    def draw_line_graph(self, values, time_span, buy_sell_log):
         logging.debug("View: draw_line_graph")
-        self.line_graph.draw(values, time_span)
+        self.line_graph.draw(values, time_span, buy_sell_log)
 
     def set_table_of_instruments(self, names, countries):
         logging.debug("View: set_market_table")

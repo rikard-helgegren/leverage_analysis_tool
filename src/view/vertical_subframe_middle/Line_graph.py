@@ -47,7 +47,7 @@ class Line_graph(Widget):
         self.canvas = self.matplot.figcanvas
 
     
-    def draw(self, values, time_span):
+    def draw(self, values, time_span, buy_sell_log):
         logging.debug("View: Line_graph: draw")
         plt.figure(self.fig.number)
 
@@ -56,6 +56,7 @@ class Line_graph(Widget):
 
         if values != []:
             self.set_time_on_x_axis(self.axs, time_span)
+            self.set_buy_and_sell_markers(self.axs, values, buy_sell_log)
             self.line1, = self.axs.plot(values)
             plt.tight_layout()
         else:
@@ -63,6 +64,45 @@ class Line_graph(Widget):
         
         self.canvas.draw()
 
+    def set_buy_and_sell_markers(self, axs, values, buy_sell_log):
+        logging.debug("View: Line_graph: set_buy_and_sell_markers")
+        circle_size =100
+
+        x_values = []
+        y_values = []
+        colors = []
+        did_buy=False
+        did_sell=False
+
+        for value in buy_sell_log:
+            if value > len(values): # bug from samples size of data to determine behaviour
+                logging.warn("index out off bounds scatter plott" + str(value) + " of " + str(len(values)))
+            else:
+                
+                x_values.append(value)
+                y_values.append(values[value])
+                events = buy_sell_log[value]
+                
+                # Reset
+                did_buy=False
+                did_sell=False
+
+                for event in events:
+                    if event['Activity'].value == 1:
+                        did_buy=True
+                    elif event['Activity'].value == 2:
+                        did_sell=True
+                    else:
+                        logging.warn("View.Linegraph: set_buy_and_sell_markers, invallid logg action: " + str(event['Activity']))
+                
+                if did_buy and did_sell:
+                    colors.append(graph_buy_and_sell)
+                elif did_buy:
+                    colors.append(graph_buy_green)
+                elif did_sell:
+                    colors.append(graph_sell_red)
+
+        axs.scatter(x_values, y_values, s=circle_size, c=colors)
 
     def set_time_on_x_axis(self, ax, time_span):
         logging.debug("View: Line_graph: set_time_on_x_axis")

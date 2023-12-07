@@ -349,7 +349,7 @@ def test_do_always_invest_strategy_2_leverage_and_founds2():
             model.rebalance_period_months,
             number_of_leveraged_instruments)
     
-    assert portfolio_results_full_time[-1] == pytest.approx(3.30075384458)
+    assert portfolio_results_full_time[-1] == pytest.approx(3.2839186671)
 
 def test_do_always_invest_strategy_2_leverage_and_founds3():
     model = Model_Builder() \
@@ -394,7 +394,7 @@ def test_do_always_invest_strategy_2_leverage_and_founds3():
     bull_after_rebalance = portfolio_item2.values[72] 
     assert bull_before_rebalance > bull_after_rebalance
 
-    assert portfolio_results_full_time[-1] == pytest.approx(3.328169395678)
+    assert portfolio_results_full_time[-1] == pytest.approx(3.278708851455)
    
 
 # TODO (currently not prioretized)

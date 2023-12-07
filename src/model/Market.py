@@ -8,6 +8,8 @@
 # commercial or non-commercial, by any means.
 
 
+from kivy.logger import logging
+
 class Market:
     """ Represents a stock market
 
@@ -32,7 +34,10 @@ class Market:
         return self.__str__()
 
     def get_first_day(self):
-        return self.time_span[0]
+        if self.time_span != []:
+            return self.time_span[0]
+        logging.warn("No days in market. Returning incorrect value")
+        return '20220101'
 
     def get_last_day(self):
         return self.time_span[-1]

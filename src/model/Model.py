@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+# Copyright (C) 2023 Rikard Helgegren <rikard.helgegren@gmail.com>
 #
 # This software is only allowed for private use. As a private user you are allowed to copy,
 # modify, use, and compile the software. You are NOT however allowed to publish, sell, or
@@ -25,6 +25,7 @@ from src.model.common.fill_in_missing_dates             import fill_gaps_data
 from src.model.common.calculate_common_time_interval    import calculate_common_time_interval
 from src.model.histogram.calculate_histograms_strategy  import calculate_histogram
 from src.model.Performance_key_values                   import Performance_Key_values
+from src.model.Buy_sell_singelton                       import Buy_sell_singelton
 
 import src.model.common.constants_model as constants_model
 import src.constants as constants
@@ -70,6 +71,7 @@ class Model:
         self.default_variance_sample_size              = self.config.DEFAUT_VARIANCE_SAMPLE_SIZE
         self.default_volatility_strategie_sample_size  = self.config.DEFAUT_VOLATILITY_STRATEGIE_SAMPLE_SIZE
         self.default_volatility_strategie_level        = self.config.DEFAUT_VOLATILITY_STRATEGIE_LEVEL
+        
 
 
         ################ Data Processed ################
@@ -111,6 +113,19 @@ class Model:
             'self.years_histogram_interval' in the time investigated.
             
             The purpose of this variable is to be ploted in histogram
+        """
+
+        self.buys_sells = Buy_sell_singelton()
+        """ Dict of buy and sell information for each day. e.x.
+            ['19990310'] = [{
+                Action: Sell
+                Certificate: OMXS30_X3
+                },
+                {
+                Action: Buy
+                Certificate: OMXS30_X5
+                }
+            ]
         """
 
         self.key_values = Performance_Key_values(self)
@@ -386,3 +401,7 @@ class Model:
     def set_volatility_strategie_level(self, volatility_strategie_level):
         logging.debug("Model: set_volatility_strategie_level")
         self.default_volatility_strategie_level = volatility_strategie_level
+
+    def get_buy_sell_log(self):
+        logging.debug("Model: get_buy_sell_log")
+        return self.buys_sells.get_log()

@@ -7,8 +7,9 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-from src.model.common.determine_longest_common_timespan   import determine_longest_common_timespan
-from src.model.common.check_data_is_empty import check_data_is_empty
+from src.model.common.determine_longest_common_timespan import determine_longest_common_timespan
+from src.model.common.check_data_is_empty               import check_data_is_empty
+from src.model.Buy_sell_singelton                       import Buy_sell_singelton
 import src.model.common.constants_model as constants_model
 import src.constants as constants
 import src.model.graph.strategies as strategies
@@ -32,6 +33,7 @@ def calculate_graph_outcomes(model):  #TODO, graph should not be able to have ne
     harvest_point           = model.get_harvest_point() / constants.CONVERT_PERCENT
     refill_point            = model.get_refill_point() / constants.CONVERT_PERCENT
     rebalance_period_months = model.get_rebalance_period_months()
+    #buy_sell                = model.get_buys_sells()
 
     if check_data_is_empty(instruments_selected, markets_selected):
         model.set_portfolio_results_full_time([])
@@ -45,6 +47,7 @@ def calculate_graph_outcomes(model):  #TODO, graph should not be able to have ne
 
     portfolio_items = utils.create_portfolio(instruments_selected, number_of_leveraged_instruments, loan, proportion_funds, number_of_funds, proportion_leverage, markets_selected)
    
+    Buy_sell_singelton().clear_log()
 
     if strategy == constants.PORTFOLIO_STRATEGIES[3]:  # Do not invest money
         portfolio_results_full_time = strategies.do_not_invest(end_pos)

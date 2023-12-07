@@ -14,6 +14,7 @@ import src.model.common.constants_model as constants_model
 import src.constants as constants
 import src.model.graph.utils as utils 
 from src.model.common.variance_and_volatility import calc_volatility
+from src.model.Buy_sell_singelton             import Buy_sell_singelton
 
 
 def do_not_invest(end_pos):
@@ -60,6 +61,10 @@ def do_always_invest(end_pos, portfolio_items, loan, strategy, number_of_funds, 
                 for i in portfolio_items:
                     if i.get_leverage() > 1:
                         i.set_reference_value(total_value * proportion_leverage / number_of_leveraged_instruments)
+                
+                Buy_sell_singelton().set_current_date(day)
+
+        Buy_sell_singelton().create_log_event_from_parts()
 
     # sum total results
     total_results = []
@@ -90,11 +95,19 @@ def do_sometimes_invest(end_pos, portfolio_items, loan, strategy, number_of_fund
                 # if vola. too high jump to next day
                 if (volatility > model.get_volatility_strategie_level()):
                     item.set_values(item.get_values() + [item.get_current_value()-loan/len(portfolio_items)])
-                    item.set_has_done_action(False)
+                    
+                    if item.get_has_done_action():
+                        Buy_sell_singelton().append_current_events(constants_model.Order.SELL)
+                        item.set_has_done_action(False)
+                    
                     continue
             
             # make func cal to strategy and somtimes rebalance
             low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, proportion_leverage, rebalance_period_months, number_of_leveraged_instruments, model)
+
+
+        Buy_sell_singelton().set_current_date(day - model.get_volatility_strategie_sample_size())
+        Buy_sell_singelton().create_log_event_from_parts()
 
     portfolio_results_full_time = utils.sum_porfolio_results_full_time(portfolio_items)
 
@@ -123,10 +136,12 @@ def harvest_refill(inspected_instrument, all_instruments, number_of_funds, harve
     reference_value = inspected_instrument.get_reference_value()
 
     if current_value > harvest_point * reference_value or current_value < refill_point * reference_value:
-
        rebalence(inspected_instrument, all_instruments, number_of_funds)
+       return True
 
-    return True
+    return False
+
+    
 
 def rebalance_time_cycle(inspected_instrument, all_instruments, number_of_funds, day, rebalance_period_months):
     """
@@ -141,8 +156,9 @@ def rebalance_time_cycle(inspected_instrument, all_instruments, number_of_funds,
 
     if (day+1) % rebalance_period_days == 0: # +1 to not rebalance the first (0th) day  
        rebalence(inspected_instrument, all_instruments, number_of_funds)
+       return True
 
-    return True
+    return False
 
 def can_rebalance(inspected_instrument, number_of_funds, all_instruments):
     """
@@ -188,6 +204,9 @@ def rebalence(inspected_instrument, all_instruments, number_of_funds):
 
     if (change_in_value < 0):
         change_in_value = change_in_value*constants_model.SPREAD
+        Buy_sell_singelton().append_current_events(constants_model.Order.BUY)
+    else:
+        Buy_sell_singelton().append_current_events(constants_model.Order.SELL)
 
     for instrument in all_instruments:
         if instrument.get_leverage() == 1:
@@ -207,6 +226,7 @@ def low_variance_strategy(item, loan, portfolio_items, day, number_of_funds, pro
 
     if (not item.get_has_done_action()) and model.get_include_fees_status():
         item.set_has_done_action(True)
+        Buy_sell_singelton().append_current_events(constants_model.Order.BUY)
         new_value /= constants_model.SPREAD
 
     item.set_current_value(new_value)
