@@ -180,6 +180,8 @@ class Model:
 
         self.update_market_selected()
 
+    def wipe_instrument_selected(self):
+        self.instruments_selected = []
 
     def update_market_selected(self):
         """ Copy the markets of the instruments selected in the instrument

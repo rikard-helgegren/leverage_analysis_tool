@@ -62,7 +62,6 @@ def insert_check_box(view, frame):
 
 
 def insert_time_and_loan(view, frame):
-
     sub_frame = BoxLayout(size_hint=(0.5, .2), pos_hint=constants.center)
     view.investment_intervall = Investment_intervall(view, sub_frame)
     sub_frame.add_widget(Widget())

@@ -40,7 +40,10 @@ class Market:
         return '20220101'
 
     def get_last_day(self):
-        return self.time_span[-1]
+        if self.time_span != []:
+            return self.time_span[-1]
+        logging.warn("No days in market. Returning incorrect value")
+        return '20220101'
 
     def get_name(self):
         return self.name

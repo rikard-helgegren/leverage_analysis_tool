@@ -39,8 +39,7 @@ class Table_of_instuments():
         self.table.bind(on_row_press=self.select_cell)
         frame.add_widget(self.table)
     
-    def get_row_and_column_from_cell(self, cell):
-        cell_nr = cell.index
+    def get_row_and_column_from_cell_index(self, cell_nr):
         nbr_table_columns = len(self.table.column_data)
         column = cell_nr % nbr_table_columns
         row = int(cell_nr / nbr_table_columns)
@@ -49,9 +48,9 @@ class Table_of_instuments():
 
 
     def select_cell(self, instance_table, cell):
-        row, column = self.get_row_and_column_from_cell(cell)
+        row, column = self.get_row_and_column_from_cell_index(cell.index)
         if cell.text == '':
-            self.update_color_on_press(cell)
+            self.update_color_on_press(cell.index)
 
             leverage = self.get_leverage_from_cell(instance_table, cell)
             market = self.get_market_from_cell(instance_table, cell)  
@@ -79,17 +78,17 @@ class Table_of_instuments():
         row_data = instance_table.row_data[row_num]
         return row_data[1]
 
-    def update_color_on_press(self, cell):
-        row_nbr, column_nbr = self.get_row_and_column_from_cell(cell)
+    def update_color_on_press(self, cell_index):
+        row_nbr, column_nbr = self.get_row_and_column_from_cell_index(cell_index)
         #current_color = cell.background_color_selected_cell
 
-        if cell.index in self.selected_cels:
-            self.selected_cels.remove(cell.index)
+        if cell_index in self.selected_cels:
+            self.selected_cels.remove(cell_index)
             prev_row = list(self.table.row_data[row_nbr])
             prev_row[column_nbr] = ''
             self.table.row_data[row_nbr] = tuple(prev_row)
         else :
-            self.selected_cels.append(cell.index)
+            self.selected_cels.append(cell_index)
             prev_row = list(self.table.row_data[row_nbr])
             prev_row[column_nbr] = ("checkbox-marked-circle", instrument_table_check_color,"")
             self.table.row_data[row_nbr] = tuple(prev_row)
@@ -110,3 +109,11 @@ class Table_of_instuments():
         if added_new_item:
             self.table.row_data=all_item_texts
   
+    def remove_selectons(self):
+        for cell_index in self.selected_cels:
+            row_nbr, column_nbr = self.get_row_and_column_from_cell_index(cell_index)
+            prev_row = list(self.table.row_data[row_nbr])
+            prev_row[column_nbr] = ''
+            self.table.row_data[row_nbr] = tuple(prev_row)
+        
+        self.selected_cels = []

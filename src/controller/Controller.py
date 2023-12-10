@@ -9,7 +9,6 @@
 
 import logging
 import src.constants as constants
-import src.controller.formating as format
 
 
 class Controller:
@@ -20,6 +19,8 @@ class Controller:
     def __init__(self, model, view):
         self.model = model
         self.view = view
+
+        self.pause_state = False
 
         self.set_table_of_instruments()
         self.set_table_of_statistics()
@@ -36,7 +37,11 @@ class Controller:
 
     def update_model(self):
         logging.debug("Controller: update_model")
-        self.model.update_model()
+
+        if self.pause_state:
+            logging.info("Model updates are paused")
+        else:
+            self.model.update_model()
 
     def update_view(self):
         logging.debug("Controller: update_view")
@@ -50,12 +55,16 @@ class Controller:
         buy_sell_log = self.model.get_buy_sell_log()
         self.draw_line_graph(portfolio_results_full_time, time_interval, buy_sell_log)
 
-        self.update_chosen_time_intervals()
-
         self.update_table_of_statistics(self.model.key_values.get_all_values())
 
         self.draw_pie_chart(self.model.key_values.get_all_values())
 
+    def set_pause_state(self, pausing_state):
+        self.pause_state = pausing_state
+
+        if  not self.pause_state:
+            self.update_model()
+            self.update_view()
 
     def draw_histogram(self, data):
         logging.debug("Controller: draw_histogram")
@@ -86,6 +95,12 @@ class Controller:
         logging.debug("Controller: update_instrument_selected")
 
         self.model.update_instrument_selected(table_focus_item_data)
+
+        self.update_model()
+        self.update_view()
+
+    def wipe_instrument_selected(self):
+        self.model.wipe_instrument_selected()
 
         self.update_model()
         self.update_view()
@@ -177,25 +192,8 @@ class Controller:
         self.update_model() #TODO can fine tune this
         self.update_view() #TODO can fine tune this
 
-    def update_chosen_time_intervals(self):
-        """ Update the manually selected time intervals in the view"""
-        
-        start_date = self.model.get_chosen_start_date_time_limit()
-        end_date = self.model.get_chosen_end_date_time_limit()
-
-        # If start day is 0 then no date is set
-        if start_date != 0:
-            start_date = format.formatDate(start_date)
-            self.view.text_box_from_date._set_text(start_date)
-
-        # If end day is 0 then no date is set
-        if end_date != 0:
-            end_date = format.formatDate(end_date)
-            self.view.text_box_to_date._set_text(end_date)
-
     def update_table_of_statistics(self, key_values):
         self.view.update_table_of_statistics(key_values)
 
     def draw_pie_chart(self, key_values):
         self.view.update_pie_chart(key_values)
-

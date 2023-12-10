@@ -37,7 +37,15 @@ class Line_graph(Widget):
     def __init__(self, view, frame):  
         super().__init__()
 
-        self.fig, self.axs = plt.subplots(1, 1, sharey=True, tight_layout=True, facecolor=light_gray)
+        self.view = view
+
+        self.fig, self.axs = plt.subplots(
+            nrows=1, 
+            ncols=1,
+            sharey=True,
+            tight_layout=True,
+            facecolor=light_gray
+        )
     
         set_empty_ticks(self.axs)
         self.matplot = MatplotFigure()
@@ -46,20 +54,73 @@ class Line_graph(Widget):
 
         self.canvas = self.matplot.figcanvas
 
-    
+        # Place holders
+        self.values = [] 
+        self.time_span = []
+        self.buy_sell_log = {}
+        self.values_refrence = [] 
+        self.time_span_refrence = []
+        self.buy_sell_log_refrence = {}
+
+    def update_refrence(self):
+        logging.info("View: Line_graph: update_refrence")
+
+        if self.values == [] or self.values ==  self.values_refrence:
+            self.values_refrence = []
+            self.time_span_refrence = []
+            self.buy_sell_log_refrence = {}
+        else:
+            self.values_refrence =  self.values      
+            self.time_span_refrence = self.time_span
+            self.buy_sell_log_refrence = self.buy_sell_log
+        
+        self._draw()
+
     def draw(self, values, time_span, buy_sell_log):
         logging.debug("View: Line_graph: draw")
+        
+        self.values = values
+        self.time_span = time_span        
+        self.buy_sell_log = buy_sell_log
+
+        self._draw()
+
+    def update(self):
+        logging.debug("View: Line_graph: update")
+        self._draw()
+
+    def _draw(self):
         plt.figure(self.fig.number)
+        clear_canvas = True
 
         #if clear_before_drawing: #TODO implement with this input
         self.axs.clear()
 
-        if values != []:
-            self.set_time_on_x_axis(self.axs, time_span)
-            self.set_buy_and_sell_markers(self.axs, values, buy_sell_log)
-            self.line1, = self.axs.plot(values)
+        if self.values != []:
+            self.set_time_on_x_axis(self.axs, self.time_span)
+            if self.view.show_trades:
+                self.set_buy_and_sell_markers(self.axs, self.values, self.buy_sell_log)
+            self.line1, = self.axs.plot(
+                self.values, 
+                color = 'blue',
+                alpha=0.5
+            )
             plt.tight_layout()
-        else:
+            clear_canvas = False
+        
+        if self.values_refrence != []:
+            self.set_time_on_x_axis(self.axs, self.time_span_refrence)
+            if self.view.show_trades:
+                self.set_buy_and_sell_markers(self.axs, self.values_refrence, self.buy_sell_log_refrence)
+            self.line1, = self.axs.plot(
+                self.values_refrence, 
+                color = 'green',
+                alpha=0.5
+            )
+            plt.tight_layout()
+            clear_canvas = False
+        
+        if clear_canvas:
             set_empty_ticks(self.axs)
         
         self.canvas.draw()

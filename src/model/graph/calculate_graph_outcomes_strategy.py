@@ -41,7 +41,11 @@ def calculate_graph_outcomes(model):  #TODO, graph should not be able to have ne
 
     [start_time, end_time] = determine_longest_common_timespan(instruments_selected, markets_selected)
 
-    end_pos = utils.get_last_index_of_days_from_instrument(instruments_selected[0], markets_selected, end_time)
+    try:
+        end_pos = utils.get_last_index_of_days_from_instrument(instruments_selected[0], markets_selected, end_time)
+    except:
+        logging.warn("Graph: Date " + str(end_time) + " could not be found in time series. Is not able to create graph data" )
+        return
 
     number_of_funds, number_of_leveraged_instruments = utils.calculate_nbr_of_funds_and_leverages(instruments_selected)
 

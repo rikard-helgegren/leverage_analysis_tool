@@ -31,8 +31,8 @@ class View(GridLayout):
         self.keyboard_observable =Keyboard_observable()
         self.mouse_position = _MOUSE_STARTER_POSITION
 
-        # Placeholder for controller
-        self.controller = None
+        self.controller = None # Placeholder for controller
+        self.show_trades = False
         
         self.cols=3
 
@@ -125,3 +125,17 @@ class View(GridLayout):
         self.pie_frame1.draw(key_values['Mean'])
         self.pie_frame2.draw(key_values['Median'])
         self.pie_frame3.draw(key_values['Risk'])
+
+    def update_refrence(self):
+        logging.debug("View: update_refrence")
+        """ Set refrence or remove it depending on if data is identical to when last pressed"""
+        self.histogram.update_refrence()
+        self.line_graph.update_refrence()
+        self.table_of_statistics.update_refrence()
+
+    def wipe_selected_instruments(self):
+        self.table_of_instruments.remove_selectons()
+        self.controller.wipe_instrument_selected()
+    
+    def set_pause_state(self, pausing_state):
+        self.controller.set_pause_state(pausing_state)

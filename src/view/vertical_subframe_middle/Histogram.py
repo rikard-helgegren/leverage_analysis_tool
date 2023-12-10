@@ -37,12 +37,13 @@ class Histogram:
         super().__init__()
 
         self.fig, self.axs = plt.subplots(
-            1,
-            1,
+            nrows=1,
+            ncols=1,
             sharey=True,
             tight_layout=True, 
             facecolor=light_gray,
-            edgecolor=light_gray)
+            edgecolor=light_gray
+        )
         set_empty_ticks(self.axs)   
         self.matplot = MatplotFigure()
         self.matplot.figure = self.fig
@@ -50,26 +51,78 @@ class Histogram:
 
         self.canvas = self.matplot.figcanvas
 
+        self.data = []
+        self.data_refrence = []
+
+    def update_refrence(self):
+        logging.info("View: Histogram: update_refrence")
+
+        if self.data == [] or self.data ==  self.data_refrence:
+            self.data_refrence = []
+        else:
+            self.data_refrence =  self.data
+        
+        self._draw()
     
     def draw(self, data):
         logging.debug("View: Histogram: draw")
+
+        self.data = data
+
+        self._draw()
+
+    def _draw(self):
         plt.figure(self.fig.number)
+
+        
+        clear_canvas = True
 
         #if clear_before_drawing: #TODO implement with this input button
         self.axs.clear()
 
-        if data != []:
-            [begining_trailing_values, end_before_trailing_values] = self.point_of_trailing_values(data)
+        if self.data != []:
+            [begining_trailing_values, end_before_trailing_values] = self.point_of_trailing_values(self.data)
             self.axs.set_xlim(xmin=begining_trailing_values, xmax=end_before_trailing_values)   
-            hist_plot = sns.histplot(data, element = "step" ,kde=True, bins=200, discrete=False, ax=self.axs)
+            hist_plot = sns.histplot(
+                self.data,
+                element = "step",
+                kde=True,
+                bins=200,
+                discrete=False,
+                ax=self.axs,
+                color = 'blue'
+            )
             y_ticks = self.axs.get_yticks()
             self.axs.set_yticks(y_ticks, ['']*len(y_ticks))
             self.axs.set_ylabel('')
             hist_plot
 
             plt.tight_layout()
+
+            clear_canvas = False
+
+        if self.data_refrence != []:
+            [begining_trailing_values, end_before_trailing_values] = self.point_of_trailing_values(self.data_refrence)
+            self.axs.set_xlim(xmin=begining_trailing_values, xmax=end_before_trailing_values)   
+            hist_plot = sns.histplot(
+                self.data_refrence,
+                element = "step",
+                kde=True,
+                bins=200,
+                discrete=False,
+                ax=self.axs,
+                color = 'green'
+            )
+            y_ticks = self.axs.get_yticks()
+            self.axs.set_yticks(y_ticks, ['']*len(y_ticks))
+            self.axs.set_ylabel('')
+            hist_plot
+
+            plt.tight_layout()
+
+            clear_canvas = False
         
-        else:
+        if clear_canvas:
             set_empty_ticks(self.axs)
 
 
