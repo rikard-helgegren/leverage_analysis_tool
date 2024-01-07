@@ -38,8 +38,9 @@ class Config():
             'SP500',
             'DIA',
             'OMXS30',
-            'OBX',
+            'OSEAX',
             'OMXC',
             'OMXH',
-            'DAX'
+            'DAX',
+            'CAC'
         ]

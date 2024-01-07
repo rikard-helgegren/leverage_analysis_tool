@@ -12,10 +12,10 @@ from src.view.styling.light_mode.color_palet import *
 def get_style():
     style = {
         "theme_text_color" : "Custom",
-        "text_color" : "orange",
-        "line_color" : "orange",
+        "text_color" : gray_4,
+        "line_color" : gray_4,
         "theme_icon_color" : "Custom",
-        "icon_color" : "orange",
+        "icon_color" : gray_4,
         "line_width" : 2,
         "font_size" :20
     }
