@@ -13,32 +13,12 @@
 #include <map>
 #include <stdexcept>
 
-#include "../common/constants.h"
-#include "../common/sumFloats.cpp"
+#include "constants.h"
+#include "sumFloats.cpp"
 #include "Parameters.cpp"
+#include "../../Logger.cpp"
 
 #pragma once
-
-/**
- * Makes mapping between each financial instrument and its market index
- *
- * key: instrument
- * value: market index
- */
-void mapIndexNrToMarketNr(std::map<int,int> indexToMarket,
-                          std::vector<std::string> marketNames,
-                          int nrMarketsSelected,
-                          std::vector<std::string> instrumentNames,
-                          int nrOfInstruments){
-
-    for (int instrumentNumber = 0; instrumentNumber < nrOfInstruments; instrumentNumber++){
-        for (int number = 0; number < nrMarketsSelected; number++){
-            if (marketNames[number] == instrumentNames[instrumentNumber]){
-                indexToMarket.insert(std::pair<int, int>(instrumentNumber, number));
-            }
-        }
-    }
-}
 
 /**
  * In start of new intervall the starting values have to be set
@@ -89,6 +69,7 @@ float getFeeLevel(int leverage){
  * Update instrument value with the daily change times its leverage 
  */
 float updateCurrentInstrumentValue(Parameters parameters, float* currentValues, int item, int day){
+    static Logger logger;
 
     float currentValue = currentValues[item]; 
     float oneDayChange = currentValue * parameters.marketDailyChanges[parameters.indexToMarket[item]][day] * static_cast<float>(parameters.instrumentLeverages[item]);
@@ -146,18 +127,36 @@ bool checkPreConditionsHarvestRefill(Parameters parameters,
 }
 
 
-void doRebalancing(Parameters parameters,
+void doRebalancing(Parameters &parameters,
                    float totForRebalancing,
                    float* referenceValue,
                    float* currentValues,
-                   int item ){
-     // Do rebalancing
+                   int item,
+                   int currentDay){
+    static Logger logger;
+    
+    // Do rebalancing
     if (totForRebalancing > (referenceValue[item] - currentValues[item])){
         float changeInValue = currentValues[item] - referenceValue[item];
         currentValues[item] = referenceValue[item];
 
+
         if (changeInValue < 0){
             changeInValue = changeInValue*constants::spread;
+            if (parameters.graphParameters.isSet){
+                parameters.graphParameters.transactionTypes[parameters.graphParameters.positionCounter] = 1; //Buy levrage
+            }
+        }
+        else {
+            if (parameters.graphParameters.isSet){
+                parameters.graphParameters.transactionTypes[parameters.graphParameters.positionCounter] = 2; //Sell leverage
+            }
+        }
+
+        if (parameters.graphParameters.isSet){
+            
+            parameters.graphParameters.transactionDates[parameters.graphParameters.positionCounter] = currentDay;
+            parameters.graphParameters.positionCounter = parameters.graphParameters.positionCounter + 1; 
         }
 
         for (int instrument = 0; instrument< parameters.nrOfInstruments; instrument++){
@@ -173,10 +172,11 @@ void doRebalancing(Parameters parameters,
  * Implement rebalance of investment cirtificates (items)
  */
 //TODO decompose, and make tests
-void rebalanceInvestmentCirtificates(Parameters parameters,
+void rebalanceInvestmentCirtificates(Parameters &parameters,
             int item,
             float* currentValues,
-            float* referenceValue){
+            float* referenceValue,
+            int currentDay){
                 
     float totForRebalancing{0.0f};
     float changeInValue{0.0f};
@@ -197,5 +197,5 @@ void rebalanceInvestmentCirtificates(Parameters parameters,
         }
     }
 
-    doRebalancing(parameters, totForRebalancing, referenceValue, currentValues, item);
+    doRebalancing(parameters, totForRebalancing, referenceValue, currentValues, item, currentDay);
 }

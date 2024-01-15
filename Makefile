@@ -9,6 +9,8 @@ trace: src/compiled_code trace_run
 
 clean:
 	rm -rf src/compiled_code
+	rm -f C++_log.txt
+	touch C++_log.txt
 
 src/compiled_code:
 	mkdir src/compiled_code
@@ -40,8 +42,8 @@ cpp_test:
 
 install:
 	sudo apt install python3-pip
-	sudo pip install pytest
+	sudo pip3 install pytest
 	apt install xsel
 	apt install xclip
 
-	pip install -r requirements.txt
+	pip3 install -r requirements.txt

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2022 Rikard Helgegren <rikard.helgegren@gmail.com>
+ * Copyright (C) 2024 Rikard Helgegren <rikard.helgegren@gmail.com>
  *
  * This software is only allowed for private use. As a private user you are allowed to copy,
  * modify, use, and compile the software. You are NOT however allowed to publish, sell, or
@@ -23,60 +23,36 @@
 #include "../common/convertArrayChangeToTotalValue.cpp"
 #include "../common/convertCharPointerToStringVector.cpp"
 #include "../common/mapIndexNrToMarketNr.cpp"
+#include "../common/utils.cpp"
 #include "../common/Parameters.cpp"
 #include "../common/ParametersBuilder.cpp"
-#include "../common/utils.cpp"
-#include "histogramStrategies.cpp"
 #include "../../Logger.cpp"
-
-
+#include "graphStrategies.cpp"
 
 // Check what startegy to use and launch it
-void launchStartegy(Parameters parameters, int firstStartDay, int lastStartDay){
-    
-    std::vector<std::future<void>> m_Futures; //vector to store async reply
-
-    if (parameters.strategy == 1){
-        m_Futures.push_back(std::async (std::launch::async, harvestRefillStrategy, parameters, firstStartDay, lastStartDay));
-    }
-    else if (parameters.strategy == 2){
-        m_Futures.push_back(std::async (std::launch::async, rebalanceTimeStrategy, parameters, firstStartDay, lastStartDay));
-    }
-    else if (parameters.strategy == 4){
-        m_Futures.push_back(std::async (std::launch::async, varianceStrategy, parameters, firstStartDay, lastStartDay));
-    }
-}
-
-void runAsyncCalculations(Parameters parameters){
-    // Loop all possible start days
+void launchStartegy(Parameters parameters){
     static Logger logger;
     
-    int startDay = 0;
-    int stepSize = 100;
-    int veryLastDay = (parameters.totNrDays - parameters.histogramParameters.daysInvesting);
-    while ( startDay < veryLastDay){
-        int startDayBatch;
-        int lastDayBatch;
-
-        // walk steps of stepSize
-        if (startDay+stepSize < veryLastDay){
-            startDayBatch = startDay;
-            lastDayBatch = startDay + stepSize;
-            startDay = startDay + stepSize;
-        }
-        else{ // if step would pass veryLastDay
-            startDayBatch = startDay;
-            lastDayBatch = veryLastDay;
-            startDay = veryLastDay;
-        }
-
-        launchStartegy(parameters, startDayBatch, lastDayBatch);
+    if (parameters.strategy == 0){
+        holdStrategy(parameters);
+    }
+    else if (parameters.strategy == 1){
+        harvestRefillStrategy(parameters);
+    }
+    else if (parameters.strategy == 2){
+        rebalanceTimeStrategy(parameters);
+    }
+    else if (parameters.strategy == 3){
+        doNotInvestStrategy(parameters);
+    }
+    else if (parameters.strategy == 4){
+        varianceStrategy(parameters);
     }
 }
 
 
 extern "C" {
-    float* calculateHistogramOutput(float  loan,
+    float* calculateGraphOutput(float  loan,
             int*    instrumentLeverages,
             int     nrOfInstruments,
             char*   instrumentNames_chr,
@@ -95,9 +71,10 @@ extern "C" {
             float   volatilityStrategieLevel,
             bool    includeFeeStatus,
             float*  outData,
-            int     daysInvesting){
-        static Logger logger;
+            int*    transactionDates,
+            int*    transactionTypes){
 
+        static Logger logger;
         std::vector<std::string> instrumentNames;
         std::vector<std::string> indexNames;
         
@@ -120,7 +97,8 @@ extern "C" {
             }
         }
 
-        Parameters parameters = ParametersBuilder().setLoan(loan)
+        Parameters parameters = ParametersBuilder()
+                .setLoan(loan)
                 .setInstrumentLeverages(instrumentLeverages)
                 .setNrOfInstruments(nrOfInstruments)
                 .setInstrumentNames(instrumentNames)
@@ -142,10 +120,17 @@ extern "C" {
                 .setIndexToMarket(indexToMarket)
                 .setIncludeFeeStatus(includeFeeStatus)
                 .setOutData(outData)
-                .setHistogramParameters(daysInvesting)
+                .setGraphParameters(transactionDates, transactionTypes)
                 .build();
+
+        if (parameters.graphParameters.isSet == true){
+            logger.log("graphParam is set");
+        }
+        else {
+            logger.log("graphParam is not set");
+        }
         
-        runAsyncCalculations(parameters);
+        launchStartegy(parameters);
 
         return outData;
     }

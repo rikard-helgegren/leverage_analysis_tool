@@ -8,6 +8,7 @@
  */
 
 #include "Parameters.cpp"
+#include "../../Logger.cpp"
 
 #pragma once
 
@@ -61,10 +62,6 @@ class ParametersBuilder{
         parameters.indexNames = indexNames;
         return *this;
     }
-    ParametersBuilder setDaysInvesting (int daysInvesting){
-        parameters.daysInvesting = daysInvesting;
-        return *this;
-    }
     ParametersBuilder setHarvestPoint (float harvestPoint){
         parameters.harvestPoint = harvestPoint;
         return *this;
@@ -113,5 +110,27 @@ class ParametersBuilder{
         parameters.outData = outData;
         return *this;
     }
-    
+
+    ParametersBuilder setGraphParameters (int* transactionDates,
+            int* transactionTypes){
+        
+        GraphParameters graphParameters;
+        graphParameters.isSet = true;
+        graphParameters.positionCounter = 0;
+        graphParameters.transactionDates = transactionDates;
+        graphParameters.transactionTypes = transactionTypes;
+
+        parameters.graphParameters = graphParameters;
+        return *this;
+    }
+
+    ParametersBuilder setHistogramParameters (
+            int daysInvesting){
+        HistogramParameters histogramParameters;
+        histogramParameters.isSet = true;
+        histogramParameters.daysInvesting = daysInvesting;
+
+        parameters.histogramParameters = histogramParameters;
+        return *this;
+    }
 };

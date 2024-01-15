@@ -7,3 +7,4 @@ Notes
 *.so
 tests.out
 .DS_Store
+C++_log.txt

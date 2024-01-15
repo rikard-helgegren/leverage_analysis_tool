@@ -11,7 +11,7 @@
 from tests.model.helpers.Model_Builder import Model_Builder
 import pytest
 
-from src.model.graph.calculate_graph_outcomes_strategy import calculate_graph_outcomes
+from src.model.graph.calculate_graph import calculate_graph_outcomes
 
 
 # TODO Make less specific asserts

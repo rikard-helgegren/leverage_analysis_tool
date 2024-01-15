@@ -14,7 +14,7 @@
 
 #define CATCH_CONFIG_MAIN
 #include "../../catch.hpp"
-#include "../../../src/model/histogram/utils.cpp"
+#include "../../../src/model/common/utils.cpp"
 #include "../helpers/ParametersBuilder.cpp"
 
 /** Not prioratized now

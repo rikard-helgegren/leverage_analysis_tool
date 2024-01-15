@@ -149,9 +149,9 @@ class Line_graph(Widget):
                 did_sell=False
 
                 for event in events:
-                    if event['Activity'].value == 1:
+                    if event['Action'].value == 1:
                         did_buy=True
-                    elif event['Activity'].value == 2:
+                    elif event['Action'].value == 2:
                         did_sell=True
                     else:
                         logging.warn("View.Linegraph: set_buy_and_sell_markers, invallid logg action: " + str(event['Activity']))

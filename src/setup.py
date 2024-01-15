@@ -16,3 +16,9 @@ command = ['g++','-O2', '-std=c++11','-pthread','-fPIC','-shared','-o',
           constants_model.program_folder + '/compiled_code/calculateHistogramOutput.so',
           constants_model.program_folder + '/model/histogram/calculateHistogramOutput.cpp']
 subprocess.run(command)
+
+# Compile c++ algorithms
+command = ['g++','-O2', '-std=c++11','-pthread','-fPIC','-shared','-o',
+          constants_model.program_folder + '/compiled_code/calculateGraphOutput.so',
+          constants_model.program_folder + '/model/graph/calculateGraphOutput.cpp']
+subprocess.run(command)

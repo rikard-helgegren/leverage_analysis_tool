@@ -9,7 +9,7 @@
 
 import logging
 
-from src.model.common.check_data_is_empty import check_data_is_empty
+from src.model.common.is_data_empty import is_data_empty
 from src.model.common.determine_longest_common_timespan import determine_longest_common_timespan
 
 
@@ -20,7 +20,7 @@ def calculate_common_time_interval(model):
     markets_selected = model.get_markets_selected()
     instruments_selected = model.get_instruments_selected()
 
-    if check_data_is_empty(instruments_selected, markets_selected):
+    if is_data_empty(instruments_selected, markets_selected):
         return []
 
     # Get select data of a random instrument

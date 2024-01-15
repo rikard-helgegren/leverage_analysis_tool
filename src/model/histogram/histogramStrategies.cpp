@@ -16,8 +16,10 @@
 
 #include "../common/constants.h"
 #include "../common/sumFloats.cpp"
-#include "utils.cpp"
-#include "Parameters.cpp"
+#include "../common/utils.cpp"
+#include "../common/Parameters.cpp"
+#include "../common/convertArrayChangeToTotalValue.cpp"
+#include "../common/varianceAndVolatility.cpp"
 
 #pragma once
 
@@ -33,7 +35,7 @@ void harvestRefillStrategy(Parameters parameters, int firstStartDay, int lastSta
         setStartValuesOfInstruments(parameters, currentValues);
 
         // Run trough all intervals and add result
-        for (int day = startDay; day < (startDay+parameters.daysInvesting); day++){
+        for (int day = startDay; day < (startDay+parameters.histogramParameters.daysInvesting); day++){
             for (int item =0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
                 
                 // Update with daily change
@@ -45,7 +47,7 @@ void harvestRefillStrategy(Parameters parameters, int firstStartDay, int lastSta
                 }
 
                 if  (checkPreConditionsHarvestRefill(parameters, referenceValue, currentValues,  item)){
-                    rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue);
+                    rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
                 }
             }
         }
@@ -67,7 +69,7 @@ void rebalanceTimeStrategy(Parameters parameters, int firstStartDay, int lastSta
         setStartValuesOfInstruments(parameters, currentValues);
 
         // Run trough all intervals and add result
-        for (int day = startDay; day < (startDay+parameters.daysInvesting); day++){
+        for (int day = startDay; day < (startDay+parameters.histogramParameters.daysInvesting); day++){
             for (int item =0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
 
                 // Update with daily change
@@ -80,7 +82,7 @@ void rebalanceTimeStrategy(Parameters parameters, int firstStartDay, int lastSta
 
                 if (checkPreConditionsRebalanceTime(parameters, day-startDay, item)){
 
-                    rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue);
+                    rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
                 }
             }
         }
@@ -114,7 +116,7 @@ void varianceStrategy(Parameters parameters, int firstStartDay, int lastStartDay
         setStartValuesOfInstruments(parameters, currentValues);
 
         // Run trough all intervals and add result
-        for (int day = startDay; day < (startDay+parameters.daysInvesting); day++){
+        for (int day = startDay; day < (startDay+parameters.histogramParameters.daysInvesting); day++){
             for (int item =0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
                 
                 if (parameters.instrumentLeverages[item] > 1 ){
@@ -142,7 +144,7 @@ void varianceStrategy(Parameters parameters, int firstStartDay, int lastStartDay
                 }
 
                 if (checkPreConditionsRebalanceTime(parameters, day-startDay, item)){
-                    rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue);
+                    rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
                 }
             }
         }

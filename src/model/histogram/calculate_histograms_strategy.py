@@ -7,7 +7,7 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-from src.model.common.check_data_is_empty import check_data_is_empty
+from src.model.common.is_data_empty import is_data_empty
 from src.model.histogram.histogram_cpp_adapter import rebalance_hist_ctypes
 
 import src.model.common.constants_model as constants_model
@@ -22,7 +22,7 @@ def calculate_histogram(model):
     markets_selected     = model.get_markets_selected()
     instruments_selected = model.get_instruments_selected()
 
-    if check_data_is_empty(instruments_selected, markets_selected):
+    if is_data_empty(instruments_selected, markets_selected):
         model.set_results_for_intervals([])
         return
 
@@ -51,7 +51,7 @@ def do_nothing_hist(model):
     proportion_leverage  = model.get_proportion_leverage()
     include_fee_status   = model.get_include_fees_status()
 
-    if check_data_is_empty(instruments_selected, markets_selected):
+    if is_data_empty(instruments_selected, markets_selected):
         model.set_results_for_intervals([])
         return
 
@@ -136,7 +136,6 @@ def combine_leveraged_instruments(number_of_leveraged_selected, outcomes_of_leve
         unified_leveraged = np.divide(unified_leveraged, number_of_leveraged_selected)
     return unified_leveraged
 
-
 def percentage_change(values):
     """ Calculate the relative change between two dadys e.g. increasing 2% or decreasing 1%
     """
@@ -213,7 +212,6 @@ def improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_s
 
     return gains
 
-
 def update_value_with_daily_change(current_value, change, leverage, fees_status):
     """
         Update instrument value with the daily change times its leverage 
@@ -230,7 +228,6 @@ def update_value_with_daily_change(current_value, change, leverage, fees_status)
         dailyFee = 0
 
     return (current_value  + oneDayChange - dailyFee) * currencyChange 
-
 
 def getFeeLevel(leverage):
     """

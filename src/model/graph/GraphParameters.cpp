@@ -7,14 +7,12 @@
  * commercial or non-commercial, by any means.
  */
 
-#pragma once
+class GraphParameters {
+    public:
+        bool isSet = false;
+        int  positionCounter = 0;
+        int* transactionDates;
+        int* transactionTypes;
+};
 
-float sumFloats(float* floatArray, int nbrOfFloats){
-    float sum = 0.0f;
 
-    for (int i = 0; i < nbrOfFloats; i++){
-        sum = sum + floatArray[i];
-    }
-
-    return sum;
-}

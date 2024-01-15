@@ -10,9 +10,9 @@
 import logging
 
 
-def check_data_is_empty(instruments_selected, markets_selected):
+def is_data_empty(instruments_selected, markets_selected):
     """If ither of the entries are empty return False"""
-    logging.debug("Common utils: check_data_is_empty")
+    logging.debug("Common utils: is_data_empty")
     
     if not instruments_selected:
         logging.debug("NOTIFY: Model: instruments_selected is empty")

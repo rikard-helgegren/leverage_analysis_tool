@@ -44,7 +44,7 @@ def set_debug_level():
 
 class LeverageApp(MDAPP):
     def build(self):
-        
+        self.title ='Leverage Analysis Tool'
 
         model = Model()
         model.model_import_data()

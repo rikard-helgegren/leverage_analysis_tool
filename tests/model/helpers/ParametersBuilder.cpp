@@ -10,7 +10,7 @@
 
 #pragma once
 #include <string>
-#include "../../../src/model/histogram/Parameters.cpp"
+#include "../../../src/model/common/Parameters.cpp"
 
 
 class Parameters_builder{
@@ -58,7 +58,7 @@ class Parameters_builder{
 
 
         this->parameters.indexNames = {"OMX30"};
-        this->parameters.daysInvesting = 3;
+        this->parameters.histogramParameters.daysInvesting = 3;
         this->parameters.harvestPoint = 1.5f;
         this->parameters.refillPoint = 0.5f;
         this->parameters.rebalance_period_months = 6;
@@ -131,7 +131,7 @@ class Parameters_builder{
     }
 
     Parameters_builder set_daysInvesting(int daysInvesting){
-        this->parameters.daysInvesting = daysInvesting;
+        this->parameters.histogramParameters.daysInvesting = daysInvesting;
         return *this;
     }
 

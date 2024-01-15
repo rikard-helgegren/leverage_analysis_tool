@@ -17,7 +17,8 @@ from enum import Enum
 program_folder = os.path.dirname(os.path.realpath(sys.argv[0]))
 #program_folder = os.getcwd())
 data_files_path = program_folder + "/data/raw_data/all"
-hist_harvest_refill_algo_file = program_folder + '/src/compiled_code/calculateHistogramOutput.so'
+calculate_histogram_output_file = program_folder + '/src/compiled_code/calculateHistogramOutput.so'
+calculate_graph_output_file = program_folder + '/src/compiled_code/calculateGraphOutput.so'
 
 MARKET_DAYS_IN_YEAR = 270  # 270 is not true for all markets but close if the union is considered
 MONTHS_IN_YEAR = 12
@@ -30,4 +31,3 @@ SPREAD = 1  #No spread at Avanza (1% spread would result in const beeing 1.01)
 class Order(Enum):
     BUY = 1
     SELL = 2
-

@@ -19,7 +19,7 @@ def calc_volatility(performance_full_time, sample_size = Config().DEFAUT_VARIANC
 
 def calc_variance(performance_full_time, sample_size = Config().DEFAUT_VARIANCE_SAMPLE_SIZE):
     """ Calculate the variance* of the full time period"""
-    logging.debug("model, performance_key_values: calc_variance")
+    logging.debug("Model, Performance_key_values: calc_variance")
 
     # Look att mean values over <sample_size> values # TODO check that this is the right approach
     total_dif = 0
@@ -29,11 +29,17 @@ def calc_variance(performance_full_time, sample_size = Config().DEFAUT_VARIANCE_
         sub_total = 0
         mean_line = calc_least_square_fit(performance_full_time[i:sample_size+i])
 
+        
         for j in range(sample_size):
-            sub_total += ((performance_full_time[i + j] - mean_line[j])/mean_line[j])**2
+            if mean_line[j] != 0:
+                sub_total += ((performance_full_time[i + j] - mean_line[j])/mean_line[j])**2
+            else:
+                logging.error("Model, Performance_key_values: Deviding by zero.")
+                variance = 1000 # set suitable large value
+                return variance
 
         total_dif += sub_total
-
+        
     if elements_to_sum > 0:
         variance = round(total_dif/elements_to_sum,10)
     else:

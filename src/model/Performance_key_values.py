@@ -17,7 +17,7 @@ class Performance_Key_values:
 
         e.g. Mean, median, volatility, beta
     """
-    logging.debug("model, Performance_Key_values: __init__")
+    logging.debug("Model, Performance_Key_values: __init__")
 
     def __init__(self, model):
 
@@ -56,7 +56,7 @@ class Performance_Key_values:
 
     def update_values(self, performance_intervals, performance_full_time):
         """Update key values du to changes in the model"""
-        logging.debug("model, performance_key_values: update_values")
+        logging.debug("Model, Performance_key_values: update_values")
 
         #set all key values to default value
         if performance_full_time == []:
@@ -327,7 +327,7 @@ def calc_worst_fall_X_days(performance_full_time, x_days):
     """ Calculate the largest loss during a time span of x_days measured in percent.
         A positive loss value is a negative change.
     """
-    logging.debug("model, performance_key_values: calc_worst_fall_X_days")
+    logging.debug("Model, Performance_key_values: calc_worst_fall_X_days")
     worst_fall = 0
 
     for i in range(len(performance_full_time) - x_days):

@@ -20,12 +20,11 @@ from src.managing_data.read_and_manage_raw_data      import read_and_manage_raw_
 ###### IMPORT MODEL ######
 from src.Config import Config
 from src.model.common.calcultate_daily_change           import calcultate_daily_change
-from src.model.graph.calculate_graph_outcomes_strategy  import calculate_graph_outcomes
+from src.model.graph.calculate_graph                    import calculate_graph
 from src.model.common.fill_in_missing_dates             import fill_gaps_data
 from src.model.common.calculate_common_time_interval    import calculate_common_time_interval
 from src.model.histogram.calculate_histograms_strategy  import calculate_histogram
 from src.model.Performance_key_values                   import Performance_Key_values
-from src.model.Buy_sell_singelton                       import Buy_sell_singelton
 
 import src.model.common.constants_model as constants_model
 import src.constants as constants
@@ -115,7 +114,7 @@ class Model:
             The purpose of this variable is to be ploted in histogram
         """
 
-        self.buys_sells = Buy_sell_singelton()
+        self.buys_sells = {}
         """ Dict of buy and sell information for each day. e.x.
             ['19990310'] = [{
                 Action: Sell
@@ -155,7 +154,7 @@ class Model:
 
         self.markets_selected = calcultate_daily_change(self.markets_selected)
 
-        calculate_graph_outcomes(self)
+        calculate_graph(self)
         calculate_histogram(self)
 
         self.common_time_interval = calculate_common_time_interval(self)  # TODO: doing double work some times
@@ -406,4 +405,40 @@ class Model:
 
     def get_buy_sell_log(self):
         logging.debug("Model: get_buy_sell_log")
-        return self.buys_sells.get_log()
+        return self.buys_sells
+    
+    def set_buy_sell_by_lists(self, date_list, action_list):
+        if date_list == []:
+            self.buys_sells = {}
+            return
+
+        buy_sell_dict = {}
+        refrence_date = date_list[0]
+        events_this_day = []
+
+        action_list = self.convert_int_to_buy_sell_enum(action_list)
+
+        for index in range(0, len(date_list)):
+            if refrence_date == date_list[index]:
+                events_this_day.append({'Action': action_list[index]})
+            else: # New day add prev day
+                buy_sell_dict[refrence_date] = events_this_day
+
+                refrence_date = date_list[index]
+                events_this_day = []
+                events_this_day.append({'Action': action_list[index]})
+        
+        buy_sell_dict[refrence_date] = events_this_day
+
+        self.buys_sells = buy_sell_dict
+    
+    def convert_int_to_buy_sell_enum(self, buy_sell_action_list):
+        new_action_list = []
+
+        for action in buy_sell_action_list:
+            if action == 1:
+                new_action_list.append(constants_model.Order.BUY)
+            elif action == 2:
+                new_action_list.append(constants_model.Order.SELL)
+        
+        return new_action_list
