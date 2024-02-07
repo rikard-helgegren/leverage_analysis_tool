@@ -45,7 +45,7 @@ class Strategy_menue:
             pos_hint=constants_view.center
         )
 
-        self.drop_down_menue.bind(text=self.update_strategy)
+        self.drop_down_menue.bind(text=self.update_strategy_using_menue)
         self.strategy_main_frame.add_widget(self.drop_down_menue)
 
         # I don't understand the size settings so this is a ugly hack to make
@@ -56,11 +56,14 @@ class Strategy_menue:
         frame.add_widget(self.strategy_main_frame)
 
 
-    def update_strategy(self, spinner, new_strategy):
-        logging.debug("Strategy_menue: update_strategy: new_strategy %r old strategy %r", new_strategy, self.current_strategy)
-        
-        old_strategy = self.current_strategy
+    def update_strategy_using_menue(self, spinner, new_strategy):
+        self.update_strategy(new_strategy)
+        self.view.update_strategy_selected(new_strategy)
 
+    def update_strategy(self, new_strategy):
+        logging.debug("Strategy_menue: update_strategy: new_strategy %r old strategy %r", new_strategy, self.current_strategy)
+        old_strategy = self.current_strategy
+        
         if old_strategy == "":
             self.strategy_main_frame.remove_widget(self.no_strategy_box)
         else:
@@ -69,20 +72,45 @@ class Strategy_menue:
         self.strategy_main_frame.add_widget(self.strategy_frames[new_strategy])
 
         self.current_strategy = new_strategy
-        self.view.update_strategy_selected(new_strategy)
 
 
     def init_strategy_frames(self):
+        logging.debug("Strategy_menue: init_strategy_frames" )
 
         strategy_frames = {}
         self.view.rebalance_strategy = Rebalance_strategy(self.view)
         self.view.harvest_refill_strategy = Harvest_refill_strategy(self.view)
         self.view.variance_strategy = Variance_strategy(self.view)
         
-        strategy_frames['Hold'] = BoxLayout(size_hint=(0.0, 0.1))
-        strategy_frames['Harvest/Refill'] = self.view.harvest_refill_strategy.get_frame()
-        strategy_frames['Rebalance Time'] = self.view.rebalance_strategy.get_frame()
-        strategy_frames['Do not invest'] = BoxLayout(size_hint=(0.0, 0.1))
-        strategy_frames['Variance Dependent'] = self.view.variance_strategy.get_frame()
+        strategy_frames[constants.PORTFOLIO_STRATEGIES[0]] = BoxLayout(size_hint=(0.0, 0.1))
+        strategy_frames[constants.PORTFOLIO_STRATEGIES[1]] = self.view.harvest_refill_strategy.get_frame()
+        strategy_frames[constants.PORTFOLIO_STRATEGIES[2]] = self.view.rebalance_strategy.get_frame()
+        strategy_frames[constants.PORTFOLIO_STRATEGIES[3]] = BoxLayout(size_hint=(0.0, 0.1))
+        strategy_frames[constants.PORTFOLIO_STRATEGIES[4]] = self.view.variance_strategy.get_frame()
 
         return strategy_frames
+    
+    def set_strategy_by_model(self, strategy, strategy_parameters):
+        logging.debug("Strategy_menue: set_strategy_by_model " + str(strategy))
+
+        self.drop_down_menue.text = strategy
+        self.update_strategy(strategy)
+
+        variable = constants.PORTFOLIO_STRATEGIES[0]
+
+        if strategy == constants.PORTFOLIO_STRATEGIES[0]:
+            logging.debug("No data need to be set for strategy: " + str(strategy))
+        elif strategy == constants.PORTFOLIO_STRATEGIES[1]:
+            self.view.harvest_refill_strategy.set_harvest_value(strategy_parameters['harvest_point'])
+            self.view.harvest_refill_strategy.set_refill_value(strategy_parameters['refill_point'])
+        elif strategy == constants.PORTFOLIO_STRATEGIES[2]:
+            self.view.rebalance_strategy.set_value(strategy_parameters['rebalance_period_months'])
+        elif strategy == constants.PORTFOLIO_STRATEGIES[3]:
+            logging.debug("No data need to be set for strategy: " + str(strategy))
+        elif strategy == constants.PORTFOLIO_STRATEGIES[4]:
+            self.view.variance_strategy.set_sample_size_variance(strategy_parameters['variance_calc_sample_size'])
+            self.view.variance_strategy.set_sample_size_decision(strategy_parameters['volatility_strategie_sample_size'])
+            self.view.variance_strategy.set_volatillaty_trigger(strategy_parameters['volatility_strategie_level'])
+
+        else:
+            logging.warn("Not accounted for strategy: " + str(strategy))

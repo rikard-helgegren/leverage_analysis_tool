@@ -32,3 +32,5 @@ instrument_table_check_color = [39 / 256, 194 / 256, 96 / 256, 1]
 graph_sell_red = [1,.3,.3]
 graph_buy_green = [.3,1,.3]
 graph_buy_and_sell = [232/255, 184/255, 84/255]
+
+portfolio_data_color = ['blue', 'green', 'red']

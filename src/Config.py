@@ -34,6 +34,7 @@ class Config():
         self.HIGHEST_LEVERAGE_AVAILABLE = json_data["HIGHEST_LEVERAGE_AVAILABLE"]
 
         self.SORT_RANKING = [
+            'DEBUG',
             'NASDAQ100',
             'SP500',
             'DIA',

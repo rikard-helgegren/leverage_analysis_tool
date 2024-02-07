@@ -25,5 +25,4 @@ def calculate_graph(model):
         return
 
     return_data = graph_ctypes(model)
-
     model.set_portfolio_results_full_time(return_data)

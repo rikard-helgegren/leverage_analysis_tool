@@ -50,6 +50,29 @@ class View(GridLayout):
         logging.debug("View: set_controller")
         self.controller = controller
 
+    def add_model(self):
+        logging.debug("View: add_model")
+        self.controller.add_model()
+
+    def update_portfolio_view(self,
+            leverage,
+            strategy,
+            strategy_parameters,
+            model_nbr,
+            instruments_selected,
+            loan,
+            include_fees_status):
+        logging.debug("View: update_portfolio_view")
+        self.leverage_slider.set_leverage(leverage)
+        self.strategy_menue.set_strategy_by_model(strategy, strategy_parameters)
+        self.table_of_instruments.clear_old_and_set_new_selected_instruments(instruments_selected, model_nbr)
+        self.loan.set_loan(loan)
+        self.use_fees.active = include_fees_status
+
+    def set_selected_model(self, model_nbr):
+        logging.debug("View: set_selected_model")
+        self.controller.set_selected_model(model_nbr)
+
     def update_fee_status(self, status):
         logging.debug("View: update_fee_status")
         self.controller.update_fee_status(status)
@@ -96,13 +119,13 @@ class View(GridLayout):
         logging.debug("View: draw_histogram")
         self.histogram.draw(data)
 
-    def draw_line_graph(self, values, time_span, buy_sell_log):
+    def draw_line_graph(self, values_list, time_span, buy_sell_log_list):
         logging.debug("View: draw_line_graph")
-        self.line_graph.draw(values, time_span, buy_sell_log)
+        self.line_graph.draw(values_list, time_span, buy_sell_log_list)
 
     def set_table_of_instruments(self, names, countries):
         logging.debug("View: set_market_table")
-        self.table_of_instruments.set_table(names, countries)
+        self.table_of_instruments.set_instruments_in_table(names, countries)
         
     def update_instrument_selected(self, table_focus_item):
         logging.debug("View: table_item_focused")
@@ -116,9 +139,9 @@ class View(GridLayout):
         logging.debug("View: update_time_limits")
         self.controller.set_time_limits(from_time, to_time)
 
-    def update_table_of_statistics(self, key_values):
+    def update_table_of_statistics(self, key_values_list):
         logging.debug("View update_table_of_statistics")
-        self.table_of_statistics.set_table(key_values)
+        self.table_of_statistics.set_table(key_values_list)
 
     def update_pie_chart(self, key_values):
         logging.debug("View update_pie_chart")
@@ -126,16 +149,18 @@ class View(GridLayout):
         self.pie_frame2.draw(key_values['Median'])
         self.pie_frame3.draw(key_values['Risk'])
 
-    def update_refrence(self):
-        logging.debug("View: update_refrence")
-        """ Set refrence or remove it depending on if data is identical to when last pressed"""
-        self.histogram.update_refrence()
-        self.line_graph.update_refrence()
-        self.table_of_statistics.update_refrence()
+    def update_reference(self):
+        logging.debug("View: update_reference")
+        """ Set reference or remove it depending on if data is identical to when last pressed"""
+        self.histogram.update_reference()
+        self.line_graph.update_reference()
+        self.table_of_statistics.update_reference()
 
     def wipe_selected_instruments(self):
+        logging.debug("View: wipe_selected_instruments")
         self.table_of_instruments.remove_selectons()
         self.controller.wipe_instrument_selected()
     
     def set_pause_state(self, pausing_state):
+        logging.debug("View: set_pause_state")
         self.controller.set_pause_state(pausing_state)

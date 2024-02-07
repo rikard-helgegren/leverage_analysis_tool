@@ -9,7 +9,6 @@
 
 import logging
 from kivy.metrics import dp
-from kivymd.uix.datatables import MDDataTable
 
 from src.view.styling.light_mode.table import get_styling
 from src.view.styling.light_mode.Color_data_table import Color_data_table
@@ -32,81 +31,52 @@ class Table_of_statistics():
         )
         frame.add_widget(self.table)
 
-        self.stats_dict = {}
-        self.stats_dict_refrence = {}
+        self.stats_dict_list = [] #list of dicts
 
-    def update_refrence(self):
-        logging.info("View: Table_of_statistics: update_refrence")
-
-        if self.stats_dict == 0 or self.stats_dict ==  self.stats_dict_refrence: #Not a good check with risk 0 when no values pressent, HACKS
-            self.stats_dict_refrence = {}
-            
-            if self.use_refence == False:
-                self.change_table = False
-            else:
-                self.change_table = True
-
-            self.use_refence = False
-        else:
-            self.stats_dict_refrence =  self.stats_dict
-
-            if self.use_refence == True:
-                self.change_table = False
-            else:
-                self.change_table = True
-
-            self.use_refence = True
-        
-        self._set_table()
-
-    def set_table(self, stats_dict):
+    def set_table(self, stats_dict_list):
         logging.debug("View: Table_of_statistics: set_table")
 
-        self.stats_dict = stats_dict
+        self.stats_dict_list = stats_dict_list
 
         self._set_table()
 
     def _set_table(self):
         """Add all the statistics to the table"""
         row_data=[]
+        self.frame.remove_widget(self.table)
 
-        if self.change_table:
-            self.frame.remove_widget(self.table)
-
-            if self.use_refence == False:
+        match len(self.stats_dict_list):
+            case 1:
                 self.table = Color_data_table(
                     rows_num=100,
                     column_data=[
                         ("Metrics", dp(40)),
-                        ("Value", dp(30))
+                        ("Portfolio 1", dp(30))
                     ],
                     row_data=[],
                     sorted_order="ASC",
                     **get_styling()
                 )
-            else:
+
+                for i, key in enumerate(self.stats_dict_list[0]):
+                    row_data.append((key,self.stats_dict_list[0][key]))
+            case 2:
                 self.table = Color_data_table(
                     rows_num=100,
                     column_data=[
                         ("Metrics", dp(30)),
-                        ("Value", dp(20)),
-                        ("Refrence\nvalue", dp(20))
+                        ("Portfolio 1", dp(20)),
+                        ("Portfolio 2", dp(20))
                     ],
                     row_data=[],
                     sorted_order="ASC",
                     **get_styling()
                  )
-
-
-        if  self.stats_dict_refrence != {}:
-            for i, key in enumerate(self.stats_dict):
-                row_data.append((key,self.stats_dict[key],self.stats_dict_refrence[key]))
-        else: 
-            for i, key in enumerate(self.stats_dict):
-                row_data.append((key,self.stats_dict[key]))
+                
+                for i, key in enumerate(self.stats_dict_list[0]):
+                    row_data.append((key, self.stats_dict_list[0][key], self.stats_dict_list[1][key]))
+            case _:
+                logging.warn("Table_of_statistics: Cant generate statistics for '%r' portfolios", len(self.stats_dict_list))
 
         self.table.row_data = row_data
-
-        if self.change_table:  
-            self.frame.add_widget(self.table)
-            self.change_table = False
+        self.frame.add_widget(self.table)

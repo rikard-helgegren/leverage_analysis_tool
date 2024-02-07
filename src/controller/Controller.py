@@ -9,6 +9,8 @@
 
 import logging
 import src.constants as constants
+from src.model.Market_data_loader import Market_data_loader
+import src.model.Model as Model
 
 
 class Controller:
@@ -16,8 +18,11 @@ class Controller:
         both the view and the model in order to keep the model updated
         and sending the right information to the view.
     """
-    def __init__(self, model, view):
-        self.model = model
+    def __init__(self, view):
+        model = Model.Model() #TODO remove the need of a model by default
+        model.set_markets(Market_data_loader().get_data())
+        self.models = [model] 
+        self.selected_model_nbr = 0
         self.view = view
 
         self.pause_state = False
@@ -25,59 +30,101 @@ class Controller:
         self.set_table_of_instruments()
         self.set_table_of_statistics()
 
-
-    def update_fee_status(self, checkbutton_fee_state):
-
-        logging.debug("Controller: fee_status: %r", checkbutton_fee_state)
-        self.model.set_include_fee_status(checkbutton_fee_state)
-        self.update_model()
-
-        self.update_view()
-
-
-    def update_model(self):
-        logging.debug("Controller: update_model")
-
-        if self.pause_state:
-            logging.info("Model updates are paused")
-        else:
-            self.model.update_model()
-
     def update_view(self):
         logging.debug("Controller: update_view")
 
         ### Update histogram ###
-        self.draw_histogram(self.model.get_results_for_intervals()) 
+        self.draw_histogram([model.get_results_for_intervals() for model in self.models])
 
         ### Update line graph ###
-        time_interval = self.model.get_common_time_interval()
-        portfolio_results_full_time = self.model.get_portfolio_results_full_time()
-        buy_sell_log = self.model.get_buy_sell_log()
-        self.draw_line_graph(portfolio_results_full_time, time_interval, buy_sell_log)
+        time_interval = self.models[self.selected_model_nbr].get_common_time_interval()
+        portfolio_results_full_time_list = [model.get_portfolio_results_full_time() for model in self.models]
+        buy_sell_log_list = [model.get_buy_sell_log() for model in self.models]
+        self.draw_line_graph(portfolio_results_full_time_list, time_interval, buy_sell_log_list)
 
-        self.update_table_of_statistics(self.model.key_values.get_all_values())
+        self.update_table_of_statistics([model.key_values.get_all_values() for model in self.models])
 
-        self.draw_pie_chart(self.model.key_values.get_all_values())
+        self.draw_pie_chart(self.models[self.selected_model_nbr].key_values.get_all_values())
+
+
+    def update_selected_model(self):
+        logging.debug("Controller: update_selected_model")
+
+        if self.pause_state:
+            logging.info("Model updates are paused")
+        else:
+            self.models[self.selected_model_nbr].update_model()
+    
+    def update_all_models(self):
+        logging.debug("Controller: update_all_models")
+        for model in self.models:
+            model.update_model()
+
+    def add_model(self):
+        logging.debug("Controller: add_model")
+        self.models.append(Model.Model())
+        self.selected_model_nbr += 1
+        self.models[self.selected_model_nbr].set_markets(Market_data_loader().get_data())
+
+    def remove_model(self, model_index):
+        logging.debug("Controller: remove_model index: %r", model_index)
+        del self.models[model_index]
+
+    def set_selected_model(self, model_nbr):
+        logging.debug("Controller: set_selected_model: %r", model_nbr)
+        self.selected_model_nbr = model_nbr
+        self.update_portfolio_view(self.models[self.selected_model_nbr])
+
+    def update_portfolio_view(self, selected_portfolio):
+        logging.debug("Controller: update_portfolio_view")
+        
+        self.view.update_portfolio_view(selected_portfolio.get_proportion_leverage(),
+                selected_portfolio.get_portfolio_strategy(),
+                self.get_strategy_parameters(selected_portfolio),
+                self.selected_model_nbr,
+                selected_portfolio.get_instruments_selected(),
+                selected_portfolio.get_loan(),
+                selected_portfolio.get_include_fees_status()) 
+        
+    def get_strategy_parameters(self, model):
+        logging.debug("Controller: get_strategy_parameters")
+        strategy_parameters = {}
+
+        strategy_parameters['harvest_point'] = model.get_harvest_point()
+        strategy_parameters['refill_point'] = model.get_refill_point()
+        strategy_parameters['rebalance_period_months'] = model.get_rebalance_period_months()
+        strategy_parameters['variance_calc_sample_size'] = model.get_variance_calc_sample_size()
+        strategy_parameters['volatility_strategie_sample_size'] = model.get_volatility_strategie_sample_size()
+        strategy_parameters['volatility_strategie_level'] = model.get_volatility_strategie_level()
+
+        return strategy_parameters
+
+    def update_fee_status(self, checkbutton_fee_state):
+        logging.debug("Controller: fee_status: %r", checkbutton_fee_state)
+        self.models[self.selected_model_nbr].set_include_fee_status(checkbutton_fee_state)
+        self.update_selected_model()
+
+        self.update_view()
 
     def set_pause_state(self, pausing_state):
         self.pause_state = pausing_state
 
         if  not self.pause_state:
-            self.update_model()
+            self.update_all_models()
             self.update_view()
 
     def draw_histogram(self, data):
         logging.debug("Controller: draw_histogram")
         self.view.draw_histogram(data)
 
-    def draw_line_graph(self, data, time_interval, buy_sell_log):
+    def draw_line_graph(self, graph_data_list, time_interval, buy_sell_log_list):
         logging.debug("Controller: draw_line_graph")
-        self.view.draw_line_graph(data, time_interval, buy_sell_log)
+        self.view.draw_line_graph(graph_data_list, time_interval, buy_sell_log_list)
     
     def set_table_of_statistics(self):
         """ Set the table with key values"""
         logging.debug("Controller: set_table_of_statistics")
-        self.update_table_of_statistics(self.model.key_values.get_all_values())
+        self.update_table_of_statistics([model.key_values.get_all_values() for model in self.models])
     
     def set_table_of_instruments(self):
         """ Set the table with information of available instruments"""
@@ -85,7 +132,8 @@ class Controller:
         names = []
         countries = []
 
-        for market in self.model.get_markets().values():
+        #TODO this information should be fetched from  a data object (Singelton), son not all models need to hold lots of data 
+        for market in self.models[self.selected_model_nbr].get_markets().values():
             names.append(market.get_name())
             countries.append(market.get_country())
 
@@ -94,106 +142,110 @@ class Controller:
     def update_instrument_selected(self, table_focus_item_data ):
         logging.debug("Controller: update_instrument_selected")
 
-        self.model.update_instrument_selected(table_focus_item_data)
+        self.models[self.selected_model_nbr].update_instrument_selected(table_focus_item_data)
 
-        self.update_model()
+        self.update_selected_model()
         self.update_view()
 
     def wipe_instrument_selected(self):
-        self.model.wipe_instrument_selected()
+        self.models[self.selected_model_nbr].wipe_instrument_selected()
 
-        self.update_model()
+        self.update_selected_model()
         self.update_view()
 
     def update_strategy_selected(self, new_strategy):
         logging.debug("Controller: update_strategy_selected")
-        self.model.set_portfolio_strategy(new_strategy)
+        self.models[self.selected_model_nbr].set_portfolio_strategy(new_strategy)
 
-        self.update_model()
+        self.update_selected_model()
         self.update_view()
 
     def set_update_amount_leverage(self, value_percent):
         logging.debug("Controller: set_update_amount_leverage")
         value = int(value_percent)/constants.CONVERT_PERCENT
-        self.model.set_proportion_leverage(value)
-        self.model.set_proportion_funds(1-value)
+        self.models[self.selected_model_nbr].set_proportion_leverage(value)
+        self.models[self.selected_model_nbr].set_proportion_funds(1-value)
 
-        self.update_model()
+        self.update_selected_model()
         self.update_view()
 
     def update_years_histogram_interval(self, years):
         logging.debug("Controller: update_years_histogram_interval")
-        self.model.set_years_histogram_interval(years)
+        for model in self.models:
+            model.set_years_histogram_interval(years)
 
-        self.update_model()
+        self.update_all_models()
         self.update_view()
 
     def update_harvest_point(self, harvest_point):
         logging.debug("Controller: update_harvest_point")
-        self.model.set_harvest_point(harvest_point)
+        self.models[self.selected_model_nbr].set_harvest_point(harvest_point)
 
-        self.update_model()
+        self.update_selected_model()
         self.update_view()
 
     def update_refill_point(self, refill_point):
         logging.debug("Controller: update_refill_point")
-        self.model.set_refill_point(refill_point)
+        self.models[self.selected_model_nbr].set_refill_point(refill_point)
 
-        self.update_model()
+        self.update_selected_model()
         self.update_view()
 
     def update_rebalance_point(self, rebalance_period):
         logging.debug("Controller: update_rebalance_point")
-        self.model.set_rebalance_period_months(rebalance_period)
+        self.models[self.selected_model_nbr].set_rebalance_period_months(rebalance_period)
 
-        self.update_model()
+        self.update_selected_model()
         self.update_view()
 
     def update_variance_calc_sample_size(self, variance_calc_sample_size):
         logging.debug("Controller: update_variance_calc_sample_size")
-        self.model.set_variance_calc_sample_size(variance_calc_sample_size)
+        self.models[self.selected_model_nbr].set_variance_calc_sample_size(variance_calc_sample_size)
 
-        self.update_model()
+        self.update_selected_model()
         self.update_view()
 
     def update_volatility_strategie_sample_size(self, volatility_strategie_sample_size):
         logging.debug("Controller: update_volatility_strategie_sample_size")
-        self.model.set_volatility_strategie_sample_size(volatility_strategie_sample_size)
+        self.models[self.selected_model_nbr].set_volatility_strategie_sample_size(volatility_strategie_sample_size)
         
-        self.update_model()
+        self.update_selected_model()
         self.update_view()
 
     def update_volatility_strategie_level(self, volatility_strategie_level):
         logging.debug("Controller: update_volatility_strategie_level")
-        self.model.set_volatility_strategie_level(volatility_strategie_level)
+        self.models[self.selected_model_nbr].set_volatility_strategie_level(volatility_strategie_level)
         
-        self.update_model()
+        self.update_selected_model()
         self.update_view()
 
     def update_loan(self, loan):
         logging.debug("Controller: update_loan")
-        self.model.set_loan(loan)
+        self.models[self.selected_model_nbr].set_loan(loan)
 
-        self.update_model()
+        self.update_selected_model()
         self.update_view()
 
     def set_time_limits(self, from_time, to_time):
         logging.debug("Controller: set_time_limits")
 
-        self.model.set_chosen_start_date_time_limit(from_time)
-        self.model.set_chosen_end_date_time_limit(to_time)
+        for model in self.models:
+            model.set_chosen_start_date_time_limit(from_time)
+            model.set_chosen_end_date_time_limit(to_time)
 
-        # If time limit is not set, do not use it
-        if from_time == 0 and to_time == 0:
-            self.model.set_chosen_time_interval_status(False)
-        else:
-            self.model.set_chosen_time_interval_status(True)
+            # If time limit is not set, do not use it
+            if from_time == 0 and to_time == 0:
+                model.set_chosen_time_interval_status(False)
+            else:
+                model.set_chosen_time_interval_status(True)
 
-        self.update_model() #TODO can fine tune this
-        self.update_view() #TODO can fine tune this
+        self.update_all_models() #TODO can fine tune this, if time is decreased it should be done without calculations
+        self.update_view()
 
-    def update_table_of_statistics(self, key_values):
-        self.view.update_table_of_statistics(key_values)
+    def update_table_of_statistics(self, key_values_list):
+        logging.debug("Controller: update_table_of_statistics")
+        self.view.update_table_of_statistics(key_values_list)
 
     def draw_pie_chart(self, key_values):
+        logging.debug("Controller: draw_pie_chart")
         self.view.update_pie_chart(key_values)

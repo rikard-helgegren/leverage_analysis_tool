@@ -26,7 +26,7 @@ class Pie_frame():
     def __init__(self, frame, title=""):
         self.title = title
         self.default_color = None
-        self.refrence_color = None
+        self.reference_color = None
         self.max_value = 20
         self.display_ending = ''
 
@@ -117,8 +117,8 @@ class Pie_frame():
     def set_default_color(self, color):
         self.default_color = color
 
-    def set_refrence_color(self, color):
-        self.refrence_color = color
+    def set_reference_color(self, color):
+        self.reference_color = color
 
     def set_max_value(self, max_value):
         self.max_value = max_value

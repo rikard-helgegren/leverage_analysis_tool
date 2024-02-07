@@ -7,8 +7,7 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-from kivy.logger import Logger
-from kivy.logger import logging
+import logging
 from kivymd.app import MDApp as MDAPP
 import sys
 
@@ -46,17 +45,10 @@ class LeverageApp(MDAPP):
     def build(self):
         self.title ='Leverage Analysis Tool'
 
-        model = Model()
-        model.model_import_data()
-
         view = View()
+        controller = Controller(view)
 
-        controller = Controller(model, view)
-
-        # set the controller to view
         view.set_controller(controller)
-
-        #self.theme_cls.theme_style = "Dark"
 
         return view
     

@@ -15,6 +15,7 @@ import src.constants as constants
 
 # Set up values and types that are to be sent to cpp
 def get_common_indata(model):
+    logging.debug("cpp_adapter: get_common_indata")
     all_argtypes = []
     all_values = []
 
@@ -104,8 +105,7 @@ def get_common_indata(model):
     elif strategy == constants.PORTFOLIO_STRATEGIES[4]:
         all_values.append(4)
     else:
-        logging.error("Unexpected startegy: " + str(strategy))
-
+        logging.warn("Unexpected startegy: " + str(strategy))
 
     ### Variance ###
     all_argtypes.append(ctypes.c_int)
@@ -122,8 +122,9 @@ def get_common_indata(model):
     all_values.append(model.get_include_fees_status())
 
     ### Out data ###
-    all_argtypes.append(ctypes.c_float * nr_days_in_data)
-    return_data = [0] * nr_days_in_data  # initiate with zeros   # TODO whait should not this be too many? should be - days in intervall. but no?!?
+    out_data_size = nr_days_in_data + 1 # for graph need starter value 1 before first day and adds
+    all_argtypes.append(ctypes.c_float * out_data_size)
+    return_data = [0] * out_data_size  # initiate with zeros   # TODO whait should not this be too many? should be - days in intervall. but no?!?
     all_values.append((ctypes.c_float * len(return_data))(*return_data))
 
     return [all_argtypes, all_values]
@@ -133,10 +134,13 @@ def get_nbr_of_days_in_investment_items(model):
     """ All items have the same number of days.
         This function takes the first item and returns its number of days
     """
-    instruments_selected = model.get_instruments_selected()
+    logging.debug("get_nbr_of_days_in_investment_items: ")
+    #instruments_selected = model.get_instruments_selected()
     markets_selected = model.get_markets_selected()
-    a_instrument = instruments_selected[0]
-    market = markets_selected[a_instrument[0]]
-    nbr_of_days_in_investment_item = len(market.get_time_span())
-
+    #a_instrument = instruments_selected[0]
+    #market = markets_selected[a_instrument[0]]
+    #nbr_of_days_in_investment_item = len(market.get_time_span())
+    first_key = list(markets_selected.keys())[0]
+    nbr_of_days_in_investment_item = len(markets_selected[first_key].get_time_span())
+    
     return nbr_of_days_in_investment_item

@@ -9,12 +9,15 @@
 
 import ctypes
 import logging
+import numpy as np
 
 import src.model.common.constants_model as constants_model
 import src.constants as constants
 import src.model.common.cpp_adapter as cpp_adapter
 
+
 def graph_ctypes(model):
+    logging.debug("graph_cpp_adapter: graph_ctypes")
 
     ## C++ interactions ##
     cpp_compiled_so_file = constants_model.calculate_graph_output_file
@@ -29,24 +32,30 @@ def graph_ctypes(model):
     cpp_algorithm.restype = ctypes.POINTER(ctypes.c_float)
 
     # make actual call
+    logging.debug("graph_cpp_adapter: Just before entering C++ realm")
     return_data = cpp_algorithm(*all_values_list) #TODO fix return value is cpp float pointer
+    logging.debug("graph_cpp_adapter: returned from C++ realm")
 
     nr_days_in_data = cpp_adapter.get_nbr_of_days_in_investment_items(model)
 
-    size_return_data = nr_days_in_data
+    size_return_data = nr_days_in_data + 1 
 
     # Do not include days only used for strategy
     if model.get_portfolio_strategy() == constants.PORTFOLIO_STRATEGIES[4]:
-        return_data_python_format = [return_data[i] for i in range(model.get_volatility_strategie_sample_size(), size_return_data)]
+        return_data_python_format = [return_data[i] for i in range(model.get_volatility_strategie_sample_size(), size_return_data -1)]
     else:
-        return_data_python_format = [return_data[i] for i in range(size_return_data)]
-
+        return_data_python_format = [return_data[i] for i in range(size_return_data -1)] # TODO, unsure why need -1 but got graph data bug, read unitionated value from c-list
+        #return_data_python_format = np.ctypeslib.as_array(return_data, shape=(size_return_data,))
     set_buy_sell_data_in_model(all_values_list, model)
 
-    return return_data_python_format
+    retList = return_data_python_format
+
+    return retList
+
 
 
 def get_in_data_for_cpp(model):
+    logging.debug("graph_cpp_adapter: get_in_data_for_cpp")
 
     [common_argtypes_list, common_values_list] = cpp_adapter.get_common_indata(model)
     [graph_argtypes_list, graph_values_list] = get_graph_indata(model)
@@ -57,6 +66,7 @@ def get_in_data_for_cpp(model):
     return [all_argtypes_list, all_values_list]
 
 def get_graph_indata(model):
+    logging.debug("graph_cpp_adapter: get_graph_indata")
     graph_argtypes_list = []
     graph_values_list = []
 
@@ -74,14 +84,12 @@ def get_graph_indata(model):
     return [graph_argtypes_list, graph_values_list]
 
 def set_buy_sell_data_in_model(all_values_list, model):
+    logging.debug("graph_cpp_adapter: set_buy_sell_data_in_model")
 
     transaction_dates_index = -2 #index of transaction dates in all_values_list
     transaction_action_index  = -1 #index of transaction action in all_values_list
-
-    buy_sell_date = all_values_list[transaction_dates_index]
-    buy_sell_date = [buy_sell_date[i] for i in range(len(buy_sell_date)) if buy_sell_date[i] != 0]
-
-    buy_sell_type = all_values_list[transaction_action_index]
+    buy_sell_date   = all_values_list[transaction_dates_index]
+    buy_sell_date   = [buy_sell_date[i] for i in range(len(buy_sell_date)) if buy_sell_date[i] != 0]
+    buy_sell_type   = all_values_list[transaction_action_index]
     buy_sell_action = [buy_sell_type[i] for i in range(len(buy_sell_type)) if buy_sell_type[i] != 0]
-
     model.set_buy_sell_by_lists(buy_sell_date, buy_sell_action)

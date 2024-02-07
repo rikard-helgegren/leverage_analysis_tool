@@ -7,6 +7,8 @@
  * commercial or non-commercial, by any means.
  */
 
+#pragma once
+
 class HistogramParameters{
     public:
         bool isSet = false;

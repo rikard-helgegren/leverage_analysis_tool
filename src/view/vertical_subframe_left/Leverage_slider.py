@@ -69,3 +69,8 @@ class Leverage_slider():
     def on_slider_change(self, instance, value):
         self.slide_counter.text=str(int(value))
         self.view.update_amount_leverage(int(value))
+
+    def set_leverage(self, new_value):
+        def convert_to_precentage(new_value):
+            return int(new_value*100 + 0.5)
+        self.slider.value = convert_to_precentage(new_value)

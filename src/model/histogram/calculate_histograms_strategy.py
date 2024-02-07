@@ -233,7 +233,7 @@ def getFeeLevel(leverage):
     """
         Return the fee rate related to the different leverage levels
     """
-    logging.debug("Graph utils: getFeeLevel")
+    logging.debug("calculate_histogram_stategy: getFeeLevel")
     if (leverage == 1):
         return constants_model.FEE_BULL_1
     elif (leverage >= 2 or leverage <= 4):

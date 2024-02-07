@@ -13,8 +13,9 @@
 #include <map>
 #include <stdexcept>
 
-#pragma once
+#include "../../Logger.cpp"
 
+#pragma once
 
 /**
  * Makes mapping between each financial instrument and its market index
@@ -22,16 +23,18 @@
  * key: instrument
  * value: market index
  */
-void mapIndexNrToMarketNr(std::map<int,int> indexToMarket,
+void mapIndexNrToMarketNr(std::map<int,int> & indexToMarket,
                           std::vector<std::string> marketNames,
                           int nrMarketsSelected,
                           std::vector<std::string> instrumentNames,
                           int nrOfInstruments){
+    //static Logger logger;
+    //logger.log("mapIndexNrToMarketNr ");
 
     for (int instrumentNumber = 0; instrumentNumber < nrOfInstruments; instrumentNumber++){
-        for (int number = 0; number < nrMarketsSelected; number++){
-            if (marketNames[number] == instrumentNames[instrumentNumber]){
-                indexToMarket.insert(std::pair<int, int>(instrumentNumber, number));
+        for (int marketNumber = 0; marketNumber < nrMarketsSelected; marketNumber++){
+            if (marketNames[marketNumber] == instrumentNames[instrumentNumber]){
+                indexToMarket.insert(std::pair<int, int>(instrumentNumber, marketNumber));
             }
         }
     }
