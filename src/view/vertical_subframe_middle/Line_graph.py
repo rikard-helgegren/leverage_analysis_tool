@@ -58,67 +58,41 @@ class Line_graph(Widget):
         self.values = [] 
         self.time_span = []
         self.buy_sell_log = {}
-        self.values_refrence = [] 
-        self.time_span_refrence = []
-        self.buy_sell_log_refrence = {}
 
-    def update_refrence(self):
-        logging.info("View: Line_graph: update_refrence")
-
-        if self.values == [] or self.values ==  self.values_refrence:
-            self.values_refrence = []
-            self.time_span_refrence = []
-            self.buy_sell_log_refrence = {}
-        else:
-            self.values_refrence =  self.values      
-            self.time_span_refrence = self.time_span
-            self.buy_sell_log_refrence = self.buy_sell_log
+    def draw(self, values_list, time_span, buy_sell_log_list):
+        logging.debug("View: Line_graph, draw")
         
-        self._draw()
-
-    def draw(self, values, time_span, buy_sell_log):
-        logging.debug("View: Line_graph: draw")
-        
-        self.values = values
+        self.values_list = values_list
         self.time_span = time_span        
-        self.buy_sell_log = buy_sell_log
+        self.buy_sell_log_list = buy_sell_log_list
 
         self._draw()
 
     def update(self):
-        logging.debug("View: Line_graph: update")
+        logging.debug("View: Line_graph, update")
         self._draw()
 
     def _draw(self):
         plt.figure(self.fig.number)
         clear_canvas = True
 
+        color_graph = portfolio_data_color
+
         #if clear_before_drawing: #TODO implement with this input
         self.axs.clear()
 
-        if self.values != []:
-            self.set_time_on_x_axis(self.axs, self.time_span)
-            if self.view.show_trades:
-                self.set_buy_and_sell_markers(self.axs, self.values, self.buy_sell_log)
-            self.line1, = self.axs.plot(
-                self.values, 
-                color = 'blue',
-                alpha=0.5
-            )
-            plt.tight_layout()
-            clear_canvas = False
-        
-        if self.values_refrence != []:
-            self.set_time_on_x_axis(self.axs, self.time_span_refrence)
-            if self.view.show_trades:
-                self.set_buy_and_sell_markers(self.axs, self.values_refrence, self.buy_sell_log_refrence)
-            self.line1, = self.axs.plot(
-                self.values_refrence, 
-                color = 'green',
-                alpha=0.5
-            )
-            plt.tight_layout()
-            clear_canvas = False
+        for index in range(len(self.values_list)):
+            if self.values_list[index] != []:
+                self.set_time_on_x_axis(self.axs, self.time_span)
+                if self.view.show_trades:
+                    self.set_buy_and_sell_markers(self.axs, self.values_list[index], self.buy_sell_log_list[index])
+                self.line1, = self.axs.plot(
+                    self.values_list[index], 
+                    color = color_graph[index], 
+                    alpha=0.5
+                )
+                plt.tight_layout()
+                clear_canvas = False
         
         if clear_canvas:
             set_empty_ticks(self.axs)
@@ -126,7 +100,7 @@ class Line_graph(Widget):
         self.canvas.draw()
 
     def set_buy_and_sell_markers(self, axs, values, buy_sell_log):
-        logging.debug("View: Line_graph: set_buy_and_sell_markers")
+        logging.debug("View: Line_graph, set_buy_and_sell_markers")
         circle_size =100
 
         x_values = []
@@ -138,8 +112,7 @@ class Line_graph(Widget):
         for value in buy_sell_log:
             if value > len(values): # bug from samples size of data to determine behaviour
                 logging.warn("index out off bounds scatter plott" + str(value) + " of " + str(len(values)))
-            else:
-                
+            else:  
                 x_values.append(value)
                 y_values.append(values[value])
                 events = buy_sell_log[value]
@@ -166,16 +139,16 @@ class Line_graph(Widget):
         axs.scatter(x_values, y_values, s=circle_size, c=colors)
 
     def set_time_on_x_axis(self, ax, time_span):
-        logging.debug("View: Line_graph: set_time_on_x_axis")
+        logging.debug("View: Line_graph, set_time_on_x_axis")
         pos = []
         labels = []
 
-        refrence_year = ""
+        reference_year = ""
         for i, time in enumerate(time_span):
             #get first 4 digits, i.e. the year
             year = str(time)[:4]
-            if year != refrence_year:
-                refrence_year = year
+            if year != reference_year:
+                reference_year = year
                 pos.append(i)
                 labels.append(year)
 

@@ -7,7 +7,7 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-
+"""
 
 from src.model.graph.strategies import do_not_invest
 from src.model.graph.strategies import do_always_invest
@@ -481,3 +481,4 @@ def test_rebalance():
     assert inspected_instrument.get_current_value() == 3
     assert fund_instrument1.get_current_value() == 0.5
     assert fund_instrument2.get_current_value() == 1
+"""

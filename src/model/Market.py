@@ -7,8 +7,7 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-
-from kivy.logger import logging
+import logging
 
 class Market:
     """ Represents a stock market

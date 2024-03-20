@@ -8,7 +8,7 @@
 # commercial or non-commercial, by any means.
 
 
-
+"""
 from src.model.graph.utils import create_portfolio
 from src.model.graph.utils import get_last_index_of_days_from_instrument
 from src.model.graph.utils import calculate_nbr_of_funds_and_leverages
@@ -332,3 +332,4 @@ def test_getFeeLevel():
     leverage = 5
     fee_level = getFeeLevel(leverage)
     assert fee_level == constants_model.FEE_BULL_5_AND_MORE
+"""

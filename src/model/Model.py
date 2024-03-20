@@ -7,15 +7,9 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
-#import logging
-from kivy.logger import logging
+import logging
 
 from copy import deepcopy
-
-###### IMPORT DATA MANAGER ######
-from src.managing_data.check_if_data_files_are_clean import check_if_data_files_are_clean
-from src.managing_data.sort_file_names               import sort_file_names
-from src.managing_data.read_and_manage_raw_data      import read_and_manage_raw_data
 
 ###### IMPORT MODEL ######
 from src.Config import Config
@@ -40,12 +34,7 @@ class Model:
     def __init__(self):
         logging.debug("Model: __init__")
 
-        
         self.config = Config()
-        ################ Data Files ################
-
-        self.data_files_path  = constants_model.data_files_path
-        self.clean_file_names = []
 
         ############## Config values ###################
 
@@ -134,30 +123,27 @@ class Model:
     # Central methods
     ######################
 
-    def model_import_data(self):
-        """ Check if data files are clean and store the market data in
-            Market class objects
-        """
-        logging.debug("Model: model_import_data")
-        clean_file_names = check_if_data_files_are_clean(self.data_files_path)
-        sorted_files = sort_file_names(clean_file_names, self.config.SORT_RANKING)
-        self.markets = read_and_manage_raw_data(self.data_files_path, sorted_files)
-
-
     def update_model(self):
         """ Make the markets selected compatible, and calculate the new results"""
         logging.debug("Model: update_model")
 
+        self.common_time_interval = calculate_common_time_interval(self)  # TODO: doing double work some times
+
+        if len(self.common_time_interval) > 0:
+            first_day = self.common_time_interval[0]
+            last_day = self.common_time_interval[-1]
+        else:
+            first_day = self.chosen_time_interval_start_date
+            last_day = self.chosen_time_interval_end_date
+
         self.markets_selected = fill_gaps_data(self.markets_selected,
-                                               self.chosen_time_interval_start_date,
-                                               self.chosen_time_interval_end_date)
+                                               first_day,
+                                               last_day)
 
         self.markets_selected = calcultate_daily_change(self.markets_selected)
 
         calculate_graph(self)
         calculate_histogram(self)
-
-        self.common_time_interval = calculate_common_time_interval(self)  # TODO: doing double work some times
 
         self.key_values.update_values(self.results_for_intervals, self.portfolio_results_full_time)
 
@@ -303,7 +289,7 @@ class Model:
         logging.debug("Model: get_markets")
         return self.markets
     def set_markets(self, markets):
-        logging.debug("Model: set_markets")
+        logging.debug("Model: set_markets %f", len(markets)  )
         self.markets = markets
 
     def get_instruments_selected(self):
@@ -408,31 +394,38 @@ class Model:
         return self.buys_sells
     
     def set_buy_sell_by_lists(self, date_list, action_list):
+        logging.debug("Model: set_buy_sell_by_lists, len both lists " + str(len(date_list)) + " " + str(len(action_list)))
         if date_list == []:
+            self.buys_sells = {}
+            return
+        
+        if len(date_list) != len(action_list): 
+            logging.warn("Model: set_buy_sell_by_lists, the lists have different size, %r and %r ", len(date_list), len(action_list))
             self.buys_sells = {}
             return
 
         buy_sell_dict = {}
-        refrence_date = date_list[0]
+        reference_date = date_list[0]
         events_this_day = []
 
         action_list = self.convert_int_to_buy_sell_enum(action_list)
 
         for index in range(0, len(date_list)):
-            if refrence_date == date_list[index]:
+            if reference_date == date_list[index]:
                 events_this_day.append({'Action': action_list[index]})
             else: # New day add prev day
-                buy_sell_dict[refrence_date] = events_this_day
+                buy_sell_dict[reference_date] = events_this_day
 
-                refrence_date = date_list[index]
+                reference_date = date_list[index]
                 events_this_day = []
                 events_this_day.append({'Action': action_list[index]})
         
-        buy_sell_dict[refrence_date] = events_this_day
+        buy_sell_dict[reference_date] = events_this_day
 
         self.buys_sells = buy_sell_dict
     
     def convert_int_to_buy_sell_enum(self, buy_sell_action_list):
+        logging.debug("Model: convert_int_to_buy_sell_enum")
         new_action_list = []
 
         for action in buy_sell_action_list:

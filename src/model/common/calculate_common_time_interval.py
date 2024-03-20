@@ -60,7 +60,7 @@ def compare_available_times_to_view_selected(model, calculated_start_time, calcu
     # If start day is manually set
     if manual_start_date != 0:
         # find first upcoming day
-        for i in range(100):
+        for i in range(10_000): #High enough to change year
             try:
                 # Match manual_start_date with an existing day in data
                 if (manual_start_date + i) in time_span:  # TODO currently i=0 never enters and is tested before 
@@ -72,7 +72,7 @@ def compare_available_times_to_view_selected(model, calculated_start_time, calcu
     # If end day is manually set
     if manual_end_date != 0:
         # find first previous day
-        for i in range(100):
+        for i in range(10_000): #High enough to change year
             try:
                 # Match manual_end_date with an existing day in data
                 if (manual_end_date - i) in time_span:

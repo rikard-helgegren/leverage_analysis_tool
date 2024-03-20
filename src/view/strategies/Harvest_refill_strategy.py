@@ -15,9 +15,11 @@ from kivy.uix.textinput import TextInput
 
 from src.view.styling.light_mode.label import get_style
 import src.view.constants as constants
+from src.view.utils import is_number
 
 class Harvest_refill_strategy():
     def __init__(self, view):
+        logging.debug('Harvest_refill_strategy: __init__')
         self.view = view
         self.view.keyboard_observable.subscribe(self)
 
@@ -48,9 +50,11 @@ class Harvest_refill_strategy():
         self.harvest_refill_frame.add_widget(self.refill_frame)
 
     def get_frame(self):
+        logging.debug('Harvest_refill_strategy: get_frame')
         return self.harvest_refill_frame
     
     def key_event(self, key, mouse_position):
+        logging.debug('Harvest_refill_strategy: key_event')
         if self.harvest_frame.collide_point(mouse_position[0], mouse_position[1]):
             match key:
                 case 273: #Up
@@ -95,6 +99,20 @@ class Harvest_refill_strategy():
         new_value = min(old_value+increase_amount,99)
         self.text_box_refill_point._set_text(str(new_value))
         self.update_refill_point(self.text_box_refill_point)
+
+    def set_harvest_value(self, new_value):
+        logging.debug('Harvest_refill_strategy: set_harvest_value: %r', new_value)
+        if is_number(new_value):
+            self.text_box_harvest_point._set_text(str(new_value))
+        else:
+            logging.error('"%r" is not a number', new_value)
+
+    def set_refill_value(self, new_value):
+        logging.debug('Harvest_refill_strategy: set_refill_value: %r', new_value)
+        if is_number(new_value):
+            self.text_box_refill_point._set_text(str(new_value))
+        else:
+            logging.error('"%r" is not a number', new_value)
 
     
     def update_harvest_point(self, text_box):

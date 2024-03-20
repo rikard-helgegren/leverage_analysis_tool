@@ -11,6 +11,8 @@
 #pragma once
 #include <string>
 #include "../../../src/model/common/Parameters.cpp"
+#include "../helpers/HistogramParametersBuilder.cpp"
+#include "../helpers/GraphParametersBuilder.cpp"
 
 
 class Parameters_builder{
@@ -66,14 +68,194 @@ class Parameters_builder{
         this->parameters.volatilityStrategieSampleSize = 0;  //TODO Not to be used yet
         this->parameters.varianceCalcSampleSize = 0;  //TODO Not to be used yet
         this->parameters.volatilityStrategieLevel = 0.0f;   //TODO Not to be used yet
-        //this->parameters.outData = new float;
         this->parameters.numberOfLeveragedInstruments = 0;
         this->parameters.numberOfFunds = 1;
         this->parameters.includeFeeStatus = false;
         this->parameters.indexToMarket =  {{1, 1}};
+        this->parameters.outData = new float[20];
+
+        this->parameters.histogramParameters = Histogram_Parameters_Builder().build();
+        this->parameters.graphParameters = Graph_Parameters_Builder().build();
 
     }
 
+    Parameters_builder setup_complex_oneMarket(){
+
+        this->parameters.loan = 0.0f;
+
+        this->parameters.instrumentLeverages = new int[20]{1,2};
+
+        this->parameters.nrOfInstruments = 2;
+        this->parameters.instrumentNames = {"OMX30", "OMX30"};
+        this->parameters.proportionFunds = 0.9f;
+        this->parameters.proportionLeverage = 0.1f;
+        this->parameters.totNrDays = 2;
+        this->parameters.nrMarketsSelected = 1;
+
+
+        float** floatPtrMarektDailyChange = new float*[2];
+
+        // Create the first inner list and set its element to 1
+        floatPtrMarektDailyChange[0] = new float[4];
+        floatPtrMarektDailyChange[0][0] = 1.0f;
+        floatPtrMarektDailyChange[0][1] = 1.0f;
+        floatPtrMarektDailyChange[0][2] = 1.0f;
+        floatPtrMarektDailyChange[0][3] = 1.0f;
+
+        // Create the second inner list and set its element to 1
+        floatPtrMarektDailyChange[1] = new float[4];
+        floatPtrMarektDailyChange[1][0] = 1.0f;
+        floatPtrMarektDailyChange[1][1] = 1.0f;
+        floatPtrMarektDailyChange[1][2] = 1.0f;
+        floatPtrMarektDailyChange[1][3] = 1.0f;
+
+        this->parameters.marketDailyChanges = floatPtrMarektDailyChange;
+
+       
+
+
+        this->parameters.indexNames = {"OMX30", "OMX30"};
+        this->parameters.histogramParameters.daysInvesting = 3;
+        this->parameters.harvestPoint = 1.5f;
+        this->parameters.refillPoint = 0.5f;
+        this->parameters.rebalance_period_months = 6;
+        this->parameters.strategy = 0;
+        this->parameters.volatilityStrategieSampleSize = 0;  //TODO Not to be used yet
+        this->parameters.varianceCalcSampleSize = 0;  //TODO Not to be used yet
+        this->parameters.volatilityStrategieLevel = 0.0f;   //TODO Not to be used yet
+        this->parameters.numberOfLeveragedInstruments = 1;
+        this->parameters.numberOfFunds = 1;
+        this->parameters.includeFeeStatus = false;
+        this->parameters.indexToMarket =  {{0, 1},{1,1}};
+
+        return *this;
+    }
+
+Parameters_builder setup_complex_twoMarkets(){
+
+        this->parameters.loan = 0.0f;
+
+        this->parameters.instrumentLeverages = new int[20]{1,2,1,2};
+
+        this->parameters.nrOfInstruments = 4;
+        this->parameters.instrumentNames = {"OMX30", "OMX30", "DAX", "DAX"};
+        this->parameters.proportionFunds = 0.9f;
+        this->parameters.proportionLeverage = 0.1f;
+        this->parameters.totNrDays = 2;
+        this->parameters.nrMarketsSelected = 2;
+
+
+        float** floatPtrMarektDailyChange = new float*[4];
+
+        // Create the first inner list and set its element to 1
+        floatPtrMarektDailyChange[0] = new float[4];
+        floatPtrMarektDailyChange[0][0] = 1.0f;
+        floatPtrMarektDailyChange[0][1] = 1.0f;
+        floatPtrMarektDailyChange[0][2] = 1.0f;
+        floatPtrMarektDailyChange[0][3] = 1.0f;
+
+        // Create the second inner list and set its element to 1
+        floatPtrMarektDailyChange[1] = new float[4];
+        floatPtrMarektDailyChange[1][0] = 1.0f;
+        floatPtrMarektDailyChange[1][1] = 1.0f;
+        floatPtrMarektDailyChange[1][2] = 1.0f;
+        floatPtrMarektDailyChange[1][3] = 1.0f;
+
+        // Create the third inner list and set its element to 2
+        floatPtrMarektDailyChange[2] = new float[4];
+        floatPtrMarektDailyChange[2][0] = 2.0f;
+        floatPtrMarektDailyChange[2][1] = 2.0f;
+        floatPtrMarektDailyChange[2][2] = 2.0f;
+        floatPtrMarektDailyChange[2][3] = 2.0f;
+
+        // Create the fourth inner list and set its element to 2
+        floatPtrMarektDailyChange[3] = new float[4];
+        floatPtrMarektDailyChange[3][0] = 2.0f;
+        floatPtrMarektDailyChange[3][1] = 2.0f;
+        floatPtrMarektDailyChange[3][2] = 2.0f;
+        floatPtrMarektDailyChange[3][3] = 2.0f;
+
+        this->parameters.marketDailyChanges = floatPtrMarektDailyChange;
+
+       
+
+
+        this->parameters.indexNames = {"OMX30", "OMX30", "DAX", "DAX"};
+        this->parameters.histogramParameters.daysInvesting = 1;
+        this->parameters.harvestPoint = 1.5f;
+        this->parameters.refillPoint = 0.5f;
+        this->parameters.rebalance_period_months = 6;
+        this->parameters.strategy = 0;
+        this->parameters.volatilityStrategieSampleSize = 0;  //TODO Not to be used yet
+        this->parameters.varianceCalcSampleSize = 0;  //TODO Not to be used yet
+        this->parameters.volatilityStrategieLevel = 0.0f;   //TODO Not to be used yet
+        this->parameters.numberOfLeveragedInstruments = 2;
+        this->parameters.numberOfFunds = 2;
+        this->parameters.includeFeeStatus = false;
+        this->parameters.indexToMarket =  {{0, 1},{1,1},{2,2},{3,2}};
+
+        return *this;
+    }
+
+
+Parameters_builder setup_complex_twoMarkets_3items(){
+
+        this->parameters.loan = 0.0f;
+
+        this->parameters.instrumentLeverages = new int[20]{1,2,1};
+
+        this->parameters.nrOfInstruments = 3;
+        this->parameters.instrumentNames = {"OMX30", "OMX30", "DAX"};
+        this->parameters.proportionFunds = 0.9f;
+        this->parameters.proportionLeverage = 0.1f;
+        this->parameters.totNrDays = 2;
+        this->parameters.nrMarketsSelected = 2;
+
+
+        float** floatPtrMarektDailyChange = new float*[3];
+
+        // Create the first inner list and set its element to 1
+        floatPtrMarektDailyChange[0] = new float[4];
+        floatPtrMarektDailyChange[0][0] = 1.0f;
+        floatPtrMarektDailyChange[0][1] = 1.0f;
+        floatPtrMarektDailyChange[0][2] = 1.0f;
+        floatPtrMarektDailyChange[0][3] = 1.0f;
+
+        // Create the second inner list and set its element to 1
+        floatPtrMarektDailyChange[1] = new float[4];
+        floatPtrMarektDailyChange[1][0] = 1.0f;
+        floatPtrMarektDailyChange[1][1] = 1.0f;
+        floatPtrMarektDailyChange[1][2] = 1.0f;
+        floatPtrMarektDailyChange[1][3] = 1.0f;
+
+        // Create the third inner list and set its element to 2
+        floatPtrMarektDailyChange[2] = new float[4];
+        floatPtrMarektDailyChange[2][0] = 2.0f;
+        floatPtrMarektDailyChange[2][1] = 2.0f;
+        floatPtrMarektDailyChange[2][2] = 2.0f;
+        floatPtrMarektDailyChange[2][3] = 2.0f;
+
+        this->parameters.marketDailyChanges = floatPtrMarektDailyChange;
+
+       
+
+
+        this->parameters.indexNames = {"OMX30", "OMX30", "DAX"};
+        this->parameters.histogramParameters.daysInvesting = 1;
+        this->parameters.harvestPoint = 1.5f;
+        this->parameters.refillPoint = 0.5f;
+        this->parameters.rebalance_period_months = 6;
+        this->parameters.strategy = 0;
+        this->parameters.volatilityStrategieSampleSize = 0;  //TODO Not to be used yet
+        this->parameters.varianceCalcSampleSize = 0;  //TODO Not to be used yet
+        this->parameters.volatilityStrategieLevel = 0.0f;   //TODO Not to be used yet
+        this->parameters.numberOfLeveragedInstruments = 1;
+        this->parameters.numberOfFunds = 2;
+        this->parameters.includeFeeStatus = false;
+        this->parameters.indexToMarket =  {{0, 1},{1,1},{2,2}};
+
+        return *this;
+    }
 
 
     Parameters build(){

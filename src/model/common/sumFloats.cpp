@@ -9,7 +9,10 @@
 
 #pragma once
 
+#include "../../Logger.cpp"
+
 float sumFloats(float* floatArray, int nbrOfFloats){
+    //static Logger logger;
     float sum = 0.0f;
 
     for (int i = 0; i < nbrOfFloats; i++){

@@ -7,6 +7,8 @@
  * commercial or non-commercial, by any means.
  */
 
+#pragma once
+
 class GraphParameters {
     public:
         bool isSet = false;
@@ -14,5 +16,3 @@ class GraphParameters {
         int* transactionDates;
         int* transactionTypes;
 };
-
-

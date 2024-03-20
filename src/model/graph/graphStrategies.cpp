@@ -26,8 +26,8 @@
 
 
 void holdStrategy(Parameters parameters){
-    static Logger logger;
-    logger.log("holdStrategy");
+    //static Logger logger;
+    //logger.log("graphStrategies: holdStrategy");
 
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];
@@ -41,12 +41,12 @@ void holdStrategy(Parameters parameters){
 
     // Run trough all intervals and add result
     for (int day = startDay; day < lastDay; day++){
-        for (int item =0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
+        for (int item = 0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
             
             // Update with daily change
             currentValues[item] = updateCurrentInstrumentValue(parameters, currentValues, item, day);
 
-            // If instrument reaches cut off level it is sold before going lower
+            // If leveraged instrument reaches cut off level it is sold before going lower
             if (parameters.instrumentLeverages[item] > 1 && currentValues[item] < cutOfValue){
                 currentValues[item] = cutOfValue;
             }
@@ -57,8 +57,8 @@ void holdStrategy(Parameters parameters){
 
 // Almost duplicate of cppRebalanceTimeAlgoSubPart due to speed
 void harvestRefillStrategy(Parameters parameters){
-    static Logger logger;
-    logger.log("harvestRefillStrategy");
+    //static Logger logger;
+    //logger.log("graphStrategies: harvestRefillStrategy");
     
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];
@@ -92,8 +92,8 @@ void harvestRefillStrategy(Parameters parameters){
 
 // Almost duplicate of cppHarvestRefillAlgoSubPart due to speed
 void rebalanceTimeStrategy(Parameters parameters){
-    static Logger logger;
-    logger.log("rebalanceTimeStrategy");
+    //static Logger logger;
+    //logger.log("graphStrategies: rebalanceTimeStrategy");
 
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];
@@ -122,11 +122,14 @@ void rebalanceTimeStrategy(Parameters parameters){
                 rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
             }
         }
+        //logger.log("graphStrategies: totDays=" + std::to_string(lastDay));
         parameters.outData[day+1] = sumFloats(currentValues, parameters.nrOfInstruments);
     }
 }
 
 void doNotInvestStrategy(Parameters parameters){
+    //static Logger logger;
+    //logger.log("graphStrategies: doNotInvestStrategy");
 
     parameters.outData[0] = 1;
     int startDay = 0;
@@ -139,6 +142,9 @@ void doNotInvestStrategy(Parameters parameters){
 
 // Almost duplicate of cppHarvestRefillAlgoSubPart due to speed
 void varianceStrategy(Parameters parameters){
+    //static Logger logger;
+    //logger.log("graphStrategies: varianceStrategy");
+
     // Set up needed variables
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];

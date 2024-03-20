@@ -18,11 +18,17 @@ def find_first_common_market_day(lists_of_indexes, chosen_time_interval_start_da
         or
         The manually set day to use as first, if it is valid for all indexes.
     """
-    first_common = max([x[0] for x in lists_of_indexes])
+    first_common = max([index_days[0] for index_days in lists_of_indexes])
     if chosen_time_interval_start_date == 0:
         return first_common
-
-    return max(first_common, chosen_time_interval_start_date)
+    
+    if  chosen_time_interval_start_date > first_common:
+        for i in range(10_000): #High enough to change year
+            for index in lists_of_indexes:
+                if (chosen_time_interval_start_date + i) in index:
+                    return chosen_time_interval_start_date + i
+    else:
+        return first_common
 
 
 def find_last_common_market_day(lists_of_indexes, chosen_time_interval_end_date):
@@ -33,8 +39,15 @@ def find_last_common_market_day(lists_of_indexes, chosen_time_interval_end_date)
     last_common = min([x[-1] for x in lists_of_indexes])
     if chosen_time_interval_end_date == 0:
         return last_common
-
-    return min(last_common, chosen_time_interval_end_date)
+    
+    if chosen_time_interval_end_date < last_common:
+        for i in range(10_000): #High enough to change year
+            for index in lists_of_indexes:
+                if (chosen_time_interval_end_date - i) in index:
+                    return chosen_time_interval_end_date - i
+        
+    else:
+        return last_common
 
 
 def fix_gaps2(lists_of_indexes, latest_first, earliest_last):
@@ -91,7 +104,7 @@ def fix_gaps2(lists_of_indexes, latest_first, earliest_last):
 
 
 def fill_gaps_data(markets_selected, chosen_time_interval_start_date, chosen_time_interval_end_date):
-    logging.debug("Model: fill_gaps_data")
+    logging.debug("fill_in_missing_dates: fill_gaps_data")
 
     if markets_selected == {}:
         return {}

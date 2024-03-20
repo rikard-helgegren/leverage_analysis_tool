@@ -10,7 +10,6 @@
 import logging
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
-from kivymd.uix.button import MDIconButton
 from kivymd.uix.button import MDRectangleFlatIconButton
 
 from src.view.styling.light_mode.button import get_style
@@ -23,14 +22,6 @@ class Options_frame:
         options_frame = BoxLayout(size_hint=(1, .15))
 
         options_frame.add_widget(Widget(size_hint=(.8, 1))) # Space
-
-        compare_button = MDRectangleFlatIconButton(
-            icon= "content-duplicate",
-            text= "Compare",
-            on_release=self.compare_button_click,
-            **get_style()
-        )
-        options_frame.add_widget(compare_button)
 
         options_frame.add_widget(Widget(size_hint=(.2, 1))) # Space
 
@@ -74,11 +65,6 @@ class Options_frame:
         options_frame.add_widget(Widget(size_hint=(.8, 1))) # Space
 
         super_frame.add_widget(options_frame)
-    
-
-    def compare_button_click(self, instance):
-        logging.debug("compare_button_click!")
-        self.view.update_refrence()
 
     def trades_button_click(self, instance):
         logging.debug("trades_button_click!")

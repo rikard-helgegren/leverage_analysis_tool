@@ -161,7 +161,25 @@ class Variance_strategy():
             self.text_box_volatillaty_trigger_point._set_text(str(new_value))
             self.update_volatillaty_trigger(self.text_box_volatillaty_trigger_point)
         else:
-            logging.error('"%r" is not a valid number', old_value)
+            logging.error('increase_volatillaty_trigger_value: "%r" is not a valid number', old_value)
+
+    def set_sample_size_variance(self, new_value):
+        if is_number(new_value):
+            self.text_box_sample_size_variance._set_text(str(new_value))
+        else:
+            logging.error('set_sample_size_variance_value: "%r" is not a valid number', new_value)
+
+    def set_volatillaty_trigger(self, new_value):
+        if is_number(new_value):
+            self.text_box_volatillaty_trigger_point._set_text(str(new_value))
+        else:
+            logging.error('set_volatillaty_trigger_value: "%r" is not a valid number', new_value)
+    
+    def set_sample_size_decision(self, new_value):
+        if is_number(new_value):
+            self.text_box_sample_size_decision_point._set_text(str(new_value))
+        else:
+            logging.error('set_sample_size_decision_value: "%r" is not a valid number', new_value)
         
     
     def update_sample_size_variance(self, text_box):

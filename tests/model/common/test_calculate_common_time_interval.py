@@ -8,13 +8,13 @@
 # commercial or non-commercial, by any means.
 
 
+from unittest.mock import patch
 from src.model.Market import Market
 from src.model.Model import Model
 from src.model.common.calculate_common_time_interval import calculate_common_time_interval
 from src.model.common.calculate_common_time_interval import compare_available_times_to_view_selected
 
 def test_calculate_common_time_interval():
-
     model = Model()
 
     timespan_overlapping_A       = [20200101,20200102,20200103]

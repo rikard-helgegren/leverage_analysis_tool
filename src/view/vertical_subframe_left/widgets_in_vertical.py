@@ -18,7 +18,7 @@ from src.view.vertical_subframe_left.Loan import Loan
 from src.view.vertical_subframe_left.Strategy_menue import Strategy_menue
 from src.view.vertical_subframe_left.Leverage_slider import Leverage_slider
 from src.view.vertical_subframe_left.Investment_intervall import Investment_intervall
-from src.view.vertical_subframe_left.Table_of_instruments import Table_of_instuments
+from src.view.vertical_subframe_left.Table_of_instruments import Table_of_instruments
 from src.view.styling.light_mode.label import get_style
 import src.view.constants as constants
 
@@ -29,11 +29,11 @@ def setup_vertical_frame(view):
     view.leverage_slider = Leverage_slider(view, vertical_sub_frame_top)
     insert_check_box(view, vertical_sub_frame_top)
     insert_time_and_loan(view, vertical_sub_frame_top)
-    view.strategy_meny = Strategy_menue(view, vertical_sub_frame_top)
+    view.strategy_menue = Strategy_menue(view, vertical_sub_frame_top)
     vertical_frame.add_widget(vertical_sub_frame_top)
 
     vertical_sub_frame_bot = BoxLayout(orientation='vertical', size_hint=(1, .6))
-    view.table_of_instruments = Table_of_instuments(view, vertical_sub_frame_bot)
+    view.table_of_instruments = Table_of_instruments(view, vertical_sub_frame_bot)
     vertical_frame.add_widget(vertical_sub_frame_bot)
 
     view.add_widget(vertical_frame)
@@ -48,9 +48,9 @@ def insert_check_box(view, frame):
 
     sub_frame.add_widget(Widget()) # empty space left
 
-    checkbox = CheckBox(size_hint=(1, 1),active=True)
-    checkbox.bind(active=on_checkbox_active)
-    sub_frame.add_widget(checkbox)
+    view.use_fees = CheckBox(size_hint=(1, 1),active=True)
+    view.use_fees.bind(active=on_checkbox_active)
+    sub_frame.add_widget(view.use_fees)
     
     label = Label(text='Include fees',
             **get_style())

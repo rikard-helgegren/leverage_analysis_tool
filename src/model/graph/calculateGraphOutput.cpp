@@ -29,9 +29,11 @@
 #include "../../Logger.cpp"
 #include "graphStrategies.cpp"
 
+
 // Check what startegy to use and launch it
 void launchStartegy(Parameters parameters){
-    static Logger logger;
+    //static Logger logger;
+    //logger.log("calculateGrphOutput: launchStartegy " + std::to_string(parameters.strategy));
     
     if (parameters.strategy == 0){
         holdStrategy(parameters);
@@ -73,11 +75,13 @@ extern "C" {
             float*  outData,
             int*    transactionDates,
             int*    transactionTypes){
-
-        static Logger logger;
+        //static Logger logger;
+        //logger.log("calculateGrphOutput: Entered C++ realm");
+        //logger.log("calculateGrphOutput: calculateGraphOutput");
+        
         std::vector<std::string> instrumentNames;
         std::vector<std::string> indexNames;
-        
+
         instrumentNames = convertCharPointerToStringVector(instrumentNames_chr);
         indexNames      = convertCharPointerToStringVector(indexNames_chr);
 
@@ -122,16 +126,12 @@ extern "C" {
                 .setOutData(outData)
                 .setGraphParameters(transactionDates, transactionTypes)
                 .build();
+        //logger.log("");parameters.printLog(); 
 
-        if (parameters.graphParameters.isSet == true){
-            logger.log("graphParam is set");
-        }
-        else {
-            logger.log("graphParam is not set");
-        }
-        
+
         launchStartegy(parameters);
 
+        //logger.log("calculateGrphOutput: Leaving C++ realm");
         return outData;
     }
 }

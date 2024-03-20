@@ -17,6 +17,7 @@ import src.view.constants as constants
 
 class Loan():
     def __init__(self, view, frame):
+        logging.debug('Loan: __init__')
         self.view = view
         self.view.keyboard_observable.subscribe(self)
         self.frame = frame
@@ -37,6 +38,7 @@ class Loan():
         self.frame.add_widget(self.loan_frame)
 
     def key_event(self, key, mouse_position):
+        logging.debug('Loan: key_event')
         if self.loan_frame.collide_point(mouse_position[0], mouse_position[1]):
             match key:
                 case 273: #Up
@@ -49,21 +51,29 @@ class Loan():
                     self.decrease_value(1)
 
     def decrease_value(self, decrease_amount=1):
+        logging.debug('Loan: decrease_value')
         old_value = int(self.textinput._get_text())
         new_value = max(old_value - decrease_amount, 0)
         self.textinput._set_text(str(new_value))
         self.update_loan(self.textinput)
     
     def increase_value(self, increase_amount=1):
+        logging.debug('Loan: increase_value')
         old_value = int(self.textinput._get_text())
         new_value = old_value + increase_amount
         self.textinput._set_text(str(new_value))
         self.update_loan(self.textinput)
 
     def update_loan(self, text_box):
+        logging.debug('Loan: update_loan')
         loan = text_box._get_text()
         if loan.isdigit():
             self.view.update_loan(int(loan))
         else:
             logging.error('"%r" is not a number', loan)
+
+    def set_loan(self, new_value):
+        logging.debug('Loan: set_loan')
+        value_converted_from_percent = int(new_value * 100)
+        self.textinput._set_text(str(value_converted_from_percent))
         

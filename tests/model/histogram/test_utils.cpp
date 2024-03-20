@@ -41,6 +41,7 @@ TEST_CASE( "Test setStartValuesOfInstruments function", "[setStartValuesOfInstru
     setStartValuesOfInstruments(parameters, currentValues);
     REQUIRE(currentValues[0] == 1);
 
+
     parameters = Parameters_builder()
             .set_nrOfInstruments(2)
             .set_proportionFunds(0.5f)
@@ -63,7 +64,6 @@ TEST_CASE( "Test setStartValuesOfInstruments function", "[setStartValuesOfInstru
 
     setStartValuesOfInstruments(parameters, currentValues);
     REQUIRE(currentValues[0] == 0.5f);
-
 }
 
 
@@ -246,7 +246,7 @@ TEST_CASE("Test checkPreConditionsHarvestRefill function","[checkPreConditionsHa
 
     REQUIRE(returnData==expectedData);
 
-    //current is close to refrence, no rebalance return false
+    //current is close to reference, no rebalance return false
     parameters = Parameters_builder()
             .set_instrumentLeverages(new int[20]{2,1})
             .set_numberOfFunds(1)
@@ -263,7 +263,7 @@ TEST_CASE("Test checkPreConditionsHarvestRefill function","[checkPreConditionsHa
 
     REQUIRE(returnData==expectedData);
 
-     //All fullfilled, refrence low return true
+     //All fullfilled, reference low return true
     parameters = Parameters_builder()
             .set_instrumentLeverages(new int[20]{2,1})
             .set_numberOfFunds(1)
@@ -314,8 +314,9 @@ TEST_CASE( "Test doRebalancing function", "[doRebalancing]" ) {
     float* referenceValue = new float[3]{1.0f, 1.0f};
     float* currentValues = new float[3]{2.0f, 0.0f};
     int item = 0;
+    int currentDay = 0;
 
-   doRebalancing(parameters, totForRebalancing, referenceValue, currentValues, item);
+   doRebalancing(parameters, totForRebalancing, referenceValue, currentValues, item, currentDay);
 
    float* expectedData = new float[3]{1.0f, 1.0f};;
 
@@ -334,10 +335,11 @@ TEST_CASE( "Test doRebalancing function", "[doRebalancing]" ) {
    referenceValue = new float[3]{1.0f, 1.0f};
    currentValues = new float[3]{0.0f, 2.0f};
    item = 0;
+   currentDay = 0;
 
-  doRebalancing(parameters, totForRebalancing, referenceValue, currentValues, item);
+  doRebalancing(parameters, totForRebalancing, referenceValue, currentValues, item, currentDay);
 
-  expectedData = new float[3]{1.0f, 1.0f};;
+  expectedData = new float[3]{1.0f, 0.998f};;
 
   REQUIRE(currentValues[0] == expectedData[0]);
   REQUIRE(currentValues[1] == expectedData[1]);
@@ -353,8 +355,9 @@ TEST_CASE( "Test doRebalancing function", "[doRebalancing]" ) {
      referenceValue = new float[3]{1.0f, 1.0f};
      currentValues = new float[3]{0.3f, 0.1f};
      item = 0;
+     currentDay = 0;
 
-    doRebalancing(parameters, totForRebalancing, referenceValue, currentValues, item);
+    doRebalancing(parameters, totForRebalancing, referenceValue, currentValues, item, currentDay);
 
     expectedData = new float[3]{0.3f, 0.1f};;
 

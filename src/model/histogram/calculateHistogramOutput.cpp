@@ -30,7 +30,6 @@
 #include "../../Logger.cpp"
 
 
-
 // Check what startegy to use and launch it
 void launchStartegy(Parameters parameters, int firstStartDay, int lastStartDay){
     
@@ -49,7 +48,6 @@ void launchStartegy(Parameters parameters, int firstStartDay, int lastStartDay){
 
 void runAsyncCalculations(Parameters parameters){
     // Loop all possible start days
-    static Logger logger;
     
     int startDay = 0;
     int stepSize = 100;
@@ -96,7 +94,6 @@ extern "C" {
             bool    includeFeeStatus,
             float*  outData,
             int     daysInvesting){
-        static Logger logger;
 
         std::vector<std::string> instrumentNames;
         std::vector<std::string> indexNames;

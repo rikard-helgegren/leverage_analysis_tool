@@ -15,6 +15,7 @@ from kivy.uix.textinput import TextInput
 
 from src.view.styling.light_mode.label import get_style
 import src.view.constants as constants
+from src.view.utils import is_number
 
 
 class Rebalance_strategy():
@@ -66,9 +67,15 @@ class Rebalance_strategy():
         self.text_box._set_text(str(new_value))
         self.update_rebalance_point(self.text_box)
 
+    def set_value(self, new_value):
+        if is_number(new_value):
+            self.text_box._set_text(str(new_value))
+        else:
+            logging.error('"%r" is not a number', new_value)
+        
     def update_rebalance_point(self, text_box):
         rebalnce_intervall = text_box._get_text()
-        if rebalnce_intervall.isdigit():
+        if is_number(rebalnce_intervall):
             self.view.update_rebalnce_intervall(int(rebalnce_intervall))
         else:
             logging.error('"%r" is not a number', rebalnce_intervall)
