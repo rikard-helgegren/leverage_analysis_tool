@@ -14,7 +14,7 @@
 #include <sstream>
 #include <iterator>
 
-#include "../common/constants.h"
+#include "../constants.h"
 #include "../common/sumFloats.cpp"
 #include "../common/utils.cpp"
 #include "../common/Parameters.cpp"
@@ -25,10 +25,13 @@
 
 // Almost duplicate of cppRebalanceTimeAlgoSubPart due to speed
 void harvestRefillStrategy(Parameters parameters, int firstStartDay, int lastStartDay){
+    //static Logger logger;
+    //logger.log("HistogramStrategies: harvestRefillStrategy");
     
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];
     float cutOfValue = 0.0f;
+    float loanPlusRent = parameters.loan;
 
     for (int startDay = firstStartDay; startDay < lastStartDay; startDay++){
 
@@ -51,18 +54,25 @@ void harvestRefillStrategy(Parameters parameters, int firstStartDay, int lastSta
                 }
             }
         }
+
+        if(parameters.includeFeeStatus){
+            loanPlusRent += loanPlusRent * constants::loan_rate;
+        }
         
-        parameters.outData[startDay] = sumFloats(currentValues, parameters.nrOfInstruments);
+        parameters.outData[startDay] = sumFloats(currentValues, parameters.nrOfInstruments) - loanPlusRent;
     }
 }
 
 
 // Almost duplicate of cppHarvestRefillAlgoSubPart due to speed
 void rebalanceTimeStrategy(Parameters parameters, int firstStartDay, int lastStartDay){
+    //static Logger logger;
+    //logger.log("HistogramStrategies: rebalanceTimeStrategy");
     
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];
     float cutOfValue = 0.0f; //TODO move to constants file
+    float loanPlusRent = parameters.loan;
 
     for (int startDay = firstStartDay; startDay < lastStartDay; startDay++){
 
@@ -87,19 +97,27 @@ void rebalanceTimeStrategy(Parameters parameters, int firstStartDay, int lastSta
             }
         }
 
-        parameters.outData[startDay] = sumFloats(currentValues, parameters.nrOfInstruments);
+         if(parameters.includeFeeStatus){
+            loanPlusRent += loanPlusRent * constants::loan_rate;
+        }
+
+        parameters.outData[startDay] = sumFloats(currentValues, parameters.nrOfInstruments) - loanPlusRent;
     }
 }
 
 
 // Almost duplicate of cppHarvestRefillAlgoSubPart due to speed
 void varianceStrategy(Parameters parameters, int firstStartDay, int lastStartDay){
+    //static Logger logger;
+    //logger.log("HistogramStrategies: varianceStrategy");
+
     // Set up needed variables
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];
     bool hasDoneAction[parameters.nrOfInstruments];
     float total_value_list[parameters.volatilityStrategieSampleSize]; 
 
+    float loanPlusRent = parameters.loan;
     float cutOfValue = 0.0f;
     float volatility = 0.0f;
     int startDayForVariance = 0;
@@ -148,7 +166,10 @@ void varianceStrategy(Parameters parameters, int firstStartDay, int lastStartDay
                 }
             }
         }
+         if(parameters.includeFeeStatus){
+            loanPlusRent += loanPlusRent * constants::loan_rate;
+        }
 
-        parameters.outData[startDay] = sumFloats(currentValues, parameters.nrOfInstruments);
+        parameters.outData[startDay] = sumFloats(currentValues, parameters.nrOfInstruments) - loanPlusRent;
     }
 }

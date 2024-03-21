@@ -47,6 +47,8 @@ SPREAD_BULL_8 = 1.0112
 SPREAD_BULL_9 = None  # no data
 SPREAD_BULL_10 = 1.015
 
+LOAN_RATE = 0.02 # 2% each year
+
 class Order(Enum):
     BUY = 1
     SELL = 2

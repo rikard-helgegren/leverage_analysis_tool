@@ -15,7 +15,7 @@ from src.model.Performance_key_values import Performance_Key_values
 from tests.model.helpers.Market_Builder import Market_Builder
 
 import src.constants as constants
-import src.model.common.constants_model as constants_model
+import src.model.constants_model as constants_model
 
 
 class Model_Builder:

@@ -9,7 +9,7 @@
 
 import subprocess
 
-import model.common.constants_model as constants_model
+import model.constants_model as constants_model
 
 # Compile c++ algorithms
 command = ['g++','-O2', '-std=c++11','-pthread','-fPIC','-shared','-o',

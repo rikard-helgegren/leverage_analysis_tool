@@ -42,7 +42,7 @@ namespace constants{
     const float spread_bull_9 = 0.0f; // no data
     const float spread_bull_10 = 1.015f;
 
-
+    const float loan_rate = 0.02f / static_cast<float>(market_days_in_year); // 2% each year
 
 
     std::string portfolio_strategies[5] = {"Hold", "Harvest/Refill", "Rebalance Time", "Do not invest", "Variance Dependent"};

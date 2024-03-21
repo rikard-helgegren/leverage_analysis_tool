@@ -14,7 +14,7 @@
 #include <sstream>
 #include <iterator>
 
-#include "../common/constants.h"
+#include "../constants.h"
 #include "../common/sumFloats.cpp"
 #include "../common/utils.cpp"
 #include "../common/Parameters.cpp"
@@ -32,6 +32,7 @@ void holdStrategy(Parameters parameters){
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];
     float cutOfValue = 0.0f;
+    float loanPlusInterest = parameters.loan;
 
     parameters.outData[0] = 1;
     int startDay = 0;
@@ -51,7 +52,12 @@ void holdStrategy(Parameters parameters){
                 currentValues[item] = cutOfValue;
             }
         }
-        parameters.outData[day+1] = sumFloats(currentValues, parameters.nrOfInstruments);
+
+        if (parameters.includeFeeStatus){
+            loanPlusInterest += loanPlusInterest * constants::loan_rate;
+        }
+
+        parameters.outData[day+1] = sumFloats(currentValues, parameters.nrOfInstruments) - loanPlusInterest;
     }
 }
 
@@ -63,6 +69,7 @@ void harvestRefillStrategy(Parameters parameters){
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];
     float cutOfValue = 0.0f;
+    float loanPlusInterest = parameters.loan;
 
     parameters.outData[0] = 1;
     int startDay = 0;
@@ -86,7 +93,12 @@ void harvestRefillStrategy(Parameters parameters){
                 rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
             }
         }
-        parameters.outData[day+1] = sumFloats(currentValues, parameters.nrOfInstruments);
+
+        if (parameters.includeFeeStatus){
+            loanPlusInterest += loanPlusInterest * constants::loan_rate;
+        }
+
+        parameters.outData[day+1] = sumFloats(currentValues, parameters.nrOfInstruments) - loanPlusInterest;
     }
 }
 
@@ -98,6 +110,7 @@ void rebalanceTimeStrategy(Parameters parameters){
     float currentValues[parameters.nrOfInstruments];
     float referenceValue[parameters.nrOfInstruments];
     float cutOfValue = 0.0f; //TODO move to constants file
+    float loanPlusInterest = parameters.loan;
 
     parameters.outData[0] = 1;
     int startDay = 0;
@@ -122,8 +135,12 @@ void rebalanceTimeStrategy(Parameters parameters){
                 rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
             }
         }
-        //logger.log("graphStrategies: totDays=" + std::to_string(lastDay));
-        parameters.outData[day+1] = sumFloats(currentValues, parameters.nrOfInstruments);
+
+        if (parameters.includeFeeStatus){
+            loanPlusInterest += loanPlusInterest * constants::loan_rate;
+        }
+        
+        parameters.outData[day+1] = sumFloats(currentValues, parameters.nrOfInstruments) - loanPlusInterest;
     }
 }
 
@@ -136,7 +153,7 @@ void doNotInvestStrategy(Parameters parameters){
     int lastDay = parameters.totNrDays;
 
     for (int day = startDay; day < lastDay; day++){
-        parameters.outData[day+1] = 1;//TODO implement with inflation
+        parameters.outData[day+1] = 1;//TODO implement with inflation & loan
     }
 }
 
@@ -150,6 +167,7 @@ void varianceStrategy(Parameters parameters){
     float referenceValue[parameters.nrOfInstruments];
     bool hasDoneAction[parameters.nrOfInstruments];
     float total_value_list[parameters.volatilityStrategieSampleSize]; 
+    float loanPlusInterest = parameters.loan;
 
     float cutOfValue = 0.0f;
     float volatility = 0.0f;
@@ -198,7 +216,12 @@ void varianceStrategy(Parameters parameters){
                 rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
             }
         }
-        parameters.outData[day+1] = sumFloats(currentValues, parameters.nrOfInstruments);
+
+        if (parameters.includeFeeStatus){
+            loanPlusInterest += loanPlusInterest * constants::loan_rate;
+        }
+
+        parameters.outData[day+1] = sumFloats(currentValues, parameters.nrOfInstruments) - loanPlusInterest;
     }   
     
 }

@@ -10,7 +10,7 @@
 import ctypes
 import logging
 
-import src.model.common.constants_model as constants_model
+import src.model.constants_model as constants_model
 import src.constants as constants
 import src.model.common.cpp_adapter as cpp_adapter
 

@@ -9,7 +9,7 @@
 
 import numpy as np
 import logging
-import src.model.common.constants_model as constants_model
+import src.model.constants_model as constants_model
 from src.Config import Config
 
 

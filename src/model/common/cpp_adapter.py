@@ -10,7 +10,7 @@
 import ctypes
 import logging
 
-import src.model.common.constants_model as constants_model
+import src.model.constants_model as constants_model
 import src.constants as constants
 
 # Set up values and types that are to be sent to cpp

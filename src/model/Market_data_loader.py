@@ -13,7 +13,7 @@ from src.managing_data.check_if_data_files_are_clean import check_if_data_files_
 from src.managing_data.sort_file_names               import sort_file_names
 from src.managing_data.read_and_manage_raw_data      import read_and_manage_raw_data
 
-import src.model.common.constants_model as constants_model
+import src.model.constants_model as constants_model
 from src.Config import Config
 
 class Market_data_loader:

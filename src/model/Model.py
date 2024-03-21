@@ -20,7 +20,7 @@ from src.model.common.calculate_common_time_interval    import calculate_common_
 from src.model.histogram.calculate_histograms_strategy  import calculate_histogram
 from src.model.Performance_key_values                   import Performance_Key_values
 
-import src.model.common.constants_model as constants_model
+import src.model.constants_model as constants_model
 import src.constants as constants
 
 class Model:

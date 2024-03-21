@@ -10,7 +10,7 @@
 from src.model.common.is_data_empty import is_data_empty
 from src.model.histogram.histogram_cpp_adapter import rebalance_hist_ctypes
 
-import src.model.common.constants_model as constants_model
+import src.model.constants_model as constants_model
 import src.constants as constants
 import numpy as np
 import logging
@@ -50,6 +50,7 @@ def do_nothing_hist(model):
     proportion_funds     = model.get_proportion_funds()
     proportion_leverage  = model.get_proportion_leverage()
     include_fee_status   = model.get_include_fees_status()
+    loan                 = model.get_loan()
 
     if is_data_empty(instruments_selected, markets_selected):
         model.set_results_for_intervals([])
@@ -73,11 +74,11 @@ def do_nothing_hist(model):
 
         if leverage == 1:
             number_of_non_leveraged_selected += 1
-            performance = improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_status)
+            performance = improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_status, loan)
             outcomes_of_normal_investments.append(performance)
         elif leverage > 1:
             number_of_leveraged_selected += 1
-            performance = improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_status)
+            performance = improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_status, loan)
             outcomes_of_leveraged_investments.append(performance)
         else:
             logging.error(" Non valid leverage used")
@@ -144,7 +145,7 @@ def percentage_change(values):
         changes.append((values[i + 1] - values[i]) / values[i])
     return changes
 
-def improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_status):
+def improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_status, loan):
     """ Uses the fact that lots of calculations in the naive version are repeated.
         This can be avoided if we know that nothing interesting will happen in the
         interval inspected.
@@ -158,6 +159,7 @@ def improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_s
     lowest_value = 1
     lowest_value_index = 0
     has_appended = False
+    lone_plus_rent = (1+loan)**values_to_check - 1 
 
     # Setup, a first run through
     for i, change in enumerate(changes[0:values_to_check]):
@@ -210,6 +212,7 @@ def improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_s
         if not has_appended:
             gains.append(value_thus_far)
 
+    gains = [(gain_item * (1 + loan))- lone_plus_rent for gain_item in gains]
     return gains
 
 def update_value_with_daily_change(current_value, change, leverage, fees_status):
