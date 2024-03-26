@@ -9,6 +9,7 @@
 import logging
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import numpy as np
 
 from kivy.metrics import dp
 from kivy.uix.widget import Widget
@@ -36,6 +37,10 @@ class Line_graph(Widget):
     """class that generate Matplotlib graph."""
     def __init__(self, view, frame):  
         super().__init__()
+        self.values_list = [] 
+        self.time_span_list = [[]]
+        self.buy_sell_log = {}
+        self.time_union = []
 
         self.view = view
 
@@ -54,17 +59,14 @@ class Line_graph(Widget):
 
         self.canvas = self.matplot.figcanvas
 
-        # Place holders
-        self.values = [] 
-        self.time_span = []
-        self.buy_sell_log = {}
 
-    def draw(self, values_list, time_span, buy_sell_log_list):
+    def draw(self, time_union, values_list, time_span_list, buy_sell_log_list):
         logging.debug("View: Line_graph, draw")
         
         self.values_list = values_list
-        self.time_span = time_span        
+        self.time_span_list = time_span_list        
         self.buy_sell_log_list = buy_sell_log_list
+        self.time_union = time_union
 
         self._draw()
 
@@ -80,17 +82,20 @@ class Line_graph(Widget):
 
         #if clear_before_drawing: #TODO implement with this input
         self.axs.clear()
+        self.set_time_on_x_axis(self.axs)
 
         for index in range(len(self.values_list)):
             if self.values_list[index] != []:
-                self.set_time_on_x_axis(self.axs, self.time_span)
-                if self.view.show_trades:
-                    self.set_buy_and_sell_markers(self.axs, self.values_list[index], self.buy_sell_log_list[index])
+                
+                if self.view.show_trades and self.buy_sell_log_list[index] != {}:
+                    self.set_buy_and_sell_markers(self.axs, self.time_span_list[index], self.values_list[index], self.buy_sell_log_list[index])
+                
                 self.line1, = self.axs.plot(
-                    self.values_list[index], 
-                    color = color_graph[index], 
-                    alpha=0.5
-                )
+                        self.time_span_list[index],
+                        self.values_list[index], 
+                        color = color_graph[index], 
+                        alpha = 0.5)
+                
                 plt.tight_layout()
                 clear_canvas = False
         
@@ -99,7 +104,7 @@ class Line_graph(Widget):
         
         self.canvas.draw()
 
-    def set_buy_and_sell_markers(self, axs, values, buy_sell_log):
+    def set_buy_and_sell_markers(self, axs, times, values, buy_sell_log):
         logging.debug("View: Line_graph, set_buy_and_sell_markers")
         circle_size =100
 
@@ -110,11 +115,13 @@ class Line_graph(Widget):
         did_sell=False
 
         for value in buy_sell_log:
-            if value > len(values): # bug from samples size of data to determine behaviour
-                logging.warn("index out off bounds scatter plott" + str(value) + " of " + str(len(values)))
+            if value < times[0] and value > times[-1]: # bug from samples size of data to determine behaviour
+                logging.warn("index out off bounds scatter plott" + str(value) + "MIN " + str(times[0]) + ", MAX " + times[-1])
             else:  
                 x_values.append(value)
-                y_values.append(values[value])
+                #TODO uggly implementation, redo this log in c++ and do it propper with information in data type.
+                ego_index = value - times[0] # not the common date indeces but the one specific to this graph
+                y_values.append(values[ego_index])
                 events = buy_sell_log[value]
                 
                 # Reset
@@ -138,13 +145,13 @@ class Line_graph(Widget):
 
         axs.scatter(x_values, y_values, s=circle_size, c=colors)
 
-    def set_time_on_x_axis(self, ax, time_span):
+    def set_time_on_x_axis(self, ax):
         logging.debug("View: Line_graph, set_time_on_x_axis")
         pos = []
         labels = []
 
         reference_year = ""
-        for i, time in enumerate(time_span):
+        for i, time in enumerate(self.time_union):
             #get first 4 digits, i.e. the year
             year = str(time)[:4]
             if year != reference_year:

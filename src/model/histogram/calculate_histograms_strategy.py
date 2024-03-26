@@ -155,11 +155,11 @@ def improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_s
     gains = []
 
     # calc once:
-    value_thus_far = 1
-    lowest_value = 1
+    value_thus_far = 1 + loan
+    lowest_value = 1 + loan
     lowest_value_index = 0
     has_appended = False
-    lone_plus_rent = (1+loan)**values_to_check - 1 
+    lone_plus_rent = (1+loan)**(values_to_check/constants_model.MARKET_DAYS_IN_YEAR) - 1 
 
     # Setup, a first run through
     for i, change in enumerate(changes[0:values_to_check]):
