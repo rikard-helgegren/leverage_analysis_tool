@@ -9,6 +9,8 @@
 
 import logging
 
+from src.util.make_union import make_union
+
 def draw_line_graph(all_models, view):
     logging.debug("draw_line_graph: draw_line_graph")
     time_interval_list =  [model.get_common_time_interval() for model in all_models]
@@ -26,7 +28,7 @@ def draw_line_graph(all_models, view):
 def interpolate_time_with_values_for_model(time_interval_lists, values_lists):
     logging.debug("draw_line_graph: interpolate_time_with_values_for_model")
      
-    time_union = fix_time_union(time_interval_lists)
+    time_union = make_union(time_interval_lists)
 
     all_time_interval_lists = []
     all_values_lists = []
@@ -61,21 +63,6 @@ def interpolate_time_with_values_for_model(time_interval_lists, values_lists):
         all_values_lists.append(new_value_list)
     
     return [time_union ,all_time_interval_lists, all_values_lists]
-     
-
-def fix_time_union(time_interval_list):
-        logging.debug("draw_line_graph: fix_time_union")
-
-        time_union = []
-
-        for time_span in time_interval_list:
-            for date in time_span:
-                if date not in time_union:
-                    time_union.append(date)
-
-        time_union.sort()
-
-        return time_union
 
 def date_to_union_time_index(time_union, time_lists):
     logging.debug("draw_line_graph: date_to_union_time_index")

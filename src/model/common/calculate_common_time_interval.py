@@ -11,7 +11,7 @@ import logging
 
 from src.model.common.is_data_empty import is_data_empty
 from src.model.common.determine_longest_common_timespan import determine_longest_common_timespan
-
+from src.util.make_union import make_union
 
 def calculate_common_time_interval(model):
     """Returns the time interval for the displayed data"""
@@ -23,10 +23,9 @@ def calculate_common_time_interval(model):
     if is_data_empty(instruments_selected, markets_selected):
         return []
 
-    # Get select data of a random instrument
-    market = markets_selected[instruments_selected[0][0]]
+    all_time_intervals = [market1.get_time_span() for _, market1 in markets_selected.items()]
 
-    time_span = market.get_time_span()
+    time_span = make_union(all_time_intervals)
     
     [start_time, end_time] = determine_longest_common_timespan(instruments_selected, markets_selected)
     

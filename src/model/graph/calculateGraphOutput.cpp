@@ -128,10 +128,9 @@ extern "C" {
                 .build();
         //logger.log("");parameters.printLog(); 
 
-
         launchStartegy(parameters);
 
         //logger.log("calculateGrphOutput: Leaving C++ realm");
-        return outData;
+        return parameters.outData;
     }
 }
