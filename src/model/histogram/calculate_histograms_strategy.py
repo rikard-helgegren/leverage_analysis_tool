@@ -88,17 +88,19 @@ def do_nothing_hist(model):
     combined_leveraged = combine_leveraged_instruments(number_of_leveraged_selected,
                                                        outcomes_of_leveraged_investments)  # Unified list of leveraged instruments
 
+    total_loan = loan * (1+constants_model.LOAN_RATE/constants_model.MARKET_DAYS_IN_YEAR)**values_to_check 
+
     # Combine normal and leveraged
     if number_of_leveraged_selected == 0:
         if np.ndarray == type(combined_normal):
-            return combined_normal.tolist()
+            return [x - total_loan for x in combined_normal.tolist()]
         else:
-            return combined_normal
+            return [x - total_loan for x in combined_normal]
     elif number_of_non_leveraged_selected == 0:
         if np.ndarray == type(combined_leveraged):
-            return combined_leveraged.tolist()
+            return [x - total_loan for x in combined_leveraged.tolist()]
         else:
-            return combined_leveraged
+            return [x - total_loan for x in combined_leveraged]
     else:
         combined_normal_proportionally = np.multiply(proportion_funds,
                                                     combined_normal)  # take in to account how much of total is invested in normal funds
@@ -106,7 +108,8 @@ def do_nothing_hist(model):
                                                        combined_leveraged)  # take in to account how much of total is invested in leveraged markets
         normal_and_leverage_combined = [normal + leverage for normal, leverage in
                                         zip(combined_normal_proportionally, combined_leveraged_proportionally)]
-        return normal_and_leverage_combined
+        
+        return [x - total_loan for x in normal_and_leverage_combined]
 
 def combine_normal_instruments(number_of_non_leveraged_selected, outcomes_of_normal_investments):
     # Unified list of normal instruments
