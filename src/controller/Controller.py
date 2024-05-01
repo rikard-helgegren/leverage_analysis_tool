@@ -58,6 +58,12 @@ class Controller:
         self.selected_model_nbr += 1
         self.models[self.selected_model_nbr].set_markets(Market_data_loader().get_data())
 
+        start_date = self.models[0].get_chosen_start_date_time_limit()
+        end_date = self.models[0].get_chosen_end_date_time_limit()
+        self.set_time_limits_no_calculations(start_date, end_date)
+
+        self.models[self.selected_model_nbr].set_markets(Market_data_loader().get_data())
+
     def remove_model(self, model_index):
         logging.debug("Controller: remove_model index: %r", model_index)
         del self.models[model_index]
@@ -216,18 +222,23 @@ class Controller:
         self.update_selected_model()
         self.update_view()
 
-    def set_time_limits(self, from_time, to_time):
+    def set_time_limits_no_calculations(self, start_date, end_date):
         logging.debug("Controller: set_time_limits")
 
         for model in self.models:
-            model.set_chosen_start_date_time_limit(from_time)
-            model.set_chosen_end_date_time_limit(to_time)
+            model.set_chosen_start_date_time_limit(start_date)
+            model.set_chosen_end_date_time_limit(end_date)
 
             # If time limit is not set, do not use it
-            if from_time == 0 and to_time == 0:
+            if start_date == 0 and end_date == 0:
                 model.set_chosen_time_interval_status(False)
             else:
                 model.set_chosen_time_interval_status(True)
+
+    def set_time_limits(self, start_date, end_date):
+        logging.debug("Controller: set_time_limits")
+
+        self.set_time_limits_no_calculations(start_date, end_date)
 
         self.update_all_models() #TODO can fine tune this, if time is decreased it should be done without calculations
         self.update_view()
