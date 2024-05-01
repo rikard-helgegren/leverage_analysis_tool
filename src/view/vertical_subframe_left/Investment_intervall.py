@@ -21,14 +21,14 @@ class Investment_intervall():
         self.view = view
         self.view.keyboard_observable.subscribe(self)
 
-        self.time_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
+        self.time_frame = BoxLayout(orientation='vertical', size_hint=(.5, 1))
         label = Label(
                 text='Time Investing',
                 pos_hint=constants.center,
-                size_hint=(1, 1),
+                size_hint=(1, .8),
                 **get_style())
         self.time_frame.add_widget(label)
-        self.textinput = TextInput(text='1', multiline=False, size_hint =(.8, .7))
+        self.textinput = TextInput(text='1', multiline=False, size_hint =(1, 1))
         self.textinput.bind(on_text_validate=self.update_years)
         self.time_frame.add_widget(self.textinput)
         self.frame.add_widget(self.time_frame)

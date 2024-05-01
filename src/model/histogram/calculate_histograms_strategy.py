@@ -81,7 +81,7 @@ def do_nothing_hist(model):
             performance = improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_status, loan)
             outcomes_of_leveraged_investments.append(performance)
         else:
-            logging.error(" Non valid leverage used")
+            logging.error("Non valid leverage used")
 
     combined_normal = combine_normal_instruments(number_of_non_leveraged_selected, outcomes_of_normal_investments)
 
@@ -102,10 +102,8 @@ def do_nothing_hist(model):
         else:
             return [x - total_loan for x in combined_leveraged]
     else:
-        combined_normal_proportionally = np.multiply(proportion_funds,
-                                                    combined_normal)  # take in to account how much of total is invested in normal funds
-        combined_leveraged_proportionally = np.multiply(proportion_leverage,
-                                                       combined_leveraged)  # take in to account how much of total is invested in leveraged markets
+        combined_normal_proportionally = np.multiply(proportion_funds, combined_normal)  # take in to account how much of total is invested in normal funds
+        combined_leveraged_proportionally = np.multiply(proportion_leverage, combined_leveraged)  # take in to account how much of total is invested in leveraged markets
         normal_and_leverage_combined = [normal + leverage for normal, leverage in
                                         zip(combined_normal_proportionally, combined_leveraged_proportionally)]
         

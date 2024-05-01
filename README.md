@@ -59,7 +59,7 @@ Metrics of the portfolios performance is displayed on the righten side of the ap
 ![Image of the applicatioin with numbers for refrence of specific parts](/images/GUI-numbers.png)
 
 1. 
-    Leverage slider: A slider, to set what procentage of the whole portfolio that is made out of leveraged products. E.g. a value of 10 menas, 90% is pure index (leverage 1) and 10% is leveraged products (leverage 2 and above).
+    Leverage slider: A slider, to set what procentage of the whole portfolio that is made out of leveraged products. E.g. a value of 10 means, 90% is pure index (leverage 1) and 10% is leveraged products (leverage 2 and above).
 
     Include fees: A toggle, to turn on and off if fees like spread, the daily fee and brokarage should be included in the model.
 

@@ -14,6 +14,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 
 from src.view.styling.light_mode.label import get_style
+from src.view.vertical_subframe_left.Investment_intervall import Investment_intervall
 from datetime import datetime
 from datetime import datetime, timedelta
 
@@ -24,7 +25,13 @@ class Time_limiters_frame():
         self.view.keyboard_observable.subscribe(self)
 
         frame = BoxLayout(size_hint=(1, .15))
-        frame.add_widget(Widget(size_hint=(.8, 1)))  # Space
+
+
+        frame.add_widget(Widget(size_hint=(.5, 1)))  # Space
+
+        view.investment_intervall = Investment_intervall(view, frame)
+
+        frame.add_widget(Widget(size_hint=(.5, 1)))  # Space
 
         self.start_date_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         label = Label(text='Start Date', size_hint=(1, .8), **get_style())
@@ -34,8 +41,8 @@ class Time_limiters_frame():
         self.start_date_frame.add_widget(view.text_box_start_date)
         frame.add_widget(self.start_date_frame)
 
-        self.in_between_dates_frame = BoxLayout(orientation='vertical', size_hint=(.7, 1))
-        self.in_between_dates_frame.add_widget(Widget(size_hint=(1, 1))) # Space
+        self.in_between_dates_frame = BoxLayout(orientation='vertical', size_hint=(.6, 1))
+        self.in_between_dates_frame.add_widget(Widget(size_hint=(.6, 1))) # Space
         frame.add_widget(self.in_between_dates_frame)
 
         self.end_date_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
@@ -48,7 +55,7 @@ class Time_limiters_frame():
         
         super_frame.add_widget(frame)
 
-        frame.add_widget(Widget(size_hint=(.8, 1))) # Space
+        frame.add_widget(Widget(size_hint=(.5, 1))) # Space
 
     def _extract_data(self, Text_box):
         self.extract_data()

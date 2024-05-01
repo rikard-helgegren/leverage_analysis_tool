@@ -22,7 +22,7 @@ class Loan():
         self.view.keyboard_observable.subscribe(self)
         self.frame = frame
 
-        self.loan_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
+        self.loan_frame = BoxLayout(orientation='horizontal', size_hint=(1, 1))
         label = Label(
                 text='Loan',
                 pos_hint=constants.center,

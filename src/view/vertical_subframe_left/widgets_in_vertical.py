@@ -25,10 +25,9 @@ import src.view.constants as constants
 def setup_vertical_frame(view):
     vertical_frame = BoxLayout(orientation='vertical', padding=5, size_hint=(.7, 1))
 
-    vertical_sub_frame_top = BoxLayout(orientation='vertical', size_hint=(1, .5))
+    vertical_sub_frame_top = BoxLayout(orientation='vertical', size_hint=(1, .3))
     view.leverage_slider = Leverage_slider(view, vertical_sub_frame_top)
-    insert_check_box(view, vertical_sub_frame_top)
-    insert_time_and_loan(view, vertical_sub_frame_top)
+    insert_check_box_and_loan(view, vertical_sub_frame_top)
     view.strategy_menue = Strategy_menue(view, vertical_sub_frame_top)
     vertical_frame.add_widget(vertical_sub_frame_top)
 
@@ -39,31 +38,29 @@ def setup_vertical_frame(view):
     view.add_widget(vertical_frame)
 
 
-def insert_check_box(view, frame):
+def insert_check_box_and_loan(view, frame):
     def on_checkbox_active(check_box, state):
         view.update_fee_status(state)
 
+    frame.add_widget(Widget(size_hint=(1, .1))) # empty space on top
 
-    sub_frame = GridLayout(size_hint=(1, .2), cols=4)
 
-    sub_frame.add_widget(Widget()) # empty space left
+    sub_frame = BoxLayout(size_hint=(1, .15), orientation='horizontal')
 
-    view.use_fees = CheckBox(size_hint=(1, 1),active=True)
-    view.use_fees.bind(active=on_checkbox_active)
-    sub_frame.add_widget(view.use_fees)
-    
+    sub_frame.add_widget(Widget(size_hint=(.5, 1))) # empty space left
+
     label = Label(text='Include fees',
             **get_style())
     sub_frame.add_widget(label)
 
-    sub_frame.add_widget(Widget()) # empty space right
+    view.use_fees = CheckBox(size_hint=(.2, 1),active=True)
+    view.use_fees.bind(active=on_checkbox_active)
+    sub_frame.add_widget(view.use_fees)
+    
+    sub_frame.add_widget(Widget(size_hint=(.6, 1))) # empty space middle
 
-    frame.add_widget(sub_frame)
-
-
-def insert_time_and_loan(view, frame):
-    sub_frame = BoxLayout(size_hint=(0.5, .2), pos_hint=constants.center)
-    view.investment_intervall = Investment_intervall(view, sub_frame)
-    sub_frame.add_widget(Widget())
     view.loan = Loan(view, sub_frame)
+
+    sub_frame.add_widget(Widget(size_hint=(.6, 1))) # empty space right
+
     frame.add_widget(sub_frame)

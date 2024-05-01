@@ -41,7 +41,8 @@ class Config():
             'OMXS30',
             'OSEAX',
             'OMXC',
-            'OMXH',
+            'HEX25',
             'DAX',
-            'CAC'
+            'CAC',
+            'Russell2000'
         ]
