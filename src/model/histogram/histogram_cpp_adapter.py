@@ -34,7 +34,7 @@ def rebalance_hist_ctypes(model):
     
     nr_days_in_data = cpp_adapter.get_nbr_of_days_in_investment_items(model)
 
-    size_return_data = nr_days_in_data - model.years_histogram_interval * constants_model.MARKET_DAYS_IN_YEAR
+    size_return_data = nr_days_in_data - int(model.years_histogram_interval * constants_model.MARKET_DAYS_IN_YEAR)
 
     # Do not include days only used for strategy
     if model.get_portfolio_strategy() == constants.PORTFOLIO_STRATEGIES[4]:
@@ -61,6 +61,6 @@ def get_hist_indata(model):
 
     # time horizon days investing
     hist_argtypes_list.append(ctypes.c_int)
-    hist_values_list.append(model.years_histogram_interval*constants_model.MARKET_DAYS_IN_YEAR)
+    hist_values_list.append(int(model.years_histogram_interval*constants_model.MARKET_DAYS_IN_YEAR))
 
     return [hist_argtypes_list, hist_values_list]

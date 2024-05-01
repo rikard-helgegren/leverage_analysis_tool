@@ -61,6 +61,8 @@ class Controller:
         start_date = self.models[0].get_chosen_start_date_time_limit()
         end_date = self.models[0].get_chosen_end_date_time_limit()
         self.set_time_limits_no_calculations(start_date, end_date)
+        investment_interval = self.models[0].get_years_histogram_interval()
+        self.set_time_intreval_no_calculations(investment_interval)
 
         self.models[self.selected_model_nbr].set_markets(Market_data_loader().get_data())
 
@@ -165,10 +167,15 @@ class Controller:
         self.update_selected_model()
         self.update_view()
 
-    def update_years_histogram_interval(self, years):
-        logging.debug("Controller: update_years_histogram_interval")
+    def set_time_intreval_no_calculations(self, years):
+        logging.debug("Controller: set_time_intreval_no_calculations")
         for model in self.models:
             model.set_years_histogram_interval(years)
+
+       
+    def update_years_histogram_interval(self, years):
+        logging.debug("Controller: update_years_histogram_interval")
+        self.set_time_intreval_no_calculations(years)
 
         self.update_all_models()
         self.update_view()

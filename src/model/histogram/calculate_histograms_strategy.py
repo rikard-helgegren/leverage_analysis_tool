@@ -70,7 +70,7 @@ def do_nothing_hist(model):
         market = markets_selected[instrument[0]]
         daily_change = market.get_daily_change()
         cutoff = 0
-        values_to_check = model.years_histogram_interval*constants_model.MARKET_DAYS_IN_YEAR
+        values_to_check = int(model.years_histogram_interval*constants_model.MARKET_DAYS_IN_YEAR)
 
         if leverage == 1:
             number_of_non_leveraged_selected += 1

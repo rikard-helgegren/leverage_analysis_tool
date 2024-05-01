@@ -15,11 +15,20 @@ from kivy.uix.boxlayout import BoxLayout
 from src.view.styling.light_mode.label import get_style
 import src.view.constants as constants
 
+from enum import Enum
+import re
+
+# class syntax
+class Time_format(Enum):
+    MONTHS = 1
+    YEARS = 2
+
 class Investment_intervall():
     def __init__(self, view, frame):
         self.frame = frame
         self.view = view
         self.view.keyboard_observable.subscribe(self)
+        self.value_format = Time_format.YEARS
 
         self.time_frame = BoxLayout(orientation='vertical', size_hint=(.5, 1))
         label = Label(
@@ -28,7 +37,7 @@ class Investment_intervall():
                 size_hint=(1, .8),
                 **get_style())
         self.time_frame.add_widget(label)
-        self.textinput = TextInput(text='1', multiline=False, size_hint =(1, 1))
+        self.textinput = TextInput(text='1 Year', multiline=False, size_hint =(1, 1))
         self.textinput.bind(on_text_validate=self.update_years)
         self.time_frame.add_widget(self.textinput)
         self.frame.add_widget(self.time_frame)
@@ -46,20 +55,85 @@ class Investment_intervall():
                     self.decrease_value(1)
 
     def decrease_value(self, decrease_amount=1):
-        old_value = int(self.textinput._get_text())
+        old_value = self.get_number_from_text()
         new_value = max(old_value - decrease_amount, 1)
-        self.textinput._set_text(str(new_value))
+        self.textinput._set_text(self.get_text_from_number(new_value))
         self.update_years(self.textinput)
     
     def increase_value(self, increase_amount=1):
-        old_value = int(self.textinput._get_text())
+        old_value = self.get_number_from_text()
         new_value = old_value + increase_amount
-        self.textinput._set_text(str(new_value))
+        self.textinput._set_text(self.get_text_from_number(new_value))
         self.update_years(self.textinput)
 
     def update_years(self, text_box):
-        years = text_box._get_text()
-        if years.isdigit():
-            self.view.update_years_histogram_interval(int(years))
+        years = self.get_text_as_years()
+        self.view.update_years_histogram_interval(years)
+
+    def get_text_from_number(self, number):
+        if self.value_format == Time_format.MONTHS:
+            return str(number) + ' Months'
+        if self.value_format == Time_format.YEARS:
+            return str(number) + ' Years'
         else:
-            logging.error('"%r" is not a valid number', years)
+            return str(number)
+
+    def get_number_from_text(self):
+        text = self.textinput._get_text()
+
+        if 'm' in text or 'M' in text:
+            text = re.sub('\D', '', text)
+            if text.isdigit():
+                months = int(text)
+                self.value_format = Time_format.MONTHS
+                return months
+            else:
+                logging.error('"%r" is not a valid number', text)
+                years = 1
+                self.value_format = Time_format.YEARS
+        elif 'y' in text or 'Y' in text:
+            text = re.sub('\D', '', text)
+            if text.isdigit():
+                years = int(text)
+                self.value_format = Time_format.YEARS
+                return years
+            else:
+                logging.error('"%r" is not a valid number', text)
+                years = 1
+                self.value_format = Time_format.YEARS
+        else:
+            self.value_format = Time_format.YEARS
+            if text.isdigit():
+                years = int(text)
+            else:
+                logging.error('"%r" is not a valid number', text)
+                years = 1
+
+        return years
+
+    def get_text_as_years(self):
+        text = self.textinput._get_text()
+
+        if 'm' in text or 'M' in text:
+            text = re.sub('\D', '', text)
+            if text.isdigit():
+                monts = int(text)
+                years = float(monts)/12
+            else:
+                logging.error('"%r" is not a valid number', text)
+                years = 1
+        elif 'y' in text or 'Y' in text:
+            text = re.sub('\D', '', text)
+            if text.isdigit():
+                years = int(text)
+            else:
+                logging.error('"%r" is not a valid number', text)
+                years = 1
+        else:
+            if text.isdigit():
+                years = float(text)
+            else:
+                logging.error('"%r" is not a valid number', text)
+                years = 1
+
+        return years
