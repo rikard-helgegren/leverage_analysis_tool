@@ -32,13 +32,13 @@ class Table_of_instruments():
         self.index_names = []
         self.index_countries = []
 
-        self.table_main_frame = BoxLayout(
-                orientation='vertical', 
-                size_hint=(1, 1))
-        
         self.portfolio_selection_frame = BoxLayout(
                 orientation='horizontal',
                 size_hint=(1, 0.2))
+
+        self.table_main_frame = BoxLayout(
+                orientation='vertical', 
+                size_hint=(1, 1))
         
         Portfolio_tab(self, self.portfolio_selection_frame)
         self.table_main_frame.add_widget(self.portfolio_selection_frame)

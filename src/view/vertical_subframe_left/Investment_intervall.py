@@ -82,7 +82,7 @@ class Investment_intervall():
         text = self.textinput._get_text()
 
         if 'm' in text or 'M' in text:
-            text = re.sub('\D', '', text)
+            text = re.sub('\D', '', text) # remove non digits
             if text.isdigit():
                 months = int(text)
                 self.value_format = Time_format.MONTHS
@@ -92,7 +92,7 @@ class Investment_intervall():
                 years = 1
                 self.value_format = Time_format.YEARS
         elif 'y' in text or 'Y' in text:
-            text = re.sub('\D', '', text)
+            text = re.sub('\D', '', text) # remove non digits
             if text.isdigit():
                 years = int(text)
                 self.value_format = Time_format.YEARS
@@ -115,7 +115,7 @@ class Investment_intervall():
         text = self.textinput._get_text()
 
         if 'm' in text or 'M' in text:
-            text = re.sub('\D', '', text)
+            text = re.sub('\D', '', text) # remove non digits
             if text.isdigit():
                 monts = int(text)
                 years = float(monts)/12
@@ -123,7 +123,7 @@ class Investment_intervall():
                 logging.error('"%r" is not a valid number', text)
                 years = 1
         elif 'y' in text or 'Y' in text:
-            text = re.sub('\D', '', text)
+            text = re.sub('\D', '', text) # remove non digits
             if text.isdigit():
                 years = int(text)
             else:

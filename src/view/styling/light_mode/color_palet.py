@@ -7,19 +7,32 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
+#Gray Tones
 gray_1 = [0.05, 0.05, 0.05, 0.05]
 gray_2 =  [0.1, 0.1, 0.1, 0.1]
 gray_3 = [0.15, 0.15, 0.15, 0.15]
 gray_4 = [0.45, 0.45, 0.45]
+light_gray = [.98, .98, .98]
 
+#Green tones
 green = [0.0, 0.5019607843137255, 0.0, 1.0]
+light_green = [.4,1,.4]
+gray_green = 'C4D5a7'
+
+#Blue Tones
+gray_blue = '90a4ae'
+blue = 'blue'
+
+#Red Tones
+
+
+# Use cases
 default_color = gray_1
 default_selected_color = gray_3
 default_back_ground_color = gray_2
 
-light_gray = [.98, .98, .98]
 
-pie_chart_mean_first_color = [.4,1,.4]
+pie_chart_mean_first_color = light_green
 pie_chart_mean_second_color = [.4,1,.4]
 pie_chart_median_first_color = [232/255, 184/255, 84/255]
 pie_chart_median_second_color = [232/255, 184/255, 84/255]

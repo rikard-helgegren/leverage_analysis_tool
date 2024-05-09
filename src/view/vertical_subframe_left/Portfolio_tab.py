@@ -9,6 +9,8 @@
 
 import logging
 
+from src.view.styling.light_mode.color_palet import *
+
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.button import MDRaisedButton
 from kivy.uix.widget import Widget
@@ -40,15 +42,24 @@ class Portfolio_tab():
             logging.debug("Portfolio_tab: btn_right_press")
             self.select_second()
         
-        self.portfolio1_btn = MDRaisedButton(text ="portfolio 1", size_hint=(1, 0.3))
+        self.portfolio1_btn = MDRaisedButton(
+            text ="portfolio 1",
+            size_hint=(1, 0.3),
+            md_bg_color = blue)
         self.portfolio1_btn.bind(on_press=btn_left_press)
         self.first_frame.add_widget(self.portfolio1_btn)
 
 
-        self.portfolio2_btn = MDRaisedButton(text ="portfolio 2", size_hint=(1, 0.1))
+        self.portfolio2_btn = MDRaisedButton(
+            text ="portfolio 2",
+            size_hint=(1, 0.1),
+            md_bg_color = green)
         self.portfolio2_btn.bind(on_press=btn_right_press)
 
-        self.add_portfolio_btn = MDRaisedButton(text ="+", size_hint=(.5, 0.1))
+        self.add_portfolio_btn = MDRaisedButton(
+            text ="+",
+            size_hint=(.5, 0.1),
+            md_bg_color = 'gray')
         self.add_portfolio_btn.bind(on_press=self.add_portfolio)
         self.second_frame.add_widget(self.add_portfolio_btn)
 
@@ -61,11 +72,15 @@ class Portfolio_tab():
         logging.debug("Portfolio_tab: select_first")
         model_nbr = 0
         self.table_of_instruments.view.set_selected_model(model_nbr)
+        self.portfolio1_btn.md_bg_color = blue
+        self.portfolio2_btn.md_bg_color = gray_green
     
     def select_second(self):
         logging.debug("Portfolio_tab: select_second")
         model_nbr = 1
         self.table_of_instruments.view.set_selected_model(model_nbr)
+        self.portfolio1_btn.md_bg_color = gray_blue
+        self.portfolio2_btn.md_bg_color = green
 
     def add_portfolio(self, value):
         logging.debug("Portfolio_tab: add_portfolio")
