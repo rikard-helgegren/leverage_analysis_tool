@@ -45,7 +45,53 @@ class Controller:
         if self.pause_state:
             logging.info("Model updates are paused")
         else:
-            self.models[self.selected_model_nbr].update_model()
+            #self.models[self.selected_model_nbr].update_model()
+            self.models[self.selected_model_nbr].update_data()
+            self.models[self.selected_model_nbr].update_graph()
+            self.models[self.selected_model_nbr].update_histogram()
+
+    # TODO: visually updating is much slower than the calculation, can this be sped up? 
+    # Right now it's done in two steps but works as if one step.
+    def update_selected_model_and_view(self):
+        logging.debug("Controller: update_selected_model_and_view")
+        
+        if self.pause_state:
+            logging.info("Model updates are paused")
+        else:
+            self.models[self.selected_model_nbr].update_data()
+
+            #graph
+            self.models[self.selected_model_nbr].update_graph()
+            draw_line_graph(self.models, self.view) 
+
+            #histogram 
+            self.models[self.selected_model_nbr].update_histogram()
+            self.draw_histogram() 
+            self.update_table_of_statistics()
+            self.draw_pie_chart()
+        
+
+    def update_all_models_and_view(self):
+        logging.debug("Controller: update_all_models_and_view")
+        
+        if self.pause_state:
+            logging.info("Model updates are paused")
+        else:
+            for model in self.models:
+                model.update_data()
+
+            #graph
+            for model in self.models:
+                model.update_graph()
+            draw_line_graph(self.models, self.view)
+
+            #histogram
+            for model in self.models:
+                model.update_histogram()
+            self.draw_histogram() 
+            self.update_table_of_statistics()
+            self.draw_pie_chart()
+
     
     def update_all_models(self):
         logging.debug("Controller: update_all_models")
@@ -102,16 +148,14 @@ class Controller:
     def update_fee_status(self, checkbutton_fee_state):
         logging.debug("Controller: fee_status: %r", checkbutton_fee_state)
         self.models[self.selected_model_nbr].set_include_fee_status(checkbutton_fee_state)
-        self.update_selected_model()
-
-        self.update_view()
+        
+        self.update_selected_model_and_view()
 
     def set_pause_state(self, pausing_state):
         self.pause_state = pausing_state
 
         if  not self.pause_state:
-            self.update_all_models()
-            self.update_view()
+            self.update_all_models_and_view()
 
     def draw_histogram(self):
         logging.debug("Controller: draw_histogram")
@@ -142,21 +186,18 @@ class Controller:
 
         self.models[self.selected_model_nbr].update_instrument_selected(table_focus_item_data)
 
-        self.update_selected_model()
-        self.update_view()
+        self.update_selected_model_and_view()
 
     def wipe_instrument_selected(self):
         self.models[self.selected_model_nbr].wipe_instrument_selected()
 
-        self.update_selected_model()
-        self.update_view()
+        self.update_selected_model_and_view()
 
     def update_strategy_selected(self, new_strategy):
         logging.debug("Controller: update_strategy_selected")
         self.models[self.selected_model_nbr].set_portfolio_strategy(new_strategy)
 
-        self.update_selected_model()
-        self.update_view()
+        self.update_selected_model_and_view()
 
     def set_update_amount_leverage(self, value_percent):
         logging.debug("Controller: set_update_amount_leverage")
@@ -164,8 +205,7 @@ class Controller:
         self.models[self.selected_model_nbr].set_proportion_leverage(value)
         self.models[self.selected_model_nbr].set_proportion_funds(1-value)
 
-        self.update_selected_model()
-        self.update_view()
+        self.update_selected_model_and_view()
 
     def set_time_intreval_no_calculations(self, years):
         logging.debug("Controller: set_time_intreval_no_calculations")
@@ -177,57 +217,49 @@ class Controller:
         logging.debug("Controller: update_years_histogram_interval")
         self.set_time_intreval_no_calculations(years)
 
-        self.update_all_models()
-        self.update_view()
+        self.update_all_models_and_view()
 
     def update_harvest_point(self, harvest_point):
         logging.debug("Controller: update_harvest_point")
         self.models[self.selected_model_nbr].set_harvest_point(harvest_point)
 
-        self.update_selected_model()
-        self.update_view()
+        self.update_selected_model_and_view()
 
     def update_refill_point(self, refill_point):
         logging.debug("Controller: update_refill_point")
         self.models[self.selected_model_nbr].set_refill_point(refill_point)
 
-        self.update_selected_model()
-        self.update_view()
+        self.update_selected_model_and_view()
 
     def update_rebalance_point(self, rebalance_period):
         logging.debug("Controller: update_rebalance_point")
         self.models[self.selected_model_nbr].set_rebalance_period_months(rebalance_period)
 
-        self.update_selected_model()
-        self.update_view()
+        self.update_selected_model_and_view()
 
     def update_variance_calc_sample_size(self, variance_calc_sample_size):
         logging.debug("Controller: update_variance_calc_sample_size")
         self.models[self.selected_model_nbr].set_variance_calc_sample_size(variance_calc_sample_size)
 
-        self.update_selected_model()
-        self.update_view()
+        self.update_selected_model_and_view()
 
     def update_volatility_strategie_sample_size(self, volatility_strategie_sample_size):
         logging.debug("Controller: update_volatility_strategie_sample_size")
         self.models[self.selected_model_nbr].set_volatility_strategie_sample_size(volatility_strategie_sample_size)
         
-        self.update_selected_model()
-        self.update_view()
+        self.update_selected_model_and_view()
 
     def update_volatility_strategie_level(self, volatility_strategie_level):
         logging.debug("Controller: update_volatility_strategie_level")
         self.models[self.selected_model_nbr].set_volatility_strategie_level(volatility_strategie_level)
         
-        self.update_selected_model()
-        self.update_view()
+        self.update_selected_model_and_view()
 
     def update_loan(self, loan):
         logging.debug("Controller: update_loan")
         self.models[self.selected_model_nbr].set_loan(loan)
 
-        self.update_selected_model()
-        self.update_view()
+        self.update_selected_model_and_view()
 
     def set_time_limits_no_calculations(self, start_date, end_date):
         logging.debug("Controller: set_time_limits")
@@ -246,9 +278,8 @@ class Controller:
         logging.debug("Controller: set_time_limits")
 
         self.set_time_limits_no_calculations(start_date, end_date)
-
-        self.update_all_models() #TODO can fine tune this, if time is decreased it should be done without calculations
-        self.update_view()
+        
+        self.update_all_models_and_view() #TODO can fine tune this, if time is decreased it should be done without calculations
 
     def update_table_of_statistics(self):
         logging.debug("Controller: update_table_of_statistics")

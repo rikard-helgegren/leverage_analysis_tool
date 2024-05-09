@@ -220,7 +220,7 @@ def update_value_with_daily_change(current_value, change, leverage, fees_status)
     """
         Update instrument value with the daily change times its leverage 
     """  
-    logging.debug("Graph utils: update_value_with_daily_change")
+    logging.debug("Calculate_histogram_strategy: update_value_with_daily_change")
     
     oneDayChange = current_value * change * leverage
     

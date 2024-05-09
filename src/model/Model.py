@@ -127,6 +127,18 @@ class Model:
         """ Make the markets selected compatible, and calculate the new results"""
         logging.debug("Model: update_model")
 
+        self.update_data()
+        self.update_graph()
+        self.update_histogram()
+
+    def update_graph(self):
+        calculate_graph(self)
+
+    def update_histogram(self):
+        calculate_histogram(self)
+        self.key_values.update_values(self.results_for_intervals, self.portfolio_results_full_time)
+
+    def update_data(self):
         self.common_time_interval = calculate_common_time_interval(self)  # TODO: doing double work some times
 
         if len(self.common_time_interval) > 0:
@@ -139,13 +151,8 @@ class Model:
         self.markets_selected = fill_gaps_data(self.markets_selected,
                                                first_day,
                                                last_day)
-
+        
         self.markets_selected = calcultate_daily_change(self.markets_selected)
-
-        calculate_graph(self)
-        calculate_histogram(self)
-
-        self.key_values.update_values(self.results_for_intervals, self.portfolio_results_full_time)
 
 
     ######################
