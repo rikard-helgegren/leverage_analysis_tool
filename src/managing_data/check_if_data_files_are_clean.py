@@ -86,7 +86,7 @@ def check_format_first_line(line):
     if words_in_line[0] != "Date":
         return False
 
-    if words_in_line[2] != "Open":
+    if not(words_in_line[1] == "Open" or words_in_line[1] == "Value"):
         return False
 
     return True
@@ -115,7 +115,7 @@ def check_value_on_rows(lines):
             return False
 
         try:
-            float(words_in_line[2])
+            float(words_in_line[1])
         except :
             logging.error("  Market opening value in data file is in wrong format.")
             return False
@@ -142,10 +142,10 @@ def check_daily_change_on_rows(lines):
 
     for line in lines:
         words_in_line = line.split(',')
-        market_values.append(float(words_in_line[2]))
+        market_values.append(float(words_in_line[1]))
 
     for i, value in enumerate(market_values[1:]):
-        change = (int(value)-market_values[i])/market_values[i]
+        change = (float(value)-market_values[i])/market_values[i]
         
         if change<= 1 and change >= -0.6:
             # all is well, do nothing

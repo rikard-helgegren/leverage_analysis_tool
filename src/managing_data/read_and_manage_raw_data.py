@@ -9,7 +9,6 @@
 
 import csv
 from src.model.Market import Market
-#import logging
 from kivy.logger import logging
 
 
@@ -40,11 +39,10 @@ def read_data(data_file_path, market_file_name):
         reader = csv.reader(csvfile,)
         for row in reader:
             time.append(int(row[0]))
-            value.append(float(row[2]))
+            value.append(float(row[1]))
     
     #Reverse, since data is backwards
     time  = time[::-1]
     value = value[::-1]
 
     return [time, value]
-    
