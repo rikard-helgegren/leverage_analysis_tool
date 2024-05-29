@@ -12,6 +12,7 @@ from kivy.uix.boxlayout import BoxLayout
 
 from src.view.vertical_subframe_right.Table_of_statistics import Table_of_statistics
 from src.view.vertical_subframe_right.Pie_frame import Pie_frame
+from src.view.vertical_subframe_right.Pie_frame_risk import Pie_frame_risk
 from src.view.styling.light_mode.color_palet import *
 
 def setup_vertical_frame(view):
@@ -34,7 +35,7 @@ def setup_vertical_frame(view):
     sub_frame_super.add_widget(sub_frame)
 
 
-    view.pie_frame3 = Pie_frame(sub_frame_super, "Risk Index")
+    view.pie_frame3 = Pie_frame_risk(sub_frame_super, "Risk Index")
     view.pie_frame3.set_default_color(pie_chart_risk_first_color)
     view.pie_frame3.set_reference_color(pie_chart_risk_first_color)
     view.pie_frame3.set_max_value(100)

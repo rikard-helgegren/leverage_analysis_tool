@@ -43,7 +43,7 @@ class Pie_frame():
 
         self.canvas = self.matplot.figcanvas
 
-        #REMOVE AFTER CLEAN UP
+        #TODO: REMOVE AFTER CLEAN UP
         self.draw(0)
 
 
@@ -68,17 +68,17 @@ class Pie_frame():
 
     def prepare_chart_with_data(self, data):
         display_text = ""
-        if data>=1:
-            outer_colors = [light_gray, self.default_color, light_gray]
-            vissable_value = max(0, (data - 1) * 100) #Cant draw a negative amount in pie chart
-            invissable_1 = max(0, self.max_value - vissable_value)
-            invissable_2 = invissable_1 + vissable_value
-            
-        else:
-            outer_colors = [light_gray, pie_chart_risk_first_color, light_gray]
-            vissable_value = max(0,(1 - data ) * 100) #Cant draw a negative amount in pie chart
-            invissable_2 = max(0, self.max_value - vissable_value)
-            invissable_1 = vissable_value + invissable_2 
+        #if data>=1:
+        outer_colors = [light_gray, self.default_color, light_gray]
+        vissable_value = max(0, (data - 1) * 100) #Cant draw a negative amount in pie chart
+        invissable_1 = max(0, self.max_value - vissable_value)
+        invissable_2 = invissable_1 + vissable_value
+        
+        #else:
+        #    outer_colors = [light_gray, pie_chart_risk_first_color, light_gray]
+        #    vissable_value = max(0,(1 - data ) * 100) #Cant draw a negative amount in pie chart
+        #    invissable_2 = max(0, self.max_value - vissable_value)
+        #    invissable_1 = vissable_value + invissable_2 
         
         data1 = [invissable_1, vissable_value, invissable_2]
         text_color = outer_colors[1]

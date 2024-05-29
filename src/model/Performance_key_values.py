@@ -114,7 +114,7 @@ class Performance_Key_values:
                 self.percentile_50 = round(np.percentile(performance_intervals, 50), 2)
                 self.percentile_75 = round(np.percentile(performance_intervals, 75), 2)
                 self.percentile_95 = round(np.percentile(performance_intervals, 95), 2)
-                self.risk = round(calc_risk(performance_intervals),2)  # TODO: should be risk neg returns, risk losing 10%, risk losing 50%
+                self.risk = round(calc_wheighted_risk(performance_intervals),3)
 
         # TODO: Have not been properly set yet, some wait for larger code implementations
         self.beta = 0
@@ -349,3 +349,20 @@ def calc_risk(performance_intervals):
         risk = nbr_lost_money/len(performance_intervals)
 
     return risk
+
+def calc_wheighted_risk(performance_intervals):
+    """Calculates risk of losing money times severity"""
+    
+    total_loss_severity = 0
+
+    for investment_return in performance_intervals:
+        if investment_return < 1:
+            if investment_return < 0.01:
+                investment_return = 0.01
+
+            loss_severity = 1/investment_return - 1 # A value between 0 and 99
+            total_loss_severity += loss_severity 
+
+    risk = total_loss_severity/len(performance_intervals)
+
+    return risk * 100 # *100 is onyl to get a prittier value (UX)

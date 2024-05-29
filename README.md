@@ -106,28 +106,31 @@ Various metrics that could be used to make a informed evaluation of the investme
 
 ### Data
 
-Data files are not included due to copyright uncertainties but can be downloaded online, for example at
+The data included are not the historical data of actual markets indeces, but rather fabricated to behave similar to the market index they try to represent.
 
-* https://www.kaggle.com/
+For correct historical data, go to the following websites to download data
 
-The data should be stored as csv files and need to have a specific format, this is checked in the beginning of the program.
+* kaggle.com
+* finance.yahoo.com
+
+The data should be stored as csv files and need to have a specific format, see below. This format is checked in the beginning of the programs execution.
 
 Filename: *Index* *Country*.csv \
-First row: Date, Close, Open \
-Following rows: *Date value*, *Close value*, *Open value*
+First row: Date,Value \
+Following rows: *Date value*,*Market value*
 
 e.g.
 
 SP500 USA.csv
 
 ```
-Date,Close,Open
-20220103,3,2
-20220102,2,1
-20220101,1,0
+Date,Value
+20220103,3
+20220102,2
+20220101,1
 ```
 
-The file path is set in *src/model/common/constants_model.py*
+The file path to the data folder is set in the file *src/model/constants_model.py*
 
 ### Disclaimer
 
