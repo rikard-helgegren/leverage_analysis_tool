@@ -17,6 +17,7 @@ from src.view.styling.light_mode.color_palet import *
 from src.view.Matplot_figure import MatplotFigure
 from src.view.styling.light_mode.pie_chart import get_text_style_no_data
 from src.view.styling.light_mode.pie_chart import get_text_style_data
+from src.view.styling.light_mode.pie_chart import get_text_style_double_data
 from src.view.styling.light_mode.pie_chart import get_title_style
 
 _WITH_SIZE = 0.2
@@ -29,6 +30,7 @@ class Pie_frame():
         self.reference_color = None
         self.max_value = 20
         self.display_ending = ''
+        self.display_text = ''
 
         self.fig, self.axs = plt.subplots(
             sharey=True,
@@ -44,7 +46,7 @@ class Pie_frame():
         self.canvas = self.matplot.figcanvas
 
         #TODO: REMOVE AFTER CLEAN UP
-        self.draw(0)
+        self.draw([])
 
 
     def draw(self, data):
@@ -59,7 +61,7 @@ class Pie_frame():
         #if clear_before_drawing: #TODO implement with this input button
         self.axs.clear()
 
-        if data != 0:
+        if data != []:
             self.prepare_chart_with_data(data)
         else:
             self.prepare_chart_no_data()        
@@ -67,34 +69,65 @@ class Pie_frame():
         self.canvas.draw()
 
     def prepare_chart_with_data(self, data):
-        display_text = ""
-        #if data>=1:
+        self.display_text = ""
         outer_colors = [light_gray, self.default_color, light_gray]
-        vissable_value = max(0, (data - 1) * 100) #Cant draw a negative amount in pie chart
+        text_color = outer_colors[1]
+        self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
+
+        if len(data) == 1:
+            value = max(0, (data[0] - 1) * 100)  #Cant draw a negative amount in pie chart
+            value = int(value + 0.5)
+            self.draw_solo_piechart(value)
+            self.write_solo_number(value)
+
+        elif len(data) == 2:
+            values = [max(0, (value - 1) * 100) for value in data]  #Cant draw a negative amount in pie chart
+            values = [int(value + 0.5) for value in values]
+            self.draw_double_outer_piechart(values[0])
+            self.draw_double_inner_piechart(values[1])
+            self.write_double_number(values)
+            
+        else:
+            logging.error("View: Pie_frame: Cant draw pie charts for this data: ", data)
+
+        self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
+        self.axs.text(0.5, 0.5, self.display_text,
+                color= text_color,
+                transform=self.axs.transAxes,
+                **get_text_style_data())
+
+        plt.tight_layout()
+
+    def draw_solo_piechart(self, value):
+        outer_colors = [light_gray, self.default_color, light_gray]
+        radius= 1
+        width=_WITH_SIZE*2
+        self.draw_general_piechart(value, outer_colors, radius, width)
+
+    def draw_double_outer_piechart(self, value):
+        outer_colors = [light_gray, self.default_color, light_gray]
+        radius= 1
+        width=_WITH_SIZE
+        self.draw_general_piechart(value, outer_colors, radius, width)
+        
+    
+    def draw_double_inner_piechart(self, value):
+        outer_colors = [light_gray, self.reference_color, light_gray]
+        radius= 1-_WITH_SIZE
+        width=_WITH_SIZE
+        self.draw_general_piechart(value, outer_colors, radius, width)
+    
+    def draw_general_piechart(self, value, color, radius, width):
+        vissable_value = value #Cant draw a negative amount in pie chart
         invissable_1 = max(0, self.max_value - vissable_value)
         invissable_2 = invissable_1 + vissable_value
         
-        #else:
-        #    outer_colors = [light_gray, pie_chart_risk_first_color, light_gray]
-        #    vissable_value = max(0,(1 - data ) * 100) #Cant draw a negative amount in pie chart
-        #    invissable_2 = max(0, self.max_value - vissable_value)
-        #    invissable_1 = vissable_value + invissable_2 
-        
         data1 = [invissable_1, vissable_value, invissable_2]
-        text_color = outer_colors[1]
-        vissable_value = int(vissable_value + 0.5) #round to whole integer
-        display_text = display_text + str(vissable_value) + self.display_ending
         
-        self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
-        self.axs.pie(data1, radius=1, colors=(outer_colors),
-            wedgeprops=dict(width=_WITH_SIZE*2, edgecolor='w'))
-        self.axs.text(0.5, 0.5, display_text,
-                color= text_color,
-                transform=self.axs.transAxes,
-                **get_text_style_data()
-        )
-
-        plt.tight_layout()
+        self.axs.pie(data1,
+                radius=radius,
+                colors=(color),
+                wedgeprops=dict(width=width, edgecolor='w'))
 
     def prepare_chart_no_data(self):
         self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
@@ -108,11 +141,35 @@ class Pie_frame():
             colors=([light_gray]),
             wedgeprops=dict(width=_WITH_SIZE*2, edgecolor='w')
         )
-        #self.axs.pie([1], radius=1-_THIN_WITH_SIZE-(_WITH_SIZE*2), colors=(['k']),
-        #    wedgeprops=dict(width=_THIN_WITH_SIZE, edgecolor='w'))
         self.axs.text(0.5, 0.5, '0'+self.display_ending,
                 transform=self.axs.transAxes,
                 **get_text_style_no_data())
+        
+    def write_solo_number(self, value):
+        self.display_text = str(value) + self.display_ending
+
+        self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
+        self.axs.text(0.5, 0.5, self.display_text,
+                color=self.default_color,
+                transform=self.axs.transAxes,
+                **get_text_style_data())
+        
+    def write_double_number(self, values ):
+
+        self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
+        
+        self.display_text1 = str(values[0]) + self.display_ending
+
+        self.axs.text(0.5, 0.65, self.display_text1,
+                color=self.default_color,
+                transform=self.axs.transAxes,
+                **get_text_style_double_data())
+        
+        self.display_text2 = str(values[1]) + self.display_ending
+        self.axs.text(0.5, 0.54, self.display_text2,
+                color=self.reference_color,
+                transform=self.axs.transAxes,
+                **get_text_style_double_data())
 
     def set_default_color(self, color):
         self.default_color = color

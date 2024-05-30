@@ -288,6 +288,6 @@ class Controller:
 
     def draw_pie_chart(self):
         logging.debug("Controller: draw_pie_chart")
-        key_values = self.models[self.selected_model_nbr].key_values.get_all_values()
+        key_values_list = [model.key_values.get_all_values() for model in self.models]
 
-        self.view.update_pie_chart(key_values)
+        self.view.update_pie_chart(key_values_list)

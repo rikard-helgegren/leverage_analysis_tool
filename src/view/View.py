@@ -143,11 +143,16 @@ class View(GridLayout):
         logging.debug("View update_table_of_statistics")
         self.table_of_statistics.set_table(key_values_list)
 
-    def update_pie_chart(self, key_values):
+    def update_pie_chart(self, key_values_list):
         logging.debug("View update_pie_chart")
-        self.pie_frame1.draw(key_values['Mean'])
-        self.pie_frame2.draw(key_values['Median'])
-        self.pie_frame3.draw(key_values['Risk'])
+
+        mean_list = [key_values['Mean'] for key_values in key_values_list]
+        median_list = [key_values['Median'] for key_values in key_values_list]
+        risk_list = [key_values['Risk'] for key_values in key_values_list]
+
+        self.pie_frame1.draw(mean_list)
+        self.pie_frame2.draw(median_list)
+        self.pie_frame3.draw(risk_list)
 
     def update_reference(self):
         logging.debug("View: update_reference")

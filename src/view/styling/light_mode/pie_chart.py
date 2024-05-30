@@ -28,6 +28,15 @@ def get_text_style_data():
     }
     return style
 
+def get_text_style_double_data():
+    style = {
+        "horizontalalignment" : 'center',
+        "verticalalignment" : 'center',
+        "fontsize" : 16,
+        "fontweight" : 'bold'
+    }
+    return style
+
 def get_title_style():
     style = {
         'fontsize': 15,

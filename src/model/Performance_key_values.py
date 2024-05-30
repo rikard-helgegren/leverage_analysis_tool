@@ -114,7 +114,7 @@ class Performance_Key_values:
                 self.percentile_50 = round(np.percentile(performance_intervals, 50), 2)
                 self.percentile_75 = round(np.percentile(performance_intervals, 75), 2)
                 self.percentile_95 = round(np.percentile(performance_intervals, 95), 2)
-                self.risk = round(calc_wheighted_risk(performance_intervals),3)
+                self.risk = round(calc_wheighted_risk(performance_intervals),1)
 
         # TODO: Have not been properly set yet, some wait for larger code implementations
         self.beta = 0
