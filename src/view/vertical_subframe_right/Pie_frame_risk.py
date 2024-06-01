@@ -29,9 +29,6 @@ _THIN_WITH_SIZE=0.05
 class Pie_frame_risk(Pie_frame):
     
     def prepare_chart_with_data(self, data):
-        self.display_text = ""
-        outer_colors = [light_gray, self.default_color, light_gray]
-        text_color = outer_colors[1]
         self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
 
         if len(data) == 1:
@@ -48,21 +45,4 @@ class Pie_frame_risk(Pie_frame):
         else:
             logging.error("View: Pie_frame: Cant draw pie charts for this data: ", data)
 
-        self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
-
         plt.tight_layout()
-
-    def draw_general_piechart(self, value, color, radius, width):
-        vissable_value = max(0, (value)) #Cant draw a negative amount in pie chart
-        invissable_1 = max(0, self.max_value - vissable_value)
-        invissable_2 = invissable_1 + vissable_value
-        
-        data1 = [invissable_1, vissable_value, invissable_2]
-        
-        self.display_text = str(vissable_value) + self.display_ending
-        
-        self.axs.pie(data1,
-                radius=radius,
-                colors=(color),
-                wedgeprops=dict(width=width, edgecolor='w'))
-

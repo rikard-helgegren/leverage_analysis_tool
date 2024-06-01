@@ -30,7 +30,6 @@ class Pie_frame():
         self.reference_color = None
         self.max_value = 20
         self.display_ending = ''
-        self.display_text = ''
 
         self.fig, self.axs = plt.subplots(
             sharey=True,
@@ -69,9 +68,6 @@ class Pie_frame():
         self.canvas.draw()
 
     def prepare_chart_with_data(self, data):
-        self.display_text = ""
-        outer_colors = [light_gray, self.default_color, light_gray]
-        text_color = outer_colors[1]
         self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
 
         if len(data) == 1:
@@ -89,12 +85,6 @@ class Pie_frame():
             
         else:
             logging.error("View: Pie_frame: Cant draw pie charts for this data: ", data)
-
-        self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
-        self.axs.text(0.5, 0.5, self.display_text,
-                color= text_color,
-                transform=self.axs.transAxes,
-                **get_text_style_data())
 
         plt.tight_layout()
 
