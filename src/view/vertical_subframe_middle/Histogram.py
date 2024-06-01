@@ -71,6 +71,14 @@ class Histogram:
         #if clear_before_drawing: #TODO implement with this input button
         self.axs.clear()
 
+        left_edge = 1
+        right_edge = 1.01
+
+        for data in self.data_list:
+            if data != []:
+                left_edge = min(left_edge, min(data))
+                right_edge = max(right_edge, max(data))
+
         for index in range(len(self.data_list)):
             if self.data_list[index] != []:
                 [begining_trailing_values, end_before_trailing_values] = self.point_of_trailing_values(self.data_list[index])
@@ -81,6 +89,7 @@ class Histogram:
                     element = "step",
                     kde=True,
                     bins=200,
+                    binrange=(left_edge, right_edge),
                     discrete=False,
                     ax=self.axs,
                     color = color_graph[index]
