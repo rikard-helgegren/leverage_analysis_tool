@@ -146,9 +146,6 @@ bool checkPreConditionsRebalanceTime(Parameters parameters, int day, int item){
     //static Logger logger;
     //logger.log("utils: checkPreConditionsRebalanceTime");
     //  Rebalance only leveraged                     Need funds to do strategy
-    if (parameters.instrumentLeverages[item] == 1 || parameters.numberOfFunds == 0 ){
-        return false;
-    }
 
     // Check it is the right day for rebalancing
     if (day % parameters.rebalance_period_months != 0  || day == 0){
@@ -164,10 +161,6 @@ bool checkPreConditionsHarvestRefill(Parameters parameters,
                                      int    item){
     //static Logger logger;
     //logger.log("utils: checkPreConditionsHarvestRefill");
-    //  Rebalance only leveraged                      Need funds to do strategy
-    if (parameters.instrumentLeverages[item] == 1 || parameters.numberOfFunds == 0 ){
-        return false;
-    }
 
     // Check if not activating strategy
     if (currentValues[item] < parameters.harvestPoint * referenceValue[item] &&
@@ -201,17 +194,17 @@ void doRebalancing(Parameters &parameters,
             changeInValue = changeInValue*getSpread(parameters.instrumentLeverages[item]);
             }
             
-            if (parameters.graphParameters.isSet){
+            if (parameters.graphParameters.isSet && parameters.instrumentLeverages[item] > 1){
                 parameters.graphParameters.transactionTypes[parameters.graphParameters.positionCounter] = 1; //Buy levrage
             }
         }
         else {
-            if (parameters.graphParameters.isSet){
+            if (parameters.graphParameters.isSet  && parameters.instrumentLeverages[item] > 1){
                 parameters.graphParameters.transactionTypes[parameters.graphParameters.positionCounter] = 2; //Sell leverage
             }
         }
 
-        if (parameters.graphParameters.isSet){
+        if (parameters.graphParameters.isSet  && parameters.instrumentLeverages[item] > 1){
             parameters.graphParameters.transactionDates[parameters.graphParameters.positionCounter] = currentDay;
             parameters.graphParameters.positionCounter = parameters.graphParameters.positionCounter + 1; 
         }
@@ -236,16 +229,8 @@ void rebalanceInvestmentCirtificates(Parameters &parameters,
         int currentDay){
     //static Logger logger;
     //logger.log("utils: rebalanceInvestmentCirtificates");                
-    float totForRebalancing{0.0f};
     float changeInValue{0.0f};
     float totalValue{0.0f};
-
-    // Check total value in funds available for rebalancing
-    for (int instrument = 0; instrument< parameters.nrOfInstruments; instrument++){
-        if (parameters.instrumentLeverages[instrument] == 1){
-            totForRebalancing += currentValues[instrument];
-        }
-    }
 
     // Update reference values
     totalValue = sumFloats(currentValues, parameters.nrOfInstruments);
@@ -253,7 +238,10 @@ void rebalanceInvestmentCirtificates(Parameters &parameters,
         if (parameters.instrumentLeverages[i] > 1){
             referenceValue[i] = (totalValue * parameters.proportionLeverage / static_cast<float>(parameters.numberOfLeveragedInstruments));
         }
+        else{
+              referenceValue[i] = (totalValue * parameters.proportionFunds / static_cast<float>(parameters.numberOfFunds));
+        } 
     }
 
-    doRebalancing(parameters, totForRebalancing, referenceValue, currentValues, item, currentDay);
+    doRebalancing(parameters, totalValue, referenceValue, currentValues, item, currentDay);
 }
