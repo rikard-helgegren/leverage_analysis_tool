@@ -148,7 +148,7 @@ bool checkPreConditionsRebalanceTime(Parameters parameters, int day, int item){
     //  Rebalance only leveraged                     Need funds to do strategy
 
     // Check it is the right day for rebalancing
-    if (day % parameters.rebalance_period_months != 0  || day == 0){
+    if (day % parameters.rebalance_period_months != 0  || day == 0 || parameters.nrOfInstruments == 1){
         return false;
     }
     return true;
@@ -163,8 +163,8 @@ bool checkPreConditionsHarvestRefill(Parameters parameters,
     //logger.log("utils: checkPreConditionsHarvestRefill");
 
     // Check if not activating strategy
-    if (currentValues[item] < parameters.harvestPoint * referenceValue[item] &&
-        currentValues[item] > parameters.refillPoint * referenceValue[item]){
+    if (parameters.nrOfInstruments == 1 || (currentValues[item] < parameters.harvestPoint * referenceValue[item] &&
+        currentValues[item] > parameters.refillPoint * referenceValue[item])){
 
         return false;
     }
@@ -173,35 +173,27 @@ bool checkPreConditionsHarvestRefill(Parameters parameters,
 
 
 void doRebalancing(Parameters &parameters,
-                   float totForRebalancing,
+                   float totalValue,
                    float* referenceValue,
                    float* currentValues,
                    int item,
                    int currentDay){
-    //static Logger logger;
+    static Logger logger;
     //logger.log("utils: doRebalancing");
     
     // Do rebalancing
-    if (totForRebalancing > (referenceValue[item] - currentValues[item])){
-        float changeInValue = currentValues[item] - referenceValue[item];
-        currentValues[item] = referenceValue[item];
+    float changeInValue = currentValues[item] - referenceValue[item];
+    currentValues[item] = referenceValue[item];
+    
+    float epsilon{0.001f};
 
-        if (changeInValue < 0){
-            if (parameters.includeFeeStatus){
+    if (changeInValue < -epsilon){
+        if (parameters.includeFeeStatus){
             changeInValue = changeInValue*getSpread(parameters.instrumentLeverages[item]);
-            }
-            else {
-            changeInValue = changeInValue*getSpread(parameters.instrumentLeverages[item]);
-            }
-            
-            if (parameters.graphParameters.isSet && parameters.instrumentLeverages[item] > 1){
-                parameters.graphParameters.transactionTypes[parameters.graphParameters.positionCounter] = 1; //Buy levrage
-            }
         }
-        else {
-            if (parameters.graphParameters.isSet  && parameters.instrumentLeverages[item] > 1){
-                parameters.graphParameters.transactionTypes[parameters.graphParameters.positionCounter] = 2; //Sell leverage
-            }
+        
+        if (parameters.graphParameters.isSet && parameters.instrumentLeverages[item] > 1){
+            parameters.graphParameters.transactionTypes[parameters.graphParameters.positionCounter] = 1; //Buy levrage
         }
 
         if (parameters.graphParameters.isSet  && parameters.instrumentLeverages[item] > 1){
@@ -209,12 +201,33 @@ void doRebalancing(Parameters &parameters,
             parameters.graphParameters.positionCounter = parameters.graphParameters.positionCounter + 1; 
         }
 
-        for (int instrument = 0; instrument< parameters.nrOfInstruments; instrument++){
-            if (parameters.instrumentLeverages[instrument] == 1){
-                currentValues[instrument] = currentValues[instrument] + (changeInValue / static_cast<float>(parameters.numberOfFunds));
-            }
+
+    }
+    else if (changeInValue > epsilon) {
+        if (parameters.graphParameters.isSet  && parameters.instrumentLeverages[item] > 1){
+            parameters.graphParameters.transactionTypes[parameters.graphParameters.positionCounter] = 2; //Sell leverage
+        }
+
+
+        if (parameters.graphParameters.isSet  && parameters.instrumentLeverages[item] > 1){
+            parameters.graphParameters.transactionDates[parameters.graphParameters.positionCounter] = currentDay;
+            parameters.graphParameters.positionCounter = parameters.graphParameters.positionCounter + 1; 
         }
     }
+    else{
+        logger.log("No action: " + std::to_string(item));
+    }
+    
+    
+    for (int instrument = 0; instrument< parameters.nrOfInstruments; instrument++){
+        if (instrument != item){
+            currentValues[instrument] = currentValues[instrument] +
+                (changeInValue / static_cast<float>(parameters.nrOfInstruments - 1)) *
+                getSpread(parameters.instrumentLeverages[instrument]);
+        }
+    }
+    
+    
 }
 
 
@@ -225,23 +238,42 @@ void doRebalancing(Parameters &parameters,
 void rebalanceInvestmentCirtificates(Parameters &parameters,
         int item,
         float* currentValues,
-        float* referenceValue,
+        float* referenceValues,
         int currentDay){
     //static Logger logger;
     //logger.log("utils: rebalanceInvestmentCirtificates");                
     float changeInValue{0.0f};
     float totalValue{0.0f};
+    float proportionFunds{0.0f};
+    float proportionLeverage{0.0f};
+
+
+    //use right proportions
+    if (parameters.numberOfLeveragedInstruments == 0 ){
+        proportionFunds = 1.0f;
+    }
+    else {
+        proportionFunds = parameters.proportionFunds;
+    }
+
+    if (parameters.numberOfFunds == 0 ){
+        proportionLeverage = 1.0f;
+    }
+    else {
+        proportionLeverage = parameters.proportionLeverage;
+    }
+
 
     // Update reference values
     totalValue = sumFloats(currentValues, parameters.nrOfInstruments);
     for (int i = 0; i< parameters.nrOfInstruments; i++){
         if (parameters.instrumentLeverages[i] > 1){
-            referenceValue[i] = (totalValue * parameters.proportionLeverage / static_cast<float>(parameters.numberOfLeveragedInstruments));
+            referenceValues[i] = (totalValue * proportionLeverage / static_cast<float>(parameters.numberOfLeveragedInstruments));
         }
         else{
-              referenceValue[i] = (totalValue * parameters.proportionFunds / static_cast<float>(parameters.numberOfFunds));
+              referenceValues[i] = (totalValue * proportionFunds / static_cast<float>(parameters.numberOfFunds));
         } 
     }
 
-    doRebalancing(parameters, totalValue, referenceValue, currentValues, item, currentDay);
+    doRebalancing(parameters, totalValue, referenceValues, currentValues, item, currentDay);
 }
