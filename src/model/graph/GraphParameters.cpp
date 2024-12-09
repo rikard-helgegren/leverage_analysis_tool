@@ -15,4 +15,5 @@ class GraphParameters {
         int  positionCounter = 0;
         int* transactionDates;
         int* transactionTypes;
+        //todo add refrence and current value to debug
 };

@@ -33,12 +33,16 @@ void harvestRefillStrategy(Parameters parameters, int firstStartDay, int lastSta
     float cutOfValue = 0.0f;
     float loanPlusRent = parameters.loan;
 
+    int itemsToRebalance[parameters.nrOfInstruments];
+    int itemsReaddyForrebalance = 0;
+
     for (int startDay = firstStartDay; startDay < lastStartDay; startDay++){
 
         setStartValuesOfInstruments(parameters, currentValues);
 
         // Run trough all intervals and add result
         for (int day = startDay; day < (startDay+parameters.histogramParameters.daysInvesting); day++){
+            itemsReaddyForrebalance = 0;
             for (int item =0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
                 
                 // Update with daily change
@@ -50,8 +54,12 @@ void harvestRefillStrategy(Parameters parameters, int firstStartDay, int lastSta
                 }
 
                 if  (checkPreConditionsHarvestRefill(parameters, referenceValue, currentValues,  item)){
-                    rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
+                    itemsToRebalance[itemsReaddyForrebalance] = item;
+                    itemsReaddyForrebalance = itemsReaddyForrebalance + 1;
                 }
+            }
+            if (itemsReaddyForrebalance > 0){
+                rebalanceInvestmentCirtificates(parameters, itemsToRebalance, itemsReaddyForrebalance, currentValues, referenceValue, day);
             }
         }
 
@@ -74,12 +82,16 @@ void rebalanceTimeStrategy(Parameters parameters, int firstStartDay, int lastSta
     float cutOfValue = 0.0f; //TODO move to constants file
     float loanPlusRent = parameters.loan;
 
+    int itemsToRebalance[parameters.nrOfInstruments];
+    int itemsReaddyForrebalance = 0;
+
     for (int startDay = firstStartDay; startDay < lastStartDay; startDay++){
 
         setStartValuesOfInstruments(parameters, currentValues);
 
         // Run trough all intervals and add result
         for (int day = startDay; day < (startDay+parameters.histogramParameters.daysInvesting); day++){
+            itemsReaddyForrebalance = 0;
             for (int item =0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
 
                 // Update with daily change
@@ -91,9 +103,12 @@ void rebalanceTimeStrategy(Parameters parameters, int firstStartDay, int lastSta
                 }
 
                 if (checkPreConditionsRebalanceTime(parameters, day-startDay, item)){
-
-                    rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
+                    itemsToRebalance[itemsReaddyForrebalance] = item;
+                    itemsReaddyForrebalance = itemsReaddyForrebalance + 1;
                 }
+            }
+            if (itemsReaddyForrebalance > 0){
+                rebalanceInvestmentCirtificates(parameters, itemsToRebalance, itemsReaddyForrebalance, currentValues, referenceValue, day);
             }
         }
 
@@ -122,6 +137,9 @@ void varianceStrategy(Parameters parameters, int firstStartDay, int lastStartDay
     float volatility = 0.0f;
     int startDayForVariance = 0;
 
+    int itemsToRebalance[parameters.nrOfInstruments];
+    int itemsReaddyForrebalance = 0;
+
     //Avoid sending negative index values of array
     if (lastStartDay < parameters.volatilityStrategieSampleSize){
         return;
@@ -135,6 +153,7 @@ void varianceStrategy(Parameters parameters, int firstStartDay, int lastStartDay
 
         // Run trough all intervals and add result
         for (int day = startDay; day < (startDay+parameters.histogramParameters.daysInvesting); day++){
+            itemsReaddyForrebalance = 0;
             for (int item =0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
                 
                 if (parameters.instrumentLeverages[item] > 1 ){
@@ -162,8 +181,12 @@ void varianceStrategy(Parameters parameters, int firstStartDay, int lastStartDay
                 }
 
                 if (checkPreConditionsRebalanceTime(parameters, day-startDay, item)){
-                    rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
+                    itemsToRebalance[itemsReaddyForrebalance] = item;
+                    itemsReaddyForrebalance = itemsReaddyForrebalance + 1;
                 }
+            }
+            if (itemsReaddyForrebalance > 0){
+                rebalanceInvestmentCirtificates(parameters, itemsToRebalance, itemsReaddyForrebalance, currentValues, referenceValue, day);
             }
         }
          if(parameters.includeFeeStatus){

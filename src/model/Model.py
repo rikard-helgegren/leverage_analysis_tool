@@ -170,6 +170,8 @@ class Model:
         else:
             self.instruments_selected.append(table_focus_item_data)
 
+        self.sort_instruments_selected() # Vital for visuals
+
         self.update_market_selected()
 
     def wipe_instrument_selected(self):
@@ -186,6 +188,9 @@ class Model:
         for instrument in self.instruments_selected:
             name = instrument[0]
             self.markets_selected[name] = deepcopy(self.markets[name])
+
+    def sort_instruments_selected(self):
+        self.instruments_selected = sorted(self.instruments_selected, key=lambda x: x[1], reverse=True)
 
 
     ##########################

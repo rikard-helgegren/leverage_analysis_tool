@@ -63,7 +63,7 @@ void holdStrategy(Parameters parameters){
 
 // Almost duplicate of cppRebalanceTimeAlgoSubPart due to speed
 void harvestRefillStrategy(Parameters parameters){
-    //static Logger logger;
+    static Logger logger;
     //logger.log("graphStrategies: harvestRefillStrategy");
     
     float currentValues[parameters.nrOfInstruments];
@@ -75,10 +75,14 @@ void harvestRefillStrategy(Parameters parameters){
     int startDay = 0;
     int lastDay = parameters.totNrDays;
 
+    int itemsToRebalance[parameters.nrOfInstruments];
+    int itemsReaddyForrebalance = 0;
+
     setStartValuesOfInstruments(parameters, currentValues);
 
     // Run trough all intervals and add result
     for (int day = startDay; day < lastDay; day++){
+        itemsReaddyForrebalance = 0;
         for (int item =0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
 
             // Update with daily change
@@ -90,8 +94,13 @@ void harvestRefillStrategy(Parameters parameters){
             }
 
             if  (checkPreConditionsHarvestRefill(parameters, referenceValue, currentValues,  item)){
-                rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
+                itemsToRebalance[itemsReaddyForrebalance] = item;
+                itemsReaddyForrebalance = itemsReaddyForrebalance + 1;
             }
+        }
+
+        if (itemsReaddyForrebalance > 0){
+            rebalanceInvestmentCirtificates(parameters, itemsToRebalance, itemsReaddyForrebalance, currentValues, referenceValue, day);
         }
 
         if (parameters.includeFeeStatus){
@@ -116,11 +125,15 @@ void rebalanceTimeStrategy(Parameters parameters){
     int startDay = 0;
     int lastDay = parameters.totNrDays;
 
+    int itemsToRebalance[parameters.nrOfInstruments];
+    int itemsReaddyForrebalance = 0;
+
     
     setStartValuesOfInstruments(parameters, currentValues);
 
     // Run trough all intervals and add result
     for (int day = startDay; day < lastDay; day++){
+        itemsReaddyForrebalance = 0;
         for (int item =0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
 
             // Update with daily change
@@ -132,10 +145,16 @@ void rebalanceTimeStrategy(Parameters parameters){
             }
 
             if (checkPreConditionsRebalanceTime(parameters, day-startDay, item)){
-                rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
+                itemsToRebalance[itemsReaddyForrebalance] = item;
+                itemsReaddyForrebalance = itemsReaddyForrebalance + 1;
             }
         }
 
+        if (itemsReaddyForrebalance > 0){
+            rebalanceInvestmentCirtificates(parameters, itemsToRebalance, itemsReaddyForrebalance, currentValues, referenceValue, day);
+        }
+        
+        
         if (parameters.includeFeeStatus){
             loanPlusInterest += loanPlusInterest * constants::loan_rate;
         }
@@ -177,6 +196,9 @@ void varianceStrategy(Parameters parameters){
     int startDay = parameters.volatilityStrategieSampleSize;
     int lastDay = parameters.totNrDays;
 
+    int itemsToRebalance[parameters.nrOfInstruments];
+    int itemsReaddyForrebalance = 0;
+
     //Avoid sending negative index values of array
     if (lastDay < parameters.volatilityStrategieSampleSize){
         return;
@@ -186,6 +208,7 @@ void varianceStrategy(Parameters parameters){
 
     // Run trough all intervals and add result
     for (int day = startDay; day < lastDay; day++){
+        itemsReaddyForrebalance = 0;
         for (int item =0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
             
             if (parameters.instrumentLeverages[item] > 1 ){
@@ -213,8 +236,14 @@ void varianceStrategy(Parameters parameters){
             }
 
             if (checkPreConditionsRebalanceTime(parameters, day-startDay, item)){
-                rebalanceInvestmentCirtificates(parameters, item, currentValues, referenceValue, day);
+
+                itemsToRebalance[itemsReaddyForrebalance] = item;
+                itemsReaddyForrebalance = itemsReaddyForrebalance + 1;
             }
+        }
+
+        if (itemsReaddyForrebalance > 0){
+            rebalanceInvestmentCirtificates(parameters, itemsToRebalance, itemsReaddyForrebalance, currentValues, referenceValue, day);
         }
 
         if (parameters.includeFeeStatus){

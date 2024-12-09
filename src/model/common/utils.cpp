@@ -178,7 +178,7 @@ void doRebalancing(Parameters &parameters,
                    float* currentValues,
                    int item,
                    int currentDay){
-    static Logger logger;
+    //static Logger logger;
     //logger.log("utils: doRebalancing");
     
     // Do rebalancing
@@ -194,11 +194,8 @@ void doRebalancing(Parameters &parameters,
         
         if (parameters.graphParameters.isSet && parameters.instrumentLeverages[item] > 1){
             parameters.graphParameters.transactionTypes[parameters.graphParameters.positionCounter] = 1; //Buy levrage
-        }
-
-        if (parameters.graphParameters.isSet  && parameters.instrumentLeverages[item] > 1){
             parameters.graphParameters.transactionDates[parameters.graphParameters.positionCounter] = currentDay;
-            parameters.graphParameters.positionCounter = parameters.graphParameters.positionCounter + 1; 
+            parameters.graphParameters.positionCounter = parameters.graphParameters.positionCounter + 1;
         }
 
 
@@ -206,17 +203,13 @@ void doRebalancing(Parameters &parameters,
     else if (changeInValue > epsilon) {
         if (parameters.graphParameters.isSet  && parameters.instrumentLeverages[item] > 1){
             parameters.graphParameters.transactionTypes[parameters.graphParameters.positionCounter] = 2; //Sell leverage
-        }
-
-
-        if (parameters.graphParameters.isSet  && parameters.instrumentLeverages[item] > 1){
             parameters.graphParameters.transactionDates[parameters.graphParameters.positionCounter] = currentDay;
             parameters.graphParameters.positionCounter = parameters.graphParameters.positionCounter + 1; 
         }
     }
-    else{
-        logger.log("No action: " + std::to_string(item));
-    }
+    //else{
+       // logger.log("No action: " + std::to_string(item));
+    //}
     
     
     for (int instrument = 0; instrument< parameters.nrOfInstruments; instrument++){
@@ -236,7 +229,8 @@ void doRebalancing(Parameters &parameters,
  */
 //TODO decompose, and make tests
 void rebalanceInvestmentCirtificates(Parameters &parameters,
-        int item,
+        int* items,
+        int nbrItemsToRebalance,
         float* currentValues,
         float* referenceValues,
         int currentDay){
@@ -275,5 +269,8 @@ void rebalanceInvestmentCirtificates(Parameters &parameters,
         } 
     }
 
-    doRebalancing(parameters, totalValue, referenceValues, currentValues, item, currentDay);
+    for (int itemToRebalance = 0; itemToRebalance < nbrItemsToRebalance; itemToRebalance++ ){
+        doRebalancing(parameters, totalValue, referenceValues, currentValues, items[itemToRebalance], currentDay);
+    }
+    
 }

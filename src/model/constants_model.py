@@ -16,7 +16,7 @@ from enum import Enum
 
 program_folder = os.path.dirname(os.path.realpath(sys.argv[0]))
 #program_folder = os.getcwd())
-data_files_path = program_folder + "/data/market_index_proxies"
+data_files_path = program_folder + "/_data/market_indexes"
 calculate_histogram_output_file = program_folder + '/src/compiled_code/calculateHistogramOutput.so'
 calculate_graph_output_file = program_folder + '/src/compiled_code/calculateGraphOutput.so'
 
