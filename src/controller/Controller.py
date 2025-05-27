@@ -43,7 +43,7 @@ class Controller:
         logging.debug("Controller: update_selected_model")
 
         if self.pause_state:
-            logging.info("Model updates are paused")
+            logging.debug("Model updates are paused")
         else:
             #self.models[self.selected_model_nbr].update_model()
             self.models[self.selected_model_nbr].update_data()
@@ -56,7 +56,7 @@ class Controller:
         logging.debug("Controller: update_selected_model_and_view")
         
         if self.pause_state:
-            logging.info("Model updates are paused")
+            logging.debug("Model updates are paused")
         else:
             self.models[self.selected_model_nbr].update_data()
 
@@ -75,7 +75,7 @@ class Controller:
         logging.debug("Controller: update_all_models_and_view")
         
         if self.pause_state:
-            logging.info("Model updates are paused")
+            logging.debug("Model updates are paused")
         else:
             for model in self.models:
                 model.update_data()

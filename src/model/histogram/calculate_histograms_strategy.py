@@ -88,26 +88,25 @@ def do_nothing_hist(model):
     combined_leveraged = combine_leveraged_instruments(number_of_leveraged_selected,
                                                        outcomes_of_leveraged_investments)  # Unified list of leveraged instruments
 
-    total_loan = loan * (1+constants_model.LOAN_RATE/constants_model.MARKET_DAYS_IN_YEAR)**values_to_check 
 
     # Combine normal and leveraged
     if number_of_leveraged_selected == 0:
         if np.ndarray == type(combined_normal):
-            return [x - total_loan for x in combined_normal.tolist()]
+            return  combined_normal.tolist()
         else:
-            return [x - total_loan for x in combined_normal]
+            return combined_normal
     elif number_of_non_leveraged_selected == 0:
         if np.ndarray == type(combined_leveraged):
-            return [x - total_loan for x in combined_leveraged.tolist()]
+            return  combined_leveraged.tolist()
         else:
-            return [x - total_loan for x in combined_leveraged]
+            return combined_leveraged
     else:
         combined_normal_proportionally = np.multiply(proportion_funds, combined_normal)  # take in to account how much of total is invested in normal funds
         combined_leveraged_proportionally = np.multiply(proportion_leverage, combined_leveraged)  # take in to account how much of total is invested in leveraged markets
         normal_and_leverage_combined = [normal + leverage for normal, leverage in
                                         zip(combined_normal_proportionally, combined_leveraged_proportionally)]
         
-        return [x - total_loan for x in normal_and_leverage_combined]
+        return normal_and_leverage_combined
 
 def combine_normal_instruments(number_of_non_leveraged_selected, outcomes_of_normal_investments):
     # Unified list of normal instruments
@@ -160,7 +159,10 @@ def improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_s
     lowest_value = 1 + loan
     lowest_value_index = 0
     has_appended = False
-    lone_plus_rent = (1+loan)**(values_to_check/constants_model.MARKET_DAYS_IN_YEAR) - 1 
+     
+    #TODO: This value is of, should be the root to be correct.
+    lone_plus_rent = loan * (1+constants_model.LOAN_RATE/constants_model.MARKET_DAYS_IN_YEAR)**values_to_check 
+    
 
     # Setup, a first run through
     for i, change in enumerate(changes[0:values_to_check]):
@@ -213,7 +215,7 @@ def improved_calc(daily_change, leverage, cutoff, values_to_check, include_fee_s
         if not has_appended:
             gains.append(value_thus_far)
 
-    gains = [(gain_item * (1 + loan))- lone_plus_rent for gain_item in gains]
+    gains = [gain_item - lone_plus_rent for gain_item in gains]
     return gains
 
 def update_value_with_daily_change(current_value, change, leverage, fees_status):
@@ -224,7 +226,7 @@ def update_value_with_daily_change(current_value, change, leverage, fees_status)
     
     oneDayChange = current_value * change * leverage
     
-    currencyChange = 1  #TODO requires dat and implementation
+    currencyChange = 1  #TODO requires data and implementation
 
     if (fees_status is True):
         dailyFee = current_value * getFeeLevel(leverage)
