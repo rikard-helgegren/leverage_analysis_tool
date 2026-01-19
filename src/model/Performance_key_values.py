@@ -9,6 +9,7 @@
 
 import logging
 import numpy as np
+from scipy import stats
 import src.constants as constants
 from src.model.common.variance_and_volatility import calc_variance
 
@@ -53,6 +54,7 @@ class Performance_Key_values:
         self.exposure_funds_median = 0
         self.exposure_leverage_median = 0
         self.sharpe_ratio = 0
+        self.trimmed_mean = 0
 
     def update_values(self, performance_intervals, performance_full_time):
         """Update key values du to changes in the model"""
@@ -90,6 +92,7 @@ class Performance_Key_values:
             self.exposure_funds_median = 0
             self.exposure_leverage_median = 0
             self.sharpe_ratio = 0
+            self.trimmed_mean = 0
 
         #calculate key values
         else:
@@ -106,6 +109,7 @@ class Performance_Key_values:
                 self.percentile_50 = 0
                 self.percentile_75 = 0
                 self.percentile_95 = 0
+                self.trimmed_mean = 0
             else:
                 self.mean = round(np.mean(performance_intervals), 2)
                 self.median = round(np.median(performance_intervals), 2)
@@ -115,6 +119,7 @@ class Performance_Key_values:
                 self.percentile_75 = round(np.percentile(performance_intervals, 75), 2)
                 self.percentile_95 = round(np.percentile(performance_intervals, 95), 2)
                 self.risk = round(calc_wheighted_risk(performance_intervals),1)
+                self.trimmed_mean = round(stats.trim_mean(performance_intervals, 0.1), 2)
 
         # TODO: Have not been properly set yet, some wait for larger code implementations
         self.beta = 0
@@ -142,6 +147,7 @@ class Performance_Key_values:
     def get_all_values(self):
         return {"Mean": self.mean,
                 "Median": self.median,
+                "Trimmed mean": self.trimmed_mean,
                 "5th Percentile": self.percentile_5,
                 "25th Percentile": self.percentile_25,
                 "50th Percentile": self.percentile_50,
