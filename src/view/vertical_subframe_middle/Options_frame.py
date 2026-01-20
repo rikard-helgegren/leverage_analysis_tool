@@ -45,6 +45,17 @@ class Options_frame:
 
         options_frame.add_widget(Widget(size_hint=(.2, 1))) # Space
 
+        logPlot_button = MDRectangleFlatIconButton(
+            icon= "chart-line-variant",
+            text= "logPlot",
+            on_release=self.logPlot_button_click,
+            **get_style()
+        )
+        options_frame.add_widget(logPlot_button)
+
+
+        options_frame.add_widget(Widget(size_hint=(.2, 1))) # Space
+
         self.pause_play_frame = BoxLayout(size_hint=(1, 1))
         self.pause_button = MDRectangleFlatIconButton(
             icon= "pause",
@@ -78,6 +89,15 @@ class Options_frame:
     def clean_button_click(self, instance):
         logging.debug("clean_button_click!")
         self.view.wipe_selected_instruments()
+
+    def logPlot_button_click(self, instance):
+        logging.debug("logPlot_button_click!")
+        if self.view.log_plot:
+            self.view.log_plot = False
+        else:
+            self.view.log_plot = True
+        
+        self.view.line_graph.update()
 
     def pause_button_click(self, instance):
         logging.debug("pause_button_click!")

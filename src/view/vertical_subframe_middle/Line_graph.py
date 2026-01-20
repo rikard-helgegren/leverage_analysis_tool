@@ -95,6 +95,9 @@ class Line_graph(Widget):
                         self.values_list[index], 
                         color = color_graph[index], 
                         alpha = 0.5)
+
+                if self.view.log_plot:
+                    self.axs.set_yscale("log")
                 
                 plt.tight_layout()
                 clear_canvas = False

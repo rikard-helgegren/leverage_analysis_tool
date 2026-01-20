@@ -33,6 +33,7 @@ class View(GridLayout):
 
         self.controller = None # Placeholder for controller
         self.show_trades = False
+        self.log_plot = False
         
         self.cols=3
 
