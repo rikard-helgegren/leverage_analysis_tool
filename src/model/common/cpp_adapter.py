@@ -104,6 +104,8 @@ def get_common_indata(model):
         all_values.append(3)
     elif strategy == constants.PORTFOLIO_STRATEGIES[4]:
         all_values.append(4)
+    elif strategy == constants.PORTFOLIO_STRATEGIES[5]:
+        all_values.append(5)
     else:
         logging.warn("Unexpected startegy: " + str(strategy))
 

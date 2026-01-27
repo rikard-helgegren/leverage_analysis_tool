@@ -30,10 +30,10 @@
 #include "graphStrategies.cpp"
 
 
-// Check what startegy to use and launch it
+// Check what strategy to use and launch it
 void launchStartegy(Parameters parameters){
     //static Logger logger;
-    //logger.log("calculateGrphOutput: launchStartegy " + std::to_string(parameters.strategy));
+    //logger.log("calculateGraphOutput: launchStrategy " + std::to_string(parameters.strategy));
     
     if (parameters.strategy == 0){
         holdStrategy(parameters);
@@ -49,6 +49,9 @@ void launchStartegy(Parameters parameters){
     }
     else if (parameters.strategy == 4){
         varianceStrategy(parameters);
+    }
+    else if (parameters.strategy == 5){
+        rebalanceTimeStrategyIncLoan(parameters);
     }
 }
 
@@ -76,8 +79,8 @@ extern "C" {
             int*    transactionDates,
             int*    transactionTypes){
         //static Logger logger;
-        //logger.log("calculateGrphOutput: Entered C++ realm");
-        //logger.log("calculateGrphOutput: calculateGraphOutput");
+        //logger.log("calculateGraphOutput: Entered C++ realm");
+        //logger.log("calculateGraphOutput: calculateGraphOutput");
         
         std::vector<std::string> instrumentNames;
         std::vector<std::string> indexNames;

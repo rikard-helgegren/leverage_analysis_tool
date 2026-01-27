@@ -30,7 +30,7 @@
 #include "../../Logger.cpp"
 
 
-// Check what startegy to use and launch it
+// Check what strategy to use and launch it
 void launchStartegy(Parameters parameters, int firstStartDay, int lastStartDay){
     
     std::vector<std::future<void>> m_Futures; //vector to store async reply
@@ -43,6 +43,9 @@ void launchStartegy(Parameters parameters, int firstStartDay, int lastStartDay){
     }
     else if (parameters.strategy == 4){
         m_Futures.push_back(std::async (std::launch::async, varianceStrategy, parameters, firstStartDay, lastStartDay));
+    }
+    else if (parameters.strategy == 5){
+        m_Futures.push_back(std::async (std::launch::async, rebalanceTimeStrategyIncLoan, parameters, firstStartDay, lastStartDay));
     }
 }
 

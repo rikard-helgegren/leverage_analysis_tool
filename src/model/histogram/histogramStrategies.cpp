@@ -122,6 +122,60 @@ void rebalanceTimeStrategy(Parameters parameters, int firstStartDay, int lastSta
 
 
 // Almost duplicate of cppHarvestRefillAlgoSubPart due to speed
+void rebalanceTimeStrategyIncLoan(Parameters parameters, int firstStartDay, int lastStartDay){
+    //static Logger logger;
+    //logger.log("HistogramStrategies: rebalanceTimeStrategy");
+    
+    float currentValues[parameters.nrOfInstruments];
+    float referenceValue[parameters.nrOfInstruments];
+    float cutOfValue = 0.0f; //TODO move to constants file
+    float loanPlussInterest = parameters.loan;
+
+    int itemsToRebalance[parameters.nrOfInstruments];
+    int itemsReaddyForrebalance = 0;
+    float prevPortfolioValue = 1.0f;
+    float loan = parameters.loan;
+
+    for (int startDay = firstStartDay; startDay < lastStartDay; startDay++){
+
+        setStartValuesOfInstruments(parameters, currentValues);
+        prevPortfolioValue = 1.0f;
+        loan = parameters.loan;
+        loanPlussInterest = parameters.loan;
+
+        // Run trough all intervals and add result
+        for (int day = startDay; day < (startDay+parameters.histogramParameters.daysInvesting); day++){
+            itemsReaddyForrebalance = 0;
+            for (int item =0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
+
+                // Update with daily change
+                currentValues[item] = updateCurrentInstrumentValue(parameters, currentValues, item, day);
+
+                // If instrument reaches cut off level it is sold before going lower
+                if (parameters.instrumentLeverages[item] > 1 && currentValues[item] < cutOfValue){
+                    currentValues[item] = cutOfValue;
+                }
+
+                if (checkPreConditionsRebalanceTimeIncLoan(parameters, day-startDay, item)){
+                    itemsToRebalance[itemsReaddyForrebalance] = item;
+                    itemsReaddyForrebalance = itemsReaddyForrebalance + 1;
+                }
+            }
+            if (itemsReaddyForrebalance > 0){
+                rebalanceInvestmentCirtificatesIncLoan(parameters, itemsToRebalance, itemsReaddyForrebalance, currentValues, referenceValue, day, loan, prevPortfolioValue, loanPlussInterest);
+            }
+        }
+
+         if(parameters.includeFeeStatus){
+            loanPlussInterest += loanPlussInterest * constants::loan_rate;
+        }
+
+        parameters.outData[startDay] = sumFloats(currentValues, parameters.nrOfInstruments) - loanPlussInterest;
+    }
+}
+
+
+// Almost duplicate of cppHarvestRefillAlgoSubPart due to speed
 void varianceStrategy(Parameters parameters, int firstStartDay, int lastStartDay){
     //static Logger logger;
     //logger.log("HistogramStrategies: varianceStrategy");

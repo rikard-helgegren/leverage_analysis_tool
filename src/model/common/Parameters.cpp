@@ -22,6 +22,7 @@
 class Parameters{
     public:
         float   loan;
+        float   loanPlussInterest;
         int*    instrumentLeverages;
         int     nrOfInstruments;
         std::vector<std::string>   instrumentNames;

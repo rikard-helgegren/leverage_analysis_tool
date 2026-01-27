@@ -63,7 +63,7 @@ void holdStrategy(Parameters parameters){
 
 // Almost duplicate of cppRebalanceTimeAlgoSubPart due to speed
 void harvestRefillStrategy(Parameters parameters){
-    static Logger logger;
+    //static Logger logger;
     //logger.log("graphStrategies: harvestRefillStrategy");
     
     float currentValues[parameters.nrOfInstruments];
@@ -162,6 +162,61 @@ void rebalanceTimeStrategy(Parameters parameters){
         parameters.outData[day+1] = sumFloats(currentValues, parameters.nrOfInstruments) - loanPlusInterest;
     }
 }
+
+//TODO: Inclomplete
+void rebalanceTimeStrategyIncLoan(Parameters parameters){
+    //static Logger logger;
+    //logger.log("graphStrategies: rebalanceTimeStrategyIncLoan");
+
+    float currentValues[parameters.nrOfInstruments];
+    float referenceValue[parameters.nrOfInstruments];
+    float cutOfValue = 0.0f; //TODO move to constants file
+    float loanPlusInterest = parameters.loan;
+    float prevPortfolioValue = 1.0f;
+
+    parameters.outData[0] = 1;
+    int startDay = 0;
+    int lastDay = parameters.totNrDays;
+
+    int itemsToRebalance[parameters.nrOfInstruments];
+    int itemsReaddyForrebalance = 0;
+
+    
+    setStartValuesOfInstruments(parameters, currentValues);
+
+    // Run trough all intervals and add result
+    for (int day = startDay; day < lastDay; day++){
+        itemsReaddyForrebalance = 0;
+        for (int item =0; item < parameters.nrOfInstruments; item++){ //TODO: could be faster by sorting and dont do rebalance on leverage 1 by using two loops
+
+            // Update with daily change
+            currentValues[item] = updateCurrentInstrumentValue(parameters, currentValues, item, day);
+
+            // If instrument reaches cut off level it is sold before going lower
+            if (parameters.instrumentLeverages[item] > 1 && currentValues[item] < cutOfValue){
+                currentValues[item] = cutOfValue;
+            }
+
+            if (checkPreConditionsRebalanceTimeIncLoan(parameters, day-startDay, item)){
+                itemsToRebalance[itemsReaddyForrebalance] = item;
+                itemsReaddyForrebalance = itemsReaddyForrebalance + 1;
+            }
+        }
+
+        if (itemsReaddyForrebalance > 0){
+            rebalanceInvestmentCirtificatesIncLoan(parameters, itemsToRebalance, itemsReaddyForrebalance, currentValues, referenceValue, day, parameters.loan, prevPortfolioValue, loanPlusInterest);
+        }
+        
+        
+        if (parameters.includeFeeStatus){
+            loanPlusInterest += loanPlusInterest * constants::loan_rate;
+        }
+
+         
+        parameters.outData[day+1] = sumFloats(currentValues, parameters.nrOfInstruments) - loanPlusInterest;
+    }
+}
+
 
 void doNotInvestStrategy(Parameters parameters){
     //static Logger logger;

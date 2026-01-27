@@ -22,7 +22,7 @@
 
 
 /**
- * In start of new intervall the starting values have to be set
+ * In start of new interval the starting values have to be set
  */
 void setStartValuesOfInstruments(Parameters parameters, float* currentValues){
     //static Logger logger;
@@ -154,6 +154,18 @@ bool checkPreConditionsRebalanceTime(Parameters parameters, int day, int item){
     return true;
 }
 
+bool checkPreConditionsRebalanceTimeIncLoan(Parameters parameters, int day, int item){
+    //static Logger logger;
+    //logger.log("utils: checkPreConditionsRebalanceTime");
+    //  Rebalance only leveraged                     Need funds to do strategy
+
+    // Check it is the right day for rebalancing
+    if (day % parameters.rebalance_period_months != 0  || day == 0 ){
+        return false;
+    }
+    return true;
+}
+
 
 bool checkPreConditionsHarvestRefill(Parameters parameters,
                                      float* referenceValue,
@@ -236,7 +248,6 @@ void rebalanceInvestmentCirtificates(Parameters &parameters,
         int currentDay){
     //static Logger logger;
     //logger.log("utils: rebalanceInvestmentCirtificates");                
-    float changeInValue{0.0f};
     float totalValue{0.0f};
     float proportionFunds{0.0f};
     float proportionLeverage{0.0f};
@@ -260,6 +271,76 @@ void rebalanceInvestmentCirtificates(Parameters &parameters,
 
     // Update reference values
     totalValue = sumFloats(currentValues, parameters.nrOfInstruments);
+    for (int i = 0; i< parameters.nrOfInstruments; i++){
+        if (parameters.instrumentLeverages[i] > 1){
+            referenceValues[i] = (totalValue * proportionLeverage / static_cast<float>(parameters.numberOfLeveragedInstruments));
+        }
+        else{
+              referenceValues[i] = (totalValue * proportionFunds / static_cast<float>(parameters.numberOfFunds));
+        } 
+    }
+
+    for (int itemToRebalance = 0; itemToRebalance < nbrItemsToRebalance; itemToRebalance++ ){
+        doRebalancing(parameters, totalValue, referenceValues, currentValues, items[itemToRebalance], currentDay);
+    }
+    
+}
+
+
+/**
+ * Implement rebalance of investment certificates (items)
+ */
+//TODO decompose, and make tests
+void rebalanceInvestmentCirtificatesIncLoan(Parameters &parameters,
+        int* items,
+        int nbrItemsToRebalance,
+        float* currentValues,
+        float* referenceValues,
+        int currentDay,
+        float& loan,
+        float& prevPortfolioValue,
+        float& loanPlussInterest){
+    //static Logger logger;
+    //logger.log("utils: rebalanceInvestmentCirtificatesIncLoan");                
+    float totalValue{0.0f};
+    float proportionFunds{0.0f};
+    float proportionLeverage{0.0f};
+
+
+    //use right proportions
+    if (parameters.numberOfLeveragedInstruments == 0 ){
+        proportionFunds = 1.0f;
+    }
+    else {
+        proportionFunds = parameters.proportionFunds;
+    }
+
+    if (parameters.numberOfFunds == 0 ){
+        proportionLeverage = 1.0f;
+    }
+    else {
+        proportionLeverage = parameters.proportionLeverage;
+    }
+
+
+    // Update reference values
+    totalValue = sumFloats(currentValues, parameters.nrOfInstruments);
+    
+    //Update loan
+    if (prevPortfolioValue <= 0.001f){ // Avoid division by zero
+        loan = 0.0f;
+    }
+    else{
+        float loanChange = (totalValue - loan)/ prevPortfolioValue;
+        float prevLoan = loan;
+        float newLoan = loanChange * prevLoan;
+        totalValue = totalValue - prevLoan + newLoan;
+        loanPlussInterest = loanPlussInterest - prevLoan + newLoan;
+        loan = newLoan;
+        prevPortfolioValue = totalValue - loan;
+    }
+
+
     for (int i = 0; i< parameters.nrOfInstruments; i++){
         if (parameters.instrumentLeverages[i] > 1){
             referenceValues[i] = (totalValue * proportionLeverage / static_cast<float>(parameters.numberOfLeveragedInstruments));

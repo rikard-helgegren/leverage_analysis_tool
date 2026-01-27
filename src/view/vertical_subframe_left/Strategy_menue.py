@@ -94,6 +94,7 @@ class Strategy_menue:
         strategy_frames[constants.PORTFOLIO_STRATEGIES[2]] = self.view.rebalance_strategy.get_frame()
         strategy_frames[constants.PORTFOLIO_STRATEGIES[3]] = BoxLayout(size_hint=(0.0, 0.1))
         strategy_frames[constants.PORTFOLIO_STRATEGIES[4]] = self.view.variance_strategy.get_frame()
+        strategy_frames[constants.PORTFOLIO_STRATEGIES[5]] = self.view.rebalance_strategy.get_frame()
 
         return strategy_frames
     
@@ -125,6 +126,8 @@ class Strategy_menue:
             self.view.variance_strategy.set_sample_size_variance(strategy_parameters['variance_calc_sample_size'])
             self.view.variance_strategy.set_sample_size_decision(strategy_parameters['volatility_strategie_sample_size'])
             self.view.variance_strategy.set_volatillaty_trigger(strategy_parameters['volatility_strategie_level'])
+        elif strategy == constants.PORTFOLIO_STRATEGIES[5]:
+            self.view.rebalance_strategy.set_value(strategy_parameters['rebalance_period_months'])
 
         else:
             logging.warn("Not accounted for strategy: " + str(strategy))
