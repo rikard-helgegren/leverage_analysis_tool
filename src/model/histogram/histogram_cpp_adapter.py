@@ -16,6 +16,7 @@ import src.model.common.cpp_adapter as cpp_adapter
 
 
 def rebalance_hist_ctypes(model):
+    logging.debug("histogram_cpp_adapter: rebalance_hist_ctypes")
 
     ## C++ interactions ##
     cpp_compiled_so_file = constants_model.calculate_histogram_output_file

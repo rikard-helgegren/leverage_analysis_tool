@@ -11,3 +11,6 @@ Changed harvest/refill algorithm:
     Change: from Python to C++ with ctypes and multithread
     speed up: 14s --> 0.05
 
+Union of time intervals:
+    Change: from list operations to set operations
+    Speed up: 5s --> 0.08s 

@@ -9,17 +9,10 @@
 
 import logging
 
-#TODO:Can probably be time improved (using +, sets, and union)
 def make_union(time_interval_list):
-        logging.debug("util: make_union")
+    logging.debug("util: make_union")
 
-        time_union = []
+    time_union = sorted(set(date for time_span in time_interval_list for date in time_span))
 
-        for time_span in time_interval_list:
-            for date in time_span:
-                if date not in time_union:
-                    time_union.append(date)
+    return time_union
 
-        time_union.sort()
-
-        return time_union

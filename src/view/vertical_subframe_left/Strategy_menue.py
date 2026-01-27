@@ -23,6 +23,9 @@ class Strategy_menue:
     def __init__(self, view, frame):
         self.view = view
 
+        # When True, ignore spinner callbacks caused by programmatic updates
+        self._suppress_strategy_callback = False
+
         self.strategy_main_frame = BoxLayout(
                 orientation='vertical', 
                 size_hint=(1, 0.32))
@@ -44,7 +47,6 @@ class Strategy_menue:
             size_hint=(self.menue_width, self.menue_hight),
             pos_hint=constants_view.center
         )
-
         self.drop_down_menue.bind(text=self.update_strategy_using_menue)
         self.strategy_main_frame.add_widget(self.drop_down_menue)
 
@@ -57,6 +59,11 @@ class Strategy_menue:
 
 
     def update_strategy_using_menue(self, spinner, new_strategy):
+        # Ignore programmatic changes (set by `set_strategy_by_model`) to avoid
+        # triggering controller updates. Only propagate user interactions.
+        if self._suppress_strategy_callback:
+            return
+
         self.update_strategy(new_strategy)
         self.view.update_strategy_selected(new_strategy)
 
@@ -93,7 +100,14 @@ class Strategy_menue:
     def set_strategy_by_model(self, strategy, strategy_parameters):
         logging.debug("Strategy_menue: set_strategy_by_model " + str(strategy))
 
-        self.drop_down_menue.text = strategy
+        # Update the spinner without firing the user-change callback.
+        self._suppress_strategy_callback = True
+        try:
+            self.drop_down_menue.text = strategy
+        finally:
+            self._suppress_strategy_callback = False
+
+        # Update UI to reflect strategy selection (no controller call)
         self.update_strategy(strategy)
 
         variable = constants.PORTFOLIO_STRATEGIES[0]

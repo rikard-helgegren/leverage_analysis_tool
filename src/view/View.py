@@ -66,7 +66,7 @@ class View(GridLayout):
         logging.debug("View: update_portfolio_view")
         self.leverage_slider.set_leverage(leverage)
         self.strategy_menue.set_strategy_by_model(strategy, strategy_parameters)
-        self.table_of_instruments.clear_old_and_set_new_selected_instruments(instruments_selected, model_nbr)
+        self.table_of_instruments.update_selected_view(model_nbr)
         self.loan.set_loan(loan)
         self.use_fees.active = include_fees_status
 

@@ -134,7 +134,7 @@ def get_nbr_of_days_in_investment_items(model):
     """ All items have the same number of days.
         This function takes the first item and returns its number of days
     """
-    logging.debug("get_nbr_of_days_in_investment_items: ")
+    logging.debug("Cpp_adapter: get_nbr_of_days_in_investment_items: ")
     #instruments_selected = model.get_instruments_selected()
     markets_selected = model.get_markets_selected()
     #a_instrument = instruments_selected[0]

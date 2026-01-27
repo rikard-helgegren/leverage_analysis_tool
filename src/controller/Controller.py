@@ -7,6 +7,12 @@
 # distribute this software, either in source code form or as a compiled binary, for any purpose,
 # commercial or non-commercial, by any means.
 
+# src/controller/Controller.py
+from kivy.clock import Clock
+from kivy.core.window import Window
+import threading
+import logging
+
 import logging
 import src.constants as constants
 
@@ -21,6 +27,7 @@ class Controller:
         and sending the right information to the view.
     """
     def __init__(self, view):
+        logging.debug("Controller: __init__")
         model = Model.Model() #TODO remove the need of a model by default
         model.set_markets(Market_data_loader().get_data())
         self.models = [model] 
@@ -31,6 +38,8 @@ class Controller:
 
         self.set_table_of_instruments()
         self.set_table_of_statistics()
+
+        self.is_computing = False
 
     def update_view(self):
         logging.debug("Controller: update_view")
@@ -55,21 +64,40 @@ class Controller:
     def update_selected_model_and_view(self):
         logging.debug("Controller: update_selected_model_and_view")
         
-        if self.pause_state:
-            logging.debug("Model updates are paused")
-        else:
+        if self.pause_state or self.is_computing:
+            logging.debug("Model updates are paused or already computing")
+            return
+        
+        self.is_computing = True
+        # Run computation in background thread
+        thread = threading.Thread(target=self._compute_and_update)
+        thread.daemon = True
+        thread.start()
+    
+    def _compute_and_update(self):
+        """Heavy computation in background thread"""
+        logging.debug("Controller: _compute_and_update")
+        try:
             self.models[self.selected_model_nbr].update_data()
-
-            #graph
             self.models[self.selected_model_nbr].update_graph()
-            draw_line_graph(self.models, self.view) 
-
-            #histogram 
             self.models[self.selected_model_nbr].update_histogram()
-            self.draw_histogram() 
+            
+            # Schedule UI update on main Kivy thread
+            Clock.schedule_once(self._update_ui_on_main_thread, 0)
+        except Exception as e:
+            logging.error(f"Error during background computation: {e}")
+            Clock.schedule_once(lambda dt: setattr(self, 'is_computing', False), 0)
+    
+    def _update_ui_on_main_thread(self, dt):
+        """Update UI safely on main thread"""
+        logging.debug("Controller: _update_ui_on_main_thread")
+        try:
+            draw_line_graph(self.models, self.view)
+            self.draw_histogram()
             self.update_table_of_statistics()
             self.draw_pie_chart()
-        
+        finally:
+            self.is_computing = False    
 
     def update_all_models_and_view(self):
         logging.debug("Controller: update_all_models_and_view")
@@ -152,6 +180,7 @@ class Controller:
         self.update_selected_model_and_view()
 
     def set_pause_state(self, pausing_state):
+        logging.debug("Controller: set_pause_state: %r", pausing_state)
         self.pause_state = pausing_state
 
         if  not self.pause_state:
@@ -189,6 +218,7 @@ class Controller:
         self.update_selected_model_and_view()
 
     def wipe_instrument_selected(self):
+        logging.debug("Controller: wipe_instrument_selected")
         self.models[self.selected_model_nbr].wipe_instrument_selected()
 
         self.update_selected_model_and_view()
