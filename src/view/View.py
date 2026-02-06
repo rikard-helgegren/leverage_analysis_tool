@@ -60,22 +60,12 @@ class View(GridLayout):
         otherwise reset to the default arrow. This method swallows exceptions
         so it is safe to call from scheduled UI callbacks.
         """
-        try:
-            if loading:
-                try:
-                    Window.set_system_cursor('wait')
-                except Exception:
-                    try:
-                        Window.set_system_cursor('watch')
-                    except Exception:
-                        pass
-            else:
-                try:
-                    Window.set_system_cursor('arrow')
-                except Exception:
-                    pass
-        except Exception:
-            pass
+        logging.debug("View: set_loading_cursor, loading: %s", loading)
+        if loading:
+            Window.set_system_cursor('wait')   
+        else:
+            Window.set_system_cursor('arrow')
+                
 
     def update_portfolio_view(self,
             leverage,

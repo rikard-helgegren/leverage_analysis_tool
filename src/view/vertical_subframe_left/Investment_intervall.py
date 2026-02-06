@@ -25,6 +25,7 @@ class Time_format(Enum):
 
 class Investment_intervall():
     def __init__(self, view, frame):
+        logging.debug("View: Investment_intervall: __init__")
         self.frame = frame
         self.view = view
         self.view.keyboard_observable.subscribe(self)
@@ -43,6 +44,7 @@ class Investment_intervall():
         self.frame.add_widget(self.time_frame)
 
     def key_event(self, key, mouse_position):
+        logging.debug("View: Investment_intervall: key_event")
         if self.time_frame.collide_point(mouse_position[0], mouse_position[1]):
             match key:
                 case 273: #Up
@@ -55,22 +57,26 @@ class Investment_intervall():
                     self.decrease_value(1)
 
     def decrease_value(self, decrease_amount=1):
+        logging.debug("View: Investment_intervall: decrease_value")
         old_value = self.get_number_from_text()
         new_value = max(old_value - decrease_amount, 1)
         self.textinput._set_text(self.get_text_from_number(new_value))
         self.update_years(self.textinput)
     
     def increase_value(self, increase_amount=1):
+        logging.debug("View: Investment_intervall: increase_value")
         old_value = self.get_number_from_text()
         new_value = old_value + increase_amount
         self.textinput._set_text(self.get_text_from_number(new_value))
         self.update_years(self.textinput)
 
     def update_years(self, text_box):
+        logging.debug("View: Investment_intervall: update_years")
         years = self.get_text_as_years()
         self.view.update_years_histogram_interval(years)
 
     def get_text_from_number(self, number):
+        logging.debug("View: Investment_intervall: get_text_from_number")
         if self.value_format == Time_format.MONTHS:
             return str(number) + ' Months'
         if self.value_format == Time_format.YEARS:
@@ -79,6 +85,7 @@ class Investment_intervall():
             return str(number)
 
     def get_number_from_text(self):
+        logging.debug("View: Investment_intervall: get_number_from_text")
         text = self.textinput._get_text()
 
         if 'm' in text or 'M' in text:
@@ -112,6 +119,7 @@ class Investment_intervall():
         return years
 
     def get_text_as_years(self):
+        logging.debug("View: Investment_intervall: get_text_as_years")
         text = self.textinput._get_text()
 
         if 'm' in text or 'M' in text:

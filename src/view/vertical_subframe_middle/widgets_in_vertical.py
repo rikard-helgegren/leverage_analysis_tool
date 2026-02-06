@@ -16,6 +16,7 @@ from src.view.vertical_subframe_middle.Line_graph import Line_graph
 from src.view.vertical_subframe_middle.Time_limiters_frame import Time_limiters_frame
 
 def setup_vertical_frame(view):
+    logging.debug("View: setup_vertical_frame")
     frame = BoxLayout(orientation='vertical', padding=5)
 
     view.options_frame = Options_frame(view, frame)

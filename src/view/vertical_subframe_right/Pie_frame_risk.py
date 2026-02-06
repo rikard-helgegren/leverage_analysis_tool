@@ -29,6 +29,7 @@ _THIN_WITH_SIZE=0.05
 class Pie_frame_risk(Pie_frame):
     
     def prepare_chart_with_data(self, data):
+        logging.debug("View: Pie_frame_risk: prepare_chart_with_data")
         self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
 
         if len(data) == 1:

@@ -97,7 +97,7 @@ class Performance_Key_values:
         #calculate key values
         else:
             self.variance = round(calc_variance(performance_full_time), 2)
-            self.volatility = round(np.sqrt(calc_variance(performance_full_time)), 2)
+            self.volatility = round(np.sqrt(calc_variance(performance_full_time)*10), 2) # *10 for clearer figures (UX)
             self.worst_fall_10_days = round(calc_worst_fall_X_days(performance_full_time, 10), 2)
             self.worst_fall_30_days = round(calc_worst_fall_X_days(performance_full_time, 30), 2)
 
@@ -160,8 +160,8 @@ class Performance_Key_values:
                 "Alpha": self.alpha,
                 "Severity": self.severity,
                 "Fees Payed": self.fees_payed,
-                "Worst fall in 10 days": str(self.worst_fall_10_days*constants.CONVERT_PERCENT)+"%",
-                "Worst fall in 30 days": str(self.worst_fall_30_days*constants.CONVERT_PERCENT)+"%",
+                "Worst fall in 10 days": str(np.round(self.worst_fall_10_days*constants.CONVERT_PERCENT, 2))+"%",
+                "Worst fall in 30 days": str(np.round(self.worst_fall_30_days*constants.CONVERT_PERCENT, 2))+"%",
                 "RPI": self.rpi,
                 "APR": self.apr,
                 "Boiling band": self.boiling_band,

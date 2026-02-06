@@ -23,6 +23,7 @@ from src.view.styling.light_mode.label import get_style
 import src.view.constants as constants
 
 def setup_vertical_frame(view):
+    logging.debug("View: setup_vertical_frame")
     vertical_frame = BoxLayout(orientation='vertical', padding=5, size_hint=(.7, 1))
 
     vertical_sub_frame_top = BoxLayout(orientation='vertical', size_hint=(1, .3))
@@ -39,6 +40,7 @@ def setup_vertical_frame(view):
 
 
 def insert_check_box_and_loan(view, frame):
+    logging.debug("View: insert_check_box_and_loan")
     def on_checkbox_active(check_box, state):
         view.update_fee_status(state)
 

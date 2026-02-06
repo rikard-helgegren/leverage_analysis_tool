@@ -19,6 +19,7 @@ from src.view.utils import is_number
 
 
 class Rebalance_strategy():
+    logging.debug("View: Rebalance_strategy: class definition")
     def __init__(self, view):
         self.view = view
         self.view.keyboard_observable.subscribe(self)
@@ -41,9 +42,11 @@ class Rebalance_strategy():
         self.rebalance_time_frame.add_widget(self.text_box)
 
     def get_frame(self):
+        logging.debug("View: Rebalance_strategy: get_frame")
         return self.rebalance_time_frame
     
     def key_event(self, key, mouse_position):
+        logging.debug("View: Rebalance_strategy: key_event")
         if self.rebalance_time_frame.collide_point(mouse_position[0], mouse_position[1]):
             match key:
                 case 273: #Up
@@ -56,24 +59,28 @@ class Rebalance_strategy():
                     self.decrease_value(1)
 
     def decrease_value(self, decrease_amount=1):
+        logging.debug("View: Rebalance_strategy: decrease_value")
         old_value = int(self.text_box._get_text())
         new_value = max(old_value - decrease_amount, 1)
         self.text_box._set_text(str(new_value))
         self.update_rebalance_point(self.text_box)
     
     def increase_value(self, increase_amount=1):
+        logging.debug("View: Rebalance_strategy: increase_value")
         old_value = int(self.text_box._get_text())
         new_value = old_value + increase_amount
         self.text_box._set_text(str(new_value))
         self.update_rebalance_point(self.text_box)
 
     def set_value(self, new_value):
+        logging.debug("View: Rebalance_strategy: set_value")
         if is_number(new_value):
             self.text_box._set_text(str(new_value))
         else:
             logging.error('"%r" is not a number', new_value)
         
     def update_rebalance_point(self, text_box):
+        logging.debug("View: Rebalance_strategy: update_rebalance_point")
         rebalnce_intervall = text_box._get_text()
         if is_number(rebalnce_intervall):
             self.view.update_rebalnce_intervall(int(rebalnce_intervall))

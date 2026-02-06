@@ -7,3 +7,5 @@ tests.out
 .DS_Store
 C++_log.txt
 venv/
+.coverage
+

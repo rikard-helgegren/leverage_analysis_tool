@@ -20,6 +20,7 @@ from src.view.styling.light_mode.label import get_style
 
 class Leverage_slider():
     def __init__(self, view, frame):
+        logging.debug("View: Leverage_slider: __init__")
         self.view = view
         self.view.keyboard_observable.subscribe(self)
         self.sub_frame = GridLayout(size_hint=(1, .2), cols=1, )
@@ -33,7 +34,7 @@ class Leverage_slider():
         self.sub_frame.add_widget(Widget(size_hint=(.3, .15)))  #Space
 
         sub_sub_frame = BoxLayout(size_hint=(1, .1) )
-        self.slider = Slider(value=10, size_hint =(1, 1))
+        self.slider = Slider(value=10, size_hint =(1, 1), value_track=True, value_track_color=[0, 0, 0, 1])
         self.slider.bind(value=self.on_slider_change)
         sub_sub_frame.add_widget(self.slider)
 
@@ -45,6 +46,7 @@ class Leverage_slider():
         frame.add_widget(self.sub_frame)
     
     def key_event(self, key, mouse_position):
+        logging.debug("View: Leverage_slider: key_event")
         if self.sub_frame.collide_point(mouse_position[0], mouse_position[1]):
             match key:
                 case 273: #Up
@@ -57,20 +59,24 @@ class Leverage_slider():
                     self.decrease_value(1)
 
     def decrease_value(self, decrease_amount=1):
+        logging.debug("View: Leverage_slider: decrease_value")
         old_value = self.slider.value
         new_value = max(old_value - decrease_amount, 0)
         self.slider.value = new_value
     
     def increase_value(self, increase_amount=1):
+        logging.debug("View: Leverage_slider: increase_value")
         old_value = self.slider.value
         new_value = min(old_value + increase_amount, 100)
         self.slider.value = new_value
 
     def on_slider_change(self, instance, value):
+        logging.debug("View: Leverage_slider: on_slider_change")
         self.slide_counter.text=str(int(value))
         self.view.update_amount_leverage(int(value))
 
     def set_leverage(self, new_value):
+        logging.debug("View: Leverage_slider: set_leverage")
         def convert_to_precentage(new_value):
             return int(new_value*100 + 0.5)
         self.slider.value = convert_to_precentage(new_value)

@@ -8,12 +8,8 @@
 # commercial or non-commercial, by any means.
 
 # src/controller/Controller.py
-from kivy.clock import Clock
-from kivy.core.window import Window
-import threading
 import logging
 
-import logging
 import src.constants as constants
 
 from src.model.Market_data_loader import Market_data_loader
@@ -69,54 +65,48 @@ class Controller:
             return
         
         self.is_computing = True
-        # Show loading cursor in the UI (must run on main thread)
-        try:
-            if self.view is not None:
-                Clock.schedule_once(lambda dt: self.view.set_loading_cursor(True), 0)
-        except Exception:
-            pass
-        # Run computation in background thread
-        thread = threading.Thread(target=self._compute_and_update)
-        thread.daemon = True
-        thread.start()
+        self.view.set_loading_cursor(True)
+
+        # Run computation synchronously (no threading)
+        self._compute_and_update()
     
     def _compute_and_update(self):
         """Heavy computation in background thread"""
         logging.debug("Controller: _compute_and_update")
-        try:
-            self.models[self.selected_model_nbr].update_data()
-            self.models[self.selected_model_nbr].update_graph()
-            self.models[self.selected_model_nbr].update_histogram()
-            
-            # Schedule UI update on main Kivy thread
-            Clock.schedule_once(self._update_ui_on_main_thread, 0)
-        except Exception as e:
-            logging.error(f"Error during background computation: {e}")
-            Clock.schedule_once(lambda dt: setattr(self, 'is_computing', False), 0)
+        
+        self.models[self.selected_model_nbr].update_data()
+        self.models[self.selected_model_nbr].update_graph()
+        self.models[self.selected_model_nbr].update_histogram()
+        
+        self._update_ui()
+        
+        self.is_computing = False
     
-    def _update_ui_on_main_thread(self, dt):
+    def _update_ui(self):
         """Update UI safely on main thread"""
-        logging.debug("Controller: _update_ui_on_main_thread")
-        try:
-            draw_line_graph(self.models, self.view)
-            self.draw_histogram()
-            self.update_table_of_statistics()
-            self.draw_pie_chart()
-        finally:
-            self.is_computing = False
-            # Reset cursor back to normal
-            try:
-                if self.view is not None:
-                    Clock.schedule_once(lambda dt: self.view.set_loading_cursor(False), 0)
-            except Exception:
-                pass
+        logging.debug("Controller: _update_ui")
+        
+        draw_line_graph(self.models, self.view)
+        self.draw_histogram()
+        self.update_table_of_statistics()
+        self.draw_pie_chart()
+    
+        self.is_computing = False
+        self.view.set_loading_cursor(False)
+      
 
     def update_all_models_and_view(self):
         logging.debug("Controller: update_all_models_and_view")
+
+
         
         if self.pause_state:
             logging.debug("Model updates are paused")
         else:
+
+            self.is_computing = True
+            self.view.set_loading_cursor(True)
+
             for model in self.models:
                 model.update_data()
 
@@ -128,9 +118,8 @@ class Controller:
             #histogram
             for model in self.models:
                 model.update_histogram()
-            self.draw_histogram() 
-            self.update_table_of_statistics()
-            self.draw_pie_chart()
+
+            self._update_ui()
 
     
     def update_all_models(self):
@@ -224,6 +213,7 @@ class Controller:
 
     def update_instrument_selected(self, table_focus_item_data ):
         logging.debug("Controller: update_instrument_selected")
+
 
         self.models[self.selected_model_nbr].update_instrument_selected(table_focus_item_data)
 

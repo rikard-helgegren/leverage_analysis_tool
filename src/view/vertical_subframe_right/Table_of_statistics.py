@@ -15,32 +15,97 @@ from src.view.styling.light_mode.Color_data_table import Color_data_table
 
 class Table_of_statistics():
     def __init__(self, view, frame):
+        logging.debug("View: Table_of_statistics: __init__")
         self.frame = frame
-        self.use_refence = False
-        self.change_table = False
+        self.stats_dict_list = []
+        self._current_column_count = None
 
         self.table = Color_data_table(
-            rows_num=100,
-            column_data=[
-                ("Metrics", dp(40)),
-                ("Value", dp(30)),
-            ],
+            column_data=[("Metrics", dp(40))],  # placeholder
             row_data=[],
+            rows_num=100,
             sorted_order="ASC",
             **get_styling()
         )
         frame.add_widget(self.table)
 
-        self.stats_dict_list = [] #list of dicts
+        self._current_columns = None
 
     def set_table(self, stats_dict_list):
         logging.debug("View: Table_of_statistics: set_table")
-
         self.stats_dict_list = stats_dict_list
+        self._update_table()
 
-        self._set_table()
+    def _update_table(self):
+        n = len(self.stats_dict_list)
+        if n == 0:
+            return
+
+        # If column structure changed → rebuild table
+        if n != self._current_column_count:
+            self._rebuild_table(n)
+
+        # Safe & cheap
+        self.table.row_data = self._build_rows(n)
+
+    def _rebuild_table(self, n):
+        # Remove old table
+        if self.table:
+            self.frame.remove_widget(self.table)
+
+        self.table = Color_data_table(
+            rows_num=100,
+            column_data=self._get_columns(n),
+            row_data=[],  # rows added after
+            sorted_order="ASC",
+            **get_styling()
+        )
+
+        self.frame.add_widget(self.table)
+        self._current_column_count = n
+
+
+    def _get_columns(self, n):
+        if n == 1:
+            return [
+                ("Metrics", dp(40)),
+                ("Portfolio 1", dp(30)),
+            ]
+        elif n == 2:
+            return [
+                ("Metrics", dp(30)),
+                ("Portfolio 1", dp(20)),
+                ("Portfolio 2", dp(20)),
+            ]
+        else:
+            logging.warning("Unsupported portfolio count: %s", n)
+            return []
+
+    def _build_rows(self, n):
+        logging.debug("View: Table_of_statistics: _build_rows")
+        rows = []
+
+        keys = self.stats_dict_list[0].keys()
+
+        if n == 1:
+            d0 = self.stats_dict_list[0]
+            for key in keys:
+                rows.append((key, d0[key]))
+
+        elif n == 2:
+            d0, d1 = self.stats_dict_list
+
+            #TODO: Remove this, just for data generation for paper
+            print(str(d0['Median']) + "/"+ str(d0['Risk']) + "| " +    str(d1['Median']) + "/"+ str(d1['Risk']))
+
+            for key in keys:
+                rows.append((key, d0[key], d1[key]))
+
+        return rows
+
 
     def _set_table(self):
+        logging.debug("View: Table_of_statistics: _set_table")
         """Add all the statistics to the table"""
         row_data=[]
         self.frame.remove_widget(self.table)
@@ -75,6 +140,8 @@ class Table_of_statistics():
                 
                 for i, key in enumerate(self.stats_dict_list[0]):
                     row_data.append((key, self.stats_dict_list[0][key], self.stats_dict_list[1][key]))
+
+               
             case _:
                 logging.warn("Table_of_statistics: Cant generate statistics for '%r' portfolios", len(self.stats_dict_list))
 

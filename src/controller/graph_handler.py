@@ -10,7 +10,6 @@
 import logging
 
 from src.util.make_union import make_union
-import time
 
 def draw_line_graph(all_models, view):
     logging.debug("draw_line_graph: draw_line_graph")

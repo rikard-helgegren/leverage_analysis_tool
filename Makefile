@@ -34,6 +34,9 @@ test: pytest cpp_test
 pytest:
 	pytest -v tests/set_path_for_import.py tests/
 
+pytest_coverage:
+	pytest --cov=src tests/set_path_for_import.py tests/
+
 pytest_debug:
 	pytest --pdb -v tests/set_path_for_import.py tests/
 

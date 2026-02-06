@@ -35,6 +35,7 @@ font_size_axis_tick=dp(12)
 
 class Histogram:
     def __init__(self, view, frame):
+        logging.debug("View: Histogram: __init__")
         super().__init__()
 
         self.fig, self.axs = plt.subplots(
@@ -57,11 +58,12 @@ class Histogram:
     def draw(self, data_list): #TODO make list input of hist data.
         logging.debug("View: Histogram: draw")
 
-        self.data_list = data_list
+        self.data_list = self.downsample_long_lists_in_list(data_list)
 
         self._draw()
 
     def _draw(self):
+        logging.debug("View: Histogram: _draw")
         plt.figure(self.fig.number)
 
         clear_canvas = True
@@ -107,9 +109,53 @@ class Histogram:
             set_empty_ticks(self.axs)
 
         self.stylize_ticks()
-        self.canvas.draw_idle()
+        self.canvas.draw()
+
+    
+    def downsample_long_lists_in_list(self,values_list, max_len=2_000):
+        logging.debug("View: Histogram, downsample_long_lists_in_list:" + str(max_len))
+        """
+        Downsample each sublist in values_list to at most max_len elements
+        by removing items evenly across the list.
+
+        Args:
+            values_list (list[list]): List of value lists
+            max_len (int): Maximum allowed length per sublist
+
+        Returns:
+            list[list]: Downsampled values_list
+        """
+        downsampled = []
+
+        if not values_list:
+            logging.debug("Empty input")
+            return downsampled
+
+        # Case 1: Single flat list → return unchanged
+        if not isinstance(values_list, list):
+            logging.debug("No list input")
+            return values_list
+        
+        if not isinstance(values_list[0], list):
+            logging.debug("No list in list input")
+            return values_list
+
+
+        for values in values_list:
+            n = len(values)
+
+            if n <= max_len:
+                downsampled.append(values)
+                continue
+
+            step = n / max_len
+            indices = [int(i * step) for i in range(max_len)]
+            downsampled.append([values[i] for i in indices])
+
+        return downsampled
 
     def point_of_trailing_values(self, data):
+        logging.debug("View: Histogram: point_of_trailing_values")
         sorted_data = sorted(data)
 
         begining_trailing_values = sorted_data[0]
@@ -121,6 +167,7 @@ class Histogram:
         return [begining_trailing_values, end_trailing_values]
 
     def stylize_ticks(self):
+        logging.debug("View: Histogram: stylize_ticks")
         for lbl in self.axs.get_xticklabels():
             try:
                 if abs(float(lbl.get_text()) - 1.0) < 1e-4:

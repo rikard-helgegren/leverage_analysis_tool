@@ -21,6 +21,7 @@ from datetime import datetime, timedelta
 class Time_limiters_frame():
 
     def __init__(self, view, super_frame):
+        logging.debug("View: Time_limiters_frame: __init__")
         self.view = view
         self.view.keyboard_observable.subscribe(self)
 
@@ -61,6 +62,7 @@ class Time_limiters_frame():
         self.extract_data()
 
     def extract_data(self):
+        logging.debug("View: Time_limiters_frame: extract_data")
         time_start = self.view.text_box_start_date._get_text()
         time_end = self.view.text_box_end_date._get_text()
         time_end = self.standardize(time_end)
@@ -70,6 +72,7 @@ class Time_limiters_frame():
         self.set_date(time_end, self.view.text_box_end_date)
 
     def standardize(self, time_string):
+        logging.debug("View: Time_limiters_frame: standardize")
         time_string = time_string.replace('-', '')
         time_string = time_string.replace('/', '')
         time_string = time_string.replace('.', '')
@@ -119,6 +122,7 @@ class Time_limiters_frame():
                     self._update_date(-1, text_box)
         
     def _update_date(self, update_amount, text_box):
+        logging.debug("View: Time_limiters_frame: _update_date")
         """ Only for key_event"""
         old_value = text_box._get_text()
 
@@ -131,6 +135,7 @@ class Time_limiters_frame():
             self.extract_data()
 
     def smooth_step(self, date_int, update_amount):
+        logging.debug("View: Time_limiters_frame: smooth_step")
         # Convert the integer to a string and then to a datetime object
         if update_amount == 365:
             date_int = date_int + 10000 #change year
@@ -146,6 +151,7 @@ class Time_limiters_frame():
             return result_int
 
     def set_date(self, start_date, text_box):
+        logging.debug("View: Time_limiters_frame: set_date")
         if start_date == 0:
             date_string = ''
         else:
@@ -154,6 +160,7 @@ class Time_limiters_frame():
         text_box._set_text(date_string)
 
     def date_int_to_string(self, date_integer):
+        logging.debug("View: Time_limiters_frame: date_int_to_string")
         """Change format from 20220101 to 2022-01-01"""
         string_version = str(date_integer)
 

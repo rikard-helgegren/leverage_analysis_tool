@@ -126,12 +126,14 @@ class Table_of_instruments:
             self.table_main_frame.add_widget(self.table)
             self.current_table_key = new_portfolio_key
         else:
+            logging.warning("Table_of_instruments: generated new table, should not happen normally")
             self.generate_and_set_new_table(new_portfolio_key)
             self.selected_cells = set()
 
     # ------------------------------------------------------------------
 
     def calc_row_and_column_from_cell_index(self, cell_index):
+        logging.debug("Table_of_instruments: calc_row_and_column_from_cell_index")
         nbr_columns = len(self.table.column_data)
         row = cell_index // nbr_columns
         column = cell_index % nbr_columns
@@ -156,6 +158,7 @@ class Table_of_instruments:
     # ------------------------------------------------------------------
 
     def extract_leverage_from_cell(self, instance_table, cell):
+        logging.debug("Table_of_instruments: extract_leverage_from_cell")
         nbr_columns = len(instance_table.column_data)
         selected_col = cell.index % nbr_columns
         column_title = instance_table.column_data[selected_col][0]
@@ -174,6 +177,7 @@ class Table_of_instruments:
     # ------------------------------------------------------------------
 
     def extract_market_from_cell(self, instance_table, cell):
+        logging.debug("Table_of_instruments: extract_market_from_cell")
         row = cell.index // len(instance_table.column_data)
         return instance_table.row_data[row][1]
 
@@ -221,6 +225,7 @@ class Table_of_instruments:
 
     def set_instruments_in_table(self, names, countries):
         logging.debug("Table_of_instruments: set_instruments_in_table")
+        logging.warn("DEBUG Table_of_instruments: set_instruments_in_table, MAX 2 times")
 
         self.index_names = names
         self.index_countries = countries

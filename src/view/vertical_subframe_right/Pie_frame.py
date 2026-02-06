@@ -25,6 +25,7 @@ _THIN_WITH_SIZE=0.05
 
 class Pie_frame():
     def __init__(self, frame, title=""):
+        logging.debug("View: Pie_frame: __init__")
         self.title = title
         self.default_color = None
         self.reference_color = None
@@ -68,6 +69,7 @@ class Pie_frame():
         self.canvas.draw()
 
     def prepare_chart_with_data(self, data):
+        logging.debug("View: Pie_frame: prepare_chart_with_data")
         self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
 
         if len(data) == 1:
@@ -89,12 +91,14 @@ class Pie_frame():
         plt.tight_layout()
 
     def draw_solo_piechart(self, value):
+        logging.debug("View: Pie_frame: draw_solo_piechart")
         outer_colors = [light_gray, self.default_color, light_gray]
         radius= 1
         width=_WITH_SIZE*2
         self.draw_general_piechart(value, outer_colors, radius, width)
 
     def draw_double_outer_piechart(self, value):
+        logging.debug("View: Pie_frame: draw_double_outer_piechart")
         outer_colors = [light_gray, self.default_color, light_gray]
         radius= 1
         width=_WITH_SIZE
@@ -102,12 +106,14 @@ class Pie_frame():
         
     
     def draw_double_inner_piechart(self, value):
+        logging.debug("View: Pie_frame: draw_double_inner_piechart")
         outer_colors = [light_gray, self.reference_color, light_gray]
         radius= 1-_WITH_SIZE
         width=_WITH_SIZE
         self.draw_general_piechart(value, outer_colors, radius, width)
     
     def draw_general_piechart(self, value, color, radius, width):
+        logging.debug("View: Pie_frame: draw_general_piechart")
         vissable_value = value #Cant draw a negative amount in pie chart
         invissable_1 = max(0, self.max_value - vissable_value)
         invissable_2 = invissable_1 + vissable_value
@@ -120,6 +126,7 @@ class Pie_frame():
                 wedgeprops=dict(width=width, edgecolor='w'))
 
     def prepare_chart_no_data(self):
+        logging.debug("View: Pie_frame: prepare_chart_no_data")
         self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
         self.axs.pie([1],
             radius=1,
@@ -136,6 +143,7 @@ class Pie_frame():
                 **get_text_style_no_data())
         
     def write_solo_number(self, value):
+        logging.debug("View: Pie_frame: write_solo_number")
         self.display_text = str(value) + self.display_ending
 
         self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
@@ -145,7 +153,7 @@ class Pie_frame():
                 **get_text_style_data())
         
     def write_double_number(self, values ):
-
+        logging.debug("View: Pie_frame: write_double_number")
         self.axs.set_title(self.title, pad=0, y=0.95, fontdict=get_title_style())
         
         self.display_text1 = str(values[0]) + self.display_ending
@@ -162,13 +170,17 @@ class Pie_frame():
                 **get_text_style_double_data())
 
     def set_default_color(self, color):
+        logging.debug("View: Pie_frame: set_default_color")
         self.default_color = color
 
     def set_reference_color(self, color):
+        logging.debug("View: Pie_frame: set_reference_color")
         self.reference_color = color
 
     def set_max_value(self, max_value):
+        logging.debug("View: Pie_frame: set_max_value")
         self.max_value = max_value
     
     def set_display_ending(self, display_ending):
+        logging.debug("View: Pie_frame: set_display_ending")
         self.display_ending = display_ending

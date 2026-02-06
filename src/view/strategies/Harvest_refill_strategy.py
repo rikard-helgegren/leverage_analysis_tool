@@ -77,24 +77,28 @@ class Harvest_refill_strategy():
                     self.decrease_refill_value(1)
 
     def decrease_harvest_value(self, decrease_amount=1):
+        logging.debug('Harvest_refill_strategy: decrease_harvest_value')
         old_value = int(self.text_box_harvest_point._get_text())
         new_value = max(old_value-decrease_amount, 100)
         self.text_box_harvest_point._set_text(str(new_value))
         self.update_harvest_point(self.text_box_harvest_point)
     
     def increase_harvest_value(self, increase_amount=1):
+        logging.debug('Harvest_refill_strategy: increase_harvest_value')
         old_value = int(self.text_box_harvest_point._get_text())
         new_value = old_value+increase_amount
         self.text_box_harvest_point._set_text(str(new_value))
         self.update_harvest_point(self.text_box_harvest_point)
 
     def decrease_refill_value(self, decrease_amount=1):
+        logging.debug('Harvest_refill_strategy: decrease_refill_value')
         old_value = int(self.text_box_refill_point._get_text())
         new_value = max(old_value-decrease_amount, 0)
         self.text_box_refill_point._set_text(str(new_value))
         self.update_refill_point(self.text_box_refill_point)
     
     def increase_refill_value(self, increase_amount=1):
+        logging.debug('Harvest_refill_strategy: increase_refill_value')
         old_value = int(self.text_box_refill_point._get_text())
         new_value = min(old_value+increase_amount,99)
         self.text_box_refill_point._set_text(str(new_value))
@@ -116,6 +120,7 @@ class Harvest_refill_strategy():
 
     
     def update_harvest_point(self, text_box):
+        logging.debug('Harvest_refill_strategy: update_harvest_point')
         harvest_point = text_box._get_text()
         if harvest_point.isdigit():
             self.view.update_harvest_point(int(harvest_point))
@@ -123,6 +128,7 @@ class Harvest_refill_strategy():
             logging.error('"%r" is not a number', harvest_point)
 
     def update_refill_point(self, text_box):
+        logging.debug('Harvest_refill_strategy: update_refill_point')
         refill_point = text_box._get_text()
         if refill_point.isdigit():
             self.view.update_refill_point(int(refill_point))

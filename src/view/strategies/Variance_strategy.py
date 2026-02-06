@@ -20,6 +20,7 @@ import src.view.constants as constants
 
 class Variance_strategy():
     def __init__(self, view):
+        logging.debug("View: Variance_strategy: __init__")
         self.view = view
         self.view.keyboard_observable.subscribe(self)
 
@@ -37,6 +38,7 @@ class Variance_strategy():
 
 
     def set_sample_size_variance_frame(self):
+        logging.debug("View: Variance_strategy: set_sample_size_variance_frame")
         self.sample_size_variance_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         self.sample_size_variance_frame.add_widget(Widget(size_hint=(1, .2))) #Space
         label = Label(text='Sample size\nvariance',
@@ -49,6 +51,7 @@ class Variance_strategy():
         self.variance_frame.add_widget(self.sample_size_variance_frame)
 
     def set_sample_size_decisoin_frame(self):
+        logging.debug("View: Variance_strategy: set_sample_size_decisoin_frame")
         self.sample_size_decision_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         self.sample_size_decision_frame.add_widget(Widget(size_hint=(1, .2))) #Space
         label = Label(text='Sample size\ndecision',
@@ -61,6 +64,7 @@ class Variance_strategy():
         self.variance_frame.add_widget(self.sample_size_decision_frame)
 
     def set_volatillaty_trigger_frame(self):
+        logging.debug("View: Variance_strategy: set_volatillaty_trigger_frame")
         self.volatillaty_trigger_frame = BoxLayout(orientation='vertical', size_hint=(1, 1))
         self.volatillaty_trigger_frame.add_widget(Widget(size_hint=(1, .2))) #Space
         label = Label(text='Volatillaty trigger',
@@ -73,9 +77,11 @@ class Variance_strategy():
         self.variance_frame.add_widget(self.volatillaty_trigger_frame)
 
     def get_frame(self):
+        logging.debug("View: Variance_strategy: get_frame")
         return self.variance_frame
     
     def key_event(self, key, mouse_position):
+        logging.debug("View: Variance_strategy: key_event")
         if self.sample_size_variance_frame.collide_point(mouse_position[0], mouse_position[1]):
             match key:
                 case 273: #Up
@@ -108,6 +114,7 @@ class Variance_strategy():
                     self.decrease_volatillaty_trigger_value(0.001)
 
     def decrease_sample_size_variance_value(self, decrease_amount=1):
+        logging.debug("View: Variance_strategy: decrease_sample_size_variance_value")
         old_value = int(self.text_box_sample_size_variance._get_text())
         if is_number(old_value):
             new_value = old_value-decrease_amount
@@ -118,6 +125,7 @@ class Variance_strategy():
        
     
     def increase_sample_size_variance_value(self, increase_amount=1):
+        logging.debug("View: Variance_strategy: increase_sample_size_variance_value")
         old_value = int(self.text_box_sample_size_variance._get_text())
         if is_number(old_value):
             new_value = old_value + increase_amount
@@ -128,6 +136,7 @@ class Variance_strategy():
         
 
     def decrease_sample_size_decision_value(self, decrease_amount=1):
+        logging.debug("View: Variance_strategy: decrease_sample_size_decision_value")
         old_value = int(self.text_box_sample_size_decision_point._get_text())
         if is_number(old_value):
             new_value = max(old_value-decrease_amount, 0)
@@ -137,6 +146,7 @@ class Variance_strategy():
             logging.error('"%r" is not a valid number', old_value)
     
     def increase_sample_size_decision_value(self, increase_amount=1):
+        logging.debug("View: Variance_strategy: increase_sample_size_decision_value")
         old_value = int(self.text_box_sample_size_decision_point._get_text())
         if is_number(old_value):
             new_value = old_value + increase_amount
@@ -146,6 +156,7 @@ class Variance_strategy():
             logging.error('"%r" is not a valid number', old_value)
 
     def decrease_volatillaty_trigger_value(self, decrease_amount=1):
+        logging.debug("View: Variance_strategy: decrease_volatillaty_trigger_value")
         old_value = float(self.text_box_volatillaty_trigger_point._get_text().replace(",","."))
         if is_number(old_value):
             new_value = round(max(old_value - decrease_amount, 0),3)
@@ -155,6 +166,7 @@ class Variance_strategy():
             logging.error('"%r" is not a valid number', old_value)
     
     def increase_volatillaty_trigger_value(self, increase_amount=1):
+        logging.debug("View: Variance_strategy: increase_volatillaty_trigger_value")
         old_value = float(self.text_box_volatillaty_trigger_point._get_text().replace(",","."))
         if is_number(old_value):
             new_value = round(old_value + increase_amount,3)
@@ -164,18 +176,21 @@ class Variance_strategy():
             logging.error('increase_volatillaty_trigger_value: "%r" is not a valid number', old_value)
 
     def set_sample_size_variance(self, new_value):
+        logging.debug("View: Variance_strategy: set_sample_size_variance")
         if is_number(new_value):
             self.text_box_sample_size_variance._set_text(str(new_value))
         else:
             logging.error('set_sample_size_variance_value: "%r" is not a valid number', new_value)
 
     def set_volatillaty_trigger(self, new_value):
+        logging.debug("View: Variance_strategy: set_volatillaty_trigger")
         if is_number(new_value):
             self.text_box_volatillaty_trigger_point._set_text(str(new_value))
         else:
             logging.error('set_volatillaty_trigger_value: "%r" is not a valid number', new_value)
     
     def set_sample_size_decision(self, new_value):
+        logging.debug("View: Variance_strategy: set_sample_size_decision")
         if is_number(new_value):
             self.text_box_sample_size_decision_point._set_text(str(new_value))
         else:
@@ -183,6 +198,7 @@ class Variance_strategy():
         
     
     def update_sample_size_variance(self, text_box):
+        logging.debug("View: Variance_strategy: update_sample_size_variance")
         sample_size_variance_point = text_box._get_text()
         if sample_size_variance_point.isdigit():
             self.view.update_variance_calc_sample_size(int(sample_size_variance_point))
@@ -190,6 +206,7 @@ class Variance_strategy():
             logging.error('"%r" is not a valid number', sample_size_variance_point)
 
     def update_sample_size_decision_point(self, text_box):
+        logging.debug("View: Variance_strategy: update_sample_size_decision_point")
         sample_size_decision_point = text_box._get_text()
         if sample_size_decision_point.isdigit():
             self.view.update_volatility_strategie_sample_size(int(sample_size_decision_point))
@@ -197,6 +214,7 @@ class Variance_strategy():
             logging.error('"%r" is not a valid number', sample_size_decision_point)
 
     def update_volatillaty_trigger(self, text_box):
+        logging.debug("View: Variance_strategy: update_volatillaty_trigger")
         volatillaty_trigger = text_box._get_text().replace(",",".")
         if is_number(volatillaty_trigger):
             self.view.update_volatility_strategie_level(float(volatillaty_trigger))

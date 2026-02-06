@@ -132,13 +132,16 @@ class Model:
         self.update_histogram()
 
     def update_graph(self):
+        logging.debug("Model: update_graph")
         calculate_graph(self)
 
     def update_histogram(self):
+        logging.debug("Model: update_histogram")
         calculate_histogram(self)
         self.key_values.update_values(self.results_for_intervals, self.portfolio_results_full_time)
 
     def update_data(self):
+        logging.debug("Model: update_data")
         self.common_time_interval = calculate_common_time_interval(self)  # TODO: doing double work some times
 
         if len(self.common_time_interval) > 0:
@@ -175,7 +178,12 @@ class Model:
         self.update_market_selected()
 
     def wipe_instrument_selected(self):
+        logging.debug("Model: wipe_instrument_selected")
         self.instruments_selected = []
+        # Ensure markets_selected is updated to reflect the cleared selections.
+        # This prevents stale markets from remaining when the UI/table is cleared,
+        # especially when actions happen while updates are paused.
+        self.update_market_selected()
 
     def update_market_selected(self):
         """ Copy the markets of the instruments selected in the instrument
@@ -188,8 +196,10 @@ class Model:
         for instrument in self.instruments_selected:
             name = instrument[0]
             self.markets_selected[name] = deepcopy(self.markets[name])
+        print("TMP remove ## update_market_selected, markets_selected: " + str(self.markets_selected.keys()))
 
     def sort_instruments_selected(self):
+        logging.debug("Model: sort_instruments_selected")
         self.instruments_selected = sorted(self.instruments_selected, key=lambda x: x[1], reverse=True)
 
 

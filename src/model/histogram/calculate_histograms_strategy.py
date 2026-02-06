@@ -222,7 +222,8 @@ def update_value_with_daily_change(current_value, change, leverage, fees_status)
     """
         Update instrument value with the daily change times its leverage 
     """  
-    logging.debug("Calculate_histogram_strategy: update_value_with_daily_change")
+    #Paused for spamming
+    #logging.debug("Calculate_histogram_strategy: update_value_with_daily_change")
     
     oneDayChange = current_value * change * leverage
     
@@ -239,7 +240,8 @@ def getFeeLevel(leverage):
     """
         Return the fee rate related to the different leverage levels
     """
-    logging.debug("calculate_histogram_stategy: getFeeLevel")
+    #Paused for spamming
+    #logging.debug("calculate_histogram_stategy: getFeeLevel")
     if (leverage == 1):
         return constants_model.FEE_BULL_1
     elif (leverage >= 2 or leverage <= 4):

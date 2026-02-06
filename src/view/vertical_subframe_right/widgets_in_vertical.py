@@ -16,7 +16,7 @@ from src.view.vertical_subframe_right.Pie_frame_risk import Pie_frame_risk
 from src.view.styling.light_mode.color_palet import *
 
 def setup_vertical_frame(view):
-
+    logging.debug("View: setup_vertical_frame")
     frame = BoxLayout(orientation='vertical', size_hint=(0.5, 1))
 
     sub_frame_super =BoxLayout(orientation='vertical', size_hint=(1, 1))
