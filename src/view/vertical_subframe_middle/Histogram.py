@@ -106,8 +106,8 @@ class Histogram:
         if clear_canvas:
             set_empty_ticks(self.axs)
 
-
-        self.canvas.draw()
+        self.stylize_ticks()
+        self.canvas.draw_idle()
 
     def point_of_trailing_values(self, data):
         sorted_data = sorted(data)
@@ -119,3 +119,20 @@ class Histogram:
         end_trailing_values = sorted_data[-last_procentile]
 
         return [begining_trailing_values, end_trailing_values]
+
+    def stylize_ticks(self):
+        for lbl in self.axs.get_xticklabels():
+            try:
+                if abs(float(lbl.get_text()) - 1.0) < 1e-4:
+                    lbl.set_fontweight('bold')
+                else:
+                    lbl.set_fontweight('normal')
+
+                if float(lbl.get_text()) < 0.95:
+                    lbl.set_color('red')
+                if float(lbl.get_text()) > 1.05:
+                    lbl.set_color('green')
+
+            except Exception:
+                # Non-numeric tick label, ignore
+                pass

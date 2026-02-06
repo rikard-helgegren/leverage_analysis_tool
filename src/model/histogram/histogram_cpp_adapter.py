@@ -31,7 +31,9 @@ def rebalance_hist_ctypes(model):
     cpp_algorithm.restype = ctypes.POINTER(ctypes.c_float)
 
     # make actual call
+    logging.debug("histogram_cpp_adapter: Just before entering C++ realm")
     return_data = cpp_algorithm(*all_values_list) #TODO fix return value is cpp float pointer
+    logging.debug("histogram_cpp_adapter: returned from C++ realm")
     
     nr_days_in_data = cpp_adapter.get_nbr_of_days_in_investment_items(model)
 
