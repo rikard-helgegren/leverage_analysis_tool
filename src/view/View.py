@@ -55,6 +55,28 @@ class View(GridLayout):
         logging.debug("View: add_model")
         self.controller.add_model()
 
+    def set_loading_cursor(self, loading: bool):
+        """Set the mouse cursor to a loading indicator when `loading` is True,
+        otherwise reset to the default arrow. This method swallows exceptions
+        so it is safe to call from scheduled UI callbacks.
+        """
+        try:
+            if loading:
+                try:
+                    Window.set_system_cursor('wait')
+                except Exception:
+                    try:
+                        Window.set_system_cursor('watch')
+                    except Exception:
+                        pass
+            else:
+                try:
+                    Window.set_system_cursor('arrow')
+                except Exception:
+                    pass
+        except Exception:
+            pass
+
     def update_portfolio_view(self,
             leverage,
             strategy,

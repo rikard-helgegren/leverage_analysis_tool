@@ -69,6 +69,12 @@ class Controller:
             return
         
         self.is_computing = True
+        # Show loading cursor in the UI (must run on main thread)
+        try:
+            if self.view is not None:
+                Clock.schedule_once(lambda dt: self.view.set_loading_cursor(True), 0)
+        except Exception:
+            pass
         # Run computation in background thread
         thread = threading.Thread(target=self._compute_and_update)
         thread.daemon = True
@@ -97,7 +103,13 @@ class Controller:
             self.update_table_of_statistics()
             self.draw_pie_chart()
         finally:
-            self.is_computing = False    
+            self.is_computing = False
+            # Reset cursor back to normal
+            try:
+                if self.view is not None:
+                    Clock.schedule_once(lambda dt: self.view.set_loading_cursor(False), 0)
+            except Exception:
+                pass
 
     def update_all_models_and_view(self):
         logging.debug("Controller: update_all_models_and_view")
