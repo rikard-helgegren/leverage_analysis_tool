@@ -11,10 +11,10 @@ from src.view.styling.light_mode.color_palet import *
 
 def get_styling():
     styling = {
-        "background_color_cell"          : default_color,
-        "background_color_selected_cell" : default_selected_color,
-        "background_color_header"        : default_back_ground_color,
-        "background_color"               : default_color,
+        "background_color_cell"          : plot_bg,
+        "background_color_selected_cell" : plot_bg_darker,
+        "background_color_header"        : plot_bg_little_darker,
+        "background_color"               : plot_bg,
         "elevation"                      : 0
     }
     

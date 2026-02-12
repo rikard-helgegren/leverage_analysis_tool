@@ -13,7 +13,7 @@ def get_style():
     style = {
         "theme_text_color" : "Custom",
         "text_color" : gray_4,
-        "line_color" : gray_4,
+        "line_color" : gray_3,
         "theme_icon_color" : "Custom",
         "icon_color" : gray_4,
         "line_width" : 2,

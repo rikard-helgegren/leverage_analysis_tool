@@ -15,20 +15,24 @@ from kivymd.uix.button import MDRectangleFlatIconButton
 from src.view.styling.light_mode.button import get_style
 
 class Options_frame:
+
+    button_height = 0.7
+
     def __init__(self, view, super_frame):
         self.view = view
         self.pause_state = False
 
         options_frame = BoxLayout(size_hint=(1, .15))
 
-        options_frame.add_widget(Widget(size_hint=(.8, 1))) # Space
+        #options_frame.add_widget(Widget(size_hint=(.8, 1))) # Space
 
-        options_frame.add_widget(Widget(size_hint=(.2, 1))) # Space
+        options_frame.add_widget(Widget(size_hint=(.1, 1))) # Space
 
         trades_button = MDRectangleFlatIconButton(
             icon= "plus-minus-variant",
             text= "Trades",
             on_release=self.trades_button_click,
+            size_hint=(1, self.button_height),
             **get_style()
         )
         options_frame.add_widget(trades_button)
@@ -39,6 +43,7 @@ class Options_frame:
             icon= "table-remove",
             text= "Clear",
             on_release=self.clean_button_click,
+            size_hint=(1, self.button_height),
             **get_style()
         )
         options_frame.add_widget(clean_button)
@@ -49,6 +54,7 @@ class Options_frame:
             icon= "chart-line-variant",
             text= "logPlot",
             on_release=self.logPlot_button_click,
+            size_hint=(1, self.button_height),
             **get_style()
         )
         options_frame.add_widget(logPlot_button)
@@ -61,6 +67,7 @@ class Options_frame:
             icon= "pause",
             text= "Pause",
             on_release=self.pause_button_click,
+            size_hint=(1, self.button_height),
             **get_style()
         )
         self.pause_play_frame.add_widget(self.pause_button)
@@ -70,10 +77,11 @@ class Options_frame:
                 icon= "play",
                 text= "Play",
                 on_release=self.play_button_click,
+                size_hint=(1, self.button_height),
                 **get_style()
             )
-
-        options_frame.add_widget(Widget(size_hint=(.8, 1))) # Space
+        options_frame.add_widget(Widget(size_hint=(.1, 1))) # Space
+        #options_frame.add_widget(Widget(size_hint=(.8, 1))) # Space
 
         super_frame.add_widget(options_frame)
 

@@ -15,6 +15,16 @@ def get_style():
     }
     return style
 
+
+def get_style_bold():
+    style = {
+        "color" : [0,0,0,1],
+        "markup" : True,
+        "font_size" : 18,
+        "bold" : True,
+    }
+    return style
+
 def get_style_no_font_size():
     style = {
         "color" : [0,0,0,1],

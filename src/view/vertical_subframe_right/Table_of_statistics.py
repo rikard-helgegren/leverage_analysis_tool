@@ -9,13 +9,18 @@
 
 import logging
 from kivy.metrics import dp
+from kivy.core.window import Window
 
 from src.view.styling.light_mode.table import get_styling
 from src.view.styling.light_mode.Color_data_table import Color_data_table
+from src.view.styling import formatting
 
 class Table_of_statistics():
+    style_scaler = 0.04 # Adjust this to scale the table for better fit on different screen sizes
     def __init__(self, view, frame):
         logging.debug("View: Table_of_statistics: __init__")
+        Window.bind(on_resize=self._on_window_resize)
+
         self.frame = frame
         self.stats_dict_list = []
         self._current_column_count = None
@@ -23,13 +28,18 @@ class Table_of_statistics():
         self.table = Color_data_table(
             column_data=[("Metrics", dp(40))],  # placeholder
             row_data=[],
-            rows_num=100,
+            rows_num=50,
             sorted_order="ASC",
+            size_hint=(1, 1),
             **get_styling()
         )
         frame.add_widget(self.table)
 
         self._current_columns = None
+    
+    def _on_window_resize(self, window, width, height):
+        self._set_table()
+
 
     def set_table(self, stats_dict_list):
         logging.debug("View: Table_of_statistics: set_table")
@@ -54,7 +64,7 @@ class Table_of_statistics():
             self.frame.remove_widget(self.table)
 
         self.table = Color_data_table(
-            rows_num=100,
+            rows_num=50,
             column_data=self._get_columns(n),
             row_data=[],  # rows added after
             sorted_order="ASC",
@@ -66,16 +76,18 @@ class Table_of_statistics():
 
 
     def _get_columns(self, n):
+        total_width = Window.width * 0.95  # leave margin, prevents overflow
+        total_width = total_width * self.style_scaler #scale factor, can be adjusted for better fit
         if n == 1:
             return [
-                ("Metrics", dp(40)),
-                ("Portfolio 1", dp(30)),
+                (formatting.small_indent_text + "Metrics", total_width*0.55),
+                (formatting.small_indent_text + "Portfolio 1", total_width*0.45),
             ]
         elif n == 2:
             return [
-                ("Metrics", dp(30)),
-                ("Portfolio 1", dp(20)),
-                ("Portfolio 2", dp(20)),
+                (formatting.small_indent_text + "Metrics", 0.33*total_width),
+                (formatting.small_indent_text + "Portfolio 1", 0.33*total_width),
+                (formatting.small_indent_text + "Portfolio 2", 0.33*total_width),
             ]
         else:
             logging.warning("Unsupported portfolio count: %s", n)
@@ -90,16 +102,13 @@ class Table_of_statistics():
         if n == 1:
             d0 = self.stats_dict_list[0]
             for key in keys:
-                rows.append((key, d0[key]))
+                rows.append(("  " +key, d0[key]))
 
         elif n == 2:
             d0, d1 = self.stats_dict_list
 
-            #TODO: Remove this, just for data generation for paper
-            print(str(d0['Median']) + "/"+ str(d0['Risk']) + "| " +    str(d1['Median']) + "/"+ str(d1['Risk']))
-
             for key in keys:
-                rows.append((key, d0[key], d1[key]))
+                rows.append(("  " +key, d0[key], d1[key]))
 
         return rows
 
@@ -107,6 +116,9 @@ class Table_of_statistics():
     def _set_table(self):
         logging.debug("View: Table_of_statistics: _set_table")
         """Add all the statistics to the table"""
+        total_width = Window.width * 0.95  # leave margin, prevents overflow
+        total_width = total_width * self.style_scaler #scale factor, can be adjusted for better fit
+
         row_data=[]
         self.frame.remove_widget(self.table)
 
@@ -115,8 +127,8 @@ class Table_of_statistics():
                 self.table = Color_data_table(
                     rows_num=100,
                     column_data=[
-                        ("Metrics", dp(40)),
-                        ("Portfolio 1", dp(30))
+                        (formatting.small_indent_text + "Metrics", total_width*0.55),
+                        ("Portfolio 1", total_width*0.45)
                     ],
                     row_data=[],
                     sorted_order="ASC",
@@ -129,9 +141,9 @@ class Table_of_statistics():
                 self.table = Color_data_table(
                     rows_num=100,
                     column_data=[
-                        ("Metrics", dp(30)),
-                        ("Portfolio 1", dp(20)),
-                        ("Portfolio 2", dp(20))
+                        (formatting.small_indent_text + "Metrics", total_width*0.33),
+                        ("Portfolio 1", total_width*0.33),
+                        ("Portfolio 2", total_width*0.33)
                     ],
                     row_data=[],
                     sorted_order="ASC",

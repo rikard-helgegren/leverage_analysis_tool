@@ -14,6 +14,7 @@ from src.view.styling.light_mode.color_palet import *
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.button import MDRaisedButton
 from kivy.uix.widget import Widget
+from kivy.metrics import sp
 
 class Portfolio_tab():
     def __init__(self, table_of_instruments, frame):
@@ -26,12 +27,12 @@ class Portfolio_tab():
 
         self.first_frame = BoxLayout(
                 orientation='vertical', 
-                size_hint=(0.1, 0.1))
+                size_hint=(0.2, 0.14))
         self.second_frame = BoxLayout(
                 orientation='vertical', 
-                size_hint=(0.1, 0.1))
+                size_hint=(0.2, 0.14))
         
-        self.space_frame = BoxLayout(orientation='vertical',size_hint=(0.1, 0.1))
+        self.space_frame = BoxLayout(orientation='vertical',size_hint=(0.01, 0.01))
         
         
         def btn_left_press(value): #TODO find out have to have it outside __init__, it's "struggeling"
@@ -43,7 +44,8 @@ class Portfolio_tab():
             self.select_second()
         
         self.portfolio1_btn = MDRaisedButton(
-            text ="portfolio 1",
+            text='[b]Portfolio 1[/b]',
+            font_size=sp(15),
             size_hint=(1, 0.3),
             md_bg_color = blue)
         self.portfolio1_btn.bind(on_press=btn_left_press)
@@ -51,22 +53,23 @@ class Portfolio_tab():
 
 
         self.portfolio2_btn = MDRaisedButton(
-            text ="portfolio 2",
+            text='[b]Portfolio 2[/b]',
+            font_size=sp(15),
             size_hint=(1, 0.1),
             md_bg_color = green)
         self.portfolio2_btn.bind(on_press=btn_right_press)
 
         self.add_portfolio_btn = MDRaisedButton(
-            text ="+",
+            text ="[b]+[/b]",
             size_hint=(.5, 0.1),
             md_bg_color = 'gray')
         self.add_portfolio_btn.bind(on_press=self.add_portfolio)
         self.second_frame.add_widget(self.add_portfolio_btn)
 
-        self.frame.add_widget(Widget(size_hint=(.015, 0.1))) #Space
+        self.frame.add_widget(Widget(size_hint=(.015, 0.01))) #H-Space
         self.frame.add_widget(self.first_frame)
         self.frame.add_widget(self.second_frame)
-        self.frame.add_widget(self.space_frame)
+        self.frame.add_widget(self.space_frame) #H-Space
 
     def select_first(self):
         logging.debug("Portfolio_tab: select_first")

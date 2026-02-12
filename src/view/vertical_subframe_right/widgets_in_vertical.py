@@ -19,7 +19,10 @@ def setup_vertical_frame(view):
     logging.debug("View: setup_vertical_frame")
     frame = BoxLayout(orientation='vertical', size_hint=(0.5, 1))
 
-    sub_frame_super =BoxLayout(orientation='vertical', size_hint=(1, 1))
+    sub_frame_super =BoxLayout(orientation='vertical', size_hint=(1, 0.83))
+
+
+    sub_frame_super.add_widget(BoxLayout(size_hint=(1, .1))) # Space)
     
     sub_frame =BoxLayout(orientation='horizontal', size_hint=(1, 1))
     view.pie_frame1 = Pie_frame(sub_frame, "Mean")
@@ -46,5 +49,7 @@ def setup_vertical_frame(view):
     view.table_of_statistics = Table_of_statistics(view, sub_frame2)
 
     frame.add_widget(sub_frame2)
+
+    frame.add_widget(BoxLayout(size_hint=(1, .04))) # Space)
     
     view.add_widget(frame)

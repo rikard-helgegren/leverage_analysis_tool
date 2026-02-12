@@ -11,6 +11,7 @@ import logging
 
 from kivy.metrics import dp
 from kivy.uix.boxlayout import BoxLayout
+from view.styling import formatting
 
 from src.view.styling.light_mode.table import get_styling
 from src.view.vertical_subframe_left.Portfolio_tab import Portfolio_tab
@@ -18,7 +19,7 @@ from src.view.styling.light_mode.Color_data_table import Color_data_table
 from src.view.styling.light_mode.color_palet import *
 from src.Config import Config
 
-column_title_leverage_1 = "Leverage 1"
+column_title_leverage_1 = "Leverage: 1"
 COLUMNS_BEFORE_LEVERAGES = 2
 class Table_of_instruments:
     def __init__(self, view, frame):
@@ -38,12 +39,16 @@ class Table_of_instruments:
 
         self.portfolio_selection_frame = BoxLayout(
             orientation='horizontal',
-            size_hint=(1, 0.2)
+            size_hint=(1, 0.2),
+            padding=0,
+            spacing=0
         )
 
         self.table_main_frame = BoxLayout(
             orientation='vertical',
-            size_hint=(1, 1)
+            size_hint=(1, 1),
+            padding=0,
+            spacing=0
         )
 
         Portfolio_tab(self, self.portfolio_selection_frame)
@@ -63,7 +68,7 @@ class Table_of_instruments:
         logging.debug("Table_of_instruments: generate_column_data")
 
         self.column_data = [
-            ("Country", dp(30)),
+            (formatting.small_indent_text + "Country", dp(30)),
             ("Index", dp(20)),
             (column_title_leverage_1, dp(20)),
         ]
@@ -77,9 +82,10 @@ class Table_of_instruments:
         logging.debug("Table_of_instruments: generate_and_set_new_table")
 
         new_table = Color_data_table(
-            rows_num=100,
+            rows_num=50,
             column_data=self.column_data,
             row_data=[],
+            size_hint_y=1,
             **get_styling()
         )
 
@@ -237,7 +243,7 @@ class Table_of_instruments:
         for market_name, country in zip(names, countries):
             if market_name not in seen_markets:
                 seen_markets.add(market_name)
-                rows.append([country, market_name] + empty_cells)
+                rows.append([formatting.small_indent_text + country, market_name] + empty_cells)
 
         if not rows:
             return

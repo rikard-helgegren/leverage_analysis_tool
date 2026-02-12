@@ -31,7 +31,7 @@ class Investment_intervall():
         self.view.keyboard_observable.subscribe(self)
         self.value_format = Time_format.YEARS
 
-        self.time_frame = BoxLayout(orientation='vertical', size_hint=(.5, 1))
+        self.time_frame = BoxLayout(orientation='vertical', size_hint=(.75, 1))
         label = Label(
                 text='Time Investing',
                 pos_hint=constants.center,

@@ -24,7 +24,7 @@ import src.view.constants as constants
 
 def setup_vertical_frame(view):
     logging.debug("View: setup_vertical_frame")
-    vertical_frame = BoxLayout(orientation='vertical', padding=5, size_hint=(.7, 1))
+    vertical_frame = BoxLayout(orientation='vertical', padding=1, size_hint=(.7, 1))
 
     vertical_sub_frame_top = BoxLayout(orientation='vertical', size_hint=(1, .3))
     view.leverage_slider = Leverage_slider(view, vertical_sub_frame_top)
@@ -34,6 +34,8 @@ def setup_vertical_frame(view):
 
     vertical_sub_frame_bot = BoxLayout(orientation='vertical', size_hint=(1, .6))
     view.table_of_instruments = Table_of_instruments(view, vertical_sub_frame_bot)
+    vertical_sub_frame_bot_space = BoxLayout(orientation='vertical', size_hint=(0.5, .03)) # Space
+    vertical_sub_frame_bot.add_widget(vertical_sub_frame_bot_space)
     vertical_frame.add_widget(vertical_sub_frame_bot)
 
     view.add_widget(vertical_frame)

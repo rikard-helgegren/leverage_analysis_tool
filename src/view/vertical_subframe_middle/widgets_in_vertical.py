@@ -23,5 +23,6 @@ def setup_vertical_frame(view):
     view.histogram = Histogram(view, frame)
     view.line_graph = Line_graph(view, frame)
     view.time_limiters_frame = Time_limiters_frame(view, frame)
+    frame.add_widget(BoxLayout(size_hint=(1, .08))) # Space
 
     view.add_widget(frame)

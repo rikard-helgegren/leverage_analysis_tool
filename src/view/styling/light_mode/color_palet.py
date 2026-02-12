@@ -27,6 +27,13 @@ blue = 'blue'
 red_blue =  [153/255, 0/255, 51/255, 1]
 red_green = [204/255, 51/255, 51/255, 1]
 
+
+plot_bg = [234/255, 234/255, 242/255, 0.95]
+plot_bg_little_darker = [224/255, 224/255, 232/255, 1]
+plot_bg_darker = [214/255, 214/255, 222/255, 1]
+
+
+
 # Use cases
 default_color = gray_1
 default_selected_color = gray_3
@@ -39,7 +46,7 @@ pie_chart_median_first_color = blue
 pie_chart_median_second_color = green
 pie_chart_risk_first_color = red_blue
 pie_chart_risk_second_color = red_green
-pie_chart_faded_black_text = gray_4
+pie_chart_faded_black_text = gray_3
 
 instrument_table_check_color = [39 / 256, 194 / 256, 96 / 256, 1]
 

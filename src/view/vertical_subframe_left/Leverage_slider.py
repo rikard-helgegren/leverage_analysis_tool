@@ -16,6 +16,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 
 from src.view.styling.light_mode.label import get_style
+from src.view.styling.light_mode.label import get_style_bold
 
 
 class Leverage_slider():
@@ -28,7 +29,7 @@ class Leverage_slider():
 
         self.sub_frame.add_widget(Widget(size_hint=(.3, .4)))  #Space
 
-        label = Label(text='Percent Leverage', size_hint=(1, .3), **get_style())
+        label = Label(text='Percent Leverage', size_hint=(1, .3), **get_style_bold())
         self.sub_frame.add_widget(label)
 
         self.sub_frame.add_widget(Widget(size_hint=(.3, .15)))  #Space
